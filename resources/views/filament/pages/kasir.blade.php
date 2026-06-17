@@ -150,10 +150,10 @@ Contoh Output:
                     <textarea wire:model.defer="bulkText" rows="8" class="w-full border border-gray-300 rounded-lg p-3 text-[13px] focus:border-pink-500 focus:ring-pink-500 font-mono resize-y" placeholder="+ FNB Es Kopi Susu Aren 2 15000&#10;+ PRN Cetak Undangan 100 2500"></textarea>
                 </div>
 
-                <button wire:click="processBulk" wire:loading.attr="disabled" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2">
-                    <span wire:loading.remove wire:target="processBulk">Proses ke Keranjang</span>
-                    <span wire:loading wire:target="processBulk">Memproses...</span>
-                    <svg wire:loading.remove wire:target="processBulk" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                <button wire:click="processBulk" 
+                        class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2 mt-6">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    <span>Proses ke Keranjang</span>
                 </button>
             </div>
             @endif
