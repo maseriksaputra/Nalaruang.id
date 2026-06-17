@@ -540,7 +540,7 @@ const LeftDrawer = () => {
                                     {clientAudioAssets.map(asset => (
                                         <button 
                                             key={asset.id}
-                                            onClick={() => updateGlobalSettings({ audioUrl: '/storage/' + asset.file_path, audioStart: null, audioEnd: null })}
+                                            onClick={() => updateGlobalSettings({ audioUrl: (window.ASSET_URL || '/storage/') + asset.file_path, audioStart: null, audioEnd: null })}
                                             className="w-full text-left p-2 rounded-lg border hover:bg-indigo-50 border-gray-200 hover:border-indigo-300 transition text-xs flex items-center justify-between group"
                                         >
                                             <div className="flex items-center gap-2 overflow-hidden">

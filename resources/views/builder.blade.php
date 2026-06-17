@@ -7,6 +7,7 @@
     <title>Visual Builder - {{ $invitation->title }}</title>
     
     <script>
+        window.ASSET_URL = '{{ rtrim(Storage::url('/'), '/') }}/';
         // Injeksi ID Undangan & Data JSON awal ke React
         window.__INVITATION_ID__ = {{ $invitation->id }};
         window.__ORDER_ID__ = {{ $invitation->order_id ? $invitation->order_id : 'null' }};

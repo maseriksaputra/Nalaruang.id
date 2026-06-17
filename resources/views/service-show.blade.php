@@ -84,7 +84,7 @@
                             <!-- Template Image / Slider -->
                             <template x-for="(slide, index) in slides" :key="index">
                                 <img x-show="currentSlide === index"
-                                     x-bind:src="slide ? (slide.startsWith('http') ? slide : '/storage/' + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 
+                                     x-bind:src="slide ? (slide.startsWith('http') ? slide : window.ASSET_URL + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 
                                      x-bind:alt="template.name" 
                                      class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
                                      x-transition:enter="transition ease-out duration-300"

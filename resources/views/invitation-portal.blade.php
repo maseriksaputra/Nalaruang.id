@@ -9,6 +9,7 @@
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/Dashboard/PortalApp.jsx'])
     <script>
+        window.ASSET_URL = '{{ rtrim(Storage::url('/'), '/') }}/';
         // Check local storage for theme
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark')

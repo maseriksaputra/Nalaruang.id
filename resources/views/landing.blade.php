@@ -366,7 +366,7 @@
                                     @else
                                         <template x-for="(slide, index) in slides" :key="index">
                                             <img x-show="currentSlide === index"
-                                                 x-bind:src="slide ? (slide.startsWith('http') ? slide : '/storage/' + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 
+                                                 x-bind:src="slide ? (slide.startsWith('http') ? slide : window.ASSET_URL + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 
                                                  class="portfolio-img absolute inset-0 w-full h-full object-cover" 
                                                  alt="{{ $template->name }}" 
                                                  onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000'"

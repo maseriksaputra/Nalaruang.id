@@ -21,6 +21,7 @@
     
     <!-- Custom Tailwind Configuration -->
     <script>
+        window.ASSET_URL = '{{ rtrim(Storage::url('/'), '/') }}/';
         tailwind.config = {
             theme: {
                 extend: {
