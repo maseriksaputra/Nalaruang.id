@@ -62,7 +62,8 @@ class DashboardPortalController extends Controller
         }
 
         // Top 10 Invitations
-        $topInvitations = Invitation::withCount(['visitors', 'rsvps', 'guests'])
+        $topInvitations = Invitation::select('id', 'title', 'slug', 'thumbnail_path')
+            ->withCount(['visitors', 'rsvps', 'guests'])
             ->orderBy('visitors_count', 'desc')
             ->orderBy('rsvps_count', 'desc')
             ->take(10)
