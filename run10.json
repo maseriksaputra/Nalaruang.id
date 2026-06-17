@@ -1,28 +1,28 @@
 {
-  "total_count": 25,
+  "total_count": 28,
   "workflow_runs": [
     {
-      "id": 27695377660,
+      "id": 27695595156,
       "name": "Deploy to VPS",
-      "node_id": "WFR_kwLOS9G5UM8AAAAGcsXs_A",
+      "node_id": "WFR_kwLOS9G5UM8AAAAGcsk-lA",
       "head_branch": "main",
-      "head_sha": "beda00d0663138b5e303334aa88cf65dda63bdb9",
+      "head_sha": "e141f07047d4b27cf795820629ad2ceaddaa58b5",
       "path": ".github/workflows/deploy.yml",
-      "display_title": "Fix CI out of memory by adding NODE_OPTIONS and separating npm steps",
-      "run_number": 25,
+      "display_title": "Remove Node.js from CI because public/build is tracked in git and bui…",
+      "run_number": 28,
       "event": "push",
-      "status": "completed",
-      "conclusion": "failure",
+      "status": "in_progress",
+      "conclusion": null,
       "workflow_id": 297473571,
-      "check_suite_id": 74591080231,
-      "check_suite_node_id": "CS_kwDOS9G5UM8AAAARXfmPJw",
-      "url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/runs/27695377660",
-      "html_url": "https://github.com/maseriksaputra/Nalaruang.id/actions/runs/27695377660",
+      "check_suite_id": 74591779370,
+      "check_suite_node_id": "CS_kwDOS9G5UM8AAAARXgQ6Kg",
+      "url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/runs/27695595156",
+      "html_url": "https://github.com/maseriksaputra/Nalaruang.id/actions/runs/27695595156",
       "pull_requests": [
 
       ],
-      "created_at": "2026-06-17T14:13:16Z",
-      "updated_at": "2026-06-17T14:13:45Z",
+      "created_at": "2026-06-17T14:16:30Z",
+      "updated_at": "2026-06-17T14:16:36Z",
       "actor": {
         "login": "maseriksaputra",
         "id": 219297792,
@@ -48,7 +48,7 @@
       "referenced_workflows": [
 
       ],
-      "run_started_at": "2026-06-17T14:13:16Z",
+      "run_started_at": "2026-06-17T14:16:30Z",
       "triggering_actor": {
         "login": "maseriksaputra",
         "id": 219297792,
@@ -70,19 +70,19 @@
         "user_view_type": "public",
         "site_admin": false
       },
-      "jobs_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/runs/27695377660/jobs",
-      "logs_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/runs/27695377660/logs",
-      "check_suite_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/check-suites/74591080231",
-      "artifacts_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/runs/27695377660/artifacts",
-      "cancel_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/runs/27695377660/cancel",
-      "rerun_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/runs/27695377660/rerun",
+      "jobs_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/runs/27695595156/jobs",
+      "logs_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/runs/27695595156/logs",
+      "check_suite_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/check-suites/74591779370",
+      "artifacts_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/runs/27695595156/artifacts",
+      "cancel_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/runs/27695595156/cancel",
+      "rerun_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/runs/27695595156/rerun",
       "previous_attempt_url": null,
       "workflow_url": "https://api.github.com/repos/maseriksaputra/Nalaruang.id/actions/workflows/297473571",
       "head_commit": {
-        "id": "beda00d0663138b5e303334aa88cf65dda63bdb9",
-        "tree_id": "8bf57edf9fa83f86b390334277024f15ece6b028",
-        "message": "Fix CI out of memory by adding NODE_OPTIONS and separating npm steps",
-        "timestamp": "2026-06-17T14:13:57Z",
+        "id": "e141f07047d4b27cf795820629ad2ceaddaa58b5",
+        "tree_id": "e2960dcbf07bd4f2fb7db6b846cf866b586af138",
+        "message": "Remove Node.js from CI because public/build is tracked in git and built locally",
+        "timestamp": "2026-06-17T14:17:17Z",
         "author": {
           "name": "Erika Dwi Saputra",
           "email": "saputrastd@gmail.com"

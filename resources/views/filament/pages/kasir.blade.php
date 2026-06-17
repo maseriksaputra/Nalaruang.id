@@ -15,8 +15,8 @@
                 @endforeach
             </div>
 
-            <!-- Type & Date -->
-            <div class="bg-white p-4 rounded-xl border border-pink-200 shadow-sm flex flex-col sm:flex-row gap-4 justify-between items-center">
+            <!-- Type, Date & Bulk Toggle -->
+            <div class="bg-white p-4 rounded-xl border border-pink-200 shadow-sm flex flex-col lg:flex-row gap-4 justify-between items-center mb-2">
                 <div class="flex bg-gray-100 p-1 rounded-lg w-full sm:w-auto">
                     <button x-on:click="type = 'income'" 
                             class="flex-1 sm:flex-none px-6 py-2 rounded-md text-sm font-bold transition-all shadow-sm"
@@ -29,10 +29,20 @@
                         - Pengeluaran
                     </button>
                 </div>
-                <div class="w-full sm:w-auto">
-                    <input type="date" wire:model="transactionDate" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-pink-500 focus:ring-pink-500 text-sm font-medium text-gray-700">
+                <div class="flex items-center gap-4 w-full sm:w-auto flex-wrap lg:flex-nowrap justify-between sm:justify-start">
+                    <input type="date" wire:model="transactionDate" class="border-gray-300 rounded-lg shadow-sm focus:border-pink-500 focus:ring-pink-500 text-sm font-medium text-gray-700">
+                    
+                    <div class="flex items-center gap-2 border-l pl-4 border-gray-200">
+                        <span class="text-sm font-bold text-gray-700">AI Input</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                          <input type="checkbox" wire:model.live="isBulkMode" class="sr-only peer">
+                          <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600"></div>
+                        </label>
+                    </div>
                 </div>
             </div>
+
+            @if(!$isBulkMode)
 
             <!-- Product Grid -->
             <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 1.5rem;">
@@ -86,6 +96,54 @@
                     </div>
                 </div>
             </div>
+            @else
+            <!-- Bulk Entry Mode -->
+            <div class="bg-white p-6 rounded-xl border border-pink-200 shadow-sm space-y-6">
+                <!-- Prompt Template -->
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 relative group">
+                    <button onclick="navigator.clipboard.writeText(document.getElementById('ai-prompt').innerText); alert('Prompt disalin!')" 
+                            class="absolute top-4 right-4 bg-white border border-gray-300 hover:bg-gray-100 text-xs font-bold py-1 px-3 rounded shadow-sm text-gray-700 flex items-center gap-1 transition-all active:scale-95">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Salin Prompt
+                    </button>
+                    <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Template Prompt untuk ChatGPT / Gemini:
+                    </h4>
+                    <pre id="ai-prompt" class="text-[13px] text-gray-600 whitespace-pre-wrap font-mono leading-relaxed bg-white p-4 border border-gray-100 rounded">Tolong ubah foto catatan transaksi kasir ini menjadi teks biasa. Susun per baris dengan format yang SANGAT KETAT seperti ini:
+[+/-] [KODE_KATEGORI] [Nama Barang atau Deskripsi] [Qty] [Harga Satuan]
+
+Keterangan Kode Kategori:
+- FNB = Makanan / Minuman
+- ATK = Alat Tulis Kantor
+- PRN = Cetak / Printing
+- DGT = Produk Digital / Jasa Desain
+
+Catatan Penting:
+- Gunakan + jika itu pemasukan, dan - jika pengeluaran.
+- Harga satuan HANYA angka, tanpa titik/koma/simbol (misal: 15000).
+- Qty HANYA angka (misal: 2).
+
+Contoh Output:
++ FNB Es Kopi Susu Aren 2 15000
++ PRN Cetak Undangan Pernikahan 100 2500
+- ATK Kertas HVS A4 70gr 1 50000
++ DGT Jasa Desain Logo Usaha 1 250000</pre>
+                </div>
+
+                <!-- Textarea -->
+                <div>
+                    <label class="block font-bold text-gray-700 text-sm mb-2">Paste Jawaban Teks AI di Sini:</label>
+                    <textarea wire:model.defer="bulkText" rows="8" class="w-full border border-gray-300 rounded-lg p-3 text-[13px] focus:border-pink-500 focus:ring-pink-500 font-mono resize-y" placeholder="+ FNB Es Kopi Susu Aren 2 15000&#10;+ PRN Cetak Undangan 100 2500"></textarea>
+                </div>
+
+                <button wire:click="processBulk" wire:loading.attr="disabled" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+                    <span wire:loading.remove wire:target="processBulk">Proses ke Keranjang</span>
+                    <span wire:loading wire:target="processBulk">Memproses...</span>
+                    <svg wire:loading.remove wire:target="processBulk" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </button>
+            </div>
+            @endif
 
         </div>
 
@@ -109,7 +167,9 @@
                             <div class="flex justify-between items-start mb-2">
                                 <div class="pr-4">
                                     <h4 class="font-bold text-gray-800 text-sm leading-tight">{{ $item['name'] }}</h4>
-                                    <span class="text-[10px] uppercase text-pink-500 font-bold tracking-wider">{{ $item['category'] }}</span>
+                                    <span class="text-[10px] uppercase font-bold tracking-wider {{ ($item['type'] ?? $transactionType) === 'expense' ? 'text-red-500' : 'text-green-600' }}">
+                                        {{ ($item['type'] ?? $transactionType) === 'expense' ? '(-) PENGELUARAN' : '(+) PEMASUKAN' }} • {{ $item['category'] }}
+                                    </span>
                                 </div>
                             </div>
                             
@@ -136,8 +196,10 @@
                 <!-- Cart Footer -->
                 <div class="p-4 border-t border-gray-100 bg-gray-50 rounded-b-xl">
                     <div class="flex justify-between items-end mb-4">
-                        <span class="text-sm font-medium text-gray-500">Total Transaksi</span>
-                        <span class="text-2xl font-black text-pink-600">Rp {{ number_format($this->cartTotal, 0, ',', '.') }}</span>
+                        <span class="text-sm font-medium text-gray-500">Total Keranjang</span>
+                        <span class="text-2xl font-black {{ $this->cartTotal < 0 ? 'text-red-600' : 'text-green-600' }}">
+                            {{ $this->cartTotal < 0 ? '-' : '' }}Rp {{ number_format(abs($this->cartTotal), 0, ',', '.') }}
+                        </span>
                     </div>
                     
                     <button wire:click="processTransaction" 

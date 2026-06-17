@@ -26,6 +26,9 @@ class Kasir extends Page
     public $manualPrice = '';
     public int $manualQty = 1;
 
+    public bool $isBulkMode = false;
+    public string $bulkText = '';
+
     public function mount()
     {
         $this->transactionDate = now()->format('Y-m-d');
@@ -47,6 +50,7 @@ class Kasir extends Page
             'price' => (float) $price,
             'qty' => 1,
             'category' => $category,
+            'type' => $this->transactionType,
         ];
     }
 
@@ -77,6 +81,7 @@ class Kasir extends Page
             'price' => $price,
             'qty' => $this->manualQty,
             'category' => $category,
+            'type' => $this->transactionType,
         ];
 
         $this->manualName = '';
@@ -117,8 +122,99 @@ class Kasir extends Page
     public function getCartTotalProperty()
     {
         return collect($this->cart)->sum(function ($item) {
-            return $item['price'] * $item['qty'];
+            $type = $item['type'] ?? $this->transactionType;
+            $amount = $item['price'] * $item['qty'];
+            return $type === 'expense' ? -$amount : $amount;
         });
+    }
+
+    public function processBulk()
+    {
+        if (empty(trim($this->bulkText))) {
+            Notification::make()->warning()->title('Teks Kosong')->body('Silakan paste hasil dari AI terlebih dahulu.')->send();
+            return;
+        }
+
+        $lines = explode("\n", str_replace("\r", "", $this->bulkText));
+        $successCount = 0;
+        $failedLines = [];
+
+        foreach ($lines as $index => $line) {
+            $line = trim($line);
+            if (empty($line)) continue;
+
+            $parts = preg_split('/\s+/', $line);
+
+            if (count($parts) < 5) {
+                $failedLines[] = "Baris " . ($index + 1) . " (Kurang data)";
+                continue;
+            }
+
+            $typeRaw = array_shift($parts);
+            $catRaw = array_shift($parts);
+            $priceRaw = array_pop($parts);
+            $qtyRaw = array_pop($parts);
+
+            $description = implode(' ', $parts);
+
+            $type = match($typeRaw) {
+                '+' => 'income',
+                '-' => 'expense',
+                default => null,
+            };
+
+            $catRawUpper = strtoupper($catRaw);
+            $category = match($catRawUpper) {
+                'FNB' => 'F&B',
+                'ATK' => 'ATK',
+                'PRN' => 'Printing',
+                'DGT' => 'Digital',
+                default => null,
+            };
+
+            $price = (float) preg_replace('/[^0-9.]/', '', $priceRaw);
+            $qty = (int) preg_replace('/[^0-9]/', '', $qtyRaw);
+
+            if (!$type || !$category || $price <= 0 || $qty <= 0 || empty($description)) {
+                $failedLines[] = "Baris " . ($index + 1) . " (Format tipe/kategori/angka tidak valid)";
+                continue;
+            }
+
+            // Generate product if not exists to save as template
+            $product = CashierProduct::firstOrCreate(
+                ['name' => $description, 'category' => $category],
+                ['default_price' => $price]
+            );
+
+            $cartId = uniqid();
+            $this->cart[$cartId] = [
+                'id' => $cartId,
+                'product_id' => $product->id,
+                'name' => $description,
+                'price' => $price,
+                'qty' => $qty,
+                'category' => $category,
+                'type' => $type,
+            ];
+
+            $successCount++;
+        }
+
+        $this->bulkText = '';
+
+        if (count($failedLines) > 0) {
+            Notification::make()
+                ->warning()
+                ->title('Sebagian Berhasil')
+                ->body("$successCount dimasukkan ke keranjang. " . count($failedLines) . " gagal diproses:\n" . implode("\n", $failedLines))
+                ->send();
+        } else {
+            Notification::make()
+                ->success()
+                ->title('Berhasil')
+                ->body("$successCount transaksi dimasukkan ke keranjang.")
+                ->send();
+        }
     }
 
     public function processTransaction()
@@ -136,7 +232,7 @@ class Kasir extends Page
         try {
             foreach ($this->cart as $item) {
                 Cashflow::create([
-                    'type' => $this->transactionType,
+                    'type' => $item['type'] ?? $this->transactionType,
                     'amount' => $item['price'] * $item['qty'],
                     'description' => $item['name'],
                     'transaction_date' => $this->transactionDate,
