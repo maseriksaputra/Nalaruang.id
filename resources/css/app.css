@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Permanent+Marker&display=swap');
+
+@import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+@source '../**/*.jsx';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@keyframes wiggle {
+
+    0%,
+    100% {
+        transform: rotate(-10deg);
+    }
+
+    50% {
+        transform: rotate(10deg);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-wiggle {
+    animation: wiggle 1s ease-in-out infinite;
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Polaroid Templates */
+.polaroid-wrapper {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.polaroid-classic {
+    background-color: #ffffff;
+    padding: 5% 5% 20% 5%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.polaroid-classic .polaroid-caption {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: #333;
+    margin-top: 8%;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.polaroid-vintage {
+    background-color: #f4f1ea;
+    padding: 6% 6% 22% 6%;
+    box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.2), inset 0 0 40px rgba(180, 150, 100, 0.1);
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.polaroid-vintage .polaroid-caption {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 1.2rem;
+    color: #2c2c2c;
+    margin-top: 10%;
+    text-align: center;
+    transform: rotate(-2deg);
+}
+
+.polaroid-modern {
+    background-color: #ffffff;
+    padding: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    border: 1px solid #f0f0f0;
+}
+
+.polaroid-modern .polaroid-caption {
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #111;
+    margin-top: 12px;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.polaroid-film {
+    background-color: #111;
+    padding: 12% 4% 12% 4%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    position: relative;
+}
+
+.polaroid-film::before,
+.polaroid-film::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background-image: radial-gradient(white 3px, transparent 4px);
+    background-size: 10px 15px;
+    background-position: center;
+}
+
+.polaroid-film::before {
+    left: -5px;
+}
+
+.polaroid-film::after {
+    right: -5px;
+}
+
+.polaroid-film .polaroid-caption {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #e0e0e0;
+    margin-top: 10%;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.polaroid-image-container {
+    flex-grow: 1;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Variants with no text */
+.polaroid-classic-notext {
+    background-color: #ffffff;
+    padding: 5%;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.polaroid-classic-notext .polaroid-caption {
+    display: none;
+}
+
+.polaroid-modern-notext {
+    background-color: #ffffff;
+    padding: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    border: 1px solid #f0f0f0;
+}
+
+.polaroid-modern-notext .polaroid-caption {
+    display: none;
+}
+
+/* Variant with text on top */
+.polaroid-toptext {
+    flex-direction: column-reverse;
+    background-color: #ffffff;
+    padding: 20% 5% 5% 5%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+}
+
+.polaroid-toptext .polaroid-caption {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 8%;
+    margin-top: 0;
+    text-align: center;
+}
+
+/* Variant with Tape */
+.polaroid-tape {
+    background-color: #fafafa;
+    padding: 5%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-radius: 2px;
+    position: relative;
+    overflow: visible !important;
+}
+
+.polaroid-tape::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 60px;
+    height: 25px;
+    background-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    z-index: 10;
+}
+
+.polaroid-tape .polaroid-caption {
+    display: none;
+}

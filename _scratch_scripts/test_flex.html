@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  .box {
+    width: 200px;
+    height: 100px;
+    background: lightblue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="box">
+  Text Node
+</div>
+
+<div class="box" id="innerHTMLBox">
+</div>
+
+<script>
+  document.getElementById('innerHTMLBox').innerHTML = 'Text Node';
+</script>
+
+</body>
+</html>

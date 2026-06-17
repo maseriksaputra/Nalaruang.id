@@ -1,0 +1,1114 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Rnd } from 'react-rnd';
+import { Player } from '@lottiefiles/react-lottie-player';
+import useCanvasStore from '../../stores/useCanvasStore';
+import useUIStore from '../../stores/useUIStore';
+import { pointsToSmoothedSvgPath } from '../../utils/pathSmoothing';
+import { applyAnimation } from '../../utils/engineGSAP';
+import { getFilterById } from '../../utils/imageFilters';
+import { loadFont } from '../../utils/fonts';
+import ChromaKeyImage from './ChromaKeyImage';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, EffectCards, EffectCoverflow, EffectFade } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/effect-cards';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/effect-fade';
+
+const hexToRgba = (hex, opacity = 100) => {
+    hex = (hex || '#ffffff').replace('#', '');
+    if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+    const r = parseInt(hex.substring(0, 2), 16) || 0;
+    const g = parseInt(hex.substring(2, 4), 16) || 0;
+    const b = parseInt(hex.substring(4, 6), 16) || 0;
+    return `rgba(${r}, ${g}, ${b}, ${opacity / 100})`;
+};
+
+const getGradientCss = (style) => {
+    if (style?.backgroundType === 'solid') return style.backgroundColor || '#ffffff';
+    
+    if (style?.backgroundType === 'linear-gradient' || style?.backgroundType === 'radial-gradient') {
+        const color1 = hexToRgba(style.gradientStart || '#ffffff', style.gradientStartOpacity ?? 100);
+        const color2 = hexToRgba(style.gradientEnd || '#000000', style.gradientEndOpacity ?? 100);
+        
+        if (style.backgroundType === 'linear-gradient') {
+            return `linear-gradient(${style.gradientAngle ?? 90}deg, ${color1}, ${color2})`;
+        }
+        return `radial-gradient(circle, ${color1}, ${color2})`;
+    }
+    return 'transparent';
+};
+
+const getShadowCss = (style) => {
+    if (!style?.isShadowActive) return 'none';
+    
+    let x = style.shadowX || 0;
+    let y = style.shadowY || 0;
+    
+    if (style.shadowDistance !== undefined && style.shadowAngle !== undefined) {
+        const angleRad = (style.shadowAngle * Math.PI) / 180;
+        x = Math.round(style.shadowDistance * Math.cos(angleRad));
+        y = Math.round(style.shadowDistance * Math.sin(angleRad));
+    }
+    
+    const blur = style.shadowBlur || 0;
+    // Note: drop-shadow filter does not support spread radius.
+    const rgbaColor = hexToRgba(style.shadowColor || '#000000', (style.shadowOpacity ?? 0.5) * 100);
+    
+    return `drop-shadow(${x}px ${y}px ${blur}px ${rgbaColor})`;
+};
+
+const ResizeHandle = () => (
+    <div className="w-3 h-3 bg-white border-2 border-indigo-500 rounded-full shadow pointer-events-auto hover:bg-indigo-50 transition-colors" />
+);
+
+const CountdownDisplay = ({ targetDate, textColor, bgColor, bgImage, fontFamily, bgOpacity, gap, showSeconds, bgStyle }) => {
+    const [timeLeft, setTimeLeft] = useState({ days: 12, hours: 8, minutes: 45, seconds: 0 });
+    
+    useEffect(() => {
+        if (!targetDate) return;
+        const target = new Date(targetDate).getTime();
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = target - now;
+            if (distance < 0) {
+                setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+                clearInterval(interval);
+                return;
+            }
+            setTimeLeft({
+                days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+                seconds: Math.floor((distance % (1000 * 60)) / 1000)
+            });
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [targetDate]);
+
+    // Parse hex to rgba for background opacity
+    const getBgColorWithOpacity = (hex, opacity) => {
+        if (!hex) return 'transparent';
+        if (hex.startsWith('rgba')) return hex;
+        let c;
+        if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+            c= hex.substring(1).split('');
+            if(c.length== 3){
+                c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+            }
+            c= '0x'+c.join('');
+            return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+(opacity !== undefined ? opacity : 0.8)+')';
+        }
+        return hex;
+    };
+
+    return (
+        <div 
+            className={`w-full h-full flex items-center justify-center rounded-xl pointer-events-none relative overflow-hidden ${(!bgStyle || bgStyle === 'glass') ? 'backdrop-blur-sm' : ''}`}
+            style={{ backgroundColor: bgImage ? 'transparent' : getBgColorWithOpacity(bgColor || '#111827', bgOpacity) }}
+        >
+            {bgImage && (
+                <div 
+                    className="absolute inset-0 w-full h-full bg-cover bg-center" 
+                    style={{ backgroundImage: `url(${bgImage})`, opacity: bgOpacity !== undefined ? bgOpacity : 0.8 }} 
+                />
+            )}
+            <div className="flex text-center relative z-10" style={{ color: textColor || 'white', fontFamily: fontFamily || 'monospace', gap: `${gap !== undefined ? gap : 16}px` }}>
+                <div><span className="block text-3xl font-bold">{String(timeLeft.days).padStart(2, '0')}</span><span className="text-[10px] uppercase tracking-widest opacity-70">Hari</span></div>
+                <span className="text-3xl font-bold opacity-80">:</span>
+                <div><span className="block text-3xl font-bold">{String(timeLeft.hours).padStart(2, '0')}</span><span className="text-[10px] uppercase tracking-widest opacity-70">Jam</span></div>
+                <span className="text-3xl font-bold opacity-80">:</span>
+                <div><span className="block text-3xl font-bold">{String(timeLeft.minutes).padStart(2, '0')}</span><span className="text-[10px] uppercase tracking-widest opacity-70">Mnt</span></div>
+                {showSeconds && (
+                    <>
+                    <span className="text-3xl font-bold opacity-80">:</span>
+                    <div><span className="block text-3xl font-bold">{String(timeLeft.seconds).padStart(2, '0')}</span><span className="text-[10px] uppercase tracking-widest opacity-70">Dtk</span></div>
+                    </>
+                )}
+            </div>
+        </div>
+    );
+};
+
+const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
+    if (layer.isHidden) return null;
+    const updateLayerPosition = useCanvasStore(state => state.updateLayerPosition);
+    const zoom = useCanvasStore(state => state.zoom);
+    const activeTab = useCanvasStore(state => state.activeTab);
+    
+    const [localPos, setLocalPos] = useState({ x: layer.style?.x || 0, y: layer.style?.y || 0 });
+    const [localSize, setLocalSize] = useState({ width: layer.style?.width || 100, height: layer.style?.height || 100 });
+    const [isDragging, setIsDragging] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+
+    const isActive = useCanvasStore(state => state.activeLayerIds?.includes(layer.id) || state.activeLayerId === layer.id);
+    const isCropMode = activeTab === 'edit_image' && isActive;
+    // Referensi untuk GSAP dan Rnd
+    const elementRef = useRef(null);
+    const rndRef = useRef(null);
+    const localPosRef = useRef({ x: layer.style?.x || 0, y: layer.style?.y || 0 });
+    useEffect(() => { localPosRef.current = localPos; }, [localPos]);
+
+    const dragStartRef = useRef(null);
+
+    const handleCropPointerDown = (e) => {
+        if (!isCropMode) return;
+        e.stopPropagation();
+        dragStartRef.current = { x: e.clientX, y: e.clientY };
+        e.target.setPointerCapture(e.pointerId);
+    };
+
+    const handleCropPointerMove = (e) => {
+        if (!isCropMode || !dragStartRef.current) return;
+        e.stopPropagation();
+        const deltaX = e.clientX - dragStartRef.current.x;
+        const deltaY = e.clientY - dragStartRef.current.y;
+        
+        const currentCrop = layer.style?.crop || { x: 0, y: 0 };
+        useCanvasStore.getState().updateLayerStyle(layer.id, {
+            crop: {
+                ...currentCrop,
+                x: currentCrop.x - deltaX,
+                y: currentCrop.y - deltaY
+            }
+        });
+        
+        dragStartRef.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handleCropPointerUp = (e) => {
+        if (!isCropMode || !dragStartRef.current) return;
+        e.stopPropagation();
+        dragStartRef.current = null;
+        e.target.releasePointerCapture(e.pointerId);
+    };
+
+    // Sinkronisasi data saat layer diubah dari Sidebar atau saat Undo/Redo
+    useEffect(() => {
+        const newX = layer.style?.x || 0;
+        const newY = layer.style?.y || 0;
+        const newWidth = layer.style?.width || 100;
+        const newHeight = layer.style?.height || 100;
+        
+        setLocalPos({ x: newX, y: newY });
+        setLocalSize({ width: newWidth, height: newHeight });
+        
+        if (rndRef.current) {
+            rndRef.current.updatePosition({ x: newX, y: newY });
+            rndRef.current.updateSize({ width: newWidth, height: newHeight });
+        }
+    }, [layer.style?.x, layer.style?.y, layer.style?.width, layer.style?.height]);
+
+    // Engine Animasi Eksekusi
+    useEffect(() => {
+        let animationInstance = null;
+        if (layer.animation && elementRef.current) {
+            // isBuilder = true prevents ScrollTrigger and plays immediately
+            animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style);
+        }
+        
+        // Cleanup yang krusial agar memori tidak bocor saat layer dihapus/update
+        return () => {
+            if (animationInstance) {
+                animationInstance.kill();
+                if (animationInstance.scrollTrigger) {
+                    animationInstance.scrollTrigger.kill();
+                }
+            }
+        };
+    }, [layer.animation]);
+
+    // Mouse rotation logic
+    const handleRotateStart = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const rect = elementRef.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const handleMouseMove = (moveEvent) => {
+            const dx = moveEvent.clientX - centerX;
+            const dy = moveEvent.clientY - centerY;
+            const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+            const rotation = (angle + 90 + 360) % 360; // Offset by 90 deg so top is 0
+            useCanvasStore.getState().updateLayerStyle(layer.id, { rotation: Math.round(rotation) });
+        };
+
+        const handleMouseUp = () => {
+            document.removeEventListener('mousemove', handleMouseMove);
+            document.removeEventListener('mouseup', handleMouseUp);
+        };
+
+        document.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUp);
+    };
+
+
+
+    // Load font if it's a text layer
+    if (layer.type === 'text' || layer.type === 'dynamic_guest_name') {
+        loadFont(layer.style?.fontFamily);
+    }
+    if (layer.type === 'polaroid') {
+        loadFont('Caveat');
+    }
+
+    const innerStructure = (
+        <div ref={elementRef} className="w-full h-full relative" style={{ transform: `rotate(${layer.style?.rotation || 0}deg)`, opacity: layer.style?.opacity ?? 1 }}>
+                
+                {/* Rotator Handle - Only visible when active */}
+                {isActive && !(layer.isLocked) && !isChildOfGroup && (
+                    <div 
+                        onMouseDown={handleRotateStart}
+                        className="absolute -top-10 left-1/2 -translate-x-1/2 w-5 h-5 bg-white border-2 border-indigo-500 rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center z-10 shadow hover:bg-indigo-50 transition-colors pointer-events-auto"
+                    >
+                        <svg className="w-3 h-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        <div className="w-[1.5px] h-5 bg-indigo-500 absolute top-5"></div>
+                    </div>
+                )}
+                
+                {/* Animation Wrapper */}
+                <div 
+                    className={`w-full h-full`}
+                    style={{
+                        transform: `scaleX(${layer.style?.flipX ? -1 : 1})`,
+                        borderRadius: (() => {
+                            if (layer.style?.borderRadius === undefined) return '0px';
+                            const r = `${layer.style.borderRadius}px`;
+                            switch(layer.style.borderRadiusType) {
+                                case 'top': return `${r} ${r} 0 0`;
+                                case 'bottom': return `0 0 ${r} ${r}`;
+                                case 'left': return `${r} 0 0 ${r}`;
+                                case 'right': return `0 ${r} ${r} 0`;
+                                case 'top-left': return `${r} 0 0 0`;
+                                case 'top-right': return `0 ${r} 0 0`;
+                                case 'bottom-right': return `0 0 ${r} 0`;
+                                case 'bottom-left': return `0 0 0 ${r}`;
+                                default: return r;
+                            }
+                        })(),
+                        overflow: layer.style?.borderRadius ? 'hidden' : 'visible',
+                        filter: getShadowCss(layer.style),
+                        background: (layer.type === 'image' || layer.type === 'text' || layer.type === 'dynamic_guest_name') ? 'transparent' : getGradientCss(layer.style),
+                        borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : undefined,
+                        borderStyle: layer.style?.borderStyle || (layer.style?.borderWidth ? 'solid' : undefined),
+                        borderColor: layer.style?.borderColor,
+                        boxSizing: 'border-box'
+                    }}
+                >
+                {/* Visualizer Konten */}
+                {(layer.type === 'text' || layer.type === 'dynamic_guest_name') && (
+                    <div 
+                        className={`w-full h-full overflow-hidden flex outline-none border-none ${isEditing ? 'no-drag !select-text !pointer-events-auto' : ''}`}
+                        style={{
+                            color: layer.style?.color || '#000000',
+                            fontSize: layer.style?.fontSize ? (String(layer.style.fontSize).includes('px') || String(layer.style.fontSize).includes('rem') || String(layer.style.fontSize).includes('em') ? layer.style.fontSize : `${layer.style.fontSize}px`) : '16px',
+                            fontFamily: layer.style?.fontFamily || 'sans-serif',
+                            fontWeight: layer.style?.fontWeight || 'normal',
+                            textAlign: layer.style?.textAlign || 'left',
+                            justifyContent: layer.style?.textAlign === 'center' ? 'center' : layer.style?.textAlign === 'right' ? 'flex-end' : 'flex-start',
+                            alignItems: 'center',
+                            textDecoration: layer.style?.textDecoration,
+                            fontStyle: layer.style?.fontStyle,
+                            letterSpacing: layer.style?.letterSpacing,
+                            lineHeight: layer.style?.lineHeight,
+                            textShadow: layer.style?.textShadow,
+                            cursor: isEditing ? 'text' : (layer.isLocked ? 'default' : 'move'),
+                            userSelect: isEditing ? 'text' : 'none',
+                            WebkitUserSelect: isEditing ? 'text' : 'none'
+                        }}
+                        contentEditable={isEditing}
+                        suppressContentEditableWarning={true}
+                        onDoubleClick={(e) => {
+                            e.stopPropagation();
+                            setIsEditing(true);
+                            const target = e.target;
+                            setTimeout(() => {
+                                target.focus();
+                                const range = document.createRange();
+                                range.selectNodeContents(target);
+                                const sel = window.getSelection();
+                                sel.removeAllRanges();
+                                sel.addRange(range);
+                            }, 50);
+                        }}
+                        onBlur={(e) => {
+                            setIsEditing(false);
+                            useCanvasStore.getState().updateLayerContent(layer.id, e.target.innerText);
+                        }}
+                    >
+                        {layer.content}
+                    </div>
+                )}
+                
+                {layer.type === 'shape' && (
+                    <div 
+                        className="w-full h-full relative pointer-events-none"
+                        style={{
+                            backgroundColor: layer.style?.backgroundColor || '#e0e7ff',
+                            borderRadius: layer.style?.borderRadius || '0px'
+                        }}
+                    ></div>
+                )}
+
+                {layer.type === 'image' && (
+                    <div className="w-full h-full relative pointer-events-none">
+                        {isActive && (
+                            <button 
+                                onClick={() => {
+                                    useUIStore.getState().setAssetSelectionTarget({
+                                        layerId: layer.id,
+                                        layerType: 'image',
+                                        multiple: false
+                                    });
+                                }}
+                                className="absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition"
+                                title="Ubah Gambar"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </button>
+                        )}
+                        {layer.style?.removeBg ? (
+                            <ChromaKeyImage 
+                                src={layer.url || layer.content}
+                                targetColorHex={layer.style?.removeBgColor || '#ffffff'}
+                                tolerance={layer.style?.removeBgTolerance ?? 50}
+                                alt="Element Chroma Key"
+                                className={`w-full h-full object-cover pointer-events-none ${isCropMode ? 'cursor-move pointer-events-auto no-drag' : ''}`}
+                                style={{
+                                    objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
+                                    transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
+                                    filter: `${layer.style?.imageFilter && layer.style.imageFilter !== 'none' ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + ' ' : ''}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
+                                }}
+                            />
+                        ) : (
+                            <img 
+                                src={layer.style?.url || layer.url} 
+                                alt="asset" 
+                                draggable={false}
+                                onPointerDown={handleCropPointerDown}
+                                onPointerMove={handleCropPointerMove}
+                                onPointerUp={handleCropPointerUp}
+                                className={`w-full h-full object-cover pointer-events-none ${isCropMode ? 'cursor-move pointer-events-auto no-drag' : ''}`}
+                                style={{
+                                    opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
+                                    objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
+                                    transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
+                                    filter: `${layer.style?.imageFilter && layer.style.imageFilter !== 'none' ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + ' ' : ''}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
+                                }}
+                            />
+                        )}
+                        {/* Overlay effects for grain or vignette */}
+                        {layer.style?.imageFilter && getFilterById(layer.style.imageFilter).getOverlay && (
+                            <div dangerouslySetInnerHTML={{ __html: getFilterById(layer.style.imageFilter).getOverlay(layer.style.imageFilterIntensity ?? 100) }} />
+                        )}
+                    </div>
+                )}
+
+                {layer.type === 'frame' && (
+                    <div className="w-full h-full relative pointer-events-none flex items-center justify-center overflow-hidden">
+                        {isActive && (
+                            <button 
+                                onClick={() => {
+                                    useUIStore.getState().setAssetSelectionTarget({
+                                        layerId: layer.id,
+                                        layerType: 'frame',
+                                        multiple: true
+                                    });
+                                }}
+                                className="absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition"
+                                title="Isi Wadah Bingkai"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                            </button>
+                        )}
+                        
+                        {layer.style?.mediaUrls && layer.style.mediaUrls.length > 0 ? (
+                            layer.style.mediaUrls[0].startsWith('data:video') || layer.style.mediaUrls[0].endsWith('.mp4') ? (
+                                <video 
+                                    src={layer.style.mediaUrls[0]}
+                                    autoPlay muted loop playsInline
+                                    className="w-full h-full object-cover pointer-events-none"
+                                />
+                            ) : layer.style.mediaUrls.length > 1 ? (
+                                <div className="w-full h-full relative">
+                                    <img src={layer.style.mediaUrls[0]} className="w-full h-full object-cover pointer-events-none" alt="Frame"/>
+                                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-[9px] bg-black/60 text-white px-2 py-1 rounded-full whitespace-nowrap">
+                                        Album ({layer.style.mediaUrls.length} Foto)
+                                    </div>
+                                </div>
+                            ) : (
+                                <img 
+                                    src={layer.style.mediaUrls[0]} 
+                                    alt="Frame Media" 
+                                    className="w-full h-full object-cover pointer-events-none"
+                                />
+                            )
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                                <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </div>
+                        )}
+                    </div>
+                )}
+        {layer.type === 'polaroid' && (
+            <div className="w-full h-full relative pointer-events-none bg-white flex flex-col p-3" style={{ 
+                paddingBottom: '3.5rem',
+                transform: layer.style?.polaroidData?.type === 'tilted' ? 'rotate(-3deg)' : 'none',
+                boxShadow: layer.style?.isShadowActive ? 'none' : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+            }}>
+                {layer.style?.polaroidData?.type === 'taped' && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-8 bg-amber-100/60 rotate-2 z-10" style={{ backdropFilter: 'blur(2px)' }}></div>
+                )}
+                <div className="w-full flex-1 relative overflow-hidden bg-gray-100 border border-gray-200">
+                    {isActive && (
+                        <button 
+                            onClick={() => {
+                                useUIStore.getState().setAssetSelectionTarget({
+                                    layerId: layer.id,
+                                    layerType: 'polaroid',
+                                    multiple: false
+                                });
+                            }}
+                            className="absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition"
+                            title="Ubah Foto Polaroid"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </button>
+                    )}
+                    {layer.style?.polaroidData?.image ? (
+                        <>
+                            <img 
+                                src={layer.style.polaroidData.image} 
+                                alt="Polaroid" 
+                                draggable={false}
+                                onPointerDown={handleCropPointerDown}
+                                onPointerMove={handleCropPointerMove}
+                                onPointerUp={handleCropPointerUp}
+                                className={`w-full h-full object-cover ${isCropMode ? 'cursor-move pointer-events-auto no-drag' : ''}`}
+                                style={{
+                                    objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
+                                    transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
+                                    filter: `${layer.style?.brightness ? `brightness(${layer.style.brightness}) ` : ''}${layer.style?.contrast ? `contrast(${layer.style.contrast}) ` : ''}${layer.style?.saturate ? `saturate(${layer.style.saturate}) ` : ''}${layer.style?.blur ? `blur(${layer.style.blur}px) ` : ''}`.trim() || 'none'
+                                }}
+                            />
+                            {layer.style?.polaroidData?.filterId && layer.style.polaroidData.filterId !== 'none' && (
+                                <div dangerouslySetInnerHTML={{ __html: getFilterById(layer.style.polaroidData.filterId)?.getOverlay(100) || '' }} />
+                            )}
+                        </>
+                    ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                    )}
+                </div>
+                {layer.style?.polaroidData?.caption && (
+                    <div className="absolute bottom-3 left-0 w-full text-center text-gray-800 text-[18px] font-bold" style={{ fontFamily: "'Caveat', cursive", lineHeight: 1 }}>
+                        {layer.style.polaroidData.caption}
+                    </div>
+                )}
+            </div>
+        )}
+
+        {layer.type === 'video' && (
+            <div className="w-full h-full relative pointer-events-none">
+                <video 
+                    src={layer.url} 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline 
+                    className="w-full h-full object-cover pointer-events-none" 
+                    style={{
+                        filter: `brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`
+                    }}
+                />
+            </div>
+        )}
+
+        {layer.type === 'custom_code' && (
+            <div 
+                className="w-full h-full relative"
+                style={{ pointerEvents: layer.isLocked ? 'none' : 'auto' }}
+            >
+                {layer.content && (
+                    <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: layer.content }} />
+                )}
+            </div>
+        )}
+
+                {layer.type === 'lottie' && (layer.lottieJsonObj || layer.animationData) && (
+                    <div className="w-full h-full relative pointer-events-none">
+                        <Player 
+                            src={layer.lottieJsonObj || layer.animationData}
+                            loop={layer.animation?.loop !== false} 
+                            autoplay={true}
+                            style={{ width: '100%', height: '100%' }}
+                        />
+                    </div>
+                )}
+
+                {layer.type === 'custom_path' && (
+                    <svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" className="pointer-events-none" style={{ overflow: 'visible' }}>
+                        <path 
+                            id={layer.id + '_path'}
+                            d="M 10 90 Q 30 10 70 50 T 90 10" 
+                            fill="transparent" 
+                            stroke={isActive ? "#6366f1" : "rgba(99,102,241,0.2)"} 
+                            strokeWidth="2" 
+                            strokeDasharray="4 4" 
+                        />
+                    </svg>
+                )}
+
+                {layer.type === 'canvas_group' && (
+                    <div className="w-full h-full relative pointer-events-none">
+                        {layer.children?.map(child => (
+                            <div 
+                                key={child.id} 
+                                style={{ 
+                                    position: 'absolute', 
+                                    left: child.style?.x || 0, 
+                                    top: child.style?.y || 0, 
+                                    width: child.style?.width || 100, 
+                                    height: child.style?.height || 100,
+                                    zIndex: child.style?.zIndex || 1
+                                }}
+                            >
+                                <LayerElement layer={child} isChildOfGroup={true} />
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {layer.type === 'interactive_countdown' && (
+                    <CountdownDisplay 
+                        targetDate={layer.style?.countdownTarget}
+                        textColor={layer.style?.countdownColor}
+                        bgColor={layer.style?.countdownBgColor}
+                        bgImage={layer.style?.countdownBgImage}
+                        fontFamily={layer.style?.fontFamily}
+                        bgOpacity={layer.style?.countdownBgOpacity}
+                        gap={layer.style?.countdownGap}
+                        showSeconds={layer.style?.countdownShowSeconds}
+                        bgStyle={layer.style?.countdownBgStyle}
+                    />
+                )}
+
+                {layer.type === 'photo_album' && (
+                    <div className="w-full h-full pointer-events-none relative flex items-center justify-center overflow-hidden">
+                        {isActive && (
+                            <button 
+                                onClick={() => {
+                                    useUIStore.getState().setAssetSelectionTarget({
+                                        layerId: layer.id,
+                                        layerType: 'photo_album',
+                                        multiple: true
+                                    });
+                                }}
+                                className="absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition"
+                                title="Isi Wadah Album"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                            </button>
+                        )}
+                        {(!layer.style?.albumData?.images || layer.style.albumData.images.length === 0) ? (
+                            <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 rounded-xl border-2 border-dashed border-gray-300 overflow-hidden" style={{ borderRadius: layer.style?.albumData?.shape === 'circle' ? '50%' : layer.style?.albumData?.shape === 'rounded' ? '1rem' : layer.style?.albumData?.shape === 'pill' ? '9999px' : layer.style?.albumData?.shape === 'arch' ? '10rem 10rem 0 0' : '0' }}>
+                                <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span className="text-[10px] font-bold text-gray-400">Wadah Album Kosong</span>
+                            </div>
+                        ) : (
+                            <Swiper
+                                key={`${layer.style?.albumData?.animationStyle || 'slide'}-${layer.style?.albumData?.direction || 'horizontal'}-${layer.style?.albumData?.speed || 500}-${layer.style?.albumData?.autoplayDelay || 2500}`}
+                                modules={[Autoplay, EffectCards, EffectCoverflow, EffectFade]}
+                                effect={layer.style?.albumData?.animationStyle || 'slide'}
+                                direction={layer.style?.albumData?.direction || 'horizontal'}
+                                speed={layer.style?.albumData?.speed || 500}
+                                observer={true}
+                                observeParents={true}
+                                grabCursor={false}
+                                centeredSlides={true}
+                                slidesPerView={1}
+                                loop={layer.style?.albumData?.animationStyle === 'cards' ? false : (layer.style?.albumData?.images?.length || 0) > 2}
+                                autoplay={{ delay: layer.style?.albumData?.autoplayDelay || 2500, disableOnInteraction: false }}
+                                coverflowEffect={layer.style?.albumData?.animationStyle === 'coverflow' ? {
+                                    rotate: 50, stretch: 0, depth: 100, modifier: 1, slideShadows: false,
+                                } : undefined}
+                                fadeEffect={layer.style?.albumData?.animationStyle === 'fade' ? { crossFade: true } : undefined}
+                                cardsEffect={layer.style?.albumData?.animationStyle === 'cards' ? { slideShadows: false } : undefined}
+                                style={{ width: '100%', height: '100%' }}
+                            >
+                                  {(layer.style?.albumData?.images || []).map((img, idx) => {
+                                      const polaroidTheme = layer.style?.albumData?.polaroidTheme;
+                                      const isPolaroid = polaroidTheme && polaroidTheme !== 'none';
+
+                                      return (
+                                          <SwiperSlide key={idx} style={{ width: '100%', height: '100%' }}>
+                                              {isPolaroid ? (
+                                                  <div className={`polaroid-wrapper polaroid-${polaroidTheme}`}>
+                                                      <div className="polaroid-image-container" style={{ 
+                                                          borderRadius: layer.style?.albumData?.shape === 'circle' ? '50%' : layer.style?.albumData?.shape === 'rounded' ? '1rem' : layer.style?.albumData?.shape === 'pill' ? '9999px' : layer.style?.albumData?.shape === 'arch' ? '10rem 10rem 0 0' : '0' 
+                                                      }}>
+                                                          <img 
+                                                              src={img.url} 
+                                                              alt={img.caption || `Slide ${idx+1}`} 
+                                                              style={{ 
+                                                                  width: '100%', height: '100%', objectFit: 'cover',
+                                                                  filter: `${img.filterId && img.filterId !== 'none' ? getFilterById(img.filterId).getCss(img.filterIntensity ?? 100) + ' ' : ''}brightness(${img.brightness ?? 1}) contrast(${img.contrast ?? 1}) saturate(${img.saturate ?? 1}) blur(${img.blur ?? 0}px)`.trim()
+                                                              }} 
+                                                          />
+                                                      </div>
+                                                      {img.caption && (
+                                                          <div className="polaroid-caption">{img.caption}</div>
+                                                      )}
+                                                  </div>
+                                              ) : (
+                                                  <div style={{ 
+                                                      position: 'relative', width: '100%', height: '100%', overflow: 'hidden',
+                                                      borderRadius: layer.style?.albumData?.shape === 'circle' ? '50%' : layer.style?.albumData?.shape === 'rounded' ? '1rem' : layer.style?.albumData?.shape === 'pill' ? '9999px' : layer.style?.albumData?.shape === 'arch' ? '10rem 10rem 0 0' : '0'
+                                                  }}>
+                                                      <img 
+                                                          src={img.url} 
+                                                          alt={img.caption || `Slide ${idx+1}`} 
+                                                          style={{ 
+                                                              width: '100%', height: '100%', objectFit: 'cover',
+                                                              filter: getFilterById(img.filterId) || 'none'
+                                                          }} 
+                                                      />
+                                                  </div>
+                                              )}
+                                          </SwiperSlide>
+                                      );
+                                  })}
+                            </Swiper>
+                        )}
+                    </div>
+                )}
+
+                {layer.type === 'interactive_rsvp' && (() => {
+                    const theme = layer.style?.rsvpTheme || 'solid';
+                    let containerStyle = {
+                        backgroundColor: layer.style?.backgroundColor || '#ffffff',
+                        backgroundImage: layer.style?.backgroundImageUrl ? `url(${layer.style.backgroundImageUrl})` : 'none',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center',
+                        borderRadius: layer.style?.borderRadius || '0.75rem',
+                        borderWidth: layer.style?.borderWidth,
+                        borderColor: layer.style?.borderColor,
+                        borderStyle: layer.style?.borderWidth ? 'solid' : 'none',
+                        color: layer.style?.textColor || '#1f2937',
+                    };
+                    const hexToRgba = (hex, alpha) => {
+                        if (!hex || !hex.startsWith('#')) return hex;
+                        const r = parseInt(hex.slice(1, 3), 16) || 0;
+                        const g = parseInt(hex.slice(3, 5), 16) || 0;
+                        const b = parseInt(hex.slice(5, 7), 16) || 0;
+                        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+                    };
+
+                    const defaultInputBg = layer.style?.inputBackgroundColor || '#f3f4f6';
+                    const opacity = layer.style?.inputBackgroundOpacity ?? 1;
+                    const finalInputBg = hexToRgba(defaultInputBg, opacity);
+
+                    let inputStyle = { backgroundColor: finalInputBg, color: layer.style?.textColor || '#9ca3af', border: 'none', borderRadius: '0.5rem' };
+                    let buttonStyle = { backgroundColor: layer.style?.buttonColor || '#4f46e5', color: layer.style?.buttonTextColor || '#ffffff', borderRadius: '0.5rem' };
+                    let wrapperClass = "w-full h-full flex flex-col items-center justify-center pointer-events-none p-4 space-y-3 relative";
+
+                    if (theme === 'glass') {
+                        containerStyle.backgroundColor = layer.style?.backgroundColor ? layer.style.backgroundColor : 'rgba(255, 255, 255, 0.2)';
+                        containerStyle.backdropFilter = 'blur(10px)';
+                        containerStyle.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+                        inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : 'rgba(255, 255, 255, 0.5)';
+                        inputStyle.backdropFilter = 'blur(4px)';
+                    } else if (theme === 'classic') {
+                        containerStyle.borderStyle = 'double';
+                        containerStyle.borderWidth = layer.style?.borderWidth || '6px';
+                        containerStyle.borderColor = layer.style?.borderColor || '#d97706';
+                        containerStyle.borderRadius = '0';
+                        inputStyle.border = '1px solid ' + (layer.style?.borderColor || '#d97706');
+                        inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : 'transparent';
+                        buttonStyle.borderRadius = '0';
+                    } else if (theme === 'romance') {
+                        containerStyle.borderRadius = '2rem';
+                        containerStyle.boxShadow = '0 10px 25px -5px rgba(225,29,72,0.1), 0 8px 10px -6px rgba(225,29,72,0.1)';
+                        inputStyle.borderRadius = '1rem';
+                        buttonStyle.borderRadius = '1rem';
+                    } else if (theme === 'adat') {
+                        containerStyle.borderRadius = '3rem 3rem 0 0';
+                        containerStyle.borderTop = `8px solid ${layer.style?.borderColor || '#8b5a2b'}`;
+                        containerStyle.borderBottom = `8px solid ${layer.style?.borderColor || '#8b5a2b'}`;
+                        inputStyle.borderBottom = '2px solid ' + (layer.style?.borderColor || '#8b5a2b');
+                        inputStyle.borderRadius = '0';
+                        inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : 'transparent';
+                    } else if (theme === 'minimalist') {
+                        containerStyle.borderStyle = 'dashed';
+                        containerStyle.borderWidth = '1px';
+                        containerStyle.borderColor = layer.style?.borderColor || '#9ca3af';
+                        inputStyle.borderBottom = '1px solid #d1d5db';
+                        inputStyle.borderRadius = '0';
+                        inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : 'transparent';
+                    } else if (theme === 'rustic') {
+                        containerStyle.borderStyle = 'solid';
+                        containerStyle.borderWidth = '4px';
+                        containerStyle.borderColor = layer.style?.borderColor || '#78716c';
+                        containerStyle.outline = '2px dashed ' + (layer.style?.borderColor || '#78716c');
+                        containerStyle.outlineOffset = '-8px';
+                    }
+
+                    return (
+                        <div className={wrapperClass} style={containerStyle}>
+                            <h3 className="font-serif text-center z-10" style={{ fontSize: layer.style?.fontSize || '1.25rem', color: layer.style?.textColor || '#1f2937', marginBottom: '4px' }}>Kehadiran Anda</h3>
+                            <div className="w-full flex-1 flex flex-col gap-2 z-10">
+                                <div className="h-10 w-full flex items-center px-3 text-sm shrink-0" style={inputStyle}>Nama Lengkap...</div>
+                                <div className="h-10 w-full flex items-center px-3 text-sm shrink-0" style={inputStyle}>Pilih Kehadiran...</div>
+                                <div className="flex-1 w-full flex items-start p-3 text-sm min-h-[3rem]" style={inputStyle}>Pesan/Doa...</div>
+                                <div className="h-10 w-full flex items-center justify-center font-bold mt-1 shrink-0" style={buttonStyle}>Kirim RSVP</div>
+                            </div>
+                        </div>
+                    );
+                })()}
+
+                {layer.type === 'interactive_map' && (() => {
+                    const mapOpacity = layer.style?.mapOpacity ?? 1;
+                    const isButtonOnly = layer.style?.mapDisplayType === 'button_only';
+                    const buttonText = layer.style?.mapButtonText || 'Buka Google Maps';
+                    const buttonColor = layer.style?.mapButtonColor || '#ef4444'; // default red
+                    const buttonTextColor = layer.style?.mapButtonTextColor || '#ffffff';
+
+                    return (
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded-xl border border-gray-300 pointer-events-none relative overflow-hidden" style={{ opacity: mapOpacity, background: isButtonOnly ? 'transparent' : undefined, borderColor: isButtonOnly ? 'transparent' : undefined }}>
+                            {!isButtonOnly && (
+                                layer.content && layer.content.includes('<iframe') ? (
+                                    <div className="w-full h-full pointer-events-none [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0" dangerouslySetInnerHTML={{ __html: layer.content }}></div>
+                                ) : (
+                                    <div className="absolute inset-0 w-full h-full" style={{ backgroundImage: 'url(/map_placeholder.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
+                                )
+                            )}
+                            
+                            {(!layer.content?.includes('<iframe') || isButtonOnly) && (
+                                <div 
+                                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur px-5 py-2.5 rounded-full shadow-md flex items-center gap-2.5 text-sm font-bold z-10 pointer-events-none"
+                                    style={{ backgroundColor: isButtonOnly ? buttonColor : 'rgba(255, 255, 255, 0.95)', color: isButtonOnly ? buttonTextColor : '#1f2937' }}
+                                >
+                                    <svg className="w-5 h-5" style={{ color: isButtonOnly ? buttonTextColor : '#ef4444' }} fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                    {buttonText}
+                                </div>
+                            )}
+                        </div>
+                    );
+                })()}
+
+                {layer.type === 'interactive_copy' && (() => {
+                    const bgOpacity = layer.style?.bgOpacity ?? 1;
+                    const textOpacity = layer.style?.textOpacity ?? 1;
+
+                    const hexToRgba = (hex, opacity = 1) => {
+                        hex = (hex || '#ffffff').replace('#', '');
+                        if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+                        const r = parseInt(hex.substring(0, 2), 16) || 0;
+                        const g = parseInt(hex.substring(2, 4), 16) || 0;
+                        const b = parseInt(hex.substring(4, 6), 16) || 0;
+                        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+                    };
+
+                    const bgColor = layer.style?.backgroundColor || '#ffffff';
+                    const textColor = layer.style?.textColor || '#1f2937';
+
+                    return (
+                        <div 
+                            className="w-full h-full flex items-center justify-between shadow-sm pointer-events-none px-4"
+                            style={{
+                                backgroundColor: hexToRgba(bgColor, bgOpacity),
+                                borderRadius: layer.style?.borderRadius || '0.75rem',
+                                borderWidth: layer.style?.borderWidth || '1px',
+                                borderColor: layer.style?.borderColor || '#e5e7eb',
+                                borderStyle: layer.style?.borderWidth ? 'solid' : (layer.style?.borderColor ? 'solid' : 'none'),
+                                boxShadow: layer.style?.isShadowActive ? `0px ${layer.style?.shadowY || 4}px 6px -1px rgba(0, 0, 0, 0.1)` : 'none',
+                            }}
+                        >
+                            <span 
+                                className="text-base font-mono font-bold w-full"
+                                style={{ color: hexToRgba(textColor, textOpacity) }}
+                            >
+                                {layer.content || ''}
+                            </span>
+                            <div 
+                                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ml-2"
+                                style={{ 
+                                    backgroundColor: layer.style?.iconBgColor || '#e0e7ff',
+                                    color: layer.style?.iconColor || '#4f46e5'
+                                }}
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            </div>
+                        </div>
+                    );
+                })()}
+
+                {layer.type === 'interactive_comments' && (
+                    <div 
+                        className="w-full h-full flex flex-col pointer-events-none overflow-hidden"
+                        style={{
+                            backgroundColor: layer.style?.backgroundColor || '#f8fafc',
+                            borderRadius: layer.style?.borderRadius || '1rem',
+                            padding: layer.style?.padding || '1rem',
+                            color: layer.style?.color || '#333333',
+                            borderWidth: layer.style?.borderWidth || 0,
+                            borderColor: layer.style?.borderColor || '#e2e8f0',
+                            borderStyle: layer.style?.borderWidth ? 'solid' : 'none',
+                        }}
+                    >
+                        <h3 className="text-sm font-bold mb-3 border-b border-gray-200 pb-2" style={{ color: layer.style?.color || '#333333' }}>
+                            Ucapan & Doa
+                        </h3>
+                        <div className="flex-1 overflow-hidden opacity-50 flex flex-col items-center justify-center">
+                            <span className="text-[10px] text-gray-400">(Daftar komentar akan muncul di sini saat tamu mengisi form RSVP)</span>
+                        </div>
+                    </div>
+                )}
+
+
+                </div> {/* End Animation Wrapper */}
+                
+        </div>
+    );
+
+    const snapTargetsRef = useRef([]);
+    const pathRecordingRef = useRef([]);
+
+    if (isChildOfGroup) {
+        return innerStructure;
+    }
+
+    return (
+        <Rnd
+            key={`rnd-${layer.id}`}
+            ref={rndRef}
+            size={{ width: localSize.width, height: localSize.height }}
+            defaultPosition={{ x: layer.style?.x || 0, y: layer.style?.y || 0 }}
+            onDrag={(e, d) => {
+                let newX = d.x;
+                let newY = d.y;
+                let activeLines = [];
+                const SNAP_THRESHOLD = 5;
+
+                const store = useCanvasStore.getState();
+                const section = store.sections.find(s => s.id === sectionId);
+                const sectionWidth = 375;
+                const sectionHeight = parseInt(section?.layout?.height || 844);
+
+                const elWidth = typeof localSize.width === 'string' ? parseFloat(localSize.width) : localSize.width;
+                const elHeight = typeof localSize.height === 'string' ? parseFloat(localSize.height) : localSize.height;
+                const elCenterX = newX + elWidth / 2;
+                const elCenterY = newY + elHeight / 2;
+
+                if (!e.shiftKey) {
+                    const centerX = sectionWidth / 2;
+                    if (Math.abs(elCenterX - centerX) < SNAP_THRESHOLD) { newX = centerX - elWidth / 2; activeLines.push({ axis: 'x', position: centerX, type: 'center' }); }
+                    const centerY = sectionHeight / 2;
+                    if (Math.abs(elCenterY - centerY) < SNAP_THRESHOLD) { newY = centerY - elHeight / 2; activeLines.push({ axis: 'y', position: centerY, type: 'center' }); }
+                    
+                    snapTargetsRef.current.forEach(({ ox, oy, ow, oh }) => {
+                        if (Math.abs(newX - ox) < SNAP_THRESHOLD) { newX = ox; activeLines.push({ axis: 'x', position: ox }); }
+                        if (Math.abs(newY - oy) < SNAP_THRESHOLD) { newY = oy; activeLines.push({ axis: 'y', position: oy }); }
+                        
+                        const otherCX = ox + ow / 2;
+                        if (Math.abs((newX + elWidth / 2) - otherCX) < SNAP_THRESHOLD) { newX = otherCX - elWidth / 2; activeLines.push({ axis: 'x', position: otherCX }); }
+                        const otherCY = oy + oh / 2;
+                        if (Math.abs((newY + elHeight / 2) - otherCY) < SNAP_THRESHOLD) { newY = otherCY - elHeight / 2; activeLines.push({ axis: 'y', position: otherCY }); }
+                    });
+                }
+
+                setLocalPos({ x: newX, y: newY });
+                localPosRef.current = { x: newX, y: newY };
+                if (rndRef.current && (newX !== d.x || newY !== d.y)) {
+                    rndRef.current.updatePosition({ x: newX, y: newY });
+                }
+                
+                const isDrawingPath = useUIStore.getState().isDrawingPath;
+                if (isDrawingPath) {
+                    const last = pathRecordingRef.current[pathRecordingRef.current.length - 1];
+                    // Rekam pusat elemen. Sensitivitas jarak > 5
+                    if (!last || Math.hypot(elCenterX - last.x, elCenterY - last.y) > 5) {
+                        pathRecordingRef.current.push({ x: elCenterX, y: elCenterY });
+                        useUIStore.getState().setCurrentPathPoints([...pathRecordingRef.current]);
+                    }
+                } else {
+                    useUIStore.getState().setSnapLines(activeLines);
+                }
+            }}
+            onDragStart={() => {
+                setIsDragging(true);
+                useCanvasStore.getState().setActiveSection(sectionId);
+
+                if (useUIStore.getState().isDrawingPath) {
+                    pathRecordingRef.current = [];
+                    const elWidth = typeof localSize.width === 'string' ? parseFloat(localSize.width) : localSize.width;
+                    const elHeight = typeof localSize.height === 'string' ? parseFloat(localSize.height) : localSize.height;
+                    const startPoint = {
+                        x: localPos.x + elWidth / 2,
+                        y: localPos.y + elHeight / 2
+                    };
+                    pathRecordingRef.current.push(startPoint);
+                    useUIStore.getState().setCurrentPathPoints([startPoint]);
+                }
+                
+                // Precalculate snap targets for better performance
+                const store = useCanvasStore.getState();
+                const otherLayers = store.sections.reduce((acc, s) => {
+                    if (s.id !== sectionId) return acc;
+                    let layers = [];
+                    s.layers.forEach(l => {
+                        if (l.id !== layer.id) layers.push(l);
+                        if (l.children) l.children.forEach(c => { if (c.id !== layer.id) layers.push(c); });
+                    });
+                    return acc.concat(layers);
+                }, []);
+                
+                snapTargetsRef.current = otherLayers.map(other => ({
+                    ox: parseFloat(other.style?.x || 0),
+                    oy: parseFloat(other.style?.y || 0),
+                    ow: parseFloat(other.style?.width || 100),
+                    oh: parseFloat(other.style?.height || 100)
+                }));
+            }}
+            onDragStop={(e, d) => {
+                setIsDragging(false);
+                useUIStore.getState().setSnapLines([]);
+                
+                let wasDrawing = false;
+                if (useUIStore.getState().isDrawingPath) {
+                    wasDrawing = true;
+                    useUIStore.getState().setIsDrawingPath(false);
+                    useUIStore.getState().setCurrentPathPoints([]);
+                    const points = pathRecordingRef.current;
+                    if (points.length > 2) {
+                        const svgPath = pointsToSmoothedSvgPath(points);
+                        useCanvasStore.getState().updateLayerAnimation(layer.id, {
+                            idle: 'custom_path',
+                            custom_path_data: {
+                                svgPath: svgPath,
+                                ease: 'power2.inOut',
+                                duration: 5,
+                                autoRotate: false
+                            }
+                        });
+                    }
+                    pathRecordingRef.current = [];
+                }
+
+                if (!wasDrawing) {
+                    const finalPos = localPosRef.current;
+                    if (finalPos.x !== layer.style?.x || finalPos.y !== layer.style?.y) {
+                        useCanvasStore.getState().updateLayerStyle(layer.id, { x: finalPos.x, y: finalPos.y });
+                    }
+                } else {
+                    // Kembalikan elemen ke posisi semula (titik A) agar animasi mulai dari titik awal
+                    const originalX = parseFloat(layer.style?.x || 0);
+                    const originalY = parseFloat(layer.style?.y || 0);
+                    setLocalPos({ x: originalX, y: originalY });
+                    localPosRef.current = { x: originalX, y: originalY };
+                }
+            }}
+            onResize={(e, direction, ref, delta, position) => {
+                setLocalSize({ width: ref.style.width, height: ref.style.height });
+                setLocalPos(position);
+            }}
+            onResizeStop={(e, direction, ref, delta, position) => {
+                const currentWidth = typeof layer.style?.width === 'number' ? `${layer.style.width}px` : layer.style?.width;
+                const currentHeight = typeof layer.style?.height === 'number' ? `${layer.style.height}px` : layer.style?.height;
+                
+                if (position.x !== layer.style?.x || position.y !== layer.style?.y || ref.style.width !== currentWidth || ref.style.height !== currentHeight) {
+                    useCanvasStore.getState().updateLayerStyle(layer.id, { 
+                        x: position.x, 
+                        y: position.y, 
+                        width: ref.style.width, 
+                        height: ref.style.height 
+                    });
+                }
+            }}
+            disableDragging={layer.isLocked || isEditing}
+            enableResizing={isActive && !layer.isLocked && !isEditing}
+            cancel=".no-drag"
+            scale={zoom}
+            style={{
+                zIndex: layer.style?.zIndex || 1,
+                opacity: layer.style?.opacity ?? 1,
+            }}
+            resizeHandleComponent={(isActive && !layer.isLocked) ? {
+                topLeft: <ResizeHandle />,
+                topRight: <ResizeHandle />,
+                bottomLeft: <ResizeHandle />,
+                bottomRight: <ResizeHandle />
+            } : {
+                topLeft: <React.Fragment />,
+                topRight: <React.Fragment />,
+                bottomLeft: <React.Fragment />,
+                bottomRight: <React.Fragment />
+            }}
+            className={`layer-wrapper ${layer.isLocked ? 'pointer-events-auto cursor-default' : 'pointer-events-auto hover:cursor-move'} ${isActive ? 'active-layer outline outline-1 outline-indigo-500 rounded' : ''}`}
+            onClick={(e) => {
+                if (layer.isLocked) return;
+                e.stopPropagation();
+                useCanvasStore.getState().setActiveSection(sectionId);
+                useCanvasStore.getState().setActiveLayer(layer.id, e.shiftKey || e.ctrlKey || e.metaKey);
+            }}
+            onMouseDown={(e) => {
+                e.stopPropagation(); // Cegah panzoom mengambil alih saat element di-klik
+            }}
+        >
+
+            {/* Floating Quick Actions (Canva-style bubble) */}
+            {isActive && !layer.isLocked && (
+                <div 
+                    className="absolute -top-10 right-0 flex items-center bg-white rounded shadow-md border border-gray-200 z-50 pointer-events-auto overflow-hidden"
+                    onMouseDown={(e) => e.stopPropagation()}
+                >
+                    {(layer.type === 'text' || layer.type === 'dynamic_guest_name') && !isEditing && (
+                        <button 
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsEditing(true);
+                                setTimeout(() => {
+                                    if (elementRef.current) {
+                                        const target = elementRef.current.querySelector('[contenteditable]');
+                                        if (target) {
+                                            target.focus();
+                                            const range = document.createRange();
+                                            range.selectNodeContents(target);
+                                            const sel = window.getSelection();
+                                            sel.removeAllRanges();
+                                            sel.addRange(range);
+                                        }
+                                    }
+                                }, 50);
+                            }}
+                            className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors border-r border-gray-100"
+                            title="Edit Teks"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </button>
+                    )}
+                    <button 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            useCanvasStore.getState().toggleLayerLock(layer.id);
+                            // Set aktif layer ke null agar selection hilang
+                            useCanvasStore.getState().setActiveLayer(null);
+                        }}
+                        className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-amber-600 hover:bg-amber-50 transition-colors"
+                        title="Kunci Elemen"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path></svg>
+                    </button>
+                </div>
+            )}
+
+            {innerStructure}
+        </Rnd>
+    );
+};
+
+export default LayerElement;

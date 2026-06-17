@@ -1,0 +1,254 @@
+import React, { useEffect, useState, useRef } from 'react';
+import PublicLayer from './PublicLayer';
+import Particles from "@tsparticles/react";
+import { tsParticles } from "@tsparticles/engine";
+import { loadFireflyPreset } from "@tsparticles/preset-firefly";
+import { loadSnowPreset } from "@tsparticles/preset-snow";
+import IframePreview from '../../Builder/components/Canvas/IframePreview';
+
+const PublicCanvas = ({ config }) => {
+    const { sections = [], global_settings = {} } = config;
+    const [init, setInit] = useState(false);
+    const [scale, setScale] = useState(1);
+    const [scaledHeight, setScaledHeight] = useState('auto');
+    const [isOpened, setIsOpened] = useState(false);
+    const [transitionType, setTransitionType] = useState('slide_up');
+    const containerRef = useRef(null);
+    const innerRef = useRef(null);
+
+    useEffect(() => {
+        const handleOpenInvitation = async (e) => {
+            const trans = e.detail?.transition || 'slide_up';
+            
+            // Check if there are any exit animations in the cover section
+            let maxExitDuration = 0;
+            const checkExit = (layer) => {
+                if (layer.animation?.exit) {
+                    const dur = (layer.animation.configExit?.speed || 1.5) * 1000;
+                    const del = (layer.animation.configExit?.delay || 0) * 1000;
+                    maxExitDuration = Math.max(maxExitDuration, dur + del);
+                }
+                if (layer.children) layer.children.forEach(checkExit);
+            };
+            if (sections[0] && sections[0].layers) {
+                sections[0].layers.forEach(checkExit);
+            }
+
+            if (maxExitDuration > 0) {
+                window.dispatchEvent(new CustomEvent('builder:play_exit_animations'));
+                // Wait for animations to finish before sliding up cover
+                await new Promise(r => setTimeout(r, maxExitDuration + 100));
+            }
+
+            setTransitionType(trans);
+            setIsOpened(true);
+            
+            // Auto play audio if exists logic can be added here
+            const audioEl = document.getElementById('background-audio');
+            if (audioEl) {
+                audioEl.play().catch(err => console.log('Audio autoplay prevented:', err));
+            }
+        };
+        window.addEventListener('builder:open_invitation', handleOpenInvitation);
+        return () => window.removeEventListener('builder:open_invitation', handleOpenInvitation);
+    }, [sections]);
+
+    useEffect(() => {
+        let hasOpenButton = false;
+        sections.forEach(s => {
+            s.layers?.forEach(l => {
+                if (l.interaction?.action === 'open_invitation') hasOpenButton = true;
+                if (l.children) {
+                    l.children.forEach(c => {
+                        if (c.interaction?.action === 'open_invitation') hasOpenButton = true;
+                    });
+                }
+            });
+        });
+
+        // We no longer lock the scroll here, because we hide the content pages instead!
+        // This allows the user to scroll the cover page if it is taller than their screen.
+    }, [sections, isOpened]);
+
+    useEffect(() => {
+        const initEngine = async () => {
+            await loadFireflyPreset(tsParticles);
+            await loadSnowPreset(tsParticles);
+            window.tsParticles = tsParticles;
+            setInit(true);
+        };
+        initEngine();
+
+        // Calculate scale for responsive view
+        const handleResize = () => {
+            if (!containerRef.current) return;
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            const baseWidth = 414;
+            let newScale = 1;
+            
+            const isPreview = new URLSearchParams(window.location.search).get('preview') === '1';
+            const hasDesktopThumbnail = config?.global_settings?.desktop_thumbnail?.enabled;
+
+            if (isPreview) {
+                newScale = screenWidth / baseWidth;
+            } else if (screenWidth < baseWidth) {
+                // Mobile
+                newScale = screenWidth / baseWidth;
+            } else if (screenWidth < 1024) {
+                // Tablet
+                newScale = screenWidth / baseWidth;
+            } else {
+                // Desktop (>= 1024px)
+                if (hasDesktopThumbnail) {
+                    newScale = screenHeight / 844;
+                } else {
+                    newScale = 1;
+                }
+            }
+
+            setScale(newScale);
+            setScaledHeight(844 * newScale);
+        };
+        
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [global_settings?.desktop_thumbnail?.enabled]);
+
+    useEffect(() => {
+        if (!innerRef.current) return;
+        const resizeObserver = new ResizeObserver((entries) => {
+            for (let entry of entries) {
+                setScaledHeight(entry.contentRect.height * scale);
+            }
+        });
+        resizeObserver.observe(innerRef.current);
+        return () => resizeObserver.disconnect();
+    }, [scale, sections]);
+
+    const hasAnyLayers = sections.some(s => s.layers && s.layers.length > 0);
+    const hideEmptySections = global_settings?.custom_code && !hasAnyLayers;
+
+    return (
+        <div ref={containerRef} style={{ width: '100%', height: scaledHeight === 'auto' ? 'auto' : `${scaledHeight}px`, overflow: 'hidden' }}>
+            <div ref={innerRef} style={{ 
+                width: '414px', 
+                maxWidth: '414px', 
+                margin: '0', 
+                overflowX: 'hidden', 
+                position: 'relative',
+                transform: `scale(${scale})`,
+                transformOrigin: 'top left',
+                backgroundColor: 'transparent'
+            }}>
+                {global_settings?.custom_code && (
+                    <IframePreview 
+                        htmlContent={global_settings.custom_code} 
+                        style={{ position: 'relative', zIndex: 9999 }}
+                    />
+                )}
+
+                {init && global_settings?.particleEffect && (
+                    <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}>
+                        <Particles 
+                            id="tsparticles-viewer" 
+                            options={{ preset: global_settings.particleEffect, background: { opacity: 0 } }} 
+                        />
+                    </div>
+                )}
+                
+                {!hideEmptySections && sections.map((section, index) => {
+                    
+                    let hasOpenButton = false;
+                    sections.forEach(s => {
+                        s.layers?.forEach(l => {
+                            if (l.interaction?.action === 'open_invitation') hasOpenButton = true;
+                            if (l.children) l.children.forEach(c => {
+                                if (c.interaction?.action === 'open_invitation') hasOpenButton = true;
+                            });
+                        });
+                    });
+
+                    let maxY = 0;
+                    const checkLayer = (layer) => {
+                        const bottom = (parseFloat(layer.style?.y) || 0) + (parseFloat(layer.style?.height) || 0);
+                        if (bottom > maxY) maxY = bottom;
+                        if (layer.children) layer.children.forEach(checkLayer);
+                    };
+                    section.layers?.forEach(checkLayer);
+
+                    const sectionHeight = (() => {
+                        if (section.layout?.height && section.layout.height !== 'auto' && section.layout.height !== '100vh') {
+                            return section.layout.height;
+                        }
+                        if (index === 0) {
+                            return maxY > 0 ? `calc(max(844px, ${maxY}px))` : '844px';
+                        }
+                        if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
+                            return section.layout.minHeight;
+                        }
+                        return maxY > 0 ? `${maxY}px` : (section.layout?.height || '844px');
+                    })();
+
+                    return (
+                    <section 
+                        key={section.id} 
+                        id={section.id}
+                        className={`public-section-${index}`}
+                        style={{
+                            position: 'relative',
+                            height: sectionHeight,
+                            background: section.layout?.background_value || '#ffffff',
+                            overflow: 'hidden',
+                            display: (!isOpened && hasOpenButton && index > 0) ? 'none' : 'block',
+                            zIndex: index === 0 ? 50 : 1,
+                            ...(index === 0 ? (() => {
+                                let isSlideUp = transitionType === 'slide_up' || !transitionType;
+                                let transStyle = {
+                                    transition: 'all 1.2s cubic-bezier(0.85, 0, 0.15, 1)',
+                                    pointerEvents: isOpened ? 'none' : 'auto'
+                                };
+                                
+                                if (isOpened) {
+                                    if (isSlideUp) {
+                                        transStyle.marginTop = `calc(-1 * max(100vh, ${maxY > 0 ? maxY : 0}px))`;
+                                    } else {
+                                        transStyle.position = 'absolute';
+                                        transStyle.top = '0';
+                                        transStyle.left = '0';
+                                        transStyle.width = '100%';
+                                        transStyle.zIndex = 50;
+                                        
+                                        switch(transitionType) {
+                                            case 'slide_down': transStyle.transform = 'translateY(100vh)'; transStyle.opacity = 0; break;
+                                            case 'slide_left': transStyle.transform = 'translateX(-100vw)'; transStyle.opacity = 0; break;
+                                            case 'slide_right': transStyle.transform = 'translateX(100vw)'; transStyle.opacity = 0; break;
+                                            case 'fade_out': transStyle.opacity = 0; break;
+                                            case 'zoom_out': transStyle.transform = 'scale(0.2)'; transStyle.opacity = 0; break;
+                                            case 'zoom_in': transStyle.transform = 'scale(2)'; transStyle.opacity = 0; break;
+                                            case 'blur_out': transStyle.filter = 'blur(20px)'; transStyle.opacity = 0; break;
+                                            case 'split_horizontal': transStyle.transform = 'scaleY(0)'; transStyle.opacity = 0; break;
+                                        }
+                                    }
+                                }
+                                return transStyle;
+                            })() : {})
+                        }}
+                    >
+                        {section.layers?.map((layer) => (
+                            <div key={layer.id} style={{ zIndex: layer.style?.zIndex || 1, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+                                {!layer.isHidden && layer.children?.map(child => (
+                                    <PublicLayer key={child.id} layer={child} />
+                                ))}
+                            </div>
+                        ))}
+                    </section>
+                    );
+                })}
+            </div>
+        </div>
+    );
+};
+
+export default PublicCanvas;

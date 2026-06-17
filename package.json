@@ -1,0 +1,45 @@
+{
+    "$schema": "https://www.schemastore.org/package.json",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite"
+    },
+    "devDependencies": {
+        "@tailwindcss/vite": "^4.0.0",
+        "axios": "^1.11.0",
+        "concurrently": "^9.0.1",
+        "laravel-vite-plugin": "^2.0.0",
+        "tailwindcss": "^4.0.0",
+        "vite": "^8.0.16"
+    },
+    "dependencies": {
+        "@dnd-kit/core": "^6.3.1",
+        "@dnd-kit/sortable": "^10.0.0",
+        "@dnd-kit/utilities": "^3.2.2",
+        "@lottiefiles/react-lottie-player": "^3.6.0",
+        "@tsparticles/engine": "^4.1.2",
+        "@tsparticles/preset-firefly": "^4.1.2",
+        "@tsparticles/preset-snow": "^4.1.2",
+        "@tsparticles/react": "^4.1.2",
+        "@vitejs/plugin-react": "^6.0.2",
+        "dompurify": "^3.4.7",
+        "gsap": "^3.15.0",
+        "immer": "^11.1.8",
+        "lodash": "^4.18.1",
+        "lottie-react": "^2.4.1",
+        "react": "^19.2.7",
+        "react-dom": "^19.2.7",
+        "react-rnd": "^10.5.3",
+        "react-tsparticles": "^2.12.2",
+        "react-zoom-pan-pinch": "^4.0.3",
+        "recharts": "^3.8.1",
+        "sweetalert2": "^11.26.25",
+        "swiper": "^12.2.0",
+        "tsparticles": "^4.1.2",
+        "wavesurfer.js": "^7.12.7",
+        "zundo": "^2.3.0",
+        "zustand": "^5.0.14"
+    }
+}

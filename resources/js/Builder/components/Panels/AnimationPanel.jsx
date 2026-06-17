@@ -1,0 +1,403 @@
+import React, { useEffect, useState } from 'react';
+import useCanvasStore from '../../stores/useCanvasStore';
+import useUIStore from '../../stores/useUIStore';
+
+import { ANIMATION_CATEGORIES, ANIMATION_STYLES } from '../../utils/animations';
+
+const AnimatedIcon = ({ anim, isText = false, isActive = false }) => {
+    return (
+        <div className="w-full h-14 mb-2 flex items-center justify-center overflow-hidden border border-gray-100 bg-white rounded-lg group-hover:shadow-sm transition-shadow">
+            {isText ? (
+                <div 
+                    className={`font-bold text-[20px] tracking-widest transition-colors ${isActive ? 'text-indigo-600' : 'text-purple-600 group-hover:text-purple-500'}`} 
+                    style={{ animation: anim.anim }}
+                >
+                    ABC
+                </div>
+            ) : (
+                <div 
+                    className={`w-8 h-8 rounded transition-colors ${isActive ? 'bg-indigo-600' : 'bg-purple-500 group-hover:bg-purple-400'}`} 
+                    style={{ animation: anim.anim }}
+                ></div>
+            )}
+        </div>
+    );
+};
+
+const AnimationPanel = () => {
+    const activeLayerId = useCanvasStore(state => state.activeLayerId);
+    const sections = useCanvasStore(state => state.sections);
+    const updateLayerAnimation = useCanvasStore(state => state.updateLayerAnimation);
+    
+    const isDrawingPath = useUIStore(state => state.isDrawingPath);
+    const setIsDrawingPath = useUIStore(state => state.setIsDrawingPath);
+
+    const [subTab, setSubTab] = useState('teks');
+    const [customMode, setCustomMode] = useState('keyframes');
+
+    useEffect(() => {
+        if (!document.getElementById('builder-anim-styles-panel')) {
+            const style = document.createElement('style');
+            style.id = 'builder-anim-styles-panel';
+            style.innerHTML = ANIMATION_STYLES;
+            document.head.appendChild(style);
+        }
+    }, []);
+
+    const findLayer = (sections, id) => {
+        for (const section of sections) {
+            const layer = section.layers.find(l => l.id === id);
+            if (layer) return layer;
+            for (const g of section.layers) {
+                if (g.children) {
+                    const child = g.children.find(c => c.id === id);
+                    if (child) return child;
+                }
+            }
+        }
+        return null;
+    };
+
+    const activeLayer = activeLayerId ? findLayer(sections, activeLayerId) : null;
+    const isText = activeLayer?.type === 'text' || activeLayer?.type === 'dynamic_guest_name';
+
+    const handleAddKeyframe = () => {
+        if (!activeLayer) return;
+        const currentAnimation = activeLayer.animation || {};
+        const keyframes = currentAnimation.custom_keyframes || [];
+        
+        // Capture current state
+        const newKf = {
+            id: 'kf_' + Date.now(),
+            x: activeLayer.style?.x || 0,
+            y: activeLayer.style?.y || 0,
+            opacity: activeLayer.style?.opacity ?? 1,
+            scale: activeLayer.style?.scale ?? 1,
+            rotation: activeLayer.style?.rotation || 0,
+            duration: 1.0, // Default speed to reach this point
+            ease: 'power1.inOut'
+        };
+
+        updateLayerAnimation(activeLayer.id, {
+            idle: 'custom_timeline', // A special flag for engineGSAP
+            custom_keyframes: [...keyframes, newKf],
+            isLooping: currentAnimation.isLooping ?? true
+        });
+    };
+
+    const handleUpdateKeyframe = (index, field, value) => {
+        if (!activeLayer || !activeLayer.animation?.custom_keyframes) return;
+        const keyframes = [...activeLayer.animation.custom_keyframes];
+        keyframes[index][field] = value;
+        updateLayerAnimation(activeLayer.id, { custom_keyframes: keyframes });
+    };
+
+    const handleRemoveKeyframe = (index) => {
+        if (!activeLayer || !activeLayer.animation?.custom_keyframes) return;
+        const keyframes = [...activeLayer.animation.custom_keyframes];
+        keyframes.splice(index, 1);
+        
+        if (keyframes.length === 0) {
+            updateLayerAnimation(activeLayer.id, { idle: null, custom_keyframes: [] });
+        } else {
+            updateLayerAnimation(activeLayer.id, { custom_keyframes: keyframes });
+        }
+    };
+
+    if (!activeLayer) {
+        return (
+            <div className="p-8 text-center text-gray-500 text-sm">
+                Pilih sebuah elemen di kanvas untuk melihat daftar animasi.
+            </div>
+        );
+    }
+
+    const setAnimation = (animId, isContinuous = false) => {
+        if (isContinuous) {
+            updateLayerAnimation(activeLayer.id, { idle: animId });
+            if (!activeLayer.animation?.configIdle) {
+                updateLayerAnimation(activeLayer.id, { configIdle: { speed: 1 } });
+            }
+        } else {
+            updateLayerAnimation(activeLayer.id, { entry: animId });
+            if (!activeLayer.animation?.config) {
+                updateLayerAnimation(activeLayer.id, { config: { speed: 1.5 } });
+            }
+        }
+    };
+
+    const currentEntryAnim = activeLayer.animation?.entry || '';
+    const currentIdleAnim = activeLayer.animation?.idle || '';
+
+    return (
+        <div className="flex flex-col h-full bg-white">
+            <div className="p-4 border-b border-gray-100 shrink-0">
+                <div className="flex bg-gray-100 rounded-lg p-1">
+                    <button 
+                        onClick={() => setSubTab('halaman')}
+                        className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors ${subTab === 'halaman' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        Halaman
+                    </button>
+                    <button 
+                        onClick={() => setSubTab('teks')}
+                        className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors ${subTab === 'teks' ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        {isText ? 'Teks' : 'Elemen'}
+                    </button>
+                    <button 
+                        onClick={() => setSubTab('kustom')}
+                        className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors flex items-center justify-center gap-1 ${subTab === 'kustom' ? 'bg-indigo-50 text-indigo-600 shadow-sm' : 'text-indigo-400 hover:text-indigo-600'}`}
+                    >
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Kustom
+                    </button>
+                </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto">
+                <div className="p-4 space-y-8">
+                    
+                    {subTab === 'halaman' ? (
+                        <div className="text-center text-gray-500 text-sm mt-10">
+                            Fitur Animasi Halaman sedang dalam pengembangan. Silakan beralih ke tab Teks/Elemen.
+                        </div>
+                    ) : subTab === 'kustom' ? (
+                        <div className="space-y-4">
+                            {/* Toggle Mode Animasi Kustom */}
+                            <div className="flex bg-gray-100 rounded-lg p-1 mb-2">
+                                <button onClick={() => setCustomMode('keyframes')} className={`flex-1 py-1.5 text-xs rounded transition-colors ${customMode === 'keyframes' ? 'bg-white shadow text-indigo-600 font-bold' : 'text-gray-500'}`}>Titik Bertahap</button>
+                                <button onClick={() => setCustomMode('path')} className={`flex-1 py-1.5 text-xs rounded transition-colors ${customMode === 'path' ? 'bg-white shadow text-indigo-600 font-bold' : 'text-gray-500'}`}>Jalur Bebas (Freehand)</button>
+                            </div>
+
+                            {customMode === 'keyframes' ? (
+                                <>
+                                    <div className="flex items-center justify-between bg-indigo-50 p-3 rounded-lg border border-indigo-100 mb-2">
+                                        <div className="text-xs text-indigo-800">
+                                            <span className="font-bold block">Animasi Keyframe</span>
+                                            Geser elemen di kanvas lalu rekam sebagai titik pergerakan.
+                                        </div>
+                                    </div>
+                            
+                            {/* Pengaturan Looping */}
+                            {(activeLayer.animation?.custom_keyframes?.length > 0) && (
+                                <div className="flex items-center justify-between px-1 mb-2 border-b border-gray-100 pb-3">
+                                    <label className="text-xs font-semibold text-gray-700">Looping Berkelanjutan</label>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input 
+                                            type="checkbox" 
+                                            className="sr-only peer" 
+                                            checked={activeLayer.animation?.isLooping ?? true}
+                                            onChange={(e) => updateLayerAnimation(activeLayer.id, { isLooping: e.target.checked })}
+                                        />
+                                        <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                                    </label>
+                                </div>
+                            )}
+
+                            {/* Daftar Keyframes */}
+                            <div className="space-y-2">
+                                {(activeLayer.animation?.custom_keyframes || []).map((kf, index) => (
+                                    <div key={kf.id} className="p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-indigo-300 transition-colors">
+                                        <div className="flex items-center justify-between mb-2">
+                                            <span className="text-xs font-bold text-gray-800 flex items-center gap-2">
+                                                <div className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-[10px]">{index + 1}</div>
+                                                Titik {index + 1}
+                                            </span>
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-[10px] text-gray-400 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">
+                                                    X:{Math.round(kf.x)} Y:{Math.round(kf.y)}
+                                                </span>
+                                                <button onClick={() => handleRemoveKeyframe(index)} className="text-red-400 hover:text-red-600 p-1">
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="grid grid-cols-2 gap-3 mt-3">
+                                            <div>
+                                                <label className="text-[10px] font-semibold text-gray-500 mb-1 block">Waktu Tempuh (s)</label>
+                                                <div className="flex items-center gap-1">
+                                                    <input 
+                                                        type="number" 
+                                                        min="0.1" step="0.1"
+                                                        value={kf.duration}
+                                                        onChange={(e) => handleUpdateKeyframe(index, 'duration', parseFloat(e.target.value) || 0.1)}
+                                                        className="w-full text-xs p-1.5 border border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-semibold text-gray-500 mb-1 block">Gaya Gerak (Ease)</label>
+                                                <select 
+                                                    value={kf.ease}
+                                                    onChange={(e) => handleUpdateKeyframe(index, 'ease', e.target.value)}
+                                                    className="w-full text-[10px] p-1.5 border border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 bg-white"
+                                                >
+                                                    <option value="none">Linear (Datar)</option>
+                                                    <option value="power1.inOut">Smooth (Lembut)</option>
+                                                    <option value="power2.in">Makin Cepat</option>
+                                                    <option value="power2.out">Makin Lambat</option>
+                                                    <option value="back.out(1.7)">Mendal (Back)</option>
+                                                    <option value="bounce.out">Memantul (Bounce)</option>
+                                                    <option value="elastic.out(1, 0.3)">Karet (Elastic)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Info properties captured */}
+                                        <div className="mt-2 text-[9px] text-gray-400 flex gap-2">
+                                            {kf.opacity !== 1 && <span>Opasitas: {Math.round(kf.opacity * 100)}%</span>}
+                                            {kf.rotation !== 0 && <span>Rotasi: {Math.round(kf.rotation)}°</span>}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            
+                            <button 
+                                onClick={handleAddKeyframe}
+                                className="w-full py-3 mt-4 border-2 border-dashed border-indigo-300 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 hover:border-indigo-400 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
+                                {(activeLayer.animation?.custom_keyframes?.length > 0) ? 'Rekam Titik Selanjutnya' : 'Mulai Rekam Titik 1'}
+                            </button>
+                                </>
+                            ) : (
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between bg-indigo-50 p-3 rounded-lg border border-indigo-100 mb-2">
+                                        <div className="text-xs text-indigo-800">
+                                            <span className="font-bold block">Animasi Jalur (Freehand)</span>
+                                            Seret (drag) elemen ini di kanvas untuk merekam pergerakan rute secara langsung.
+                                        </div>
+                                    </div>
+
+                                    <button 
+                                        onClick={() => setIsDrawingPath(!isDrawingPath)}
+                                        className={`w-full py-3 mt-2 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2 ${isDrawingPath ? 'bg-red-500 text-white shadow-lg shadow-red-500/30' : 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 hover:bg-indigo-700'}`}
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                        {isDrawingPath ? 'Selesai & Berhenti Merekam' : (activeLayer.animation?.idle === 'custom_path' ? 'Rekam Ulang Jalur' : 'Mulai Rekam Jalur')}
+                                    </button>
+
+                                    {activeLayer.animation?.idle === 'custom_path' && activeLayer.animation?.custom_path_data && (
+                                        <div className="p-3 bg-white border border-gray-200 rounded-lg mt-4 space-y-4 shadow-sm">
+                                            <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                                                <span className="text-xs font-bold text-gray-800">Pengaturan Jalur</span>
+                                                <button onClick={() => updateLayerAnimation(activeLayer.id, { idle: null, custom_path_data: null })} className="text-[10px] text-red-500 hover:text-red-700 bg-red-50 px-2 py-1 rounded">Hapus Jalur</button>
+                                            </div>
+                                            
+                                            <div>
+                                                <label className="text-[10px] font-semibold text-gray-500 mb-2 flex justify-between">
+                                                    <span>Kecepatan/Durasi (Detik)</span>
+                                                    <span className="text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded font-bold">{activeLayer.animation.custom_path_data.duration}s</span>
+                                                </label>
+                                                <input 
+                                                    type="range" 
+                                                    min="0.5" max="15" step="0.5"
+                                                    value={activeLayer.animation.custom_path_data.duration || 5}
+                                                    onChange={(e) => updateLayerAnimation(activeLayer.id, { 
+                                                        custom_path_data: { ...activeLayer.animation.custom_path_data, duration: parseFloat(e.target.value) } 
+                                                    })}
+                                                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="text-[10px] font-semibold text-gray-500 mb-1 block">Gaya Gerakan (Ease)</label>
+                                                <select 
+                                                    value={activeLayer.animation.custom_path_data.ease || 'power2.inOut'}
+                                                    onChange={(e) => updateLayerAnimation(activeLayer.id, { 
+                                                        custom_path_data: { ...activeLayer.animation.custom_path_data, ease: e.target.value } 
+                                                    })}
+                                                    className="w-full text-xs p-2 border border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 bg-white"
+                                                >
+                                                    <option value="power2.inOut">Mulus (Smooth/Default)</option>
+                                                    <option value="none">Konstan (Linear)</option>
+                                                    <option value="power1.out">Asli (Cepat lalu lambat)</option>
+                                                    <option value="back.out(1.7)">Mendal (Back Out)</option>
+                                                    <option value="elastic.out(1, 0.3)">Karet (Elastic)</option>
+                                                </select>
+                                            </div>
+
+                                            <div className="flex items-center justify-between pt-2">
+                                                <label className="text-[11px] font-semibold text-gray-700">Arahkan Mengikuti Jalur</label>
+                                                <label className="relative inline-flex items-center cursor-pointer">
+                                                    <input 
+                                                        type="checkbox" 
+                                                        className="sr-only peer" 
+                                                        checked={activeLayer.animation.custom_path_data.autoRotate || false}
+                                                        onChange={(e) => updateLayerAnimation(activeLayer.id, { 
+                                                            custom_path_data: { ...activeLayer.animation.custom_path_data, autoRotate: e.target.checked } 
+                                                        })}
+                                                    />
+                                                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                            <p className="text-[10px] text-gray-400 mt-2 text-center">
+                                Geser elemen di kanvas atau ubah gaya di panel kanan terlebih dahulu, lalu klik rekam.
+                            </p>
+                        </div>
+                    ) : (
+                        <>
+                            {ANIMATION_CATEGORIES.map((category, catIdx) => (
+                                <div key={catIdx}>
+                                    <h3 className="text-sm font-bold text-gray-800 mb-4">{category.name}</h3>
+                                    
+                                    <div className="grid grid-cols-3 gap-3">
+                                        {/* Tombol Hapus Animasi */}
+                                        {catIdx === 0 && (
+                                            <button 
+                                                onClick={() => {
+                                                    updateLayerAnimation(activeLayer.id, { entry: null, config: null });
+                                                }}
+                                                className="group flex flex-col items-center cursor-pointer"
+                                            >
+                                                <div className="w-full h-14 mb-2 flex items-center justify-center border border-gray-200 bg-gray-50 rounded-lg group-hover:bg-gray-100 transition-colors">
+                                                    <svg className="w-6 h-6 text-gray-400 group-hover:text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                                                </div>
+                                                <span className="text-[10px] text-gray-500 font-medium text-center">Tanpa Animasi</span>
+                                            </button>
+                                        )}
+
+                                        {category.items.map((anim) => {
+                                            const isActive = category.isContinuous ? currentIdleAnim === anim.id : currentEntryAnim === anim.id;
+                                            
+                                            return (
+                                                <button 
+                                                    key={anim.id}
+                                                    onClick={() => setAnimation(anim.id, category.isContinuous)}
+                                                    className="group flex flex-col items-center cursor-pointer outline-none"
+                                                >
+                                                    <div className={`w-full rounded-xl transition-all p-1 ${isActive ? 'bg-indigo-50 border-indigo-500 ring-1 ring-indigo-500' : 'border-transparent hover:bg-gray-50'}`}>
+                                                        <AnimatedIcon anim={anim} isText={isText} isActive={isActive} />
+                                                        <span className={`text-[10px] text-center leading-tight block pb-1 ${isActive ? 'text-indigo-700 font-semibold' : 'text-gray-600 group-hover:text-gray-800'}`}>{anim.label}</span>
+                                                    </div>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                    
+                                    {/* Jika kategori berkelanjutan, tambahkan opsi "Hapus Efek Tambahan" */}
+                                    {category.isContinuous && currentIdleAnim && (
+                                         <button 
+                                            onClick={() => updateLayerAnimation(activeLayer.id, { idle: null, configIdle: null })}
+                                            className="mt-4 w-full py-2 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors border border-red-100"
+                                         >
+                                             Hapus Efek Tambahan
+                                         </button>
+                                    )}
+                                </div>
+                            ))}
+                        </>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default AnimationPanel;
