@@ -402,8 +402,8 @@
 
             @foreach($services as $service)
                 <div class="mb-16 last:mb-0" data-aos="fade-up">
-                    <div class="flex flex-col md:flex-row justify-between items-end mb-6">
-                        <div>
+                    <div class="flex flex-col md:flex-row justify-between items-center md:items-end mb-6 text-center md:text-left">
+                        <div class="mb-4 md:mb-0">
                             <h3 class="text-2xl font-serif text-brand-900 mb-1">{{ $service->title }}</h3>
                             <p class="text-sm text-brand-600">{{ $service->templates->count() }} Produk Tersedia</p>
                         </div>
@@ -807,6 +807,7 @@
     </script>
 </body>
 </html>
+
 
 
 
