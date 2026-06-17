@@ -23,6 +23,15 @@ Route::post('/test-post-submit', function () {
 Route::get('/order/{template_id}', [OrderController::class, 'create'])->name('order.create');
 Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 
+Route::get('/debug-log', function () {
+    $logFile = storage_path('logs/laravel.log');
+    if (!file_exists($logFile)) return 'No log file';
+    
+    $lines = file($logFile);
+    $lastLines = array_slice($lines, -100);
+    return response("<pre>" . implode("", $lastLines) . "</pre>");
+});
+
 // Route::get('/fix-cashflow-data', function() {
 //     \App\Models\Cashflow::where('type', 'expense')->where('amount', '>', 0)->update(['amount' => \Illuminate\Support\Facades\DB::raw('-amount')]);
 //     return 'Database migrated successfully!';
