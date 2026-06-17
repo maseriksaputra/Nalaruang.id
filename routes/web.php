@@ -68,6 +68,99 @@ Route::get('/fix-services', function () {
     return 'Layanan berhasil dibuat di database! Silakan cek kembali halaman depan.';
 });
 
+Route::get('/fix-all', function () {
+    // 1. Create Web & Mobile App Service
+    $webSvc = \App\Models\Service::firstOrCreate(
+        ['slug' => 'web-mobile-app'],
+        [
+            'title' => 'Web & Mobile App',
+            'description' => 'Layanan pembuatan website dan aplikasi mobile profesional.',
+            'is_active' => true,
+            'sort_order' => 2
+        ]
+    );
+
+    // 2. Create Cetak Fisik Service
+    $cetakSvc = \App\Models\Service::firstOrCreate(
+        ['slug' => 'cetak-fisik'],
+        [
+            'title' => 'Cetak Fisik',
+            'description' => 'Layanan cetak fisik premium.',
+            'is_active' => true,
+            'sort_order' => 3
+        ]
+    );
+
+    // Packages for Web & Mobile App
+    $webPackages = [
+        [
+            'name' => 'Exclusive',
+            'price' => 79.999,
+            'description' => 'Bebas Khawatir Sampai Hari H',
+            'features' => ["Semua Fitur Premium","Galeri Foto & Video","Request Elemen Tambahan","Prioritas Pengerjaan (Fast Track)","Dukungan Tim Ahli","Tamu Tak Terbatas","Masa Aktif 1 Tahun","Revisi Unlimited"],
+            'is_popular' => false,
+            'sort_order' => 5,
+            'is_customizable' => false
+        ],
+        [
+            'name' => 'Custom VIP',
+            'price' => 99.999,
+            'description' => 'Eksklusif Sesuai Imajinasi',
+            'features' => ["Semua Fitur Exclusive","Galeri Foto & Video Unlimited","Layout Kustomisasi Penuh","Bebas Request Fitur Khusus","Multiple Backsound Lanjutan","Tamu Tak Terbatas","Masa Aktif Selamanya","Revisi Unlimited & VIP Support"],
+            'is_popular' => false,
+            'sort_order' => 6,
+            'is_customizable' => false
+        ],
+        [
+            'name' => 'Custom Web App',
+            'price' => 3000000,
+            'description' => 'Sistem informasi, reservasi atau kasir',
+            'features' => ["Desain UI/UX Custom (Figma)","Sistem Login & Dashboard Admin","Database & Fitur Sesuai Request","Integrasi API (Payment Gateway, dll)","Maintenance 3 Bulan Gratis"],
+            'is_popular' => false,
+            'sort_order' => 3,
+            'is_customizable' => false
+        ]
+    ];
+
+    foreach ($webPackages as $pkg) {
+        \App\Models\Package::updateOrCreate(
+            ['service_id' => $webSvc->id, 'name' => $pkg['name']],
+            $pkg
+        );
+    }
+    
+    // Default packages for Cetak Fisik
+    $cetakPackages = [
+        [
+            'name' => 'Standard Cetak',
+            'price' => 5000,
+            'description' => 'Cetak bahan Art Carton Premium',
+            'features' => ["Art Carton 260gsm","Laminasi Doff/Glossy","Gratis Plastik OPP","Gratis Label Nama","Minimal Order 100 pcs"],
+            'is_popular' => true,
+            'sort_order' => 1,
+            'is_customizable' => false
+        ],
+        [
+            'name' => 'Premium Hardcover',
+            'price' => 15000,
+            'description' => 'Undangan Hardcover Mewah',
+            'features' => ["Hardcover Premium","Foil Emas/Perak","Emboss Letter","Gratis Plastik OPP","Gratis Label Nama","Minimal Order 100 pcs"],
+            'is_popular' => false,
+            'sort_order' => 2,
+            'is_customizable' => false
+        ]
+    ];
+
+    foreach ($cetakPackages as $pkg) {
+        \App\Models\Package::updateOrCreate(
+            ['service_id' => $cetakSvc->id, 'name' => $pkg['name']],
+            $pkg
+        );
+    }
+
+    return 'Layanan Cetak Fisik & Web Mobile App beserta paketnya berhasil disuntikkan! Silakan kembali ke website dan Refresh.';
+});
+
 Route::get('/fix-packages', function () {
     $service = \App\Models\Service::where('slug', 'event-digital')->first();
     if (!$service) return 'Layanan Event Digital belum ada. Jalankan /fix-services dulu.';
