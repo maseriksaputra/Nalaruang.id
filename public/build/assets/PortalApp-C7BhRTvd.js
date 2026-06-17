@@ -23936,7 +23936,13 @@ var PortalApp = () => {
 		try {
 			const csrfToken = document.querySelector("meta[name=\"csrf-token\"]")?.getAttribute("content");
 			const response = await axios.post("/admin/invitation-portal/create", {}, { headers: { "X-CSRF-TOKEN": csrfToken } });
-			if (response.data?.success && response.data?.redirect_url) window.location.href = response.data.redirect_url;
+			if (response.data?.success && response.data?.redirect_url) {
+				window.location.href = response.data.redirect_url;
+				return;
+			} else {
+				alert(response.data?.error || response.data?.message || "Gagal membuat desain baru.");
+				setIsLoading(false);
+			}
 		} catch (error) {
 			console.error(error);
 			const msg = error.response?.data?.error || "Gagal membuat desain baru.";
@@ -23949,7 +23955,13 @@ var PortalApp = () => {
 		try {
 			const csrfToken = document.querySelector("meta[name=\"csrf-token\"]")?.getAttribute("content");
 			const response = await axios.post(`/admin/invitation-portal/templates/${id}/duplicate`, {}, { headers: { "X-CSRF-TOKEN": csrfToken } });
-			if (response.data?.success && response.data?.redirect_url) window.location.href = response.data.redirect_url;
+			if (response.data?.success && response.data?.redirect_url) {
+				window.location.href = response.data.redirect_url;
+				return;
+			} else {
+				alert(response.data?.error || response.data?.message || "Gagal menggunakan template.");
+				setIsLoading(false);
+			}
 		} catch (error) {
 			console.error(error);
 			const msg = error.response?.data?.error || "Gagal menggunakan template.";

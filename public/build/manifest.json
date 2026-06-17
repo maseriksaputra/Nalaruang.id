@@ -67,7 +67,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-CJuKKbuw.css",
+    "file": "assets/app-DuB8Bmad.css",
     "name": "app",
     "names": [
       "app.css"
@@ -90,7 +90,7 @@
     ]
   },
   "resources/js/Dashboard/PortalApp.jsx": {
-    "file": "assets/PortalApp-CzWkKDzD.js",
+    "file": "assets/PortalApp-C7BhRTvd.js",
     "name": "PortalApp",
     "src": "resources/js/Dashboard/PortalApp.jsx",
     "isEntry": true,

@@ -2149,7 +2149,15 @@
     flex-shrink: 1;
   }
 
-  .flex-shrink-0, .shrink-0 {
+  .flex-shrink-0 {
+    flex-shrink: 0;
+  }
+
+  .shrink {
+    flex-shrink: 1;
+  }
+
+  .shrink-0 {
     flex-shrink: 0;
   }
 
@@ -6221,6 +6229,10 @@
   .select-none {
     -webkit-user-select: none;
     user-select: none;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
   }
 
   .ring-inset {
