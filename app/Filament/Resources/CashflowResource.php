@@ -78,52 +78,75 @@ class CashflowResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\Layout\Split::make([
-                    Tables\Columns\Layout\Stack::make([
-                        Tables\Columns\TextColumn::make('description')
-                            ->weight('bold')
-                            ->size('sm')
-                            ->searchable(),
-                        Tables\Columns\TextColumn::make('category')
-                            ->getStateUsing(fn (\App\Models\Cashflow $record) => 'Kategori ' . ($record->category ?? '-') . ' • Kas ' . ($record->type === 'income' ? 'Masuk' : 'Keluar'))
-                            ->color('gray')
-                            ->size('xs'),
-                    ])->space(1)->grow(),
+                Tables\Columns\TextColumn::make('description')
+                    ->label('Nama Transaksi')
+                    ->weight('bold')
+                    ->searchable()
+                    ->sortable(),
+                
+                Tables\Columns\TextColumn::make('category')
+                    ->label('Kategori')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'F&B' => 'warning',
+                        'ATK' => 'info',
+                        'Printing' => 'success',
+                        'Digital' => 'primary',
+                        default => 'gray',
+                    }),
+                    
+                Tables\Columns\TextColumn::make('type')
+                    ->label('Tipe')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state): string => $state === 'income' ? 'Masuk' : 'Keluar')
+                    ->color(fn (string $state): string => $state === 'income' ? 'success' : 'danger'),
+                    
+                Tables\Columns\TextColumn::make('quantity')
+                    ->label('Qty')
+                    ->numeric()
+                    ->alignCenter(),
+                    
+                Tables\Columns\TextColumn::make('price')
+                    ->label('Harga Satuan')
+                    ->money('IDR', locale: 'id')
+                    ->alignRight()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
-                    Tables\Columns\TextColumn::make('amount')
-                        ->formatStateUsing(fn ($state) => 'Rp ' . number_format(abs((float)$state), 0, ',', '.'))
-                        ->color(fn (\App\Models\Cashflow $record): string => $record->type === 'income' ? 'success' : 'danger')
-                        ->weight('bold')
-                        ->size('sm')
-                        ->alignRight()
-                        ->grow(false),
-                ])->from('md')->extraAttributes(['class' => 'items-center py-2']),
+                Tables\Columns\TextColumn::make('amount')
+                    ->label('Total')
+                    ->money('IDR', locale: 'id')
+                    ->color(fn (\App\Models\Cashflow $record): string => $record->type === 'income' ? 'success' : 'danger')
+                    ->weight('bold')
+                    ->alignRight()
+                    ->sortable(),
             ])
+            ->striped()
             ->defaultSort('transaction_date', 'desc')
             ->defaultGroup('transaction_date')
             ->groups([
                 Tables\Grouping\Group::make('transaction_date')
-                    ->label('')
-                    ->collapsible(false)
+                    ->label('Tanggal')
+                    ->date() // Forces grouping by date
+                    ->collapsible()
                     ->getTitleFromRecordUsing(function (\App\Models\Cashflow $record) {
                         $date = \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d');
-                        $displayDate = \Carbon\Carbon::parse($record->transaction_date)->translatedFormat('d F Y');
+                        $displayDate = \Carbon\Carbon::parse($record->transaction_date)->translatedFormat('l, d F Y');
                         
-                        $income = \Illuminate\Support\Facades\Cache::remember('cashflow_income_'.$date, 2, fn() => \App\Models\Cashflow::whereDate('transaction_date', $date)->where('type', 'income')->sum('amount') ?? 0);
-                        $expense = \Illuminate\Support\Facades\Cache::remember('cashflow_expense_'.$date, 2, fn() => \App\Models\Cashflow::whereDate('transaction_date', $date)->where('type', 'expense')->sum('amount') ?? 0);
+                        $income = \App\Models\Cashflow::whereDate('transaction_date', $date)->where('type', 'income')->sum('amount') ?? 0;
+                        $expense = \App\Models\Cashflow::whereDate('transaction_date', $date)->where('type', 'expense')->sum('amount') ?? 0;
                         $net = $income - $expense;
                         
                         $netColorHex = $net >= 0 ? '#16a34a' : '#dc2626';
                         $netSign = $net < 0 ? '-' : '';
                         
                         return new \Illuminate\Support\HtmlString("
-                            <div class='flex flex-col md:flex-row md:items-center justify-between w-full pr-2 md:pr-4 gap-2 py-1'>
-                                <span style='font-weight: 600; color: #374151; font-size: 0.875rem;'>{$displayDate}</span>
-                                <div class='flex flex-wrap items-center gap-2 md:gap-4' style='font-size: 0.75rem;'>
-                                    <span style='color: #6b7280;'>Masuk: <strong style='color: #16a34a;'>Rp " . number_format($income, 0, ',', '.') . "</strong></span>
-                                    <span style='color: #6b7280;'>Keluar: <strong style='color: #dc2626;'>Rp " . number_format($expense, 0, ',', '.') . "</strong></span>
-                                    <span style='color: #374151; background-color: #f3f4f6; padding: 0.25rem 0.6rem; border-radius: 9999px; font-weight: 600; border: 1px solid #e5e7eb; display: inline-block;'>
-                                        NETT: <strong style='color: {$netColorHex};'>{$netSign}Rp " . number_format(abs($net), 0, ',', '.') . "</strong>
+                            <div class='flex flex-col sm:flex-row sm:items-center justify-between w-full py-1'>
+                                <span class='font-bold text-gray-800 text-base'>{$displayDate}</span>
+                                <div class='flex flex-wrap items-center gap-3 sm:gap-6 text-sm mt-2 sm:mt-0'>
+                                    <span class='text-gray-600'>Masuk: <strong class='text-green-600'>Rp " . number_format($income, 0, ',', '.') . "</strong></span>
+                                    <span class='text-gray-600'>Keluar: <strong class='text-red-600'>Rp " . number_format($expense, 0, ',', '.') . "</strong></span>
+                                    <span class='px-3 py-1 rounded-full border bg-gray-50 border-gray-200 font-bold'>
+                                        NETT: <span style='color: {$netColorHex};'>{$netSign}Rp " . number_format(abs($net), 0, ',', '.') . "</span>
                                     </span>
                                 </div>
                             </div>
