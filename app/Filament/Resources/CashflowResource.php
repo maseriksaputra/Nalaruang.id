@@ -87,7 +87,7 @@ class CashflowResource extends Resource
                 Tables\Columns\TextColumn::make('category')
                     ->label('Kategori')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn (?string $state): string => match ($state) {
                         'F&B' => 'warning',
                         'ATK' => 'info',
                         'Printing' => 'success',

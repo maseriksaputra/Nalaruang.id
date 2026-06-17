@@ -50,14 +50,14 @@
             </div>
 
             <!-- Product Grid -->
-            <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 1.5rem;">
+            <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-bottom: 1.5rem;">
                 @forelse($this->products as $product)
                     <button x-show="tab === '{{ $product->category }}'"
                             wire:click="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->default_price }}, '{{ $product->category }}')" 
-                            style="background-color: white; border: 1px solid #fbcfe8; border-radius: 12px; padding: 12px; text-align: left; min-height: 90px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.1s, background-color 0.2s;"
+                            style="background-color: white; border: 1px solid #fbcfe8; border-radius: 8px; padding: 8px; text-align: left; min-height: 70px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.1s, background-color 0.2s;"
                             onmouseover="this.style.backgroundColor='#fdf2f8'" onmouseout="this.style.backgroundColor='white'" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
-                        <span style="font-weight: 600; color: #1f2937; font-size: 14px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $product->name }}</span>
-                        <span style="color: #db2777; font-weight: bold; font-size: 13px; margin-top: 8px;">Rp {{ number_format($product->default_price, 0, ',', '.') }}</span>
+                        <span style="font-weight: 600; color: #1f2937; font-size: 12px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $product->name }}</span>
+                        <span style="color: #db2777; font-weight: bold; font-size: 11px; margin-top: 4px;">Rp {{ number_format($product->default_price, 0, ',', '.') }}</span>
                     </button>
                 @empty
                 @endforelse
