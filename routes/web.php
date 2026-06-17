@@ -31,6 +31,13 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/admin/invitation-portal/templates/{id}/toggle', [\App\Http\Controllers\DashboardPortalController::class, 'toggleTemplate']);
     Route::post('/admin/invitation-portal/templates/{id}/thumbnail', [\App\Http\Controllers\DashboardPortalController::class, 'updateThumbnail']);
 
+    Route::get('/test-post', function () {
+        return '<form method="POST" action="/test-post-submit"><input type="hidden" name="_token" value="'.csrf_token().'"><button type="submit">Test POST</button></form>';
+    });
+    Route::post('/test-post-submit', function () {
+        return 'POST BERHASIL! Berarti masalahnya ada di Livewire, bukan Nginx.';
+    });
+
     // Mock Order untuk testing form klien
     // Route::get('/admin/mock-order', function () {
     //     $template = \App\Models\Template::latest('id')->first();
