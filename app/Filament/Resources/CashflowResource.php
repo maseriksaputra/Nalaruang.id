@@ -125,10 +125,11 @@ class CashflowResource extends Resource
             ->defaultGroup('transaction_date')
             ->groups([
                 Tables\Grouping\Group::make('transaction_date')
-                    ->label('Tanggal')
-                    ->collapsible()
+                    ->label('') // Hide 'Tanggal:' prefix
+                    ->collapsible(false) // Standard table layout without accordion
                     ->groupQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) => $query->groupByRaw('date(transaction_date)'))
                     ->scopeQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query, \App\Models\Cashflow $record) => $query->whereDate('transaction_date', \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d')))
+                    ->scopeQueryByKeyUsing(fn (\Illuminate\Database\Eloquent\Builder $query, string $key) => $query->whereDate('transaction_date', $key))
                     ->getKeyFromRecordUsing(fn (\App\Models\Cashflow $record) => \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d'))
                     ->getTitleFromRecordUsing(function (\App\Models\Cashflow $record) {
                         $date = \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d');
@@ -142,12 +143,12 @@ class CashflowResource extends Resource
                         $netSign = $net < 0 ? '-' : '';
                         
                         return new \Illuminate\Support\HtmlString("
-                            <div class='flex flex-col sm:flex-row sm:items-center justify-between w-full py-1'>
-                                <span class='font-bold text-gray-800 text-base'>{$displayDate}</span>
-                                <div class='flex flex-wrap items-center gap-3 sm:gap-6 text-sm mt-2 sm:mt-0'>
-                                    <span class='text-gray-600'>Masuk: <strong class='text-green-600'>Rp " . number_format($income, 0, ',', '.') . "</strong></span>
-                                    <span class='text-gray-600'>Keluar: <strong class='text-red-600'>Rp " . number_format($expense, 0, ',', '.') . "</strong></span>
-                                    <span class='px-3 py-1 rounded-full border bg-gray-50 border-gray-200 font-bold'>
+                            <div class='flex flex-col md:flex-row md:items-center justify-between w-full py-1.5'>
+                                <span class='font-bold text-gray-800 text-sm'>🗓️ {$displayDate}</span>
+                                <div class='flex flex-wrap items-center gap-3 text-xs mt-1 md:mt-0'>
+                                    <span class='text-gray-500'>Masuk: <strong class='text-green-600'>Rp " . number_format($income, 0, ',', '.') . "</strong></span>
+                                    <span class='text-gray-500'>Keluar: <strong class='text-red-600'>Rp " . number_format($expense, 0, ',', '.') . "</strong></span>
+                                    <span class='px-2 py-0.5 rounded bg-gray-50 border border-gray-200 font-bold'>
                                         NETT: <span style='color: {$netColorHex};'>{$netSign}Rp " . number_format(abs($net), 0, ',', '.') . "</span>
                                     </span>
                                 </div>
