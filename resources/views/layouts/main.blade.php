@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nalaruang.id - Solusi Cetak, Undangan & Digital Kreatif</title>
     
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Removed CDN here, moving it below -->
     
     <!-- AOS Animation CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -49,6 +48,9 @@
             }
         }
     </script>
+
+    <!-- Tailwind CSS CDN (Moved here to ensure it loads AFTER the config) -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
         body { background-color: #fdfbf7; }
