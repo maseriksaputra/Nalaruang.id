@@ -213,76 +213,143 @@
 
             <!-- GRID KARTU LAYANAN -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                
-                <!-- Card 1: Digital Printing Fisik -->
-                <div class="service-card bg-sand hover:bg-brand-900 p-8 rounded-xl border border-gray-100 group flex flex-col relative overflow-hidden cursor-pointer" data-aos="fade-up" data-aos-delay="100">
-                    <div class="w-14 h-14 bg-brand-100 group-hover:bg-brand-800 rounded-full flex items-center justify-center mb-6 text-brand-800 group-hover:text-white transition-colors duration-500 transform group-hover:scale-110">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-serif text-brand-900 group-hover:text-white transition-colors duration-500 mb-4">Cetak Fisik Premium</h3>
-                    <ul class="text-gray-600 group-hover:text-brand-100 transition-colors duration-500 text-sm mb-8 space-y-3 flex-grow">
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Undangan Pernikahan Eksklusif</li>
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Custom Lanyard & ID Card</li>
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Buku Yasin & Majmu premium</li>
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Jasa Print & Fotocopy Dokumen</li>
-                    </ul>
-                    <a href="/layanan/cetak-fisik" class="inline-flex items-center text-brand-800 group-hover:text-white text-sm font-semibold transition-colors duration-500">
-                        Detail Layanan <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </a>
-                </div>
 
-                <!-- Card 2: Undangan Digital -->
-                <div class="service-card bg-sand hover:bg-brand-900 p-8 rounded-xl border border-gray-100 group flex flex-col relative overflow-hidden cursor-pointer" data-aos="fade-up" data-aos-delay="200">
-                    <div class="absolute top-0 right-0 bg-brand-800 text-white group-hover:bg-white group-hover:text-brand-900 transition-colors duration-500 text-[10px] uppercase font-bold px-3 py-1 rounded-bl-lg">Terpopuler</div>
-                    <div class="w-14 h-14 bg-brand-100 group-hover:bg-brand-800 rounded-full flex items-center justify-center mb-6 text-brand-800 group-hover:text-white transition-colors duration-500 transform group-hover:scale-110">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-serif text-brand-900 group-hover:text-white transition-colors duration-500 mb-4">Event Digital</h3>
-                    <ul class="text-gray-600 group-hover:text-brand-100 transition-colors duration-500 text-sm mb-8 space-y-3 flex-grow">
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Website Undangan Interaktif</li>
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Video Undangan Cinematic</li>
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Buku Tamu Digital (QR Code)</li>
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> RSVP & Filter Instagram Acara</li>
-                    </ul>
-                    <a href="/layanan/event-digital" class="inline-flex items-center text-brand-800 group-hover:text-white text-sm font-semibold transition-colors duration-500">
-                        Detail Layanan <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </a>
-                </div>
+                <!-- Card 01 -->
+                <div class="group relative bg-white p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col overflow-hidden h-full cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+                    <!-- Badge Number -->
+                    <div class="absolute top-0 left-0 bg-brand-500 text-white text-xs font-bold px-4 py-2 rounded-br-2xl z-20 shadow-sm">01</div>
+                    
+                    
+                    <!-- Dot Pattern -->
+                    <div class="absolute top-6 right-6 w-20 h-20 opacity-40 z-0" style="background-image: radial-gradient(#f9a8d4 2px, transparent 2px); background-size: 10px 10px;"></div>
+                    
+                    <!-- Wave Background -->
+                    <svg class="absolute bottom-0 left-0 w-full text-brand-50 opacity-50 group-hover:opacity-100 transition-opacity duration-700 z-0 transform translate-y-4 group-hover:translate-y-0" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                        <path fill="currentColor" fill-opacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,144C672,139,768,181,864,202.7C960,224,1056,224,1152,213.3C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                    </svg>
 
-                <!-- Card 3: Souvenir -->
-                <div class="service-card bg-sand hover:bg-brand-900 p-8 rounded-xl border border-gray-100 group flex flex-col relative overflow-hidden cursor-pointer" data-aos="fade-up" data-aos-delay="300">
-                    <div class="w-14 h-14 bg-brand-100 group-hover:bg-brand-800 rounded-full flex items-center justify-center mb-6 text-brand-800 group-hover:text-white transition-colors duration-500 transform group-hover:scale-110">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                    <!-- Premium 2.5D Icon -->
+                    <div class="relative w-28 h-28 mx-auto mt-6 mb-8 z-10 transform group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 flex items-center justify-center">
+                        <div class="absolute inset-0 bg-gradient-to-br from-brand-100 to-white rounded-full shadow-inner opacity-80 group-hover:rotate-12 transition-transform duration-700"></div>
+                        <div class="absolute inset-2 bg-gradient-to-tl from-brand-50 to-white rounded-full shadow-[inset_0_4px_8px_rgba(0,0,0,0.05)]"></div>
+                        <div class="absolute inset-0 bg-brand-400 opacity-0 group-hover:opacity-15 blur-xl rounded-full transition-opacity duration-500"></div>
+                        <svg class="w-12 h-12 text-brand-600 filter drop-shadow-md relative z-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-serif text-brand-900 group-hover:text-white transition-colors duration-500 mb-4">Souvenir & Merchandise</h3>
-                    <ul class="text-gray-600 group-hover:text-brand-100 transition-colors duration-500 text-sm mb-8 space-y-3 flex-grow">
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Tumbler & Gelas Kaca Custom</li>
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Tasbih Premium & Box Estetik</li>
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Totebag Canvas Sablon</li>
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Plakat Akrilik & Kayu</li>
-                    </ul>
-                    <a href="/layanan/souvenir-merchandise" class="inline-flex items-center text-brand-800 group-hover:text-white text-sm font-semibold transition-colors duration-500">
-                        Detail Layanan <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </a>
-                </div>
 
-                <!-- Card 4: Web & App Design -->
-                <div class="service-card bg-sand hover:bg-brand-900 p-8 rounded-xl border border-gray-100 group flex flex-col relative overflow-hidden cursor-pointer" data-aos="fade-up" data-aos-delay="400">
-                    <div class="w-14 h-14 bg-brand-100 group-hover:bg-brand-800 rounded-full flex items-center justify-center mb-6 text-brand-800 group-hover:text-white transition-colors duration-500 transform group-hover:scale-110">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    <h3 class="text-2xl font-serif text-gray-900 mb-6 relative z-10 text-center group-hover:text-brand-800 transition-colors duration-300">Cetak Fisik Premium</h3>
+                    
+                    <ul class="text-gray-600 text-[13px] mb-10 space-y-3.5 flex-grow relative z-10 leading-relaxed">
+                        <li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-brand-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Undangan Pernikahan Eksklusif</li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-brand-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Custom Lanyard & ID Card</li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-brand-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Buku Yasin & Majmu premium</li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-brand-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Jasa Print & Fotocopy Dokumen</li>
+                    </ul>
+
+                    <div class="relative z-10 text-center mt-auto">
+                        <a href="/layanan/cetak-fisik" class="inline-flex items-center justify-center px-6 py-2.5 bg-white border border-gray-100 text-brand-600 text-sm font-semibold rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] group-hover:bg-brand-500 group-hover:text-white group-hover:border-brand-500 group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 w-full sm:w-auto">
+                            Detail Layanan <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
                     </div>
-                    <h3 class="text-xl font-serif text-brand-900 group-hover:text-white transition-colors duration-500 mb-4">Web & Mobile App</h3>
-                    <ul class="text-gray-600 group-hover:text-brand-100 transition-colors duration-500 text-sm mb-8 space-y-3 flex-grow">
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> UI/UX Design & Prototyping</li>
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Landing Page & Company Profile</li>
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Aplikasi Bisnis / Kasir Mobile</li>
-                        <li class="flex items-start"><span class="text-brand-500 group-hover:text-brand-400 transition-colors duration-500 mr-2">✦</span> Sistem Reservasi Custom</li>
-                    </ul>
-                    <a href="/layanan/web-mobile-app" class="inline-flex items-center text-brand-800 group-hover:text-white text-sm font-semibold transition-colors duration-500">
-                        Detail Layanan <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </a>
                 </div>
+                <!-- Card 02 -->
+                <div class="group relative bg-white p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col overflow-hidden h-full cursor-pointer" data-aos="fade-up" data-aos-delay="200">
+                    <!-- Badge Number -->
+                    <div class="absolute top-0 left-0 bg-blue-500 text-white text-xs font-bold px-4 py-2 rounded-br-2xl z-20 shadow-sm">02</div>
+                    <div class="absolute top-0 right-0 bg-blue-100 text-blue-700 text-[10px] uppercase font-bold px-3 py-1.5 rounded-bl-xl z-20 flex items-center gap-1 shadow-sm"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg> TERPOPULER</div>
+                    
+                    <!-- Dot Pattern -->
+                    <div class="absolute top-6 right-6 w-20 h-20 opacity-40 z-0" style="background-image: radial-gradient(#93c5fd 2px, transparent 2px); background-size: 10px 10px;"></div>
+                    
+                    <!-- Wave Background -->
+                    <svg class="absolute bottom-0 left-0 w-full text-blue-50 opacity-50 group-hover:opacity-100 transition-opacity duration-700 z-0 transform translate-y-4 group-hover:translate-y-0" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                        <path fill="currentColor" fill-opacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,144C672,139,768,181,864,202.7C960,224,1056,224,1152,213.3C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                    </svg>
 
+                    <!-- Premium 2.5D Icon -->
+                    <div class="relative w-28 h-28 mx-auto mt-6 mb-8 z-10 transform group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 flex items-center justify-center">
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-100 to-white rounded-full shadow-inner opacity-80 group-hover:rotate-12 transition-transform duration-700"></div>
+                        <div class="absolute inset-2 bg-gradient-to-tl from-blue-50 to-white rounded-full shadow-[inset_0_4px_8px_rgba(0,0,0,0.05)]"></div>
+                        <div class="absolute inset-0 bg-blue-400 opacity-0 group-hover:opacity-15 blur-xl rounded-full transition-opacity duration-500"></div>
+                        <svg class="w-12 h-12 text-blue-600 filter drop-shadow-md relative z-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                    </div>
+
+                    <h3 class="text-2xl font-serif text-gray-900 mb-6 relative z-10 text-center group-hover:text-blue-800 transition-colors duration-300">Event Digital</h3>
+                    
+                    <ul class="text-gray-600 text-[13px] mb-10 space-y-3.5 flex-grow relative z-10 leading-relaxed">
+                        <li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Website Undangan Interaktif</li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Video Undangan Cinematic</li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Buku Tamu Digital (QR Code)</li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>RSVP & Filter Instagram Acara</li>
+                    </ul>
+
+                    <div class="relative z-10 text-center mt-auto">
+                        <a href="/layanan/event-digital" class="inline-flex items-center justify-center px-6 py-2.5 bg-white border border-gray-100 text-blue-600 text-sm font-semibold rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] group-hover:bg-blue-500 group-hover:text-white group-hover:border-blue-500 group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 w-full sm:w-auto">
+                            Detail Layanan <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                <!-- Card 03 -->
+                <div class="group relative bg-white p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col overflow-hidden h-full cursor-pointer" data-aos="fade-up" data-aos-delay="300">
+                    <!-- Badge Number -->
+                    <div class="absolute top-0 left-0 bg-purple-500 text-white text-xs font-bold px-4 py-2 rounded-br-2xl z-20 shadow-sm">03</div>
+                    
+                    
+                    <!-- Dot Pattern -->
+                    <div class="absolute top-6 right-6 w-20 h-20 opacity-40 z-0" style="background-image: radial-gradient(#d8b4fe 2px, transparent 2px); background-size: 10px 10px;"></div>
+                    
+                    <!-- Wave Background -->
+                    <svg class="absolute bottom-0 left-0 w-full text-purple-50 opacity-50 group-hover:opacity-100 transition-opacity duration-700 z-0 transform translate-y-4 group-hover:translate-y-0" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                        <path fill="currentColor" fill-opacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,144C672,139,768,181,864,202.7C960,224,1056,224,1152,213.3C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                    </svg>
+
+                    <!-- Premium 2.5D Icon -->
+                    <div class="relative w-28 h-28 mx-auto mt-6 mb-8 z-10 transform group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 flex items-center justify-center">
+                        <div class="absolute inset-0 bg-gradient-to-br from-purple-100 to-white rounded-full shadow-inner opacity-80 group-hover:rotate-12 transition-transform duration-700"></div>
+                        <div class="absolute inset-2 bg-gradient-to-tl from-purple-50 to-white rounded-full shadow-[inset_0_4px_8px_rgba(0,0,0,0.05)]"></div>
+                        <div class="absolute inset-0 bg-purple-400 opacity-0 group-hover:opacity-15 blur-xl rounded-full transition-opacity duration-500"></div>
+                        <svg class="w-12 h-12 text-purple-600 filter drop-shadow-md relative z-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                    </div>
+
+                    <h3 class="text-2xl font-serif text-gray-900 mb-6 relative z-10 text-center group-hover:text-purple-800 transition-colors duration-300">Souvenir & Merchandise</h3>
+                    
+                    <ul class="text-gray-600 text-[13px] mb-10 space-y-3.5 flex-grow relative z-10 leading-relaxed">
+                        <li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-purple-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Tumbler & Gelas Kaca Custom</li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-purple-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Tasbih Premium & Box Estetik</li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-purple-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Totebag Canvas Sablon</li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-purple-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Plakat Akrilik & Kayu</li>
+                    </ul>
+
+                    <div class="relative z-10 text-center mt-auto">
+                        <a href="/layanan/souvenir-merchandise" class="inline-flex items-center justify-center px-6 py-2.5 bg-white border border-gray-100 text-purple-600 text-sm font-semibold rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] group-hover:bg-purple-500 group-hover:text-white group-hover:border-purple-500 group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 w-full sm:w-auto">
+                            Detail Layanan <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+                <!-- Card 04 -->
+                <div class="group relative bg-white p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col overflow-hidden h-full cursor-pointer" data-aos="fade-up" data-aos-delay="400">
+                    <!-- Badge Number -->
+                    <div class="absolute top-0 left-0 bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-br-2xl z-20 shadow-sm">04</div>
+                    
+                    
+                    <!-- Dot Pattern -->
+                    <div class="absolute top-6 right-6 w-20 h-20 opacity-40 z-0" style="background-image: radial-gradient(#6ee7b7 2px, transparent 2px); background-size: 10px 10px;"></div>
+                    
+                    <!-- Wave Background -->
+                    <svg class="absolute bottom-0 left-0 w-full text-emerald-50 opacity-50 group-hover:opacity-100 transition-opacity duration-700 z-0 transform translate-y-4 group-hover:translate-y-0" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                        <path fill="currentColor" fill-opacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,144C672,139,768,181,864,202.7C960,224,1056,224,1152,213.3C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                    </svg>
+
+                    <!-- Premium 2.5D Icon -->
+                    <div class="relative w-28 h-28 mx-auto mt-6 mb-8 z-10 transform group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 flex items-center justify-center">
+                        <div class="absolute inset-0 bg-gradient-to-br from-emerald-100 to-white rounded-full shadow-inner opacity-80 group-hover:rotate-12 transition-transform duration-700"></div>
+                        <div class="absolute inset-2 bg-gradient-to-tl from-emerald-50 to-white rounded-full shadow-[inset_0_4px_8px_rgba(0,0,0,0.05)]"></div>
+                        <div class="absolute inset-0 bg-emerald-400 opacity-0 group-hover:opacity-15 blur-xl rounded-full transition-opacity duration-500"></div>
+                        <svg class="w-12 h-12 text-emerald-600 filter drop-shadow-md relative z-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    </div>
+
+                    <h3 class="text-2xl font-serif text-gray-900 mb-6 relative z-10 text-center group-hover:text-emerald-800 transition-colors duration-300">Web & Mobile App</h3>
+                    
+                    <ul class="text-gray-600 text-[13px] mb-10 space-y-3.5 flex-grow relative z-10 leading-relaxed">
+                        <li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>UI/UX Design & Prototyping</li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Landing Page & Company Profile</li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Aplikasi Bisnis / Kasir Mobile</li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-emerald-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div>Sistem Reservasi Custom</li>
+                    </ul>
+
+                    <div class="relative z-10 text-center mt-auto">
+                        <a href="/layanan/web-mobile-app" class="inline-flex items-center justify-center px-6 py-2.5 bg-white border border-gray-100 text-emerald-600 text-sm font-semibold rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] group-hover:bg-emerald-500 group-hover:text-white group-hover:border-emerald-500 group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 w-full sm:w-auto">
+                            Detail Layanan <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -703,3 +770,4 @@
     </script>
 </body>
 </html>
+
