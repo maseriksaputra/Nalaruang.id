@@ -41,7 +41,7 @@ Route::get('/fix-services', function () {
     $service = \App\Models\Service::firstOrCreate(
         ['slug' => 'event-digital'],
         [
-            'name' => 'Event Digital',
+            'title' => 'Event Digital',
             'description' => 'Layanan pembuatan undangan digital interaktif dan modern.',
             'is_active' => true,
             'sort_order' => 1
@@ -50,7 +50,7 @@ Route::get('/fix-services', function () {
     \App\Models\Service::firstOrCreate(
         ['slug' => 'undangan-cetak'],
         [
-            'name' => 'Undangan Cetak',
+            'title' => 'Undangan Cetak',
             'description' => 'Layanan cetak undangan premium.',
             'is_active' => true,
             'sort_order' => 2
@@ -59,7 +59,7 @@ Route::get('/fix-services', function () {
     \App\Models\Service::firstOrCreate(
         ['slug' => 'souvenir-merchandise'],
         [
-            'name' => 'Souvenir & Merchandise',
+            'title' => 'Souvenir & Merchandise',
             'description' => 'Layanan pembuatan souvenir dan merchandise eksklusif.',
             'is_active' => true,
             'sort_order' => 3
