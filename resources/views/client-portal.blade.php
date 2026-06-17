@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <link rel="icon" href="/logo1.png" type="image/png">
+    <link rel="icon" href="/logo1.png?v=2" type="image/png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client Area - {{ $invitation->title }}</title>
@@ -105,7 +105,7 @@
     <header class="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <img src="/logo1.png" alt="Logo Nalaruang" class="h-10 w-auto object-contain">
+                <img src="/logo1.png?v=2" alt="Logo Nalaruang" class="h-10 w-auto object-contain">
                 <h1 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Client Area</h1>
             </div>
             

@@ -39,7 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Nalaruang.id')
             ->brandLogo(fn () => asset('logo.png'))
             ->brandLogoHeight('6rem')
-            ->favicon('/logo1.png')
+            ->favicon('/logo1.png?v=2')
             ->sidebarCollapsibleOnDesktop()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
