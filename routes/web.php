@@ -13,6 +13,13 @@ Route::get('/layanan/{slug}', [ServiceController::class, 'show'])->name('service
 Route::get('/client/form/{token}', [ClientFormController::class, 'show'])->name('client.form.show');
 Route::post('/client/form/{token}', [ClientFormController::class, 'submit'])->name('client.form.submit');
 
+Route::get('/test-post', function () {
+    return '<form method="POST" action="/test-post-submit"><input type="hidden" name="_token" value="'.csrf_token().'"><button type="submit">Test POST</button></form>';
+});
+Route::post('/test-post-submit', function () {
+    return 'POST BERHASIL! Berarti masalahnya ada di Livewire, bukan Nginx.';
+});
+
 Route::get('/order/{template_id}', [OrderController::class, 'create'])->name('order.create');
 Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 
@@ -30,13 +37,6 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/admin/invitation-portal/templates/{id}/duplicate', [\App\Http\Controllers\DashboardPortalController::class, 'duplicateTemplate']);
     Route::post('/admin/invitation-portal/templates/{id}/toggle', [\App\Http\Controllers\DashboardPortalController::class, 'toggleTemplate']);
     Route::post('/admin/invitation-portal/templates/{id}/thumbnail', [\App\Http\Controllers\DashboardPortalController::class, 'updateThumbnail']);
-
-    Route::get('/test-post', function () {
-        return '<form method="POST" action="/test-post-submit"><input type="hidden" name="_token" value="'.csrf_token().'"><button type="submit">Test POST</button></form>';
-    });
-    Route::post('/test-post-submit', function () {
-        return 'POST BERHASIL! Berarti masalahnya ada di Livewire, bukan Nginx.';
-    });
 
     // Mock Order untuk testing form klien
     // Route::get('/admin/mock-order', function () {
