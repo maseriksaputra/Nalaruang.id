@@ -304,6 +304,10 @@ const PortalApp = () => {
             });
             if (response.data?.success && response.data?.redirect_url) {
                 window.location.href = response.data.redirect_url;
+                return; // Biarkan spinner tetap jalan saat redirect
+            } else {
+                alert(response.data?.error || response.data?.message || 'Gagal membuat desain baru.');
+                setIsLoading(false);
             }
         } catch (error) {
             console.error(error);
@@ -322,6 +326,10 @@ const PortalApp = () => {
             });
             if (response.data?.success && response.data?.redirect_url) {
                 window.location.href = response.data.redirect_url;
+                return; // Biarkan spinner tetap jalan saat redirect
+            } else {
+                alert(response.data?.error || response.data?.message || 'Gagal menggunakan template.');
+                setIsLoading(false);
             }
         } catch (error) {
             console.error(error);
