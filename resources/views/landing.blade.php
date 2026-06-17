@@ -221,7 +221,7 @@
                     
                     
                     <!-- Dot Pattern -->
-                    <div class="absolute top-6 right-6 w-24 h-24 opacity-50 z-0" style="background-image: radial-gradient(var(--color-pink-300) 2.5px, transparent 2.5px); background-size: 12px 12px;"></div>
+                    <div class="absolute top-6 right-6 w-24 h-24 opacity-50 z-0" style="background-image: radial-gradient(#f9a8d4 2.5px, transparent 2.5px); background-size: 12px 12px;"></div>
                     
                     <!-- Gradient Blobs for dynamic background -->
                     <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 group-hover:opacity-70 transition-opacity duration-700"></div>
