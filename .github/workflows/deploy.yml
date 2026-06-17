@@ -29,10 +29,13 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install NPM Dependencies and Build
-        run: |
-          npm install
-          npm run build
+      - name: Install NPM Dependencies
+        run: npm install
+
+      - name: Build Assets
+        run: npm run build
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
 
       - name: Deploy to VPS via Rsync
         uses: easingthemes/ssh-deploy@main
