@@ -4,6 +4,21 @@
         <!-- Left Column: Products & Entry -->
         <div class="lg:col-span-2 space-y-6">
             
+            <!-- Mode Selector (Manual vs AI) -->
+            <div class="flex flex-col sm:flex-row gap-2 bg-pink-50 p-1.5 rounded-xl border border-pink-100 w-full mb-6">
+                <button wire:click="$set('isBulkMode', false)" 
+                        class="flex-1 py-3 px-4 rounded-lg font-bold text-sm flex justify-center items-center gap-2 transition-all {{ !$isBulkMode ? 'bg-white shadow-sm text-pink-600 border border-pink-200' : 'text-gray-500 hover:text-pink-500' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    Mode Kasir Manual
+                </button>
+                <button wire:click="$set('isBulkMode', true)" 
+                        class="flex-1 py-3 px-4 rounded-lg font-bold text-sm flex justify-center items-center gap-2 transition-all {{ $isBulkMode ? 'bg-white shadow-sm text-pink-600 border border-pink-200' : 'text-gray-500 hover:text-pink-500' }}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    Mode Input Massal (AI)
+                </button>
+            </div>
+
+            @if(!$isBulkMode)
             <!-- Categories -->
             <div class="flex overflow-x-auto pb-2 hide-scrollbar custom-categories-wrapper" style="gap: 12px; margin-bottom: 1rem;">
                 @foreach($categories as $cat)
@@ -15,8 +30,8 @@
                 @endforeach
             </div>
 
-            <!-- Type, Date & Bulk Toggle -->
-            <div class="bg-white p-4 rounded-xl border border-pink-200 shadow-sm flex flex-col lg:flex-row gap-4 justify-between items-center mb-2">
+            <!-- Type & Date -->
+            <div class="bg-white p-4 rounded-xl border border-pink-200 shadow-sm flex flex-col lg:flex-row gap-4 justify-between items-center mb-6">
                 <div class="flex bg-gray-100 p-1 rounded-lg w-full sm:w-auto">
                     <button x-on:click="type = 'income'" 
                             class="flex-1 sm:flex-none px-6 py-2 rounded-md text-sm font-bold transition-all shadow-sm"
@@ -29,20 +44,10 @@
                         - Pengeluaran
                     </button>
                 </div>
-                <div class="flex items-center gap-4 w-full sm:w-auto flex-wrap lg:flex-nowrap justify-between sm:justify-start">
-                    <input type="date" wire:model="transactionDate" class="border-gray-300 rounded-lg shadow-sm focus:border-pink-500 focus:ring-pink-500 text-sm font-medium text-gray-700">
-                    
-                    <div class="flex items-center gap-2 border-l pl-4 border-gray-200">
-                        <span class="text-sm font-bold text-gray-700">AI Input</span>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                          <input type="checkbox" wire:model.live="isBulkMode" class="sr-only peer">
-                          <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-pink-600"></div>
-                        </label>
-                    </div>
+                <div class="w-full sm:w-auto">
+                    <input type="date" wire:model="transactionDate" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-pink-500 focus:ring-pink-500 text-sm font-medium text-gray-700">
                 </div>
             </div>
-
-            @if(!$isBulkMode)
 
             <!-- Product Grid -->
             <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 1.5rem;">
@@ -99,6 +104,14 @@
             @else
             <!-- Bulk Entry Mode -->
             <div class="bg-white p-6 rounded-xl border border-pink-200 shadow-sm space-y-6">
+                
+                <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+                    <h3 class="font-bold text-lg text-gray-800">Input Transaksi via AI</h3>
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-semibold text-gray-600">Tanggal Transaksi:</span>
+                        <input type="date" wire:model="transactionDate" class="border-gray-300 rounded-lg shadow-sm focus:border-pink-500 focus:ring-pink-500 text-sm font-medium text-gray-700">
+                    </div>
+                </div>
                 <!-- Prompt Template -->
                 <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 relative group">
                     <button onclick="navigator.clipboard.writeText(document.getElementById('ai-prompt').innerText); alert('Prompt disalin!')" 
