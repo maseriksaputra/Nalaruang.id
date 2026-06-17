@@ -127,6 +127,8 @@ class CashflowResource extends Resource
                 Tables\Grouping\Group::make('transaction_date')
                     ->label('Tanggal')
                     ->collapsible()
+                    ->groupQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) => $query->groupByRaw('date(transaction_date)'))
+                    ->scopeQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query, \App\Models\Cashflow $record) => $query->whereDate('transaction_date', \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d')))
                     ->getKeyFromRecordUsing(fn (\App\Models\Cashflow $record) => \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d'))
                     ->getTitleFromRecordUsing(function (\App\Models\Cashflow $record) {
                         $date = \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d');
