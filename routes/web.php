@@ -37,6 +37,37 @@ Route::get('/debug-log', function () {
 //     return 'Database migrated successfully!';
 // });
 
+Route::get('/fix-services', function () {
+    $service = \App\Models\Service::firstOrCreate(
+        ['slug' => 'event-digital'],
+        [
+            'name' => 'Event Digital',
+            'description' => 'Layanan pembuatan undangan digital interaktif dan modern.',
+            'is_active' => true,
+            'sort_order' => 1
+        ]
+    );
+    \App\Models\Service::firstOrCreate(
+        ['slug' => 'undangan-cetak'],
+        [
+            'name' => 'Undangan Cetak',
+            'description' => 'Layanan cetak undangan premium.',
+            'is_active' => true,
+            'sort_order' => 2
+        ]
+    );
+    \App\Models\Service::firstOrCreate(
+        ['slug' => 'souvenir-merchandise'],
+        [
+            'name' => 'Souvenir & Merchandise',
+            'description' => 'Layanan pembuatan souvenir dan merchandise eksklusif.',
+            'is_active' => true,
+            'sort_order' => 3
+        ]
+    );
+    return 'Layanan berhasil dibuat di database! Silakan cek kembali halaman depan.';
+});
+
 // Routes untuk SaaS Undangan Digital (Protected by Auth)
 Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/admin/invitation-portal', [\App\Http\Controllers\DashboardPortalController::class, 'index']);
