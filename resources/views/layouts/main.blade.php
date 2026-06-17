@@ -37,7 +37,11 @@
                             700: '#D81295', // Logo Color 2
                             600: '#F32396', // Logo Color 3
                             500: '#F63EA1', // Logo Color 5
+                            400: '#F86AB8', // Generated from 500
+                            300: '#FA97CF', // Generated from 500
+                            200: '#FCD4EA', // Generated from 500
                             100: '#FDF0F8', // Very light pink
+                            50: '#FFF7FB',  // Lightest pink
                         },
                         sand: '#fdfbf7', // Off-white/warm
                     }
