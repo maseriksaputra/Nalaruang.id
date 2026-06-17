@@ -126,8 +126,8 @@ class CashflowResource extends Resource
             ->groups([
                 Tables\Grouping\Group::make('transaction_date')
                     ->label('Tanggal')
-                    ->date() // Forces grouping by date
                     ->collapsible()
+                    ->getKeyFromRecordUsing(fn (\App\Models\Cashflow $record) => \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d'))
                     ->getTitleFromRecordUsing(function (\App\Models\Cashflow $record) {
                         $date = \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d');
                         $displayDate = \Carbon\Carbon::parse($record->transaction_date)->translatedFormat('l, d F Y');
