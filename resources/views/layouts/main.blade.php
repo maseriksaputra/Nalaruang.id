@@ -21,7 +21,7 @@
     
     <!-- Custom Tailwind Configuration -->
     <script>
-        window.ASSET_URL = '{{ rtrim(Storage::url('/'), '/') }}/';
+        window.ASSET_URL = '{{ str_replace('test.txt', '', Storage::url('test.txt')) }}';
         tailwind.config = {
             theme: {
                 extend: {

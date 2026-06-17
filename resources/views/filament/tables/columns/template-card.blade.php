@@ -48,7 +48,7 @@
     <!-- Image Section -->
     <div class="relative w-full bg-gray-100 overflow-hidden mb-3" style="border-radius: 0.75rem; aspect-ratio: 4/3;">
         @if($record->image)
-            <img src="{{ rtrim(Storage::url('/'), '/') . '/' . $record->image }}" alt="{{ $record->name }}" class="w-full h-full object-cover" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="{{ rtrim(str_replace('test.txt', '', Storage::url('test.txt')), '/') . '/' . $record->image }}" alt="{{ $record->name }}" class="w-full h-full object-cover" style="width: 100%; height: 100%; object-fit: cover;">
         @elseif($iframeUrl)
             <!-- Iframe Preview Fallback -->
             <div style="width: 414px; height: 896px; transform: scale(0.65); transform-origin: top left; pointer-events: none;">
