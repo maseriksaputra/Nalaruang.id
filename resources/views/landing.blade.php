@@ -217,41 +217,41 @@
                 <!-- Card 01 -->
                 <div class="group relative bg-white p-6 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-2 transition-all duration-500 border border-gray-100 flex flex-col overflow-hidden h-full cursor-pointer" data-aos="fade-up" data-aos-delay="100">
                     <!-- Badge Number -->
-                    <div class="absolute top-0 left-0 bg-brand-500 text-white text-xs font-bold px-4 py-2 rounded-br-2xl z-20 shadow-sm">01</div>
+                    <div class="absolute top-0 left-0 bg-pink-500 text-white text-xs font-bold px-4 py-2 rounded-br-2xl z-20 shadow-sm">01</div>
                     
                     
                     <!-- Dot Pattern -->
-                    <div class="absolute top-6 right-6 w-24 h-24 opacity-50 z-0" style="background-image: radial-gradient(#F63EA1 2.5px, transparent 2.5px); background-size: 12px 12px;"></div>
+                    <div class="absolute top-6 right-6 w-24 h-24 opacity-50 z-0" style="background-image: radial-gradient(var(--color-pink-300) 2.5px, transparent 2.5px); background-size: 12px 12px;"></div>
                     
                     <!-- Gradient Blobs for dynamic background -->
-                    <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-brand-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 group-hover:opacity-70 transition-opacity duration-700"></div>
-                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-brand-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 group-hover:opacity-60 transition-opacity duration-700 delay-100"></div>
+                    <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 group-hover:opacity-70 transition-opacity duration-700"></div>
+                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 group-hover:opacity-60 transition-opacity duration-700 delay-100"></div>
 
                     <!-- Multi-layer Wave Background -->
                     <svg class="absolute bottom-0 left-0 w-full opacity-60 group-hover:opacity-100 transition-opacity duration-700 z-0 transform translate-y-2 group-hover:translate-y-0" viewBox="0 0 1440 320" preserveAspectRatio="none">
-                        <path class="text-brand-100" fill="currentColor" fill-opacity="0.5" d="M0,192L48,197.3C96,203,192,213,288,202.7C384,192,480,160,576,149.3C672,139,768,149,864,165.3C960,181,1056,203,1152,202.7C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-                        <path class="text-brand-200" fill="currentColor" fill-opacity="0.4" d="M0,256L48,245.3C96,235,192,213,288,213.3C384,213,480,235,576,234.7C672,235,768,213,864,197.3C960,181,1056,149,1152,144C1248,139,1344,160,1392,170.7L1440,181L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
-                        <path class="text-brand-300" fill="currentColor" fill-opacity="0.3" d="M0,288L48,272C96,256,192,224,288,218.7C384,213,480,235,576,229.3C672,224,768,192,864,186.7C960,181,1056,203,1152,202.7C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                        <path class="text-pink-100" fill="currentColor" fill-opacity="0.5" d="M0,192L48,197.3C96,203,192,213,288,202.7C384,192,480,160,576,149.3C672,139,768,149,864,165.3C960,181,1056,203,1152,202.7C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                        <path class="text-pink-200" fill="currentColor" fill-opacity="0.4" d="M0,256L48,245.3C96,235,192,213,288,213.3C384,213,480,235,576,234.7C672,235,768,213,864,197.3C960,181,1056,149,1152,144C1248,139,1344,160,1392,170.7L1440,181L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                        <path class="text-pink-300" fill="currentColor" fill-opacity="0.3" d="M0,288L48,272C96,256,192,224,288,218.7C384,213,480,235,576,229.3C672,224,768,192,864,186.7C960,181,1056,203,1152,202.7C1248,203,1344,181,1392,170.7L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
                     </svg>
 
                     <!-- Premium 2.5D Icon (Centered) -->
                     <div class="relative w-24 h-24 mx-auto mt-8 mb-6 z-10 transform group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500 flex items-center justify-center">
-                        <div class="absolute inset-0 bg-gradient-to-br from-brand-100 to-white rounded-full shadow-inner opacity-90 group-hover:rotate-12 transition-transform duration-700"></div>
-                        <div class="absolute inset-2 bg-gradient-to-tl from-brand-50 to-white rounded-full shadow-[inset_0_4px_8px_rgba(0,0,0,0.05)]"></div>
-                        <div class="absolute inset-0 bg-brand-400 opacity-0 group-hover:opacity-20 blur-xl rounded-full transition-opacity duration-500"></div>
-                        <svg class="w-10 h-10 text-brand-600 filter drop-shadow-md relative z-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                        <div class="absolute inset-0 bg-gradient-to-br from-pink-100 to-white rounded-full shadow-inner opacity-90 group-hover:rotate-12 transition-transform duration-700"></div>
+                        <div class="absolute inset-2 bg-gradient-to-tl from-pink-50 to-white rounded-full shadow-[inset_0_4px_8px_rgba(0,0,0,0.05)]"></div>
+                        <div class="absolute inset-0 bg-pink-400 opacity-0 group-hover:opacity-20 blur-xl rounded-full transition-opacity duration-500"></div>
+                        <svg class="w-10 h-10 text-pink-600 filter drop-shadow-md relative z-20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
                     </div>
 
                     <!-- Content -->
                     <div class="relative z-10 flex-grow flex flex-col">
-                        <h3 class="text-xl font-serif font-bold text-gray-900 mb-5 text-center group-hover:text-brand-800 transition-colors duration-300">Cetak Fisik Premium</h3>
+                        <h3 class="text-xl font-serif font-bold text-gray-900 mb-5 text-center group-hover:text-pink-800 transition-colors duration-300">Cetak Fisik Premium</h3>
                         
                         <ul class="text-gray-600 text-[13px] mb-8 space-y-3 flex-grow leading-relaxed text-left mx-auto w-fit">
-                            <li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-brand-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div><span class="leading-tight">Undangan Pernikahan Eksklusif</span></li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-brand-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div><span class="leading-tight">Custom Lanyard & ID Card</span></li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-brand-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div><span class="leading-tight">Buku Yasin & Majmu Premium</span></li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-brand-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div><span class="leading-tight">Jasa Print & Fotocopy Dokumen</span></li>
+                            <li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-pink-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div><span class="leading-tight">Undangan Pernikahan Eksklusif</span></li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-pink-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div><span class="leading-tight">Custom Lanyard & ID Card</span></li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-pink-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div><span class="leading-tight">Buku Yasin & Majmu Premium</span></li><li class="flex items-start"><div class="flex-shrink-0 w-4 h-4 rounded-full bg-pink-500 text-white flex items-center justify-center mt-0.5 mr-3 shadow-sm"><svg class="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg></div><span class="leading-tight">Jasa Print & Fotocopy Dokumen</span></li>
                         </ul>
 
                         <div class="mt-auto text-center w-full">
-                            <a href="/layanan/cetak-fisik" class="inline-flex items-center justify-center px-6 py-2.5 bg-white border border-gray-100 text-brand-600 text-sm font-semibold rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] group-hover:bg-brand-500 group-hover:text-white group-hover:border-brand-500 group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 w-full sm:w-auto">
+                            <a href="/layanan/cetak-fisik" class="inline-flex items-center justify-center px-6 py-2.5 bg-white border border-gray-100 text-pink-600 text-sm font-semibold rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.02)] group-hover:bg-pink-500 group-hover:text-white group-hover:border-pink-500 group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300 w-full sm:w-auto">
                                 Detail Layanan <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </a>
                         </div>
@@ -807,6 +807,7 @@
     </script>
 </body>
 </html>
+
 
 
 
