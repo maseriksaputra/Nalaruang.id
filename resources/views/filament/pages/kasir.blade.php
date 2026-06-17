@@ -2,7 +2,7 @@
     <div class="kasir-grid" x-data="{ tab: 'F&B', type: @entangle('transactionType') }">
         
         <!-- Left Column: Products & Entry -->
-        <div class="lg:col-span-2 space-y-6">
+        <div class="lg:col-span-2 space-y-6 min-w-0">
             
             <!-- Mode Selector (Manual vs AI) -->
             <div class="flex flex-col sm:flex-row gap-2 bg-pink-50 p-1.5 rounded-xl border border-pink-100 w-full mb-6">
@@ -123,7 +123,7 @@
                         <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         Template Prompt untuk ChatGPT / Gemini:
                     </h4>
-                    <pre id="ai-prompt" class="text-[13px] text-gray-600 whitespace-pre-wrap font-mono leading-relaxed bg-white p-4 border border-gray-100 rounded">Tolong ubah foto catatan transaksi kasir ini menjadi teks biasa. Susun per baris dengan format yang SANGAT KETAT seperti ini:
+                    <pre id="ai-prompt" class="text-[13px] text-gray-600 whitespace-pre-wrap break-words font-mono leading-relaxed bg-white p-4 border border-gray-100 rounded overflow-x-auto">Tolong ubah foto catatan transaksi kasir ini menjadi teks biasa. Susun per baris dengan format yang SANGAT KETAT seperti ini:
 [+/-] [KODE_KATEGORI] [Nama Barang atau Deskripsi] [Qty] [Harga Satuan]
 
 Keterangan Kode Kategori:
