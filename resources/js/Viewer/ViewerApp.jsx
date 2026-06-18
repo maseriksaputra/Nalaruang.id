@@ -100,8 +100,16 @@ const ViewerApp = ({ previewData, onClosePreview }) => {
             )}
             
             {/* Main Canvas Container */}
-            <div className={`relative z-10 w-full h-full flex ${hasDesktopThumbnail ? 'justify-center lg:justify-end' : 'justify-center'} ${isInsideBuilderPreview && !hasDesktopThumbnail ? 'pt-14' : ''}`}>
-                <div id="viewer-scroll-container" className={`w-full bg-white relative overflow-y-auto ${isInsideBuilderPreview && hasDesktopThumbnail ? 'h-full' : ''}`} style={{ height: '100vh', maxWidth: `${414 * desktopScale}px` }}>
+            <div className={`relative z-10 w-full h-full flex ${hasDesktopThumbnail ? 'justify-center lg:justify-end' : 'justify-center items-center'} ${isInsideBuilderPreview && !hasDesktopThumbnail ? 'pt-14 pb-6' : ''}`}>
+                <div 
+                    id="viewer-scroll-container" 
+                    className={`w-full bg-white relative overflow-y-auto ${!hasDesktopThumbnail && desktopScale === 1 ? 'shadow-2xl rounded-xl border border-gray-200/20' : ''}`} 
+                    style={{ 
+                        height: (!hasDesktopThumbnail && desktopScale === 1) ? '844px' : '100vh', 
+                        maxHeight: (!hasDesktopThumbnail && desktopScale === 1) ? (isInsideBuilderPreview ? 'calc(100vh - 80px)' : 'calc(100vh - 64px)') : '100%',
+                        maxWidth: `${414 * desktopScale}px` 
+                    }}
+                >
                     <PublicCanvas config={viewerData} />
                 </div>
             </div>
