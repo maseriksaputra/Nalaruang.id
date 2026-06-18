@@ -40,6 +40,9 @@ class CashflowStats extends BaseWidget
     #[Reactive]
     public ?string $activeTab = null;
 
+    #[Reactive]
+    public ?array $customFilters = null;
+
     protected HasTable $tablePage;
 
     protected function getTablePage(): string
@@ -67,6 +70,7 @@ class CashflowStats extends BaseWidget
         $page->tableSearch = $this->tableSearch;
         $page->tableSortColumn = $this->tableSortColumn;
         $page->tableSortDirection = $this->tableSortDirection;
+        $page->customFilters = $this->customFilters;
 
         return $this->tablePage = $page;
     }
