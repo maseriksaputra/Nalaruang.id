@@ -38,7 +38,8 @@ const useCanvasStore = create(temporal((set, get) => ({
             const deepCopy = (item) => JSON.parse(JSON.stringify(item));
 
             for (const layer of section.layers) {
-                if (state.activeLayerIds.includes(layer.id)) {
+                // Ignore structural groups from being copied directly
+                if (state.activeLayerIds.includes(layer.id) && layer.type !== 'group') {
                     copied.push(deepCopy(layer));
                 } else if (layer.children) {
                     for (const child of layer.children) {
