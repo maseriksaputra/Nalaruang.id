@@ -9,6 +9,7 @@ import AnimationPanel from './components/Panels/AnimationPanel';
 import TopToolbar from './components/Panels/TopToolbar';
 import ContextualToolbar from './components/Panels/ContextualToolbar';
 import AssetSelectionModal from './components/Panels/AssetSelectionModal';
+import TimelinePanel from './components/Panels/TimelinePanel';
 import useUIStore from './stores/useUIStore';
 import useCanvasStore from './stores/useCanvasStore';
 import { TransformWrapper, TransformComponent, useControls } from "react-zoom-pan-pinch";
@@ -347,6 +348,9 @@ const BuilderApp = () => {
                                     )}
                                 </TransformWrapper>
                             )}
+                            
+                            {/* Render Timeline Panel */}
+                            <TimelinePanel />
                         </main>
 
                         <div className={isPreviewMobile ? 'hidden' : 'absolute top-0 right-0 bottom-0 z-40 flex pointer-events-none'}>
