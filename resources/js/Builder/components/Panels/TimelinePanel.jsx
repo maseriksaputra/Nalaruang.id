@@ -16,6 +16,7 @@ const TimelinePanel = () => {
     
     const [isOpen, setIsOpen] = useState(true);
     const [panelHeight, setPanelHeight] = useState(250);
+    const [isDraggingResizer, setIsDraggingResizer] = useState(false);
     const [timeScale, setTimeScale] = useState(100); // pixels per second (zoomed in for micro adjustments)
     const [playheadPos, setPlayheadPos] = useState(0); // in seconds
     const [isPlaying, setIsPlaying] = useState(false);
