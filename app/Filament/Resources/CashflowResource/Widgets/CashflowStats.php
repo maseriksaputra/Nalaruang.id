@@ -89,6 +89,11 @@ class CashflowStats extends BaseWidget
         $totalExpense = (clone $query)->where('type', 'expense')->sum('amount');
         $totalNet = $totalIncome + $totalExpense; // Add them because expense is already negative
 
+        $incomeFnB = (clone $query)->where('type', 'income')->where('category', 'F&B')->sum('amount');
+        $incomeAtk = (clone $query)->where('type', 'income')->where('category', 'ATK')->sum('amount');
+        $incomePrint = (clone $query)->where('type', 'income')->where('category', 'Printing')->sum('amount');
+        $incomeDigital = (clone $query)->where('type', 'income')->where('category', 'Digital')->sum('amount');
+
         return [
             Stat::make('Total Pemasukan', 'Rp ' . number_format($totalIncome, 0, ',', '.'))
                 ->description('Dari data yang sedang disaring')
@@ -104,6 +109,26 @@ class CashflowStats extends BaseWidget
                 ->description('Pemasukan - Pengeluaran')
                 ->descriptionIcon($totalNet >= 0 ? 'heroicon-m-arrow-up-circle' : 'heroicon-m-exclamation-triangle', \Filament\Support\Enums\IconPosition::Before)
                 ->color($totalNet >= 0 ? 'success' : 'danger'),
+
+            Stat::make('Omzet F&B', 'Rp ' . number_format($incomeFnB, 0, ',', '.'))
+                ->description('Pemasukan kategori F&B')
+                ->descriptionIcon('heroicon-m-cake', \Filament\Support\Enums\IconPosition::Before)
+                ->color('warning'),
+
+            Stat::make('Omzet ATK', 'Rp ' . number_format($incomeAtk, 0, ',', '.'))
+                ->description('Pemasukan kategori ATK')
+                ->descriptionIcon('heroicon-m-pencil-square', \Filament\Support\Enums\IconPosition::Before)
+                ->color('info'),
+
+            Stat::make('Omzet Printing', 'Rp ' . number_format($incomePrint, 0, ',', '.'))
+                ->description('Pemasukan kategori Printing')
+                ->descriptionIcon('heroicon-m-printer', \Filament\Support\Enums\IconPosition::Before)
+                ->color('success'),
+
+            Stat::make('Omzet Digital', 'Rp ' . number_format($incomeDigital, 0, ',', '.'))
+                ->description('Pemasukan kategori Digital')
+                ->descriptionIcon('heroicon-m-device-phone-mobile', \Filament\Support\Enums\IconPosition::Before)
+                ->color('primary'),
         ];
     }
 }
