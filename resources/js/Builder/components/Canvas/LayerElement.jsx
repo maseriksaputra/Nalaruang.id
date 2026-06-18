@@ -269,7 +269,9 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 }}
             >
                 {layer.children?.map(child => (
-                    <LayerElement key={child.id} layer={child} isChildOfGroup={true} sectionId={sectionId} />
+                    <div key={child.id} style={{ pointerEvents: 'auto' }}>
+                        <LayerElement layer={child} isChildOfGroup={true} sectionId={sectionId} />
+                    </div>
                 ))}
             </div>
         );
@@ -586,7 +588,9 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 {layer.type === 'canvas_group' && (
                     <div className="w-full h-full relative pointer-events-none">
                         {layer.children?.map(child => (
-                            <LayerElement key={child.id} layer={child} isChildOfGroup={true} sectionId={sectionId} />
+                            <div key={child.id} style={{ pointerEvents: 'auto' }}>
+                                <LayerElement layer={child} isChildOfGroup={true} sectionId={sectionId} />
+                            </div>
                         ))}
                     </div>
                 )}
