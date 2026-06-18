@@ -135,6 +135,12 @@ const BuilderApp = () => {
                     } else {
                         if (useCanvasStore.getState().groupElements) useCanvasStore.getState().groupElements();
                     }
+                } else if (e.key === 'c' || e.key === 'C') {
+                    if (window.getSelection().toString() !== '') return;
+                    e.preventDefault();
+                    if (useCanvasStore.getState().copyElements) useCanvasStore.getState().copyElements();
+                } else if (e.key === 'v' || e.key === 'V') {
+                    if (useCanvasStore.getState().pasteElements) useCanvasStore.getState().pasteElements();
                 }
             }
         };

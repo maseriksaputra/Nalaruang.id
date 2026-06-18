@@ -26,6 +26,97 @@ const useCanvasStore = create(temporal((set, get) => ({
     sections: [],
     activeLayerId: null,
     activeLayerIds: [],
+    clipboard: null,
+
+    copyElements: () => {
+        set(produce((state) => {
+            if (state.activeLayerIds.length === 0) return;
+            const section = state.sections.find(s => s.id === state.activeSectionId);
+            if (!section) return;
+
+            const copied = [];
+            const deepCopy = (item) => JSON.parse(JSON.stringify(item));
+
+            for (const layer of section.layers) {
+                if (state.activeLayerIds.includes(layer.id)) {
+                    copied.push(deepCopy(layer));
+                } else if (layer.children) {
+                    for (const child of layer.children) {
+                        if (state.activeLayerIds.includes(child.id)) {
+                            copied.push(deepCopy(child));
+                        }
+                    }
+                }
+            }
+            if (copied.length > 0) {
+                state.clipboard = copied;
+            }
+        }));
+    },
+
+    pasteElements: () => {
+        set(produce((state) => {
+            if (!state.clipboard || state.clipboard.length === 0) return;
+            const section = state.sections.find(s => s.id === state.activeSectionId) || state.sections[0];
+            if (!section) return;
+
+            const deepCopy = (item) => JSON.parse(JSON.stringify(item));
+            const newLayerIds = [];
+
+            // Find max Z
+            let maxZ = 0;
+            const checkZ = (layers) => {
+                layers.forEach(l => {
+                    if ((l.style?.zIndex || 0) > maxZ) maxZ = l.style.zIndex;
+                    if (l.children) checkZ(l.children);
+                });
+            };
+            checkZ(section.layers);
+
+            const pasteItem = (item) => {
+                const newItem = deepCopy(item);
+                
+                const generateNewId = (oldId) => oldId.replace(/_[0-9]+.*$/, '') + '_' + Date.now() + Math.floor(Math.random()*1000);
+                newItem.id = generateNewId(newItem.id);
+                
+                if (newItem.style) {
+                    if (newItem.style.x !== undefined) newItem.style.x += 20;
+                    if (newItem.style.y !== undefined) newItem.style.y += 20;
+                    maxZ++;
+                    newItem.style.zIndex = maxZ;
+                }
+
+                if (newItem.children) {
+                    newItem.children = newItem.children.map(c => pasteItem(c));
+                }
+                return newItem;
+            };
+
+            const pastedItems = state.clipboard.map(item => pasteItem(item));
+            
+            // Push to active group or root
+            let activeGroup = section.layers.find(l => l.id === state.activeLayerId);
+            if (!activeGroup) {
+                activeGroup = section.layers.find(g => g.children?.some(c => c.id === state.activeLayerId));
+            }
+            if (!activeGroup && section.layers.length > 0) {
+                activeGroup = section.layers[section.layers.length - 1];
+            }
+
+            pastedItems.forEach(pi => {
+                newLayerIds.push(pi.id);
+                if (activeGroup && activeGroup.children && pi.type !== 'canvas_group' && pi.type !== 'group') {
+                    activeGroup.children.push(pi);
+                } else {
+                    section.layers.push(pi);
+                }
+            });
+
+            state.activeLayerIds = newLayerIds;
+            state.activeLayerId = newLayerIds[newLayerIds.length - 1];
+        }));
+        get().triggerAutoSave();
+    },
     activeSectionId: null,
     zoom: 1,
     activeTab: 'elements', // 'elements', 'text', 'uploads', 'layers', 'settings'

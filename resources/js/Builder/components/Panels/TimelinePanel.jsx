@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import useCanvasStore from '../../stores/useCanvasStore';
+import useUIStore from '../../stores/useUIStore';
 import { produce } from 'immer';
 
 const MAX_TIME = 60; // 60 seconds timeline
@@ -11,6 +12,7 @@ const TimelinePanel = () => {
     const activeLayerIds = useCanvasStore(state => state.activeLayerIds);
     const setActiveLayer = useCanvasStore(state => state.setActiveLayer);
     const updateLayerAnimation = useCanvasStore(state => state.updateLayerAnimation);
+    const isRightSidebarOpen = useUIStore(state => state.isRightSidebarOpen);
     
     const [isOpen, setIsOpen] = useState(true);
     const [panelHeight, setPanelHeight] = useState(250);
@@ -120,7 +122,7 @@ const TimelinePanel = () => {
 
     return (
         <div 
-            className={`absolute bottom-[48px] left-0 right-0 bg-white border-t border-gray-200 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] transition-transform duration-300 z-50 flex flex-col`}
+            className={`absolute bottom-[48px] left-0 transition-all duration-300 bg-white border-t border-gray-200 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-50 flex flex-col ${isRightSidebarOpen ? 'right-[320px]' : 'right-0'}`}
             style={{ 
                 height: isOpen ? `${panelHeight}px` : '40px',
                 transform: `translateY(0)`
@@ -381,6 +383,11 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
     const thumbUrl = getThumbUrl();
     const displayName = layer.name || (layer.type === 'text' ? 'Teks' : (layer.type === 'image' ? 'Gambar' : 'Elemen'));
 
+    const hasEntry = !!layer.animation?.entry;
+    const hasExit = !!layer.animation?.exit;
+    const entryAnimName = layer.animation?.entry || '';
+    const exitAnimName = layer.animation?.exit || '';
+
     return (
         <div 
             className={`timeline-block absolute top-1 bottom-1 rounded-md shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-hidden bg-indigo-500 ${active ? 'ring-2 ring-indigo-400 z-20 shadow-[0_0_15px_rgba(99,102,241,0.4)]' : 'hover:ring-1 hover:ring-indigo-400 z-10'}`}
@@ -414,6 +421,11 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
                 onMouseDown={(e) => handleMouseDown(e, 'start')}
             >
                 <div className="w-1.5 h-6 bg-green-400 rounded-r-md shadow-sm opacity-80 group-hover:opacity-100 group-hover:w-2 transition-all"></div>
+                {hasEntry && (
+                    <div className="absolute left-2 text-[8px] font-bold text-green-200 bg-green-900/60 px-1 py-0.5 rounded pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        {entryAnimName}
+                    </div>
+                )}
             </div>
             
             {/* Name Label */}
@@ -429,6 +441,11 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
                 onMouseDown={(e) => handleMouseDown(e, 'end')}
             >
                 <div className="w-1.5 h-6 bg-red-400 rounded-l-md shadow-sm opacity-80 group-hover:opacity-100 group-hover:w-2 transition-all"></div>
+                {hasExit && (
+                    <div className="absolute right-2 text-[8px] font-bold text-red-200 bg-red-900/60 px-1 py-0.5 rounded pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                        {exitAnimName}
+                    </div>
+                )}
             </div>
         </div>
     );
