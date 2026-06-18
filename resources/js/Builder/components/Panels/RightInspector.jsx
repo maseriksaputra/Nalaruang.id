@@ -150,6 +150,8 @@ const RightInspector = () => {
             opacity: activeLayer.style?.opacity ?? 1,
             scale: activeLayer.style?.scale ?? 1,
             rotation: activeLayer.style?.rotation || 0,
+            width: activeLayer.style?.width !== undefined ? parseFloat(activeLayer.style.width) : undefined,
+            height: activeLayer.style?.height !== undefined ? parseFloat(activeLayer.style.height) : undefined,
             duration: 1.0, 
             ease: 'power1.inOut'
         };
@@ -1375,6 +1377,8 @@ const RightInspector = () => {
                                                                     opacity: activeLayer.style?.opacity ?? 1,
                                                                     scale: activeLayer.style?.scale ?? 1,
                                                                     rotation: activeLayer.style?.rotation || 0,
+                                                                    width: activeLayer.style?.width !== undefined ? parseFloat(activeLayer.style.width) : undefined,
+                                                                    height: activeLayer.style?.height !== undefined ? parseFloat(activeLayer.style.height) : undefined,
                                                                 };
                                                                 updateLayerAnimation(activeLayer.id, { custom_keyframes: keyframes });
                                                                 alert('Titik ' + (index + 1) + ' telah diperbarui dengan posisi elemen saat ini di kanvas!');

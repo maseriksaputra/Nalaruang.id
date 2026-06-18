@@ -257,6 +257,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                         opacity: kf.opacity ?? 1,
                         scale: kf.scale ?? 1,
                         rotation: kf.rotation ?? 0,
+                        ...(kf.width !== undefined && { width: kf.width }),
+                        ...(kf.height !== undefined && { height: kf.height })
                     });
                 } else {
                     tl.to(elementRef, {
@@ -265,6 +267,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                         opacity: kf.opacity ?? 1,
                         scale: kf.scale ?? 1,
                         rotation: kf.rotation ?? 0,
+                        ...(kf.width !== undefined && { width: kf.width }),
+                        ...(kf.height !== undefined && { height: kf.height }),
                         duration: kf.duration || 1,
                         ease: kf.ease || "sine.inOut",
                         force3D: true,

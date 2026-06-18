@@ -74,6 +74,8 @@ const AnimationPanel = () => {
             opacity: activeLayer.style?.opacity ?? 1,
             scale: activeLayer.style?.scale ?? 1,
             rotation: activeLayer.style?.rotation || 0,
+            width: activeLayer.style?.width !== undefined ? parseFloat(activeLayer.style.width) : undefined,
+            height: activeLayer.style?.height !== undefined ? parseFloat(activeLayer.style.height) : undefined,
             duration: 1.0, // Default speed to reach this point
             ease: 'power1.inOut'
         };
