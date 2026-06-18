@@ -49,8 +49,8 @@ class GlobalElementController extends Controller
         $file = $request->file('file');
         $disk = config('filesystems.default');
         
-        // Simpan ke storage sesuai disk default (S3 atau local)
-        $path = $file->store('global_elements_media', $disk);
+        // Simpan ke storage sesuai disk default (S3 atau local) secara publik
+        $path = $file->storePublicly('global_elements_media', $disk);
 
         // Dapatkan URL yang benar (S3 URL atau local URL)
         $url = \Illuminate\Support\Facades\Storage::disk($disk)->url($path);

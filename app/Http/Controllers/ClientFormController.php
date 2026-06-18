@@ -84,7 +84,7 @@ class ClientFormController extends Controller
                     $files = [$files];
                 }
                 foreach ($files as $file) {
-                    $path = $file->store('client-assets/'.$order->id, config('filesystems.default'));
+                    $path = $file->storePublicly('client-assets/'.$order->id, config('filesystems.default'));
                     // Detect if it's a video based on mime type or extension
                     $mime = $file->getMimeType();
                     $isVid = str_starts_with($mime, 'video/');
@@ -97,7 +97,7 @@ class ClientFormController extends Controller
                 }
             } elseif ($field['type'] === 'audio' && $request->hasFile($fieldName)) {
                 $file = $request->file($fieldName);
-                $path = $file->store('client-assets/'.$order->id.'/audio', config('filesystems.default'));
+                $path = $file->storePublicly('client-assets/'.$order->id.'/audio', config('filesystems.default'));
                 \App\Models\ClientAsset::create([
                     'order_id' => $order->id,
                     'field_name' => $field['field_name'],
