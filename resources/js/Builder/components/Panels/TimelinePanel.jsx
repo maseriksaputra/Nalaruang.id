@@ -326,11 +326,16 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
     const [tempEnd, setTempEnd] = useState(endTime);
     const [dragOffsetY, setDragOffsetY] = useState(0);
 
+    const currentStartRef = useRef(startTime);
+    const currentEndRef = useRef(endTime);
+
     // Sync state if props change, BUT ONLY if not dragging to prevent bouncing
     useEffect(() => {
         if (!isDragging.current) {
             setTempStart(startTime);
             setTempEnd(endTime);
+            currentStartRef.current = startTime;
+            currentEndRef.current = endTime;
         }
     }, [startTime, endTime]);
 
@@ -341,8 +346,8 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
         dragType.current = type;
         startX.current = e.clientX;
         startY.current = e.clientY;
-        initialStart.current = tempStart;
-        initialEnd.current = tempEnd;
+        initialStart.current = currentStartRef.current;
+        initialEnd.current = currentEndRef.current;
 
         document.body.style.cursor = type === 'body' ? 'grabbing' : 'col-resize';
         
@@ -358,11 +363,13 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
         const deltaTime = deltaX / timeScale;
 
         if (dragType.current === 'start') {
-            const newStart = Math.max(0, Math.min(initialStart.current + deltaTime, tempEnd - 0.5));
+            const newStart = Math.max(0, Math.min(initialStart.current + deltaTime, currentEndRef.current - 0.5));
             setTempStart(newStart);
+            currentStartRef.current = newStart;
         } else if (dragType.current === 'end') {
-            const newEnd = Math.max(tempStart + 0.5, Math.min(initialEnd.current + deltaTime, MAX_TIME));
+            const newEnd = Math.max(currentStartRef.current + 0.5, Math.min(initialEnd.current + deltaTime, MAX_TIME));
             setTempEnd(newEnd);
+            currentEndRef.current = newEnd;
         } else if (dragType.current === 'body') {
             const duration = initialEnd.current - initialStart.current;
             let newStart = initialStart.current + deltaTime;
@@ -378,6 +385,8 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
 
             setTempStart(newStart);
             setTempEnd(newEnd);
+            currentStartRef.current = newStart;
+            currentEndRef.current = newEnd;
             setDragOffsetY(deltaY); // Vertical drag feedback
         }
     };
@@ -414,15 +423,15 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
 
             // Apply time changes to store
             updateAnimation(layer.id, {
-                config: { delay: parseFloat(tempStart.toFixed(1)) },
-                configExit: { delay: parseFloat(tempEnd.toFixed(1)) }
+                config: { delay: parseFloat(currentStartRef.current.toFixed(1)) },
+                configExit: { delay: parseFloat(currentEndRef.current.toFixed(1)) }
             });
             
             // Auto add exit animation if it didn't exist but we shortened the block
-            if (!layer.animation?.exit && tempEnd < MAX_TIME) {
+            if (!layer.animation?.exit && currentEndRef.current < MAX_TIME) {
                 updateAnimation(layer.id, {
                     exit: 'fadeOut', // Default exit
-                    configExit: { delay: parseFloat(tempEnd.toFixed(1)), speed: 1 }
+                    configExit: { delay: parseFloat(currentEndRef.current.toFixed(1)), speed: 1 }
                 });
             }
         }
