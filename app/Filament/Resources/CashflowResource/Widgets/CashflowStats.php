@@ -80,6 +80,11 @@ class CashflowStats extends BaseWidget
         return $this->getTablePageInstance()->getFilteredSortedTableQuery();
     }
 
+    protected function getColumns(): int
+    {
+        return 4;
+    }
+
     protected function getStats(): array
     {
         // $this->getPageTableQuery() returns the query builder instance with all active table filters applied!
