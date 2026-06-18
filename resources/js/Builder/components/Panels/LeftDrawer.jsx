@@ -318,13 +318,14 @@ const LeftDrawer = () => {
         }
     };
 
-    const saveGlobalElement = async (name, type, payload, thumbnailUrl = null) => {
+    const saveGlobalElement = async (name, type, payload, thumbnailUrl = null, category = 'Umum') => {
         try {
             const res = await apiClient.post('/admin/builder/global-elements', {
                 name,
                 type,
                 payload,
-                thumbnail_url: thumbnailUrl
+                thumbnail_url: thumbnailUrl,
+                category
             });
             if (res.data.success) {
                 addLayer({
@@ -332,6 +333,9 @@ const LeftDrawer = () => {
                     ...payload
                 });
                 fetchGlobalElements();
+                if (activeFolder !== category) {
+                    setActiveFolder(category);
+                }
             }
         } catch (error) {
             console.error('Failed to save element permanently:', error);
@@ -344,6 +348,10 @@ const LeftDrawer = () => {
         if (name === null) return; // Cancelled
         if (!name.trim()) name = `Custom ${type}`;
         
+        let folderName = await window.promptAsync(`Simpan di folder apa? (Kosongkan untuk 'Umum')`, activeFolder || 'Umum');
+        if (folderName === null) return; // Cancelled
+        if (!folderName.trim()) folderName = 'Umum';
+
         if (type === 'lottie') {
             const reader = new FileReader();
             reader.onload = async (event) => {
@@ -354,7 +362,7 @@ const LeftDrawer = () => {
                         animationData: animationData,
                         style: { x: 50, y: 50, width: 200, height: 200 }
                     };
-                    await saveGlobalElement(name, 'lottie', payload);
+                    await saveGlobalElement(name, 'lottie', payload, null, folderName);
                 } catch (err) {
                     alert('File JSON tidak valid!');
                 }
@@ -376,7 +384,7 @@ const LeftDrawer = () => {
                         url: response.data.url,
                         style: { x: 50, y: 50, width: 150, height: 150 }
                     };
-                    await saveGlobalElement(name, 'image', payload, response.data.url);
+                    await saveGlobalElement(name, 'image', payload, response.data.url, folderName);
                 }
             } catch (error) {
                 console.error('Upload failed:', error);
@@ -670,39 +678,86 @@ const LeftDrawer = () => {
         if (activeTab === 'elements') {
             return (
                 <div className="p-4 space-y-6">
-                    {/* Koleksi Permanen */}
+                    {/* Koleksi Permanen / Folders */}
                     <div className="space-y-3">
-                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between">
-                            Koleksi Permanen
-                            {isLoadingElements && <span className="text-[10px] text-indigo-500 normal-case animate-pulse">Memuat...</span>}
-                        </h3>
-                        {globalElements.length === 0 && !isLoadingElements ? (
-                            <div className="text-center p-4 bg-gray-50 border border-dashed border-gray-200 rounded-lg text-xs text-gray-400">
-                                Belum ada elemen tersimpan.
+                        {activeFolder ? (
+                            <div className="space-y-3">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <button 
+                                        onClick={() => setActiveFolder(null)}
+                                        className="p-1 hover:bg-gray-100 rounded text-gray-500 hover:text-indigo-600 transition"
+                                        title="Kembali ke Folder"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
+                                    </button>
+                                    <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider flex-1 truncate">
+                                        {activeFolder}
+                                    </h3>
+                                </div>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {globalElements.filter(el => (el.category || 'Umum') === activeFolder).map((el) => (
+                                        <div key={el.id} className="relative group">
+                                            <button 
+                                                onClick={() => addLayer({ id: 'layer_' + Date.now(), ...el.payload })}
+                                                className="w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-indigo-500 hover:shadow-sm transition aspect-square"
+                                                title={el.name}
+                                            >
+                                                {el.type === 'image' && el.thumbnail_url ? (
+                                                    <img src={el.thumbnail_url} alt={el.name} className="w-8 h-8 object-contain mb-1" />
+                                                ) : el.type === 'lottie' ? (
+                                                    <div className="w-8 h-8 bg-indigo-50 text-indigo-400 flex items-center justify-center rounded mb-1">
+                                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                    </div>
+                                                ) : (
+                                                    <div className="w-8 h-8 bg-gray-100 flex items-center justify-center rounded mb-1">
+                                                        <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                    </div>
+                                                )}
+                                                <span className="text-[9px] font-semibold text-gray-600 truncate w-full text-center leading-tight">{el.name}</span>
+                                            </button>
+                                            <button 
+                                                onClick={(e) => deleteGlobalElement(el.id, e)}
+                                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition shadow-sm z-10"
+                                                title="Hapus Elemen"
+                                            >
+                                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-3 gap-2">
-                                {globalElements.map((el) => (
-                                    <button 
-                                        key={el.id}
-                                        onClick={() => addLayer({ id: 'layer_' + Date.now(), ...el.payload })}
-                                        className="relative group flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-indigo-500 hover:shadow-sm transition aspect-square"
-                                        title={el.name}
-                                    >
-                                        {el.type === 'image' && el.thumbnail_url ? (
-                                            <img src={el.thumbnail_url} alt={el.name} className="w-8 h-8 object-contain mb-1" />
-                                        ) : el.type === 'lottie' ? (
-                                            <div className="w-8 h-8 bg-indigo-50 text-indigo-400 flex items-center justify-center rounded mb-1">
-                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                            </div>
-                                        ) : (
-                                            <div className="w-8 h-8 bg-gray-100 flex items-center justify-center rounded mb-1">
-                                                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                            </div>
-                                        )}
-                                        <span className="text-[9px] font-semibold text-gray-600 truncate w-full text-center leading-tight">{el.name}</span>
-                                    </button>
-                                ))}
+                            <div className="space-y-3">
+                                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between">
+                                    Koleksi Permanen
+                                    {isLoadingElements && <span className="text-[10px] text-indigo-500 normal-case animate-pulse">Memuat...</span>}
+                                </h3>
+                                {globalElements.length === 0 && !isLoadingElements ? (
+                                    <div className="text-center p-4 bg-gray-50 border border-dashed border-gray-200 rounded-lg text-xs text-gray-400">
+                                        Belum ada elemen tersimpan.
+                                    </div>
+                                ) : (
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {[...new Set(globalElements.map(el => el.category || 'Umum'))].map(folder => {
+                                            const itemsInFolder = globalElements.filter(el => (el.category || 'Umum') === folder);
+                                            return (
+                                                <button
+                                                    key={folder}
+                                                    onClick={() => setActiveFolder(folder)}
+                                                    className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2"
+                                                >
+                                                    <div className="w-10 h-10 bg-indigo-50 flex items-center justify-center rounded-lg text-indigo-500">
+                                                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                                                    </div>
+                                                    <div className="text-center">
+                                                        <span className="text-[10px] font-bold text-gray-700 block truncate w-full">{folder}</span>
+                                                        <span className="text-[9px] text-gray-400">{itemsInFolder.length} item</span>
+                                                    </div>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>
