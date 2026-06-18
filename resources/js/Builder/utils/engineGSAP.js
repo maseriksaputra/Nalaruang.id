@@ -250,17 +250,27 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             // Loop dari titik 1 ke seterusnya
             for (let i = 0; i < layerAnimation.custom_keyframes.length; i++) {
                 const kf = layerAnimation.custom_keyframes[i];
-                tl.to(elementRef, {
-                    x: kf.x - baseX,
-                    y: kf.y - baseY,
-                    opacity: kf.opacity ?? 1,
-                    scale: kf.scale ?? 1,
-                    rotation: kf.rotation ?? 0,
-                    duration: kf.duration || 1,
-                    ease: kf.ease || "sine.inOut",
-                    force3D: true,
-                    autoRound: false
-                });
+                if (i === 0) {
+                    tl.set(elementRef, {
+                        x: kf.x - baseX,
+                        y: kf.y - baseY,
+                        opacity: kf.opacity ?? 1,
+                        scale: kf.scale ?? 1,
+                        rotation: kf.rotation ?? 0,
+                    });
+                } else {
+                    tl.to(elementRef, {
+                        x: kf.x - baseX,
+                        y: kf.y - baseY,
+                        opacity: kf.opacity ?? 1,
+                        scale: kf.scale ?? 1,
+                        rotation: kf.rotation ?? 0,
+                        duration: kf.duration || 1,
+                        ease: kf.ease || "sine.inOut",
+                        force3D: true,
+                        autoRound: false
+                    });
+                }
             }
             
             activeTweens.push(tl);

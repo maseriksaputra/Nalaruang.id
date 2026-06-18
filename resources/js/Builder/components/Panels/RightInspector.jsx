@@ -1430,38 +1430,47 @@ const RightInspector = () => {
                                                     </div>
                                                 </div>
                                                 
-                                                <div className="mt-3 pl-2 pt-3 border-t border-gray-100">
-                                                    <div className="flex justify-between items-center mb-1">
-                                                        <span className="text-[10px] font-semibold text-gray-600 block">Waktu Tempuh (s)</span>
-                                                        <span className="text-[10px] font-bold text-indigo-600">{kf.duration || 1}s</span>
-                                                    </div>
-                                                    <input 
-                                                        type="range" min="0" max="15" step="0.05"
-                                                        value={kf.duration || 1}
-                                                        onChange={(e) => handleUpdateKeyframe(index, 'duration', parseFloat(e.target.value))}
-                                                        className="w-full accent-indigo-600 cursor-pointer"
-                                                    />
-                                                </div>
+                                                {index > 0 && (
+                                                    <>
+                                                        <div className="mt-3 pl-2 pt-3 border-t border-gray-100">
+                                                            <div className="flex justify-between items-center mb-1">
+                                                                <span className="text-[10px] font-semibold text-gray-600 block">Waktu Tempuh (s)</span>
+                                                                <span className="text-[10px] font-bold text-indigo-600">{kf.duration || 1}s</span>
+                                                            </div>
+                                                            <input 
+                                                                type="range" min="0" max="15" step="0.05"
+                                                                value={kf.duration || 1}
+                                                                onChange={(e) => handleUpdateKeyframe(index, 'duration', parseFloat(e.target.value))}
+                                                                className="w-full accent-indigo-600 cursor-pointer"
+                                                            />
+                                                        </div>
 
-                                                <div className="mt-3 pl-2">
-                                                    <label className="text-[10px] font-semibold text-gray-600 mb-1 block">Gaya Gerak (Ease)</label>
-                                                    <div className="relative">
-                                                        <select 
-                                                            value={kf.ease}
-                                                            onChange={(e) => handleUpdateKeyframe(index, 'ease', e.target.value)}
-                                                            className="appearance-none w-full text-[11px] font-medium text-gray-700 bg-gray-50 border border-gray-200 hover:border-indigo-400 hover:bg-white rounded-lg py-2 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all cursor-pointer shadow-sm"
-                                                            style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em' }}
-                                                        >
-                                                            <option value="none">Linear (Datar & Konstan)</option>
-                                                            <option value="power1.inOut">Smooth (Mulus Alami)</option>
-                                                            <option value="power2.in">Ease In (Makin Cepat)</option>
-                                                            <option value="power2.out">Ease Out (Makin Lambat)</option>
-                                                            <option value="back.out(1.7)">Back (Mendal Kelebihan)</option>
-                                                            <option value="bounce.out">Bounce (Memantul)</option>
-                                                            <option value="elastic.out(1, 0.3)">Elastic (Seperti Karet)</option>
-                                                        </select>
+                                                        <div className="mt-3 pl-2">
+                                                            <label className="text-[10px] font-semibold text-gray-600 mb-1 block">Gaya Gerak (Ease)</label>
+                                                            <div className="relative">
+                                                                <select 
+                                                                    value={kf.ease}
+                                                                    onChange={(e) => handleUpdateKeyframe(index, 'ease', e.target.value)}
+                                                                    className="appearance-none w-full text-[11px] font-medium text-gray-700 bg-gray-50 border border-gray-200 hover:border-indigo-400 hover:bg-white rounded-lg py-2 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all cursor-pointer shadow-sm"
+                                                                    style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em' }}
+                                                                >
+                                                                    <option value="none">Linear (Datar & Konstan)</option>
+                                                                    <option value="power1.inOut">Smooth (Mulus Alami)</option>
+                                                                    <option value="power2.in">Ease In (Makin Cepat)</option>
+                                                                    <option value="power2.out">Ease Out (Makin Lambat)</option>
+                                                                    <option value="back.out(1.7)">Back (Mendal Kelebihan)</option>
+                                                                    <option value="bounce.out">Bounce (Memantul)</option>
+                                                                    <option value="elastic.out(1, 0.3)">Elastic (Seperti Karet)</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                )}
+                                                {index === 0 && (
+                                                    <div className="mt-2 pl-2 pt-2 border-t border-gray-100">
+                                                        <span className="text-[9px] text-gray-400 italic block">Titik 1 adalah titik awal, durasi & transisi diatur di titik selanjutnya.</span>
                                                     </div>
-                                                </div>
+                                                )}
                                             </div>
                                         ))}
                                     </div>
