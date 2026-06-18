@@ -279,7 +279,7 @@ const LeftDrawer = () => {
     const fetchGlobalElements = async () => {
         setIsLoadingElements(true);
         try {
-            const res = await apiClient.get('/admin/builder/global-elements');
+            const res = await apiClient.get('/admin/builder/global-elements?t=' + Date.now());
             if (res.data.success) {
                 setGlobalElements(res.data.data);
             }
@@ -329,6 +329,16 @@ const LeftDrawer = () => {
                 category
             });
             if (res.data.success) {
+                const newElement = {
+                    id: res.data.data ? res.data.data.id : Date.now(),
+                    name, 
+                    type, 
+                    payload, 
+                    thumbnail_url: thumbnailUrl, 
+                    category
+                };
+                setGlobalElements(prev => [newElement, ...prev]);
+
                 addLayer({
                     id: 'layer_' + Date.now(),
                     ...payload
