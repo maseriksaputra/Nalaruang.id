@@ -203,6 +203,18 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
     // Engine Animasi Eksekusi
     useEffect(() => {
         let animationInstance = null;
+        
+        // If element is selected in builder, disable animations so it doesn't fight with Rnd resizing/moving
+        // Unless they explicitly clicked "Preview Animasi" (which updates previewKey)
+        const isPreviewing = layer.animation?.config?.previewKey && (Date.now() - layer.animation.config.previewKey < 2000);
+        
+        if (isActive && !isPreviewing) {
+            import('gsap').then(gsap => {
+                if (elementRef.current) gsap.default.set(elementRef.current, { clearProps: "all" });
+            });
+            return;
+        }
+
         if (layer.animation && elementRef.current) {
             // isBuilder = true prevents ScrollTrigger and plays immediately
             animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style);
@@ -216,8 +228,11 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                     animationInstance.scrollTrigger.kill();
                 }
             }
+            import('gsap').then(gsap => {
+                if (elementRef.current) gsap.default.set(elementRef.current, { clearProps: "all" });
+            });
         };
-    }, [layer.animation]);
+    }, [layer.animation, isActive]);
 
     // Mouse rotation logic
     const handleRotateStart = (e) => {

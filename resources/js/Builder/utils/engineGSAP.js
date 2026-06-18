@@ -229,7 +229,12 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             }
         } else if (layerAnimation.idle === 'custom_timeline' && layerAnimation.custom_keyframes && layerAnimation.custom_keyframes.length > 0) {
             const tl = gsap.timeline({
-                repeat: isLooping ? -1 : 0,
+                repeat: (isLooping && !isBuilder) ? -1 : 0,
+                onComplete: () => {
+                    if (isBuilder) {
+                        gsap.set(elementRef, { clearProps: "all" });
+                    }
+                },
                 scrollTrigger: (!isBuilder && config.trigger === 'onScroll') ? {
                     trigger: elementRef,
                     start: "top 85%",
