@@ -27,7 +27,7 @@ class UserAssetController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $disk = config('filesystems.default');
-            $path = $file->store('user_assets', $disk);
+            $path = $file->storePublicly('user_assets', $disk);
             
             $type = str_starts_with($file->getMimeType(), 'video/') ? 'video' : 'image';
 

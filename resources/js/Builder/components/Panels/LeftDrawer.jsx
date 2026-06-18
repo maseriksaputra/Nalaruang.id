@@ -295,7 +295,7 @@ const LeftDrawer = () => {
     const fetchUserAssets = async () => {
         setIsLoadingAssets(true);
         try {
-            const res = await apiClient.get('/admin/builder/user-assets');
+            const res = await apiClient.get('/admin/builder/user-assets?t=' + Date.now());
             if (res.data.success) {
                 setUserAssets(res.data.data);
             }
@@ -1173,13 +1173,15 @@ const LeftDrawer = () => {
                     });
 
                     if (response.data.success) {
-                        fetchUserAssets();
+                        const newAsset = response.data.data;
+                        setUserAssets(prev => [newAsset, ...prev]);
                         addLayer({
                             id: 'layer_' + Date.now(),
-                            type: response.data.data.type,
-                            url: response.data.url,
-                            style: { x: 50, y: 50, width: 200, height: 200 }
+                            type: newAsset.type,
+                            url: newAsset.url,
+                            style: { x: 50, y: 50, width: 150, height: 150 }
                         });
+                        fetchUserAssets();
                     }
                 } catch (error) {
                     console.error('Upload failed:', error);
