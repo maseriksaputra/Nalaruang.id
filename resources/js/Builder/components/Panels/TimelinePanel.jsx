@@ -53,7 +53,8 @@ const TimelinePanel = () => {
     useEffect(() => {
         const handleMouseMove = (e) => {
             if (!isResizing.current) return;
-            const newHeight = window.innerHeight - e.clientY;
+            // Subtract 48px because the panel is positioned at bottom-[48px]
+            const newHeight = window.innerHeight - e.clientY - 48;
             setPanelHeight(Math.max(150, Math.min(newHeight, window.innerHeight * 0.8)));
         };
         const handleMouseUp = () => {
