@@ -67,7 +67,7 @@ class PackageResource extends Resource
                     ->searchable()
                     ->label('Nama Paket'),
                 Tables\Columns\TextColumn::make('price')
-                    ->money('IDR')
+                    ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state ?? 0, 0, ',', '.'))
                     ->sortable()
                     ->label('Harga'),
                 Tables\Columns\TextColumn::make('orders_count')

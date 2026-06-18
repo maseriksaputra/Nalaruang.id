@@ -72,7 +72,7 @@ class CashierProductResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('default_price')
                     ->label('Harga Default')
-                    ->money('IDR', locale: 'id')
+                    ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state ?? 0, 0, ',', '.'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Terakhir Diupdate')

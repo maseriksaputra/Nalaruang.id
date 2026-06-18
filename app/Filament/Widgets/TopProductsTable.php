@@ -38,7 +38,7 @@ class TopProductsTable extends BaseWidget
                     ->sortable(),
                 Tables\Columns\TextColumn::make('orders_sum_total_price')
                     ->label('Total Pendapatan')
-                    ->money('IDR')
+                    ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state ?? 0, 0, ',', '.'))
                     ->sortable(),
             ])
             ->paginated(false);

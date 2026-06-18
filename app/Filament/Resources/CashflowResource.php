@@ -112,13 +112,13 @@ class CashflowResource extends Resource
                     
                 Tables\Columns\TextColumn::make('price')
                     ->label('Harga Satuan')
-                    ->money('IDR', locale: 'id')
+                    ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state ?? 0, 0, ',', '.'))
                     ->alignRight()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Total')
-                    ->money('IDR', locale: 'id')
+                    ->formatStateUsing(fn ($state) => ($state < 0 ? '-' : '') . 'Rp ' . number_format(abs($state ?? 0), 0, ',', '.'))
                     ->color(fn (\App\Models\Cashflow $record): string => $record->type === 'income' ? 'success' : 'danger')
                     ->weight('bold')
                     ->alignRight()
