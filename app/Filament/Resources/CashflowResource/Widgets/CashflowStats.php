@@ -129,6 +129,11 @@ class CashflowStats extends BaseWidget
                 ->description('Pemasukan kategori Digital')
                 ->descriptionIcon('heroicon-m-device-phone-mobile', \Filament\Support\Enums\IconPosition::Before)
                 ->color('primary'),
+
+            Stat::make('Jumlah Transaksi', (clone $query)->count() . ' Transaksi')
+                ->description('Total aktivitas tercatat')
+                ->descriptionIcon('heroicon-m-document-text', \Filament\Support\Enums\IconPosition::Before)
+                ->color('gray'),
         ];
     }
 }
