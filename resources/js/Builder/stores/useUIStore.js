@@ -12,7 +12,11 @@ const useUIStore = create((set) => ({
     isRightSidebarOpen: true,
     setIsRightSidebarOpen: (val) => set({ isRightSidebarOpen: val }),
     assetSelectionTarget: null,
-    setAssetSelectionTarget: (target) => set({ assetSelectionTarget: target })
+    setAssetSelectionTarget: (target) => set({ assetSelectionTarget: target }),
+    timelineHeight: 250,
+    setTimelineHeight: (height) => set({ timelineHeight: height }),
+    isTimelineOpen: true,
+    setIsTimelineOpen: (isOpen) => set({ isTimelineOpen: isOpen })
 }));
 
 export default useUIStore;

@@ -30,10 +30,24 @@ const TimelinePanel = () => {
     const layers = activeSection ? activeSection.layers : [];
 
     const renderableLayers = useMemo(() => {
-        let list = [...layers];
-        // Only render top-level elements (if it's a group, it acts as one block in the timeline like Canva)
+        let list = [];
+        layers.forEach(layer => {
+            if (layer.type === 'group' && layer.children) {
+                // Flatten structural group children
+                layer.children.forEach(child => list.push(child));
+            } else {
+                list.push(layer);
+            }
+        });
+        // Sort by zIndex descending so higher elements are visually at the top tracks
         return list.sort((a, b) => (b.style?.zIndex || 0) - (a.style?.zIndex || 0));
     }, [layers]);
+
+    // Sync panel height to store so Right Inspector can avoid it
+    useEffect(() => {
+        useUIStore.getState().setTimelineHeight(panelHeight);
+        useUIStore.getState().setIsTimelineOpen(isOpen);
+    }, [panelHeight, isOpen]);
 
     // Panel Resizer
     useEffect(() => {
@@ -290,11 +304,16 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
     const isDragging = useRef(false);
     const dragType = useRef(null); // 'start', 'end', 'body'
     const startX = useRef(0);
+    const startY = useRef(0);
     const initialStart = useRef(0);
     const initialEnd = useRef(0);
+    
+    const moveLayerUp = useCanvasStore(state => state.moveLayerUp);
+    const moveLayerDown = useCanvasStore(state => state.moveLayerDown);
 
     const [tempStart, setTempStart] = useState(startTime);
     const [tempEnd, setTempEnd] = useState(endTime);
+    const [dragOffsetY, setDragOffsetY] = useState(0);
 
     // Sync state if props change
     useEffect(() => {
@@ -308,6 +327,7 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
         isDragging.current = true;
         dragType.current = type;
         startX.current = e.clientX;
+        startY.current = e.clientY;
         initialStart.current = tempStart;
         initialEnd.current = tempEnd;
 
@@ -321,6 +341,7 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
         if (!isDragging.current) return;
         
         const deltaX = e.clientX - startX.current;
+        const deltaY = e.clientY - startY.current;
         const deltaTime = deltaX / timeScale;
 
         if (dragType.current === 'start') {
@@ -344,17 +365,32 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
 
             setTempStart(newStart);
             setTempEnd(newEnd);
+            setDragOffsetY(deltaY); // Vertical drag feedback
         }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (e) => {
         if (isDragging.current) {
             isDragging.current = false;
             document.body.style.cursor = 'default';
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseup', handleMouseUp);
 
-            // Apply changes to store
+            const deltaY = e.clientY - startY.current;
+            setDragOffsetY(0);
+
+            // If dragged vertically more than a track's height (48px)
+            if (dragType.current === 'body') {
+                if (deltaY < -24) {
+                    // Dragged UP -> increase zIndex
+                    moveLayerUp(layer.id);
+                } else if (deltaY > 24) {
+                    // Dragged DOWN -> decrease zIndex
+                    moveLayerDown(layer.id);
+                }
+            }
+
+            // Apply time changes to store
             updateAnimation(layer.id, {
                 config: { delay: parseFloat(tempStart.toFixed(1)) },
                 configExit: { delay: parseFloat(tempEnd.toFixed(1)) }
@@ -394,7 +430,10 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             style={{ 
                 left: `${tempStart * timeScale}px`,
                 width: `${(tempEnd - tempStart) * timeScale}px`,
-                minWidth: '20px'
+                minWidth: '20px',
+                transform: `translateY(${dragOffsetY}px)`,
+                zIndex: isDragging.current ? 50 : undefined,
+                transition: isDragging.current ? 'none' : 'transform 0.2s'
             }}
             onMouseDown={(e) => handleMouseDown(e, 'body')}
         >

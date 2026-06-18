@@ -106,6 +106,9 @@ const BuilderApp = () => {
     const setIsPreviewMode = useCanvasStore(state => state.setIsPreviewMode);
     const workspaceView = useCanvasStore(state => state.workspaceView);
     const showMockup = useCanvasStore(state => state.showMockup);
+    const isTimelineOpen = useUIStore(state => state.isTimelineOpen);
+    const timelineHeight = useUIStore(state => state.timelineHeight);
+    
     const [isLoading, setIsLoading] = useState(true);
     const [initialScale, setInitialScale] = useState(zoom);
     const [isInitialized, setIsInitialized] = useState(false);
@@ -359,7 +362,10 @@ const BuilderApp = () => {
                             <TimelinePanel />
                         </main>
 
-                        <div className={isPreviewMobile ? 'hidden' : 'absolute top-0 right-0 bottom-0 z-40 flex pointer-events-none'}>
+                        <div 
+                            className={isPreviewMobile ? 'hidden' : 'absolute top-0 right-0 z-40 flex pointer-events-none transition-all duration-300'}
+                            style={{ bottom: isTimelineOpen ? `${timelineHeight + 48}px` : '48px' }}
+                        >
                             <RightInspector />
                         </div>
                     </div>
