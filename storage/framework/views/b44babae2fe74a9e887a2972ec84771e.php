@@ -11,8 +11,23 @@
     <div class="kasir-grid" x-data="{ tab: 'F&B', type: <?php if ((object) ('transactionType') instanceof \Livewire\WireDirective) : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('transactionType'->value()); ?>')<?php echo e('transactionType'->hasModifier('live') ? '.live' : ''); ?><?php else : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('transactionType'); ?>')<?php endif; ?> }">
         
         <!-- Left Column: Products & Entry -->
-        <div class="lg:col-span-2 space-y-6">
+        <div class="lg:col-span-2 space-y-6 min-w-0">
             
+            <!-- Mode Selector (Manual vs AI) -->
+            <div class="flex flex-col sm:flex-row gap-2 bg-primary-50 p-1.5 rounded-xl border border-primary-100 w-full mb-6">
+                <button wire:click="$set('isBulkMode', false)" 
+                        class="flex-1 py-3 px-4 rounded-lg font-bold text-sm flex justify-center items-center gap-2 transition-all <?php echo e(!$isBulkMode ? 'bg-white shadow-sm text-primary-600 border border-primary-200' : 'text-gray-500 hover:text-primary-500'); ?>">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                    Mode Kasir Manual
+                </button>
+                <button wire:click="$set('isBulkMode', true)" 
+                        class="flex-1 py-3 px-4 rounded-lg font-bold text-sm flex justify-center items-center gap-2 transition-all <?php echo e($isBulkMode ? 'bg-white shadow-sm text-primary-600 border border-primary-200' : 'text-gray-500 hover:text-primary-500'); ?>">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    Mode Input Massal (AI)
+                </button>
+            </div>
+
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!$isBulkMode): ?>
             <!-- Categories -->
             <div class="flex overflow-x-auto pb-2 hide-scrollbar custom-categories-wrapper" style="gap: 12px; margin-bottom: 1rem;">
                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -26,7 +41,7 @@
             </div>
 
             <!-- Type & Date -->
-            <div class="bg-white p-4 rounded-xl border border-pink-200 shadow-sm flex flex-col sm:flex-row gap-4 justify-between items-center">
+            <div class="bg-white p-4 rounded-xl border border-primary-200 shadow-sm flex flex-col lg:flex-row gap-4 justify-between items-center mb-6">
                 <div class="flex bg-gray-100 p-1 rounded-lg w-full sm:w-auto">
                     <button x-on:click="type = 'income'" 
                             class="flex-1 sm:flex-none px-6 py-2 rounded-md text-sm font-bold transition-all shadow-sm"
@@ -40,19 +55,19 @@
                     </button>
                 </div>
                 <div class="w-full sm:w-auto">
-                    <input type="date" wire:model="transactionDate" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-pink-500 focus:ring-pink-500 text-sm font-medium text-gray-700">
+                    <input type="date" wire:model="transactionDate" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm font-medium text-gray-700">
                 </div>
             </div>
 
             <!-- Product Grid -->
-            <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 1.5rem;">
+            <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-bottom: 1.5rem;">
                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $this->products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <button x-show="tab === '<?php echo e($product->category); ?>'"
                             wire:click="addToCart(<?php echo e($product->id); ?>, '<?php echo e($product->name); ?>', <?php echo e($product->default_price); ?>, '<?php echo e($product->category); ?>')" 
-                            style="background-color: white; border: 1px solid #fbcfe8; border-radius: 12px; padding: 12px; text-align: left; min-height: 90px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.1s, background-color 0.2s;"
+                            style="background-color: white; border: 1px solid #fbcfe8; border-radius: 8px; padding: 8px; text-align: left; min-height: 70px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.1s, background-color 0.2s;"
                             onmouseover="this.style.backgroundColor='#fdf2f8'" onmouseout="this.style.backgroundColor='white'" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
-                        <span style="font-weight: 600; color: #1f2937; font-size: 14px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"><?php echo e($product->name); ?></span>
-                        <span style="color: #db2777; font-weight: bold; font-size: 13px; margin-top: 8px;">Rp <?php echo e(number_format($product->default_price, 0, ',', '.')); ?></span>
+                        <span style="font-weight: 600; color: #1f2937; font-size: 12px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"><?php echo e($product->name); ?></span>
+                        <span style="color: #db2777; font-weight: bold; font-size: 11px; margin-top: 4px;">Rp <?php echo e(number_format($product->default_price, 0, ',', '.')); ?></span>
                     </button>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
@@ -96,30 +111,89 @@
                     </div>
                 </div>
             </div>
+            <?php else: ?>
+            <!-- Bulk Entry Mode -->
+            <div class="bg-white p-6 rounded-xl border border-primary-200 shadow-sm space-y-6">
+                
+                <div class="flex items-center justify-between border-b border-gray-100 pb-4">
+                    <h3 class="font-bold text-lg text-gray-800">Input Transaksi via AI</h3>
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm font-semibold text-gray-600">Tanggal Transaksi:</span>
+                        <input type="date" wire:model="transactionDate" class="border-gray-300 rounded-lg shadow-sm focus:border-primary-500 focus:ring-primary-500 text-sm font-medium text-gray-700">
+                    </div>
+                </div>
+                <!-- Prompt Template -->
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 relative group">
+                    <button onclick="navigator.clipboard.writeText(document.getElementById('ai-prompt').innerText); alert('Prompt disalin!')" 
+                            class="absolute top-4 right-4 bg-white border border-gray-300 hover:bg-gray-100 text-xs font-bold py-1 px-3 rounded shadow-sm text-gray-700 flex items-center gap-1 transition-all active:scale-95">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                        Salin Prompt
+                    </button>
+                    <h4 class="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+                        <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Template Prompt untuk ChatGPT / Gemini:
+                    </h4>
+                    <pre id="ai-prompt" class="text-[13px] text-gray-600 whitespace-pre-wrap break-words font-mono leading-relaxed bg-white p-4 border border-gray-100 rounded overflow-x-auto">Tolong ubah foto catatan transaksi kasir ini menjadi teks biasa. Susun per baris dengan format yang SANGAT KETAT seperti ini:
+[+/-] [KODE_KATEGORI] [Nama Barang atau Deskripsi] [Qty] [Harga Satuan]
+
+Keterangan Kode Kategori:
+- FNB = Makanan / Minuman
+- ATK = Alat Tulis Kantor
+- PRN = Cetak / Printing
+- DGT = Produk Digital / Jasa Desain
+
+Catatan Penting:
+- Gunakan + jika itu pemasukan, dan - jika pengeluaran.
+- Harga satuan HANYA angka, tanpa titik/koma/simbol (misal: 15000).
+- Qty HANYA angka (misal: 2).
+
+Contoh Output:
++ FNB Es Kopi Susu Aren 2 15000
++ PRN Cetak Undangan Pernikahan 100 2500
+- ATK Kertas HVS A4 70gr 1 50000
++ DGT Jasa Desain Logo Usaha 1 250000</pre>
+                </div>
+
+                <!-- Textarea -->
+                <div>
+                    <label class="block font-bold text-gray-700 text-sm mb-2">Paste Jawaban Teks AI di Sini:</label>
+                    <textarea wire:model.defer="bulkText" rows="8" class="w-full border border-gray-300 rounded-lg p-3 text-[13px] focus:border-primary-500 focus:ring-primary-500 font-mono resize-y" placeholder="+ FNB Es Kopi Susu Aren 2 15000&#10;+ PRN Cetak Undangan 100 2500"></textarea>
+                </div>
+
+                <button wire:click="processBulk" 
+                        class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2 mt-6">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    <span>Proses ke Keranjang</span>
+                </button>
+            </div>
+            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
         </div>
 
         <!-- Right Column: Cart -->
         <div class="lg:col-span-1">
-            <div class="bg-white rounded-xl border border-pink-200 shadow-sm flex flex-col h-[calc(100vh-12rem)] max-h-[600px] sticky top-6">
+            <div class="bg-white rounded-xl border border-primary-200 shadow-sm flex flex-col h-[calc(100vh-12rem)] max-h-[600px] sticky top-6">
                 
                 <!-- Cart Header -->
-                <div class="p-4 border-b border-gray-100 bg-pink-50/50 rounded-t-xl flex justify-between items-center">
-                    <h3 class="font-bold text-pink-800">Keranjang Kasir</h3>
-                    <span class="bg-pink-200 text-pink-800 text-xs font-bold px-2 py-1 rounded-full"><?php echo e(count($cart)); ?> Item</span>
+                <div class="p-4 border-b border-gray-100 bg-primary-50/50 rounded-t-xl flex justify-between items-center">
+                    <h3 class="font-bold text-primary-800">Keranjang Kasir</h3>
+                    <span class="bg-primary-200 text-primary-800 text-xs font-bold px-2 py-1 rounded-full"><?php echo e(count($cart)); ?> Item</span>
                 </div>
 
                 <!-- Cart Items -->
                 <div class="flex-1 overflow-y-auto p-4 space-y-3">
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $cart; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                        <div class="flex flex-col p-3 border border-pink-100 rounded-lg bg-white relative group">
+                        <div class="flex flex-col p-3 border border-primary-100 rounded-lg bg-white relative group">
                             <button wire:click="removeItem('<?php echo e($key); ?>')" class="absolute -top-2 -right-2 w-6 h-6 bg-red-100 text-red-600 hover:bg-red-500 hover:text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
                                 x
                             </button>
                             <div class="flex justify-between items-start mb-2">
                                 <div class="pr-4">
                                     <h4 class="font-bold text-gray-800 text-sm leading-tight"><?php echo e($item['name']); ?></h4>
-                                    <span class="text-[10px] uppercase text-pink-500 font-bold tracking-wider"><?php echo e($item['category']); ?></span>
+                                    <span class="text-[10px] uppercase font-bold tracking-wider <?php echo e(($item['type'] ?? $transactionType) === 'expense' ? 'text-red-500' : 'text-green-600'); ?>">
+                                        <?php echo e(($item['type'] ?? $transactionType) === 'expense' ? '(-) PENGELUARAN' : '(+) PEMASUKAN'); ?> • <?php echo e($item['category']); ?>
+
+                                    </span>
                                 </div>
                             </div>
                             
@@ -137,7 +211,7 @@
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <div class="h-full flex flex-col items-center justify-center text-center p-6 text-gray-400">
-                            <svg width="48" height="48" style="width: 3rem; height: 3rem;" class="mb-3 text-pink-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                            <svg width="48" height="48" style="width: 3rem; height: 3rem;" class="mb-3 text-primary-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                             <p class="text-sm">Belum ada item di keranjang.</p>
                         </div>
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
@@ -146,8 +220,11 @@
                 <!-- Cart Footer -->
                 <div class="p-4 border-t border-gray-100 bg-gray-50 rounded-b-xl">
                     <div class="flex justify-between items-end mb-4">
-                        <span class="text-sm font-medium text-gray-500">Total Transaksi</span>
-                        <span class="text-2xl font-black text-pink-600">Rp <?php echo e(number_format($this->cartTotal, 0, ',', '.')); ?></span>
+                        <span class="text-sm font-medium text-gray-500">Total Keranjang</span>
+                        <span class="text-2xl font-black <?php echo e($this->cartTotal < 0 ? 'text-red-600' : 'text-green-600'); ?>">
+                            <?php echo e($this->cartTotal < 0 ? '-' : ''); ?>Rp <?php echo e(number_format(abs($this->cartTotal), 0, ',', '.')); ?>
+
+                        </span>
                     </div>
                     
                     <button wire:click="processTransaction" 
