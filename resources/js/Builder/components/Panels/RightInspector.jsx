@@ -60,7 +60,7 @@ const RightInspector = () => {
     const renderToggleButton = () => (
         <button
             onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
-            className="absolute top-1/2 -left-4 -translate-y-1/2 w-8 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:bg-gray-50 shadow-md z-40 transition-all hover:scale-105"
+            className="absolute top-1/2 -left-4 -translate-y-1/2 w-8 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:bg-gray-50 shadow-md z-[60] transition-all hover:scale-105"
             title={isRightSidebarOpen ? "Tutup Panel" : "Buka Panel"}
         >
             <svg className={`w-4 h-4 mr-1 transition-transform ${isRightSidebarOpen ? '' : 'rotate-180'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
@@ -86,7 +86,7 @@ const RightInspector = () => {
     if (!activeLayer) {
         const activeSection = sections.find(s => s.id === activeSectionId);
         return (
-            <div className={`bg-white border-l border-gray-200 flex flex-col z-30 shrink-0 shadow-2xl pointer-events-auto transition-all duration-300 relative ${isRightSidebarOpen ? 'w-[320px]' : 'w-0'}`}>
+            <div className={`bg-white border-l border-gray-200 flex flex-col z-[60] shrink-0 shadow-2xl pointer-events-auto transition-all duration-300 relative ${isRightSidebarOpen ? 'w-[320px]' : 'w-0'}`}>
                 {renderToggleButton()}
                 <div className="w-[320px] h-full flex flex-col overflow-hidden">
                     <div className="h-14 border-b border-gray-100 flex items-center px-4 shrink-0 bg-gray-50">
@@ -181,7 +181,7 @@ const RightInspector = () => {
     };
 
     return (
-        <div className={`bg-white border-l border-gray-200 flex flex-col z-30 shrink-0 shadow-2xl pointer-events-auto transition-all duration-300 relative ${isRightSidebarOpen ? 'w-[320px]' : 'w-0'}`}>
+        <div className={`bg-white border-l border-gray-200 flex flex-col z-[60] shrink-0 shadow-2xl pointer-events-auto transition-all duration-300 relative ${isRightSidebarOpen ? 'w-[320px]' : 'w-0'}`}>
             {renderToggleButton()}
             <div className="w-[320px] h-full flex flex-col overflow-hidden">
                 {/* Tabs Header */}

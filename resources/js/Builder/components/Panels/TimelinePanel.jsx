@@ -199,7 +199,7 @@ const TimelinePanel = () => {
                 <div className="flex flex-1 overflow-hidden select-none">
                     {/* Time Tracks (Full Width) */}
                     <div 
-                        className="flex-1 overflow-x-auto overflow-y-auto bg-gray-900 relative hidden-scrollbar" 
+                        className="flex-1 overflow-x-auto overflow-y-auto bg-gray-50 relative hidden-scrollbar" 
                         id="timeline-tracks-container"
                         onMouseDown={(e) => {
                             if (e.target.closest('.timeline-block')) return; // Ignore if clicking on a time block
@@ -212,7 +212,7 @@ const TimelinePanel = () => {
                         >
                             {/* Time Ruler Header */}
                             <div 
-                                className="h-8 border-b border-gray-700 bg-gray-800 sticky top-0 z-20 flex cursor-text"
+                                className="h-8 border-b border-gray-200 bg-white sticky top-0 z-20 flex cursor-text"
                                 onMouseDown={(e) => {
                                     handlePlayheadDragStart(e);
                                 }}
@@ -223,7 +223,7 @@ const TimelinePanel = () => {
                                     return (
                                         <div 
                                             key={i} 
-                                            className={`absolute top-0 bottom-0 border-l ${isSecond ? 'border-gray-600' : 'border-gray-700'} flex items-end pb-1 pl-1 text-[10px] ${isSecond ? 'text-gray-300 font-bold' : 'text-transparent'} font-mono`} 
+                                            className={`absolute top-0 bottom-0 border-l ${isSecond ? 'border-gray-300' : 'border-gray-100'} flex items-end pb-1 pl-1 text-[10px] ${isSecond ? 'text-gray-500 font-bold' : 'text-transparent'} font-mono`} 
                                             style={{ left: `${sec * timeScale}px`, height: isSecond ? '100%' : '50%', top: isSecond ? '0' : '50%' }}
                                         >
                                             {isSecond ? `${sec}s` : ''}
@@ -235,7 +235,7 @@ const TimelinePanel = () => {
                             {/* Background Grid */}
                             <div className="absolute top-8 bottom-0 left-0 right-0 pointer-events-none flex z-0 opacity-20">
                                 {Array.from({ length: MAX_TIME * 10 }).map((_, i) => (
-                                    <div key={i} className={`h-full border-l ${i % 10 === 0 ? 'border-gray-600' : 'border-gray-700 border-dashed'}`} style={{ width: `${timeScale / 10}px` }}></div>
+                                    <div key={i} className={`h-full border-l ${i % 10 === 0 ? 'border-gray-400' : 'border-gray-300 border-dashed'}`} style={{ width: `${timeScale / 10}px` }}></div>
                                 ))}
                             </div>
 
@@ -261,7 +261,7 @@ const TimelinePanel = () => {
                                     const endTime = hasExit ? (layer.animation?.configExit?.delay || (startTime + 5)) : (startTime + 5);
 
                                     return (
-                                        <div key={layer.id} className="h-16 border-b border-gray-800/50 flex items-center relative w-full mb-2">
+                                        <div key={layer.id} className="h-12 border-b border-gray-200 flex items-center relative w-full mb-1 hover:bg-gray-100/50">
                                             <TimeBlock 
                                                 layer={layer}
                                                 startTime={startTime}
@@ -383,19 +383,18 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
 
     return (
         <div 
-            className={`timeline-block absolute top-1 bottom-1 rounded-md shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-hidden ${active ? 'ring-2 ring-indigo-500 z-20 shadow-[0_0_15px_rgba(99,102,241,0.4)]' : 'hover:ring-1 hover:ring-indigo-400 z-10'}`}
+            className={`timeline-block absolute top-1 bottom-1 rounded-md shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-hidden bg-indigo-500 ${active ? 'ring-2 ring-indigo-400 z-20 shadow-[0_0_15px_rgba(99,102,241,0.4)]' : 'hover:ring-1 hover:ring-indigo-400 z-10'}`}
             style={{ 
                 left: `${tempStart * timeScale}px`,
                 width: `${(tempEnd - tempStart) * timeScale}px`,
-                minWidth: '20px',
-                backgroundColor: '#374151', // gray-700
+                minWidth: '20px'
             }}
             onMouseDown={(e) => handleMouseDown(e, 'body')}
         >
             {/* Repeating Thumbnail Background */}
             {thumbUrl && (
                 <div 
-                    className="absolute inset-0 pointer-events-none opacity-40 mix-blend-screen"
+                    className="absolute inset-0 pointer-events-none opacity-30 mix-blend-luminosity"
                     style={{
                         backgroundImage: `url('${thumbUrl}')`,
                         backgroundSize: 'auto 100%',
@@ -406,7 +405,7 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             )}
             
             {!thumbUrl && (
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/60 to-purple-600/60 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-indigo-600 pointer-events-none"></div>
             )}
 
             {/* Entry Handle (Green) */}
@@ -419,7 +418,7 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             
             {/* Name Label */}
             <div className="absolute left-6 right-6 top-0 bottom-0 flex items-center px-2 pointer-events-none z-10 overflow-hidden">
-                <span className="text-[11px] font-bold text-white drop-shadow-md truncate bg-black/40 px-1.5 py-0.5 rounded backdrop-blur-sm shadow-sm border border-white/10">
+                <span className="text-[11px] font-bold text-white drop-shadow-md truncate bg-black/20 px-1.5 py-0.5 rounded backdrop-blur-sm">
                     {displayName}
                 </span>
             </div>
