@@ -293,6 +293,8 @@ const TimelinePanel = () => {
                                                         updateAnimation={updateLayerAnimation}
                                                         active={activeLayerIds.includes(layer.id)}
                                                         setActive={() => setActiveLayer(layer.id)}
+                                                        trackIndex={trackIndex}
+                                                        allTracks={renderableLayers}
                                                     />
                                                 );
                                             })}
@@ -309,7 +311,7 @@ const TimelinePanel = () => {
 };
 
 // Unified Time Block (Canva Style)
-const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, active, setActive }) => {
+const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, active, setActive, trackIndex, allTracks }) => {
     const isDragging = useRef(false);
     const dragType = useRef(null); // 'start', 'end', 'body'
     const startX = useRef(0);
@@ -324,10 +326,12 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
     const [tempEnd, setTempEnd] = useState(endTime);
     const [dragOffsetY, setDragOffsetY] = useState(0);
 
-    // Sync state if props change
+    // Sync state if props change, BUT ONLY if not dragging to prevent bouncing
     useEffect(() => {
-        setTempStart(startTime);
-        setTempEnd(endTime);
+        if (!isDragging.current) {
+            setTempStart(startTime);
+            setTempEnd(endTime);
+        }
     }, [startTime, endTime]);
 
     const handleMouseDown = (e, type) => {
@@ -388,14 +392,23 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             const deltaY = e.clientY - startY.current;
             setDragOffsetY(0);
 
-            // If dragged vertically more than a track's height (48px)
+            // If dragged vertically, calculate track hopping based on row height (~52px)
             if (dragType.current === 'body') {
-                if (deltaY < -24) {
-                    // Dragged UP -> increase zIndex
-                    moveLayerUp(layer.id);
-                } else if (deltaY > 24) {
-                    // Dragged DOWN -> decrease zIndex
-                    moveLayerDown(layer.id);
+                const rowOffset = Math.round(deltaY / 52);
+                if (rowOffset !== 0 && allTracks) {
+                    const targetTrackIndex = trackIndex + rowOffset;
+                    if (targetTrackIndex >= 0 && targetTrackIndex < allTracks.length) {
+                        const targetTrack = allTracks[targetTrackIndex];
+                        if (targetTrack && targetTrack.type === 'group' && !targetTrack.id.startsWith('mock_track')) {
+                            useCanvasStore.getState().moveElementToGroup(layer.id, targetTrack.id);
+                        } else {
+                            if (deltaY < 0) moveLayerUp(layer.id);
+                            else moveLayerDown(layer.id);
+                        }
+                    } else {
+                        if (deltaY < 0) moveLayerUp(layer.id);
+                        else moveLayerDown(layer.id);
+                    }
                 }
             }
 
