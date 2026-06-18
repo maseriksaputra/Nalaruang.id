@@ -43,20 +43,21 @@ class GlobalElementController extends Controller
     public function uploadMedia(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|max:20480', // Max 20MB
+            'file' => 'required|file|mimes:jpeg,png,jpg,gif,svg,webp,mp4,mov,webm,ogg,mp3,wav|max:51200', // Max 50MB
         ]);
 
         $file = $request->file('file');
-        $filename = time() . '_' . $file->getClientOriginalName();
-        // Simpan di public/uploads
-        $file->move(public_path('uploads'), $filename);
+        $disk = config('filesystems.default');
+        
+        // Simpan ke storage sesuai disk default (S3 atau local)
+        $path = $file->store('global_elements_media', $disk);
 
-        $url = '/uploads/' . $filename;
+        // Dapatkan URL yang benar (S3 URL atau local URL)
+        $url = \Illuminate\Support\Facades\Storage::disk($disk)->url($path);
 
         return response()->json([
             'success' => true,
-            'url' => $url,
-            'filename' => $filename
+            'url' => $url
         ]);
     }
 
