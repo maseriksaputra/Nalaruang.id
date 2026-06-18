@@ -81,6 +81,8 @@ class CashierProductResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->defaultSort('updated_at', 'desc')
+            ->defaultPaginationPageOption(50)
+            ->paginationPageOptions([10, 25, 50, 100, 'all'])
             ->filters([
                 Tables\Filters\SelectFilter::make('category')
                     ->options([
