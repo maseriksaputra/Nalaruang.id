@@ -82,6 +82,7 @@ class CashflowResource extends Resource
                 Tables\Columns\TextColumn::make('description')
                     ->label('Nama Transaksi')
                     ->weight('bold')
+                    ->description(fn (\App\Models\Cashflow $record): string => $record->category ?? '')
                     ->searchable()
                     ->sortable(),
                 
@@ -95,7 +96,8 @@ class CashflowResource extends Resource
                         'Digital' => 'primary',
                         'Tabungan BEP' => 'indigo',
                         default => 'gray',
-                    }),
+                    })
+                    ->toggleable(isToggledHiddenByDefault: true),
                     
                 Tables\Columns\TextColumn::make('type')
                     ->label('Tipe')
@@ -134,7 +136,9 @@ class CashflowResource extends Resource
                         $date = \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d');
                         $income = \App\Models\Cashflow::whereDate('transaction_date', $date)->where('type', 'income')->sum('amount') ?? 0;
                         $expense = \App\Models\Cashflow::whereDate('transaction_date', $date)->where('type', 'expense')->sum('amount') ?? 0;
-                        $net = $income - $expense;
+                        
+                        // Expense is saved as negative in database, so net is income + expense
+                        $net = $income + $expense;
                         
                         $netColorHex = $net >= 0 ? '#16a34a' : '#dc2626';
                         $netSign = $net < 0 ? '-' : '';
@@ -142,7 +146,7 @@ class CashflowResource extends Resource
                         return new \Illuminate\Support\HtmlString("
                             <div class='flex flex-wrap items-center gap-3 text-xs mt-1'>
                                 <span class='text-gray-500'>Masuk: <strong class='text-green-600'>Rp " . number_format($income, 0, ',', '.') . "</strong></span>
-                                <span class='text-gray-500'>Keluar: <strong class='text-red-600'>Rp " . number_format($expense, 0, ',', '.') . "</strong></span>
+                                <span class='text-gray-500'>Keluar: <strong class='text-red-600'>Rp " . number_format(abs($expense), 0, ',', '.') . "</strong></span>
                                 <span class='px-2 py-0.5 rounded bg-gray-50 border border-gray-200 font-bold'>
                                     NETT: <span style='color: {$netColorHex};'>{$netSign}Rp " . number_format(abs($net), 0, ',', '.') . "</span>
                                 </span>
