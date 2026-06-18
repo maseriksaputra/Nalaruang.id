@@ -138,6 +138,11 @@ const TimelinePanel = () => {
 
     if (isPreviewMobile) return null;
 
+    const [expandedGroups, setExpandedGroups] = useState([]);
+    const toggleGroup = (id) => {
+        setExpandedGroups(prev => prev.includes(id) ? prev.filter(g => g !== id) : [...prev, id]);
+    };
+
     return (
         <div 
             className={`absolute bottom-[48px] left-0 right-0 ${!isDraggingResizer ? 'transition-all duration-300' : ''} bg-white border-t border-gray-200 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-50 flex flex-col`}
@@ -276,35 +281,105 @@ const TimelinePanel = () => {
                             {/* Tracks */}
                             <div className="flex flex-col py-2 relative z-10 px-4 min-w-max">
                                 {renderableLayers.map((track, trackIndex) => {
+                                    const isRealGroup = track.type === 'group' && !track.id.startsWith('mock_track');
+                                    const isExpanded = expandedGroups.includes(track.id);
+
+                                    const groupStart = (track.children && track.children.length > 0)
+                                        ? Math.min(...track.children.map(c => c.animation?.config?.delay || 0))
+                                        : 0;
+                                    const groupEnd = (track.children && track.children.length > 0)
+                                        ? Math.max(...track.children.map(c => {
+                                            const s = c.animation?.config?.delay || 0;
+                                            return c.animation?.exit ? (c.animation?.configExit?.delay || s + 5) : s + 5;
+                                        }))
+                                        : 5;
+
                                     return (
-                                        <div key={track.id} className="h-12 border-b border-gray-200 flex items-center relative w-full mb-1 hover:bg-gray-100/50">
-                                            {/* Track Label */}
-                                            <div className="absolute left-0 top-0 bottom-0 w-24 bg-white/50 border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] backdrop-blur-sm pointer-events-none">
-                                                <span className="text-[10px] font-bold text-gray-500 truncate">{track.name || `Track ${trackIndex + 1}`}</span>
-                                            </div>
+                                        <React.Fragment key={track.id}>
+                                            <div className={`h-12 border-b border-gray-200 flex items-center relative w-full mb-1 ${isRealGroup && isExpanded ? 'bg-indigo-50/50' : 'hover:bg-gray-100/50'}`}>
+                                                {/* Track Label */}
+                                                <div className="absolute left-0 top-0 bottom-0 w-24 bg-white/50 border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] backdrop-blur-sm pointer-events-none">
+                                                    {isRealGroup && (
+                                                        <button 
+                                                            onClick={(e) => { e.stopPropagation(); toggleGroup(track.id); }}
+                                                            className="mr-1 pointer-events-auto p-0.5 hover:bg-gray-200 rounded"
+                                                        >
+                                                            <svg className={`w-3 h-3 text-gray-500 transform transition-transform ${isExpanded ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                                                        </button>
+                                                    )}
+                                                    <span className={`text-[10px] font-bold text-gray-500 truncate ${!isRealGroup && 'ml-4'}`}>{track.name || `Track ${trackIndex + 1}`}</span>
+                                                </div>
 
-                                            {/* Elements in this track */}
-                                            {track.children && track.children.map(layer => {
-                                                const startTime = layer.animation?.config?.delay || 0;
-                                                const hasExit = !!layer.animation?.exit;
-                                                const endTime = hasExit ? (layer.animation?.configExit?.delay || (startTime + 5)) : (startTime + 5);
-
-                                                return (
+                                                {/* Elements in this track */}
+                                                {isRealGroup ? (
                                                     <TimeBlock 
-                                                        key={layer.id}
-                                                        layer={layer}
-                                                        startTime={startTime}
-                                                        endTime={endTime}
+                                                        layer={track}
+                                                        startTime={groupStart}
+                                                        endTime={groupEnd}
                                                         timeScale={timeScale}
                                                         updateAnimation={updateLayerAnimation}
-                                                        active={activeLayerIds.includes(layer.id)}
-                                                        setActive={() => setActiveLayer(layer.id)}
+                                                        active={activeLayerIds.includes(track.id)}
+                                                        setActive={() => setActiveLayer(track.id)}
                                                         trackIndex={trackIndex}
                                                         allTracks={renderableLayers}
+                                                        isGroupParent={true}
                                                     />
+                                                ) : (
+                                                    track.children && track.children.map(layer => {
+                                                        const startTime = layer.animation?.config?.delay || 0;
+                                                        const hasExit = !!layer.animation?.exit;
+                                                        const endTime = hasExit ? (layer.animation?.configExit?.delay || (startTime + 5)) : (startTime + 5);
+
+                                                        return (
+                                                            <TimeBlock 
+                                                                key={layer.id}
+                                                                layer={layer}
+                                                                startTime={startTime}
+                                                                endTime={endTime}
+                                                                timeScale={timeScale}
+                                                                updateAnimation={updateLayerAnimation}
+                                                                active={activeLayerIds.includes(layer.id)}
+                                                                setActive={() => setActiveLayer(layer.id)}
+                                                                trackIndex={trackIndex}
+                                                                allTracks={renderableLayers}
+                                                                isGroupParent={false}
+                                                            />
+                                                        );
+                                                    })
+                                                )}
+                                            </div>
+
+                                            {/* Child Tracks (if Expanded) */}
+                                            {isRealGroup && isExpanded && track.children?.map((childLayer, childIndex) => {
+                                                const startTime = childLayer.animation?.config?.delay || 0;
+                                                const hasExit = !!childLayer.animation?.exit;
+                                                const endTime = hasExit ? (childLayer.animation?.configExit?.delay || (startTime + 5)) : (startTime + 5);
+
+                                                return (
+                                                    <div key={childLayer.id} className="h-10 border-b border-gray-100 flex items-center relative w-full mb-1 bg-gray-50/50 hover:bg-gray-100/80">
+                                                        {/* Child Label */}
+                                                        <div className="absolute left-0 top-0 bottom-0 w-24 bg-white/50 border-r border-gray-200 z-40 px-2 pl-6 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] backdrop-blur-sm pointer-events-none">
+                                                            <div className="w-1.5 h-1.5 border-l-2 border-b-2 border-gray-400 mr-1.5 opacity-50"></div>
+                                                            <span className="text-[9px] font-medium text-gray-500 truncate">{childLayer.name || `Child ${childIndex + 1}`}</span>
+                                                        </div>
+
+                                                        {/* Child TimeBlock */}
+                                                        <TimeBlock 
+                                                            layer={childLayer}
+                                                            startTime={startTime}
+                                                            endTime={endTime}
+                                                            timeScale={timeScale}
+                                                            updateAnimation={updateLayerAnimation}
+                                                            active={activeLayerIds.includes(childLayer.id)}
+                                                            setActive={() => setActiveLayer(childLayer.id)}
+                                                            trackIndex={trackIndex}
+                                                            allTracks={renderableLayers}
+                                                            isGroupParent={false}
+                                                        />
+                                                    </div>
                                                 );
                                             })}
-                                        </div>
+                                        </React.Fragment>
                                     );
                                 })}
                             </div>
@@ -317,7 +392,7 @@ const TimelinePanel = () => {
 };
 
 // Unified Time Block (Canva Style)
-const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, active, setActive, trackIndex, allTracks }) => {
+const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, active, setActive, trackIndex, allTracks, isGroupParent }) => {
     const isDragging = useRef(false);
     const dragType = useRef(null); // 'start', 'end', 'body'
     const startX = useRef(0);
@@ -428,17 +503,26 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             }
 
             // Apply time changes to store
-            updateAnimation(layer.id, {
-                config: { delay: parseFloat(currentStartRef.current.toFixed(1)) },
-                configExit: { delay: parseFloat(currentEndRef.current.toFixed(1)) }
-            });
-            
-            // Auto add exit animation if it didn't exist but we shortened the block
-            if (!layer.animation?.exit && currentEndRef.current < MAX_TIME) {
+            if (isGroupParent) {
+                if (dragType.current === 'body') {
+                    const deltaX = currentStartRef.current - initialStart.current;
+                    if (deltaX !== 0) {
+                        useCanvasStore.getState().offsetGroupChildrenTime(layer.id, deltaX);
+                    }
+                }
+            } else {
                 updateAnimation(layer.id, {
-                    exit: 'fadeOut', // Default exit
-                    configExit: { delay: parseFloat(currentEndRef.current.toFixed(1)), speed: 1 }
+                    config: { delay: parseFloat(currentStartRef.current.toFixed(1)) },
+                    configExit: { delay: parseFloat(currentEndRef.current.toFixed(1)) }
                 });
+                
+                // Auto add exit animation if it didn't exist but we shortened the block
+                if (!layer.animation?.exit && currentEndRef.current < MAX_TIME) {
+                    updateAnimation(layer.id, {
+                        exit: 'fadeOut', // Default exit
+                        configExit: { delay: parseFloat(currentEndRef.current.toFixed(1)), speed: 1 }
+                    });
+                }
             }
         }
     };
@@ -492,17 +576,19 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             )}
 
             {/* Entry Handle (Green) */}
-            <div 
-                className="absolute left-0 top-0 bottom-0 w-6 flex items-center justify-start group cursor-col-resize z-30 hover:bg-white/10"
-                onMouseDown={(e) => handleMouseDown(e, 'start')}
-            >
-                <div className="w-1.5 h-6 bg-green-400 rounded-r-md shadow-sm opacity-80 group-hover:opacity-100 group-hover:w-2 transition-all"></div>
-                {hasEntry && (
-                    <div className="absolute left-2 text-[8px] font-bold text-white bg-green-500 px-1 py-0.5 rounded shadow-sm pointer-events-none whitespace-nowrap z-40">
-                        {entryAnimName}
-                    </div>
-                )}
-            </div>
+            {!isGroupParent && (
+                <div 
+                    className="absolute left-0 top-0 bottom-0 w-6 flex items-center justify-start group cursor-col-resize z-30 hover:bg-white/10"
+                    onMouseDown={(e) => handleMouseDown(e, 'start')}
+                >
+                    <div className="w-1.5 h-6 bg-green-400 rounded-r-md shadow-sm opacity-80 group-hover:opacity-100 group-hover:w-2 transition-all"></div>
+                    {hasEntry && (
+                        <div className="absolute left-2 text-[8px] font-bold text-white bg-green-500 px-1 py-0.5 rounded shadow-sm pointer-events-none whitespace-nowrap z-40">
+                            {entryAnimName}
+                        </div>
+                    )}
+                </div>
+            )}
             
             {/* Name Label */}
             <div className="absolute left-6 right-6 top-0 bottom-0 flex items-center px-2 pointer-events-none z-10 overflow-hidden">
@@ -512,17 +598,19 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             </div>
 
             {/* Exit Handle (Red) */}
-            <div 
-                className="absolute right-0 top-0 bottom-0 w-6 flex items-center justify-end group cursor-col-resize z-30 hover:bg-white/10"
-                onMouseDown={(e) => handleMouseDown(e, 'end')}
-            >
-                <div className="w-1.5 h-6 bg-red-400 rounded-l-md shadow-sm opacity-80 group-hover:opacity-100 group-hover:w-2 transition-all"></div>
-                {hasExit && (
-                    <div className="absolute right-2 text-[8px] font-bold text-white bg-red-500 px-1 py-0.5 rounded shadow-sm pointer-events-none whitespace-nowrap z-40">
-                        {exitAnimName}
-                    </div>
-                )}
-            </div>
+            {!isGroupParent && (
+                <div 
+                    className="absolute right-0 top-0 bottom-0 w-6 flex items-center justify-end group cursor-col-resize z-30 hover:bg-white/10"
+                    onMouseDown={(e) => handleMouseDown(e, 'end')}
+                >
+                    <div className="w-1.5 h-6 bg-red-400 rounded-l-md shadow-sm opacity-80 group-hover:opacity-100 group-hover:w-2 transition-all"></div>
+                    {hasExit && (
+                        <div className="absolute right-2 text-[8px] font-bold text-white bg-red-500 px-1 py-0.5 rounded shadow-sm pointer-events-none whitespace-nowrap z-40">
+                            {exitAnimName}
+                        </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 };

@@ -726,6 +726,27 @@ const useCanvasStore = create(temporal((set, get) => ({
         get().triggerAutoSave();
     },
 
+    offsetGroupChildrenTime: (groupId, deltaX) => {
+        set(produce((state) => {
+            const group = findElement(state.sections, groupId);
+            if (group && group.children) {
+                const shiftTime = (layer) => {
+                    if (layer.animation?.config?.delay !== undefined) {
+                        layer.animation.config.delay = Math.max(0, layer.animation.config.delay + deltaX);
+                    }
+                    if (layer.animation?.configExit?.delay !== undefined) {
+                        layer.animation.configExit.delay = Math.max(0, layer.animation.configExit.delay + deltaX);
+                    }
+                    if (layer.children) {
+                        layer.children.forEach(shiftTime);
+                    }
+                };
+                group.children.forEach(shiftTime);
+            }
+        }));
+        get().triggerAutoSave();
+    },
+
     updateLayerInteraction: (layerId, interactionData) => {
         set(produce((state) => {
             const layer = findElement(state.sections, layerId);
