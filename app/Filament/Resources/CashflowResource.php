@@ -132,6 +132,7 @@ class CashflowResource extends Resource
                     ->label('') // Hide prefix
                     ->date() // Use native date grouping (bulletproof)
                     ->collapsible(false) // Standard table layout
+                    ->orderQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query, string $direction) => $query->orderBy('transaction_date', 'desc'))
                     ->getDescriptionFromRecordUsing(function (\App\Models\Cashflow $record) {
                         $date = \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d');
                         $income = \App\Models\Cashflow::whereDate('transaction_date', $date)->where('type', 'income')->sum('amount') ?? 0;
@@ -229,6 +230,15 @@ class CashflowResource extends Resource
         return [
             CashflowResource\Widgets\CashflowStats::class,
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ])
+            ->orderBy('created_at', 'desc');
     }
 
     public static function getRelations(): array
