@@ -18495,11 +18495,11 @@ var LeftDrawer = () => {
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-xs font-semibold",
-									children: "Upload Gambar (PNG/SVG)"
+									children: "Upload Gambar (PNG/SVG/GIF)"
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 									type: "file",
-									accept: "image/png, image/svg+xml, image/jpeg",
+									accept: "image/png, image/svg+xml, image/jpeg, image/gif",
 									className: "hidden",
 									onChange: (e) => {
 										if (e.target.files[0]) handleUploadGlobalElement(e.target.files[0], "image");

@@ -67,7 +67,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-DuB8Bmad.css",
+    "file": "assets/app-Cr6xH5Zg.css",
     "name": "app",
     "names": [
       "app.css"
@@ -76,7 +76,7 @@
     "isEntry": true
   },
   "resources/js/Builder/BuilderApp.jsx": {
-    "file": "assets/BuilderApp-Dkn3yc9R.js",
+    "file": "assets/BuilderApp-BVgTLbuL.js",
     "name": "BuilderApp",
     "src": "resources/js/Builder/BuilderApp.jsx",
     "isEntry": true,
