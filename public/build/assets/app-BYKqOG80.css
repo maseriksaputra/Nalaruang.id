@@ -3394,10 +3394,6 @@
     border-color: var(--color-rose-200);
   }
 
-  .border-rose-500 {
-    border-color: var(--color-rose-500);
-  }
-
   .border-slate-100 {
     border-color: var(--color-slate-100);
   }
@@ -5321,10 +5317,6 @@
     word-break: break-all;
   }
 
-  .text-ellipsis {
-    text-overflow: ellipsis;
-  }
-
   .whitespace-normal {
     white-space: normal;
   }
@@ -5952,6 +5944,10 @@
 
   .mix-blend-exclusion {
     mix-blend-mode: exclusion;
+  }
+
+  .mix-blend-luminosity {
+    mix-blend-mode: luminosity;
   }
 
   .mix-blend-multiply {

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import useCanvasStore from '../../stores/useCanvasStore';
 import { produce } from 'immer';
 
-const MAX_TIME = 15; // 15 seconds timeline
+const MAX_TIME = 60; // 60 seconds timeline
 
 const TimelinePanel = () => {
     const isPreviewMobile = useCanvasStore(state => state.isPreviewMobile);
@@ -319,6 +319,33 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
     useEffect(() => { setTempStart(startTime); }, [startTime]);
     useEffect(() => { setTempEnd(endTime); }, [endTime]);
 
+    const renderThumbnail = () => {
+        if (layer.type === 'image' && layer.content) {
+            return (
+                <div className="absolute inset-y-0 left-0 right-0 flex overflow-hidden opacity-30 pointer-events-none">
+                    {Array.from({ length: 40 }).map((_, i) => (
+                        <img key={i} src={layer.content} className="h-full object-cover shrink-0 w-auto mix-blend-luminosity" alt="" />
+                    ))}
+                </div>
+            );
+        } else if (layer.type === 'shape' && layer.content) {
+            return (
+                <div className="absolute inset-y-0 left-0 right-0 flex items-center gap-4 overflow-hidden opacity-20 pointer-events-none px-4">
+                     {Array.from({ length: 20 }).map((_, i) => (
+                        <div key={i} className="w-6 h-6 shrink-0" dangerouslySetInnerHTML={{ __html: layer.content }} />
+                    ))}
+                </div>
+            );
+        } else if (layer.type === 'text') {
+             return (
+                <div className="absolute inset-y-0 left-0 right-0 flex items-center overflow-hidden opacity-30 pointer-events-none px-2 whitespace-nowrap text-xs font-serif italic text-white/70">
+                    {layer.content?.replace(/<[^>]*>?/gm, '')?.repeat(20)}
+                </div>
+            );
+        }
+        return null;
+    };
+
     const handleDragStart = (e, dragType) => {
         e.stopPropagation();
         setActive();
@@ -399,7 +426,8 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             }}
             onMouseDown={(e) => handleDragStart(e, 'move')}
         >
-            <div className="px-2 flex-1 overflow-hidden whitespace-nowrap text-[10px] font-bold text-white tracking-wide">
+            {renderThumbnail()}
+            <div className="px-2 flex-1 overflow-hidden whitespace-nowrap text-[10px] font-bold text-white tracking-wide z-10 relative">
                 {(tempEnd - tempStart).toFixed(1)}s
             </div>
             

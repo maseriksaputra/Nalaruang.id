@@ -25441,7 +25441,7 @@ var AssetSelectionModal = () => {
 };
 //#endregion
 //#region resources/js/Builder/components/Panels/TimelinePanel.jsx
-var MAX_TIME = 15;
+var MAX_TIME = 60;
 var TimelinePanel = () => {
 	const isPreviewMobile = useCanvasStore((state) => state.isPreviewMobile);
 	const sections = useCanvasStore((state) => state.sections);
@@ -25712,7 +25712,7 @@ var TimelinePanel = () => {
 								onMouseDown: (e) => {
 									handlePlayheadDragStart(e);
 								},
-								children: Array.from({ length: 151 }).map((_, i) => {
+								children: Array.from({ length: 601 }).map((_, i) => {
 									const isSecond = i % 10 === 0;
 									const sec = i / 10;
 									return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -25781,6 +25781,28 @@ var TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, active
 	(0, import_react.useEffect)(() => {
 		setTempEnd(endTime);
 	}, [endTime]);
+	const renderThumbnail = () => {
+		if (layer.type === "image" && layer.content) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "absolute inset-y-0 left-0 right-0 flex overflow-hidden opacity-30 pointer-events-none",
+			children: Array.from({ length: 40 }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+				src: layer.content,
+				className: "h-full object-cover shrink-0 w-auto mix-blend-luminosity",
+				alt: ""
+			}, i))
+		});
+		else if (layer.type === "shape" && layer.content) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "absolute inset-y-0 left-0 right-0 flex items-center gap-4 overflow-hidden opacity-20 pointer-events-none px-4",
+			children: Array.from({ length: 20 }).map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "w-6 h-6 shrink-0",
+				dangerouslySetInnerHTML: { __html: layer.content }
+			}, i))
+		});
+		else if (layer.type === "text") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "absolute inset-y-0 left-0 right-0 flex items-center overflow-hidden opacity-30 pointer-events-none px-2 whitespace-nowrap text-xs font-serif italic text-white/70",
+			children: layer.content?.replace(/<[^>]*>?/gm, "")?.repeat(20)
+		});
+		return null;
+	};
 	const handleDragStart = (e, dragType) => {
 		e.stopPropagation();
 		setActive();
@@ -25841,8 +25863,9 @@ var TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, active
 		},
 		onMouseDown: (e) => handleDragStart(e, "move"),
 		children: [
+			renderThumbnail(),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "px-2 flex-1 overflow-hidden whitespace-nowrap text-[10px] font-bold text-white tracking-wide",
+				className: "px-2 flex-1 overflow-hidden whitespace-nowrap text-[10px] font-bold text-white tracking-wide z-10 relative",
 				children: [(tempEnd - tempStart).toFixed(1), "s"]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
