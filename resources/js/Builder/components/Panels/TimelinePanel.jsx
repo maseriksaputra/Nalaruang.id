@@ -100,6 +100,12 @@ const TimelinePanel = () => {
         if (!container) return;
         const rect = container.getBoundingClientRect();
         
+        // Immediate jump on click
+        const initialScrollLeft = container.scrollLeft;
+        const initialX = e.clientX - rect.left + initialScrollLeft - 256; // 256 is left sidebar width
+        const initialTime = Math.max(0, Math.min(initialX / timeScale, MAX_TIME));
+        setPlayheadPos(initialTime);
+
         const handleMouseMove = (moveEvent) => {
             const scrollLeft = container.scrollLeft;
             const x = moveEvent.clientX - rect.left + scrollLeft - 256; // 256 is left sidebar width
@@ -228,6 +234,10 @@ const TimelinePanel = () => {
                     <div 
                         className="flex-1 overflow-x-auto overflow-y-auto bg-gray-50 relative hidden-scrollbar" 
                         id="timeline-tracks-container"
+                        onMouseDown={(e) => {
+                            if (e.target.closest('.timeline-block')) return; // Ignore if clicking on a time block
+                            handlePlayheadDragStart(e);
+                        }}
                     >
                         <div 
                             className="min-h-full relative" 
@@ -418,7 +428,7 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
 
     return (
         <div 
-            className={`absolute top-2 bottom-2 rounded-md border shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-visible bg-indigo-500 border-indigo-600 ${active ? 'ring-2 ring-indigo-400 ring-offset-1 z-20' : 'opacity-90 hover:opacity-100 z-10'}`}
+            className={`timeline-block absolute top-2 bottom-2 rounded-md border shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-visible bg-indigo-500 border-indigo-600 ${active ? 'ring-2 ring-indigo-400 ring-offset-1 z-20' : 'opacity-90 hover:opacity-100 z-10'}`}
             style={{ 
                 left: `${tempStart * timeScale}px`,
                 width: `${(tempEnd - tempStart) * timeScale}px`,

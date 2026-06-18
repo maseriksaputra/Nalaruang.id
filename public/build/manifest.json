@@ -67,7 +67,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-CW_tGjJe.css",
+    "file": "assets/app-CEPI24pl.css",
     "name": "app",
     "names": [
       "app.css"
@@ -76,7 +76,7 @@
     "isEntry": true
   },
   "resources/js/Builder/BuilderApp.jsx": {
-    "file": "assets/BuilderApp-CMvLk78H.js",
+    "file": "assets/BuilderApp-CFaVF7G_.js",
     "name": "BuilderApp",
     "src": "resources/js/Builder/BuilderApp.jsx",
     "isEntry": true,

@@ -25520,6 +25520,9 @@ var TimelinePanel = () => {
 		const container = document.getElementById("timeline-tracks-container");
 		if (!container) return;
 		const rect = container.getBoundingClientRect();
+		const initialScrollLeft = container.scrollLeft;
+		const initialX = e.clientX - rect.left + initialScrollLeft - 256;
+		setPlayheadPos(Math.max(0, Math.min(initialX / timeScale, MAX_TIME)));
 		const handleMouseMove = (moveEvent) => {
 			const scrollLeft = container.scrollLeft;
 			const x = moveEvent.clientX - rect.left + scrollLeft - 256;
@@ -25703,6 +25706,10 @@ var TimelinePanel = () => {
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "flex-1 overflow-x-auto overflow-y-auto bg-gray-50 relative hidden-scrollbar",
 					id: "timeline-tracks-container",
+					onMouseDown: (e) => {
+						if (e.target.closest(".timeline-block")) return;
+						handlePlayheadDragStart(e);
+					},
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "min-h-full relative",
 						style: { width: `${MAX_TIME * timeScale}px` },
@@ -25855,7 +25862,7 @@ var TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, active
 		window.addEventListener("mouseup", handleMouseUp);
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: `absolute top-2 bottom-2 rounded-md border shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-visible bg-indigo-500 border-indigo-600 ${active ? "ring-2 ring-indigo-400 ring-offset-1 z-20" : "opacity-90 hover:opacity-100 z-10"}`,
+		className: `timeline-block absolute top-2 bottom-2 rounded-md border shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-visible bg-indigo-500 border-indigo-600 ${active ? "ring-2 ring-indigo-400 ring-offset-1 z-20" : "opacity-90 hover:opacity-100 z-10"}`,
 		style: {
 			left: `${tempStart * timeScale}px`,
 			width: `${(tempEnd - tempStart) * timeScale}px`,
