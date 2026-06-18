@@ -43,7 +43,7 @@ class Kasir extends Page
     public function addToCart($productId, $name, $price, $category)
     {
         $cartId = uniqid();
-        $this->cart[$cartId] = [
+        $newItem = [
             'id' => $cartId,
             'product_id' => $productId,
             'name' => $name,
@@ -52,6 +52,7 @@ class Kasir extends Page
             'category' => $category,
             'type' => $this->transactionType,
         ];
+        $this->cart = [$cartId => $newItem] + $this->cart;
     }
 
     public function addManual($category)
@@ -74,7 +75,7 @@ class Kasir extends Page
         );
 
         $cartId = uniqid();
-        $this->cart[$cartId] = [
+        $newItem = [
             'id' => $cartId,
             'product_id' => $product->id,
             'name' => $this->manualName,
@@ -83,6 +84,7 @@ class Kasir extends Page
             'category' => $category,
             'type' => $this->transactionType,
         ];
+        $this->cart = [$cartId => $newItem] + $this->cart;
 
         $this->manualName = '';
         $this->manualPrice = '';
@@ -187,7 +189,7 @@ class Kasir extends Page
             );
 
             $cartId = uniqid();
-            $this->cart[$cartId] = [
+            $newItem = [
                 'id' => $cartId,
                 'product_id' => $product->id,
                 'name' => $description,
@@ -196,6 +198,7 @@ class Kasir extends Page
                 'category' => $category,
                 'type' => $type,
             ];
+            $this->cart = [$cartId => $newItem] + $this->cart;
 
             $successCount++;
         }
