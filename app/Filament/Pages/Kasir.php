@@ -69,10 +69,11 @@ class Kasir extends Page
         $price = (float) $this->manualPrice;
 
         // Auto save as template
-        $product = CashierProduct::firstOrCreate(
-            ['name' => $this->manualName, 'category' => $category],
-            ['default_price' => $price]
-        );
+        $product = CashierProduct::firstOrCreate([
+            'name' => $this->manualName, 
+            'category' => $category,
+            'default_price' => $price
+        ]);
 
         $cartId = uniqid();
         $newItem = [
@@ -183,10 +184,11 @@ class Kasir extends Page
             }
 
             // Generate product if not exists to save as template
-            $product = CashierProduct::firstOrCreate(
-                ['name' => $description, 'category' => $category],
-                ['default_price' => $price]
-            );
+            $product = CashierProduct::firstOrCreate([
+                'name' => $description, 
+                'category' => $category,
+                'default_price' => $price
+            ]);
 
             $cartId = uniqid();
             $newItem = [
