@@ -230,11 +230,6 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
         } else if (layerAnimation.idle === 'custom_timeline' && layerAnimation.custom_keyframes && layerAnimation.custom_keyframes.length > 0) {
             const tl = gsap.timeline({
                 repeat: (isLooping && !isBuilder) ? -1 : 0,
-                onComplete: () => {
-                    if (isBuilder) {
-                        gsap.set(elementRef, { clearProps: "all" });
-                    }
-                },
                 scrollTrigger: (!isBuilder && config.trigger === 'onScroll') ? {
                     trigger: elementRef,
                     start: "top 85%",
@@ -275,7 +270,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                         ...(kf.width !== undefined && { width: kf.width }),
                         ...(kf.height !== undefined && { height: kf.height }),
                         duration: kf.duration || 1,
-                        ease: kf.ease || "sine.inOut",
+                        ease: kf.ease || "none",
                         force3D: true,
                         autoRound: false
                     });

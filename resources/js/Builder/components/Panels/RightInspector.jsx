@@ -153,7 +153,7 @@ const RightInspector = () => {
             width: activeLayer.style?.width !== undefined ? parseFloat(activeLayer.style.width) : undefined,
             height: activeLayer.style?.height !== undefined ? parseFloat(activeLayer.style.height) : undefined,
             duration: 1.0, 
-            ease: 'power1.inOut'
+            ease: 'none'
         };
 
         updateLayerAnimation(activeLayer.id, {
