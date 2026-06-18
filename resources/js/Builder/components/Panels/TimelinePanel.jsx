@@ -31,7 +31,7 @@ const TimelinePanel = () => {
         let list = [];
         layers.forEach(layer => {
             if (layer.children) {
-                list.push(layer);
+                // DO NOT push the parent group to avoid duplicates in timeline
                 layer.children.forEach(child => list.push({ ...child, isChild: true, parentId: layer.id }));
             } else {
                 list.push(layer);
@@ -292,9 +292,8 @@ const TimelinePanel = () => {
                                     // Map Nalaruang's entry/exit to a Canva-like Block
                                     const startTime = layer.animation?.config?.delay || 0;
                                     const hasExit = !!layer.animation?.exit;
-                                    // If no exit animation, default lifespan is until MAX_TIME. 
-                                    // If it has exit animation, the end time is configExit.delay
-                                    const endTime = hasExit ? (layer.animation?.configExit?.delay || 5) : MAX_TIME;
+                                    // Default lifespan is 5s
+                                    const endTime = layer.animation?.configExit?.delay || 5;
                                     const duration = endTime - startTime;
 
                                     return (
@@ -332,23 +331,23 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
     const renderThumbnail = () => {
         if (layer.type === 'image' && layer.content) {
             return (
-                <div className="absolute inset-y-0 left-0 right-0 flex overflow-hidden opacity-30 pointer-events-none">
+                <div className="absolute inset-y-0 left-0 right-0 flex overflow-hidden opacity-90 pointer-events-none rounded-md">
                     {Array.from({ length: 40 }).map((_, i) => (
-                        <img key={i} src={layer.content} className="h-full object-cover shrink-0 w-auto mix-blend-luminosity" alt="" />
+                        <img key={i} src={layer.content} className="h-full object-cover shrink-0 w-auto" alt="" />
                     ))}
                 </div>
             );
         } else if (layer.type === 'shape' && layer.content) {
             return (
-                <div className="absolute inset-y-0 left-0 right-0 flex items-center gap-4 overflow-hidden opacity-20 pointer-events-none px-4">
+                <div className="absolute inset-y-0 left-0 right-0 flex items-center gap-4 overflow-hidden opacity-80 pointer-events-none px-4 bg-white/20">
                      {Array.from({ length: 20 }).map((_, i) => (
-                        <div key={i} className="w-6 h-6 shrink-0" dangerouslySetInnerHTML={{ __html: layer.content }} />
+                        <div key={i} className="w-6 h-6 shrink-0 text-white drop-shadow-sm" dangerouslySetInnerHTML={{ __html: layer.content }} />
                     ))}
                 </div>
             );
         } else if (layer.type === 'text') {
              return (
-                <div className="absolute inset-y-0 left-0 right-0 flex items-center overflow-hidden opacity-30 pointer-events-none px-2 whitespace-nowrap text-xs font-serif italic text-white/70">
+                <div className="absolute inset-y-0 left-0 right-0 flex items-center overflow-hidden opacity-100 pointer-events-none px-2 whitespace-nowrap text-xs font-serif font-bold text-white/90 drop-shadow-md">
                     {layer.content?.replace(/<[^>]*>?/gm, '')?.repeat(20)}
                 </div>
             );
