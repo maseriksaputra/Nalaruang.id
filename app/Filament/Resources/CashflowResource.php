@@ -155,6 +155,7 @@ class CashflowResource extends Resource
                         ");
                     })
             ])
+            ->groupingSettingsHidden()
             ->heading(fn (\Filament\Tables\Contracts\HasTable $livewire) => new \Illuminate\Support\HtmlString(view('cashflow-tabs', ['livewire' => $livewire])->render()))
             ->filters([
                 Tables\Filters\Filter::make('transaction_date')
