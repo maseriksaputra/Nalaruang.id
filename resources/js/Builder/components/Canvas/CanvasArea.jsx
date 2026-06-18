@@ -224,7 +224,24 @@ const CanvasArea = () => {
                         )}
                     </section>
                 ))
-            ))}
+            )
+        )}
+
+            {!hideEmptySections && sections.length < 2 && (
+                <div className="flex justify-center p-6 relative z-50 pointer-events-auto">
+                    <button 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            useCanvasStore.getState().addSection();
+                        }}
+                        className="flex items-center gap-2 px-6 py-3 bg-white hover:bg-indigo-50 border-2 border-dashed border-indigo-300 hover:border-indigo-500 rounded-xl text-indigo-600 font-bold shadow-sm transition-all"
+                    >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
+                        Tambah Halaman Isi
+                    </button>
+                </div>
+            )}
             </div>
         </div>
     );

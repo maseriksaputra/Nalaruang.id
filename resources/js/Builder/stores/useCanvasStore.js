@@ -305,25 +305,44 @@ const useCanvasStore = create(temporal((set, get) => ({
             const section = state.sections.find(s => s.id === state.activeSectionId);
             if (!section) return;
             
-            // Find the element and its current group
+            // Find the element and its current group recursively
             let elementToMove = null;
             let currentGroup = null;
             
-            for (const group of section.layers) {
-                if (group.children) {
-                    const childIndex = group.children.findIndex(c => c.id === elementId);
-                    if (childIndex !== -1) {
-                        elementToMove = group.children[childIndex];
-                        currentGroup = group;
-                        group.children.splice(childIndex, 1); // Remove from current group
-                        break;
+            const findAndRemove = (layers) => {
+                for (const layer of layers) {
+                    if (layer.children) {
+                        const childIndex = layer.children.findIndex(c => c.id === elementId);
+                        if (childIndex !== -1) {
+                            elementToMove = layer.children[childIndex];
+                            currentGroup = layer;
+                            layer.children.splice(childIndex, 1);
+                            return true;
+                        }
+                        if (findAndRemove(layer.children)) return true;
                     }
                 }
-            }
+                return false;
+            };
+
+            findAndRemove(section.layers);
             
             if (elementToMove) {
-                // Find target group
-                const targetGroup = section.layers.find(g => g.id === targetGroupId);
+                // Find target group recursively
+                let targetGroup = null;
+                const findTarget = (layers) => {
+                    for (const layer of layers) {
+                        if (layer.id === targetGroupId) {
+                            targetGroup = layer;
+                            return true;
+                        }
+                        if (layer.children && findTarget(layer.children)) return true;
+                    }
+                    return false;
+                };
+                
+                findTarget(section.layers);
+
                 if (targetGroup && targetGroup.children) {
                     // Calculate new zIndex based on target group's children count
                     elementToMove.style = {
@@ -331,9 +350,62 @@ const useCanvasStore = create(temporal((set, get) => ({
                         zIndex: targetGroup.children.length + 1
                     };
                     targetGroup.children.push(elementToMove);
-                } else {
+                } else if (currentGroup && currentGroup.children) {
                     // If target group not found, push back to original group
                     currentGroup.children.push(elementToMove);
+                }
+            }
+        }));
+        get().triggerAutoSave();
+    },
+
+    moveElementToNewGroup: (elementId, insertAfterGroupId = null) => {
+        set(produce((state) => {
+            const section = state.sections.find(s => s.id === state.activeSectionId);
+            if (!section) return;
+
+            let elementToMove = null;
+            
+            const findAndRemove = (layers) => {
+                for (const layer of layers) {
+                    if (layer.children) {
+                        const childIndex = layer.children.findIndex(c => c.id === elementId);
+                        if (childIndex !== -1) {
+                            elementToMove = layer.children[childIndex];
+                            layer.children.splice(childIndex, 1);
+                            return true;
+                        }
+                        if (findAndRemove(layer.children)) return true;
+                    }
+                }
+                return false;
+            };
+
+            findAndRemove(section.layers);
+
+            if (elementToMove) {
+                let maxGroupZ = 0;
+                section.layers.forEach(g => {
+                    if (g.style && g.style.zIndex && g.style.zIndex > maxGroupZ) maxGroupZ = g.style.zIndex;
+                });
+                
+                const newGroup = {
+                    id: 'layer_' + Date.now(),
+                    type: 'group',
+                    name: 'Layer Baru',
+                    children: [elementToMove],
+                    style: { zIndex: maxGroupZ + 1 }
+                };
+                
+                if (insertAfterGroupId) {
+                    const idx = section.layers.findIndex(g => g.id === insertAfterGroupId);
+                    if (idx !== -1) {
+                        section.layers.splice(idx + 1, 0, newGroup);
+                    } else {
+                        section.layers.push(newGroup);
+                    }
+                } else {
+                    section.layers.push(newGroup);
                 }
             }
         }));
@@ -533,14 +605,14 @@ const useCanvasStore = create(temporal((set, get) => ({
 
             if (elementsToGroup.length < 2) return;
 
-            // Make children coordinates relative to the new bounding box
             const groupChildren = elementsToGroup.map(el => {
                 return {
                     ...el,
                     style: {
                         ...el.style,
-                        x: (el.style?.x || 0) - minX,
-                        y: (el.style?.y || 0) - minY
+                        // Preserve original coordinates
+                        x: el.style?.x || 0,
+                        y: el.style?.y || 0
                     }
                 };
             });

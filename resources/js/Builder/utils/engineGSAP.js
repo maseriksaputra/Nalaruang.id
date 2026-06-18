@@ -175,25 +175,32 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
         
         const entryProps = getAnimationProps(layerAnimation.entry, false, config, layerStyle);
             
-            if (hasEntry) {
-                if (config.scale !== undefined && config.scale !== 1) {
-                    entryProps.scale = config.scale;
-                }
-                const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none reverse";
-                const tween = gsap.from(elementRef, {
-                    ...entryProps,
-                    ...repeatConfig,
-                    force3D: true,
-                    autoRound: false,
-                    scrollTrigger: (!isBuilder || config.trigger === 'onScroll') && config.trigger !== 'onLoad' ? { 
-                        trigger: elementRef, 
-                        start: "top 85%", 
-                        toggleActions: toggleActionStr 
-                    } : null
-                });
-                activeTweens.push(tween);
+        if (hasEntry) {
+            if (config.scale !== undefined && config.scale !== 1) {
+                entryProps.scale = config.scale;
             }
+            const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none reverse";
+            const tween = gsap.from(elementRef, {
+                ...entryProps,
+                ...repeatConfig,
+                force3D: true,
+                autoRound: false,
+                scrollTrigger: (!isBuilder || config.trigger === 'onScroll') && config.trigger !== 'onLoad' ? { 
+                    trigger: elementRef, 
+                    start: "top 85%", 
+                    toggleActions: toggleActionStr 
+                } : null
+            });
+            activeTweens.push(tween);
         }
+    } else if (!isBuilder && config.delay && config.delay > 0) {
+        // Fallback: If no entry animation but it has a timeline delay, hide it until delay
+        const tween = gsap.fromTo(elementRef, 
+            { opacity: 0 }, 
+            { opacity: 1, duration: 0.01, delay: config.delay, immediateRender: true }
+        );
+        activeTweens.push(tween);
+    }
 
     // Idle Animation (Continuous)
     if (layerAnimation.idle) {

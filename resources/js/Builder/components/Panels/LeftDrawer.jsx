@@ -14,9 +14,9 @@ import ImageEditorPanel from './ImageEditorPanel';
 import DesktopThumbnailPanel from './DesktopThumbnailPanel';
 import ClientAssetsPanel from './ClientAssetsPanel';
 
-const DraggableChildItem = ({ child, parentId, isActive }) => {
+const DraggableChildItem = ({ childId, child, parentId, isActive }) => {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-        id: child.id,
+        id: childId,
         data: { type: 'child', parentId }
     });
 
@@ -26,6 +26,8 @@ const DraggableChildItem = ({ child, parentId, isActive }) => {
         zIndex: transform ? 50 : 'auto',
         position: transform ? 'relative' : 'static'
     };
+
+    if (!child) return null;
 
     return (
         <div 
@@ -53,7 +55,7 @@ const DraggableChildItem = ({ child, parentId, isActive }) => {
                     ) : child.type === 'lottie' ? (
                         <svg className="w-3 h-3 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     ) : (
-                        <span className="text-[8px] font-bold text-gray-500 uppercase">{child.type.charAt(0)}</span>
+                        <span className="text-[8px] font-bold text-gray-500 uppercase">{(child.type || 'E').charAt(0)}</span>
                     )}
                 </div>
                 <span className="text-xs font-medium text-gray-600 truncate">{child.content || (child.type === 'image' ? 'Gambar Asset' : 'Elemen')}</span>
@@ -93,6 +95,18 @@ const DraggableChildItem = ({ child, parentId, isActive }) => {
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                 </button>
             </div>
+
+            {/* Recursive Children Rendering */}
+            {child.children && child.children.length > 0 && (
+                <div className="pl-6 pr-2 py-1 space-y-1 bg-gray-50/50 border-l border-r border-b border-gray-100">
+                    <SortableContext items={[...child.children].reverse().map((c, i) => c?.id ? c.id.toString() : `temp-nested-${child.id}-${i}`)} strategy={verticalListSortingStrategy}>
+                        {[...child.children].reverse().map((nestedChild, i) => {
+                            const cid = nestedChild?.id ? nestedChild.id.toString() : `temp-nested-${child.id}-${i}`;
+                            return <DraggableChildItem key={cid} childId={cid} child={nestedChild} parentId={child.id} isActive={isActive || useCanvasStore.getState().activeLayerId === nestedChild?.id} />
+                        })}
+                    </SortableContext>
+                </div>
+            )}
         </div>
     );
 };
@@ -199,10 +213,11 @@ const SortableLayerItem = ({ layer }) => {
             {/* Render Children */}
             {layer.children && layer.children.length > 0 && (
                 <div className="pl-6 pr-2 py-2 space-y-1 bg-gray-50 border-l border-r border-b border-gray-200">
-                    <SortableContext items={[...layer.children].reverse().map(c => c.id)} strategy={verticalListSortingStrategy}>
-                        {[...layer.children].reverse().map(child => (
-                            <DraggableChildItem key={child.id} child={child} parentId={layer.id} isActive={activeLayerId === child.id} />
-                        ))}
+                    <SortableContext items={[...layer.children].reverse().map((c, i) => c?.id ? c.id.toString() : `temp-child-${i}`)} strategy={verticalListSortingStrategy}>
+                        {[...layer.children].reverse().map((child, i) => {
+                            const cid = child?.id ? child.id.toString() : `temp-child-${i}`;
+                            return <DraggableChildItem key={cid} childId={cid} child={child} parentId={layer.id} isActive={activeLayerId === child?.id} />
+                        })}
                     </SortableContext>
                 </div>
             )}
@@ -931,6 +946,7 @@ const LeftDrawer = () => {
                 sortedLayers.forEach(layer => {
                     flattenedItems.push({
                         ...layer,
+                        id: layer.id || `temp-id-${Math.random()}`,
                         originalSectionId: section.id
                     });
                 });

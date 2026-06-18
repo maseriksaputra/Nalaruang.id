@@ -201,6 +201,24 @@ const TimelinePanel = () => {
                             <span className="text-xs font-mono text-gray-600 w-12 text-center">
                                 {playheadPos.toFixed(1)}s
                             </span>
+                            
+                            {/* Switch Section Buttons */}
+                            {sections.length > 1 && (
+                                <div className="flex items-center ml-2 border border-indigo-200 rounded-lg overflow-hidden shrink-0">
+                                    <button 
+                                        onClick={() => useCanvasStore.getState().setActiveSection(sections[0].id)}
+                                        className={`px-3 py-1.5 text-[10px] font-bold transition-colors ${activeSectionId === sections[0].id ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'}`}
+                                    >
+                                        Halaman Cover
+                                    </button>
+                                    <button 
+                                        onClick={() => useCanvasStore.getState().setActiveSection(sections[1].id)}
+                                        className={`px-3 py-1.5 text-[10px] font-bold transition-colors border-l border-indigo-200 ${activeSectionId === sections[1].id ? 'bg-indigo-600 text-white border-l-indigo-600' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'}`}
+                                    >
+                                        Halaman Isi
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
@@ -312,18 +330,30 @@ const TimelinePanel = () => {
 
                                                 {/* Elements in this track */}
                                                 {isRealGroup ? (
-                                                    <TimeBlock 
-                                                        layer={track}
-                                                        startTime={groupStart}
-                                                        endTime={groupEnd}
-                                                        timeScale={timeScale}
-                                                        updateAnimation={updateLayerAnimation}
-                                                        active={activeLayerIds.includes(track.id)}
-                                                        setActive={() => setActiveLayer(track.id)}
-                                                        trackIndex={trackIndex}
-                                                        allTracks={renderableLayers}
-                                                        isGroupParent={true}
-                                                    />
+                                                    <React.Fragment>
+                                                        {track.children && track.children.map(childLayer => {
+                                                            const startTime = childLayer.animation?.config?.delay || 0;
+                                                            const hasExit = !!childLayer.animation?.exit;
+                                                            const endTime = hasExit ? (childLayer.animation?.configExit?.delay || (startTime + 5)) : (startTime + 5);
+
+                                                            return (
+                                                                <TimeBlock 
+                                                                    key={childLayer.id}
+                                                                    layer={childLayer}
+                                                                    parentTrackId={track.id}
+                                                                    startTime={startTime}
+                                                                    endTime={endTime}
+                                                                    timeScale={timeScale}
+                                                                    updateAnimation={updateLayerAnimation}
+                                                                    active={activeLayerIds.includes(childLayer.id) || activeLayerIds.includes(track.id)}
+                                                                    setActive={(multi) => setActiveLayer(childLayer.id, multi)}
+                                                                    trackIndex={trackIndex}
+                                                                    allTracks={renderableLayers}
+                                                                    isGroupParent={false}
+                                                                />
+                                                            );
+                                                        })}
+                                                    </React.Fragment>
                                                 ) : (
                                                     track.children && track.children.map(layer => {
                                                         const startTime = layer.animation?.config?.delay || 0;
@@ -339,7 +369,7 @@ const TimelinePanel = () => {
                                                                 timeScale={timeScale}
                                                                 updateAnimation={updateLayerAnimation}
                                                                 active={activeLayerIds.includes(layer.id)}
-                                                                setActive={() => setActiveLayer(layer.id)}
+                                                                setActive={(multi) => setActiveLayer(layer.id, multi)}
                                                                 trackIndex={trackIndex}
                                                                 allTracks={renderableLayers}
                                                                 isGroupParent={false}
@@ -350,35 +380,20 @@ const TimelinePanel = () => {
                                             </div>
 
                                             {/* Child Tracks (if Expanded) */}
-                                            {isRealGroup && isExpanded && track.children?.map((childLayer, childIndex) => {
-                                                const startTime = childLayer.animation?.config?.delay || 0;
-                                                const hasExit = !!childLayer.animation?.exit;
-                                                const endTime = hasExit ? (childLayer.animation?.configExit?.delay || (startTime + 5)) : (startTime + 5);
-
-                                                return (
-                                                    <div key={childLayer.id} className="h-10 border-b border-gray-100 flex items-center relative w-full mb-1 bg-gray-50/50 hover:bg-gray-100/80">
-                                                        {/* Child Label */}
-                                                        <div className="absolute left-0 top-0 bottom-0 w-24 bg-white/50 border-r border-gray-200 z-40 px-2 pl-6 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] backdrop-blur-sm pointer-events-none">
-                                                            <div className="w-1.5 h-1.5 border-l-2 border-b-2 border-gray-400 mr-1.5 opacity-50"></div>
-                                                            <span className="text-[9px] font-medium text-gray-500 truncate">{childLayer.name || `Child ${childIndex + 1}`}</span>
-                                                        </div>
-
-                                                        {/* Child TimeBlock */}
-                                                        <TimeBlock 
-                                                            layer={childLayer}
-                                                            startTime={startTime}
-                                                            endTime={endTime}
-                                                            timeScale={timeScale}
-                                                            updateAnimation={updateLayerAnimation}
-                                                            active={activeLayerIds.includes(childLayer.id)}
-                                                            setActive={() => setActiveLayer(childLayer.id)}
-                                                            trackIndex={trackIndex}
-                                                            allTracks={renderableLayers}
-                                                            isGroupParent={false}
-                                                        />
-                                                    </div>
-                                                );
-                                            })}
+                                            {isRealGroup && isExpanded && track.children?.map((childLayer, childIndex) => (
+                                                <RecursiveChildTrackRow 
+                                                    key={childLayer.id}
+                                                    childLayer={childLayer}
+                                                    childIndex={childIndex}
+                                                    depth={1}
+                                                    timeScale={timeScale}
+                                                    updateLayerAnimation={updateLayerAnimation}
+                                                    activeLayerIds={activeLayerIds}
+                                                    setActiveLayer={setActiveLayer}
+                                                    trackIndex={trackIndex}
+                                                    renderableLayers={renderableLayers}
+                                                />
+                                            ))}
                                         </React.Fragment>
                                     );
                                 })}
@@ -391,8 +406,55 @@ const TimelinePanel = () => {
     );
 };
 
+// Recursive Child Track Row Component
+const RecursiveChildTrackRow = ({ childLayer, childIndex, depth, timeScale, updateLayerAnimation, activeLayerIds, setActiveLayer, trackIndex, renderableLayers }) => {
+    const startTime = childLayer.animation?.config?.delay || 0;
+    const hasExit = !!childLayer.animation?.exit;
+    const endTime = hasExit ? (childLayer.animation?.configExit?.delay || (startTime + 5)) : (startTime + 5);
+
+    return (
+        <React.Fragment>
+            <div className="h-10 border-b border-gray-100 flex items-center relative w-full mb-1 bg-gray-50/50 hover:bg-gray-100/80">
+                {/* Child Label */}
+                <div className="absolute left-0 top-0 bottom-0 w-24 bg-white/50 border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] backdrop-blur-sm pointer-events-none" style={{ paddingLeft: `${1.5 + (depth - 1) * 0.5}rem` }}>
+                    <div className="w-1.5 h-1.5 border-l-2 border-b-2 border-gray-400 mr-1.5 opacity-50"></div>
+                    <span className="text-[9px] font-medium text-gray-500 truncate">{childLayer.name || `Child ${childIndex + 1}`}</span>
+                </div>
+
+                {/* Child TimeBlock */}
+                <TimeBlock 
+                    layer={childLayer}
+                    startTime={startTime}
+                    endTime={endTime}
+                    timeScale={timeScale}
+                    updateAnimation={updateLayerAnimation}
+                    active={activeLayerIds.includes(childLayer.id)}
+                    setActive={(multi) => setActiveLayer(childLayer.id, multi)}
+                    trackIndex={trackIndex}
+                    allTracks={renderableLayers}
+                    isGroupParent={false}
+                />
+            </div>
+            {childLayer.children && childLayer.children.length > 0 && childLayer.children.map((nestedChild, nestedIndex) => (
+                <RecursiveChildTrackRow 
+                    key={nestedChild.id}
+                    childLayer={nestedChild}
+                    childIndex={nestedIndex}
+                    depth={depth + 1}
+                    timeScale={timeScale}
+                    updateLayerAnimation={updateLayerAnimation}
+                    activeLayerIds={activeLayerIds}
+                    setActiveLayer={setActiveLayer}
+                    trackIndex={trackIndex}
+                    renderableLayers={renderableLayers}
+                />
+            ))}
+        </React.Fragment>
+    );
+};
+
 // Unified Time Block (Canva Style)
-const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, active, setActive, trackIndex, allTracks, isGroupParent }) => {
+const TimeBlock = ({ layer, parentTrackId, startTime, endTime, timeScale, updateAnimation, active, setActive, trackIndex, allTracks, isGroupParent }) => {
     const isDragging = useRef(false);
     const dragType = useRef(null); // 'start', 'end', 'body'
     const startX = useRef(0);
@@ -420,9 +482,50 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
         }
     }, [startTime, endTime]);
 
+    // Generate snap points from other tracks
+    const snapPoints = useMemo(() => {
+        if (!allTracks) return [];
+        const points = new Set([0]); // Always snap to 0
+        
+        allTracks.forEach(t => {
+            if (t.id !== layer.id) {
+                const st = t.animation?.config?.delay || 0;
+                const hasEx = !!t.animation?.exit;
+                const et = hasEx ? (t.animation?.configExit?.delay || (st + 5)) : (st + 5);
+                points.add(st);
+                points.add(et);
+            }
+            if (t.children) {
+                t.children.forEach(c => {
+                    if (c.id !== layer.id) {
+                        const cSt = c.animation?.config?.delay || 0;
+                        const cHasEx = !!c.animation?.exit;
+                        const cEt = cHasEx ? (c.animation?.configExit?.delay || (cSt + 5)) : (cSt + 5);
+                        points.add(cSt);
+                        points.add(cEt);
+                    }
+                });
+            }
+        });
+        return Array.from(points).sort((a,b) => a-b);
+    }, [allTracks, layer.id]);
+
+    const getSnappedTime = (time) => {
+        const SNAP_THRESHOLD = 0.2; // roughly 0.2s stickiness
+        let closest = time;
+        let minDiff = SNAP_THRESHOLD;
+        snapPoints.forEach(p => {
+            if (Math.abs(time - p) < minDiff) {
+                minDiff = Math.abs(time - p);
+                closest = p;
+            }
+        });
+        return closest;
+    };
+
     const handleMouseDown = (e, type) => {
         e.stopPropagation();
-        setActive();
+        setActive(e.shiftKey || e.ctrlKey || e.metaKey);
         isDragging.current = true;
         dragType.current = type;
         startX.current = e.clientX;
@@ -444,17 +547,37 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
         const deltaTime = deltaX / timeScale;
 
         if (dragType.current === 'start') {
-            const newStart = Math.max(0, Math.min(initialStart.current + deltaTime, currentEndRef.current - 0.5));
+            let newStart = Math.max(0, Math.min(initialStart.current + deltaTime, currentEndRef.current - 0.2));
+            newStart = getSnappedTime(newStart);
+            if (newStart > currentEndRef.current - 0.2) newStart = currentEndRef.current - 0.2;
             setTempStart(newStart);
             currentStartRef.current = newStart;
         } else if (dragType.current === 'end') {
-            const newEnd = Math.max(currentStartRef.current + 0.5, Math.min(initialEnd.current + deltaTime, MAX_TIME));
+            let newEnd = Math.max(currentStartRef.current + 0.2, Math.min(initialEnd.current + deltaTime, MAX_TIME));
+            newEnd = getSnappedTime(newEnd);
+            if (newEnd < currentStartRef.current + 0.2) newEnd = currentStartRef.current + 0.2;
             setTempEnd(newEnd);
             currentEndRef.current = newEnd;
         } else if (dragType.current === 'body') {
             const duration = initialEnd.current - initialStart.current;
             let newStart = initialStart.current + deltaTime;
             let newEnd = initialEnd.current + deltaTime;
+
+            // Snapping for body
+            const snappedStart = getSnappedTime(newStart);
+            const snappedEnd = getSnappedTime(newEnd);
+            
+            if (Math.abs(snappedStart - newStart) < Math.abs(snappedEnd - newEnd)) {
+                if (snappedStart !== newStart) {
+                    newStart = snappedStart;
+                    newEnd = newStart + duration;
+                }
+            } else {
+                if (snappedEnd !== newEnd) {
+                    newEnd = snappedEnd;
+                    newStart = newEnd - duration;
+                }
+            }
 
             if (newStart < 0) {
                 newStart = 0;
@@ -482,6 +605,8 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             const deltaY = e.clientY - startY.current;
             setDragOffsetY(0);
 
+            let hasMovedTrack = false;
+
             // If dragged vertically, calculate track hopping based on row height (~52px)
             if (dragType.current === 'body') {
                 const rowOffset = Math.round(deltaY / 52);
@@ -489,15 +614,21 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
                     const targetTrackIndex = trackIndex + rowOffset;
                     if (targetTrackIndex >= 0 && targetTrackIndex < allTracks.length) {
                         const targetTrack = allTracks[targetTrackIndex];
-                        if (targetTrack && targetTrack.type === 'group' && !targetTrack.id.startsWith('mock_track')) {
-                            useCanvasStore.getState().moveElementToGroup(layer.id, targetTrack.id);
-                        } else {
-                            if (deltaY < 0) moveLayerUp(layer.id);
-                            else moveLayerDown(layer.id);
+                        // If we are dragging a child element, move it to the target group
+                        if (!isGroupParent && targetTrack && targetTrack.type === 'group' && !targetTrack.id.startsWith('mock_track')) {
+                            if (targetTrack.id !== parentTrackId) {
+                                useCanvasStore.getState().moveElementToGroup(layer.id, targetTrack.id);
+                                hasMovedTrack = true;
+                            }
                         }
-                    } else {
-                        if (deltaY < 0) moveLayerUp(layer.id);
-                        else moveLayerDown(layer.id);
+                    } else if (targetTrackIndex >= allTracks.length) {
+                        // Create a new track if dropped below the last track
+                        if (!isGroupParent) {
+                            useCanvasStore.getState().moveElementToNewGroup(layer.id);
+                            hasMovedTrack = true;
+                        }
+                    } else if (targetTrackIndex < 0) {
+                        // Create a new track at the top? For now, we can just use the same logic or let it snap to 0.
                     }
                 }
             }
@@ -519,11 +650,9 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
                     configExit: { ...currentConfigExit, delay: parseFloat(currentEndRef.current.toFixed(1)) }
                 };
                 
-                // Auto add exit animation if it didn't exist but we dragged the end handle backwards from MAX_TIME
-                if (!layer.animation?.exit && currentEndRef.current < 60) {
-                    newAnimationData.exit = 'fadeOut'; // Default exit
-                    if (!newAnimationData.configExit.speed) newAnimationData.configExit.speed = 1;
-                }
+                // Set default speed if missing to ensure it saves correctly
+                if (!newAnimationData.config.speed) newAnimationData.config.speed = 1.5;
+                if (!newAnimationData.configExit.speed) newAnimationData.configExit.speed = 1.5;
                 
                 updateAnimation(layer.id, newAnimationData);
             }
@@ -550,21 +679,21 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
 
     return (
         <div 
-            className={`timeline-block absolute top-1 bottom-1 rounded-md shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-hidden bg-indigo-500 ${active ? 'ring-2 ring-indigo-400 z-20 shadow-[0_0_15px_rgba(99,102,241,0.4)]' : 'hover:ring-1 hover:ring-indigo-400 z-10'}`}
+            className={`timeline-block absolute top-1.5 bottom-1.5 rounded shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-hidden transition-all ${active ? 'bg-indigo-500 ring-2 ring-white z-30 shadow-[0_4px_15px_rgba(0,0,0,0.3)] opacity-100' : 'bg-indigo-500 hover:ring-1 hover:ring-white/50 z-10 opacity-40 hover:opacity-70'}`}
             style={{ 
                 left: `${tempStart * timeScale}px`,
                 width: `${(tempEnd - tempStart) * timeScale}px`,
-                minWidth: '20px',
+                minWidth: '24px',
                 transform: `translateY(${dragOffsetY}px)`,
-                zIndex: isDragging.current ? 50 : undefined,
-                transition: isDragging.current ? 'none' : 'transform 0.2s'
+                zIndex: isDragging.current ? 50 : (active ? 30 : 10),
+                transition: isDragging.current ? 'none' : 'transform 0.15s ease-out'
             }}
             onMouseDown={(e) => handleMouseDown(e, 'body')}
         >
             {/* Repeating Thumbnail Background */}
             {thumbUrl && (
                 <div 
-                    className="absolute inset-0 pointer-events-none opacity-30 mix-blend-luminosity"
+                    className="absolute inset-0 pointer-events-none opacity-40 mix-blend-luminosity"
                     style={{
                         backgroundImage: `url('${thumbUrl}')`,
                         backgroundSize: 'auto 100%',
@@ -581,21 +710,21 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             {/* Entry Handle (Green) */}
             {!isGroupParent && (
                 <div 
-                    className="absolute left-0 top-0 bottom-0 w-6 flex items-center justify-start group cursor-col-resize z-30 hover:bg-white/10"
+                    className="absolute left-0 top-0 bottom-0 w-4 md:w-6 flex items-center justify-start group cursor-col-resize z-40 hover:bg-white/20"
                     onMouseDown={(e) => handleMouseDown(e, 'start')}
                 >
-                    <div className="w-1.5 h-6 bg-green-400 rounded-r-md shadow-sm opacity-80 group-hover:opacity-100 group-hover:w-2 transition-all"></div>
+                    <div className="w-1.5 h-full bg-green-400 opacity-90 group-hover:opacity-100 group-hover:w-2 transition-all shadow-[1px_0_2px_rgba(0,0,0,0.2)]"></div>
                     {hasEntry && (
-                        <div className="absolute left-2 text-[8px] font-bold text-white bg-green-500 px-1 py-0.5 rounded shadow-sm pointer-events-none whitespace-nowrap z-40">
-                            {entryAnimName}
+                        <div className="absolute left-2 text-[9px] font-bold text-white bg-green-500/90 px-1.5 py-0.5 rounded shadow-sm pointer-events-none whitespace-nowrap z-50 backdrop-blur-sm border border-green-400/50">
+                            IN: {entryAnimName.replace('-', ' ')}
                         </div>
                     )}
                 </div>
             )}
             
             {/* Name Label */}
-            <div className="absolute left-6 right-6 top-0 bottom-0 flex items-center px-2 pointer-events-none z-10 overflow-hidden">
-                <span className="text-[11px] font-bold text-white drop-shadow-md truncate bg-black/20 px-1.5 py-0.5 rounded backdrop-blur-sm">
+            <div className="absolute left-6 right-6 top-0 bottom-0 flex items-center px-2 pointer-events-none z-20 overflow-hidden justify-center">
+                <span className="text-[11px] font-bold text-white drop-shadow-md truncate bg-black/30 px-2 py-0.5 rounded backdrop-blur-sm border border-white/10">
                     {displayName}
                 </span>
             </div>
@@ -603,13 +732,13 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             {/* Exit Handle (Red) */}
             {!isGroupParent && (
                 <div 
-                    className="absolute right-0 top-0 bottom-0 w-6 flex items-center justify-end group cursor-col-resize z-30 hover:bg-white/10"
+                    className="absolute right-0 top-0 bottom-0 w-4 md:w-6 flex items-center justify-end group cursor-col-resize z-40 hover:bg-white/20"
                     onMouseDown={(e) => handleMouseDown(e, 'end')}
                 >
-                    <div className="w-1.5 h-6 bg-red-400 rounded-l-md shadow-sm opacity-80 group-hover:opacity-100 group-hover:w-2 transition-all"></div>
+                    <div className="w-1.5 h-full bg-rose-400 opacity-90 group-hover:opacity-100 group-hover:w-2 transition-all shadow-[-1px_0_2px_rgba(0,0,0,0.2)]"></div>
                     {hasExit && (
-                        <div className="absolute right-2 text-[8px] font-bold text-white bg-red-500 px-1 py-0.5 rounded shadow-sm pointer-events-none whitespace-nowrap z-40">
-                            {exitAnimName}
+                        <div className="absolute right-2 text-[9px] font-bold text-white bg-rose-500/90 px-1.5 py-0.5 rounded shadow-sm pointer-events-none whitespace-nowrap z-50 backdrop-blur-sm border border-rose-400/50">
+                            OUT: {exitAnimName.replace('-', ' ')}
                         </div>
                     )}
                 </div>

@@ -321,7 +321,7 @@ const BuilderApp = () => {
                                                                 width: '100%',
                                                                 maxWidth: workspaceView === 'desktop' ? '1200px' : '414px',
                                                                 minWidth: '320px',
-                                                                minHeight: showMockup ? '844px' : '100vh',
+                                                                minHeight: '844px',
                                                                 height: showMockup ? '844px' : 'auto'
                                                             }}
                                                             className={`canvas-container bg-white relative pointer-events-auto shrink-0 mx-auto ${showMockup ? 'rounded-[2.5rem] border-[4px] border-gray-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] overflow-y-auto overflow-x-hidden ring-2 ring-gray-300' : 'shadow-[0_0_50px_rgba(0,0,0,0.1)]'}`}
