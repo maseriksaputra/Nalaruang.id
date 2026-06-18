@@ -28,15 +28,8 @@ const TimelinePanel = () => {
     const layers = activeSection ? activeSection.layers : [];
 
     const renderableLayers = useMemo(() => {
-        let list = [];
-        layers.forEach(layer => {
-            if (layer.children) {
-                // DO NOT push the parent group to avoid duplicates in timeline
-                layer.children.forEach(child => list.push({ ...child, isChild: true, parentId: layer.id }));
-            } else {
-                list.push(layer);
-            }
-        });
+        let list = [...layers];
+        // Only render top-level elements (if it's a group, it acts as one block in the timeline like Canva)
         return list.sort((a, b) => (b.style?.zIndex || 0) - (a.style?.zIndex || 0));
     }, [layers]);
 
@@ -204,35 +197,9 @@ const TimelinePanel = () => {
             {/* Timeline Body */}
             {isOpen && (
                 <div className="flex flex-1 overflow-hidden select-none">
-                    {/* Left Column: Layers */}
-                    <div className="w-64 border-r border-gray-200 bg-white flex flex-col shrink-0 overflow-y-auto hidden-scrollbar">
-                        <div className="h-8 border-b border-gray-100 bg-gray-50 flex items-center px-4 sticky top-0 z-10 shrink-0">
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Layer & Z-Index</span>
-                        </div>
-                        <div className="flex flex-col py-2">
-                            {renderableLayers.map(layer => (
-                                <div 
-                                    key={layer.id}
-                                    onClick={() => setActiveLayer(layer.id)}
-                                    className={`h-12 flex items-center px-3 border-b border-gray-50 cursor-pointer transition-colors ${activeLayerIds.includes(layer.id) ? 'bg-indigo-50 border-indigo-100' : 'hover:bg-gray-50'} ${layer.isChild ? 'pl-8' : ''}`}
-                                >
-                                    <div className="w-5 h-5 flex items-center justify-center text-gray-400 cursor-grab active:cursor-grabbing hover:text-gray-600 mr-2">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16"></path></svg>
-                                    </div>
-                                    <div className="flex-1 truncate flex flex-col">
-                                        <span className={`text-xs truncate ${activeLayerIds.includes(layer.id) ? 'font-bold text-indigo-700' : 'font-medium text-gray-700'}`}>
-                                            {layer.name || layer.content?.substring(0, 20) || 'Elemen'}
-                                        </span>
-                                        <span className="text-[9px] text-gray-400 font-mono">z-index: {layer.style?.zIndex || 0}</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Right Column: Time Tracks */}
+                    {/* Time Tracks (Full Width) */}
                     <div 
-                        className="flex-1 overflow-x-auto overflow-y-auto bg-gray-50 relative hidden-scrollbar" 
+                        className="flex-1 overflow-x-auto overflow-y-auto bg-gray-900 relative hidden-scrollbar" 
                         id="timeline-tracks-container"
                         onMouseDown={(e) => {
                             if (e.target.closest('.timeline-block')) return; // Ignore if clicking on a time block
@@ -245,9 +212,8 @@ const TimelinePanel = () => {
                         >
                             {/* Time Ruler Header */}
                             <div 
-                                className="h-8 border-b border-gray-200 bg-white sticky top-0 z-20 flex cursor-text"
+                                className="h-8 border-b border-gray-700 bg-gray-800 sticky top-0 z-20 flex cursor-text"
                                 onMouseDown={(e) => {
-                                    // Clicking on ruler moves playhead
                                     handlePlayheadDragStart(e);
                                 }}
                             >
@@ -257,7 +223,7 @@ const TimelinePanel = () => {
                                     return (
                                         <div 
                                             key={i} 
-                                            className={`absolute top-0 bottom-0 border-l ${isSecond ? 'border-gray-300' : 'border-gray-100'} flex items-end pb-1 pl-1 text-[10px] ${isSecond ? 'text-gray-500 font-bold' : 'text-transparent'} font-mono`} 
+                                            className={`absolute top-0 bottom-0 border-l ${isSecond ? 'border-gray-600' : 'border-gray-700'} flex items-end pb-1 pl-1 text-[10px] ${isSecond ? 'text-gray-300 font-bold' : 'text-transparent'} font-mono`} 
                                             style={{ left: `${sec * timeScale}px`, height: isSecond ? '100%' : '50%', top: isSecond ? '0' : '50%' }}
                                         >
                                             {isSecond ? `${sec}s` : ''}
@@ -269,7 +235,7 @@ const TimelinePanel = () => {
                             {/* Background Grid */}
                             <div className="absolute top-8 bottom-0 left-0 right-0 pointer-events-none flex z-0 opacity-20">
                                 {Array.from({ length: MAX_TIME * 10 }).map((_, i) => (
-                                    <div key={i} className={`h-full border-l ${i % 10 === 0 ? 'border-gray-500' : 'border-gray-300 border-dashed'}`} style={{ width: `${timeScale / 10}px` }}></div>
+                                    <div key={i} className={`h-full border-l ${i % 10 === 0 ? 'border-gray-600' : 'border-gray-700 border-dashed'}`} style={{ width: `${timeScale / 10}px` }}></div>
                                 ))}
                             </div>
 
@@ -287,17 +253,15 @@ const TimelinePanel = () => {
                             </div>
 
                             {/* Tracks */}
-                            <div className="flex flex-col py-2 relative z-10">
+                            <div className="flex flex-col py-2 relative z-10 px-4">
                                 {renderableLayers.map(layer => {
-                                    // Map Nalaruang's entry/exit to a Canva-like Block
                                     const startTime = layer.animation?.config?.delay || 0;
                                     const hasExit = !!layer.animation?.exit;
-                                    // Default lifespan is 5s
-                                    const endTime = layer.animation?.configExit?.delay || 5;
-                                    const duration = endTime - startTime;
+                                    // Default duration is 5s unless specified
+                                    const endTime = hasExit ? (layer.animation?.configExit?.delay || (startTime + 5)) : (startTime + 5);
 
                                     return (
-                                        <div key={layer.id} className={`h-12 border-b border-transparent flex items-center relative w-full ${activeLayerIds.includes(layer.id) ? 'bg-indigo-50/50' : ''}`}>
+                                        <div key={layer.id} className="h-16 border-b border-gray-800/50 flex items-center relative w-full mb-2">
                                             <TimeBlock 
                                                 layer={layer}
                                                 startTime={startTime}
@@ -321,139 +285,151 @@ const TimelinePanel = () => {
 
 // Unified Time Block (Canva Style)
 const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, active, setActive }) => {
+    const isDragging = useRef(false);
+    const dragType = useRef(null); // 'start', 'end', 'body'
+    const startX = useRef(0);
+    const initialStart = useRef(0);
+    const initialEnd = useRef(0);
+
     const [tempStart, setTempStart] = useState(startTime);
     const [tempEnd, setTempEnd] = useState(endTime);
-    
-    // Sync external changes
-    useEffect(() => { setTempStart(startTime); }, [startTime]);
-    useEffect(() => { setTempEnd(endTime); }, [endTime]);
 
-    const renderThumbnail = () => {
-        if (layer.type === 'image' && layer.content) {
-            return (
-                <div className="absolute inset-y-0 left-0 right-0 flex overflow-hidden opacity-90 pointer-events-none rounded-md">
-                    {Array.from({ length: 40 }).map((_, i) => (
-                        <img key={i} src={layer.content} className="h-full object-cover shrink-0 w-auto" alt="" />
-                    ))}
-                </div>
-            );
-        } else if (layer.type === 'shape' && layer.content) {
-            return (
-                <div className="absolute inset-y-0 left-0 right-0 flex items-center gap-4 overflow-hidden opacity-80 pointer-events-none px-4 bg-white/20">
-                     {Array.from({ length: 20 }).map((_, i) => (
-                        <div key={i} className="w-6 h-6 shrink-0 text-white drop-shadow-sm" dangerouslySetInnerHTML={{ __html: layer.content }} />
-                    ))}
-                </div>
-            );
-        } else if (layer.type === 'text') {
-             return (
-                <div className="absolute inset-y-0 left-0 right-0 flex items-center overflow-hidden opacity-100 pointer-events-none px-2 whitespace-nowrap text-xs font-serif font-bold text-white/90 drop-shadow-md">
-                    {layer.content?.replace(/<[^>]*>?/gm, '')?.repeat(20)}
-                </div>
-            );
-        }
-        return null;
-    };
+    // Sync state if props change
+    useEffect(() => {
+        setTempStart(startTime);
+        setTempEnd(endTime);
+    }, [startTime, endTime]);
 
-    const handleDragStart = (e, dragType) => {
+    const handleMouseDown = (e, type) => {
         e.stopPropagation();
         setActive();
-        
-        const startX = e.clientX;
-        const initialStart = tempStart;
-        const initialEnd = tempEnd;
-        
-        const handleMouseMove = (moveEvent) => {
-            const dx = moveEvent.clientX - startX;
-            const dTime = dx / timeScale;
-            
-            if (dragType === 'move') {
-                const duration = initialEnd - initialStart;
-                let newStart = Math.max(0, initialStart + dTime);
-                let newEnd = newStart + duration;
-                
-                if (newEnd > MAX_TIME) {
-                    newEnd = MAX_TIME;
-                    newStart = newEnd - duration;
-                }
-                
-                setTempStart(newStart);
-                setTempEnd(newEnd);
-            } else if (dragType === 'resize-left') {
-                const newStart = Math.max(0, Math.min(initialStart + dTime, tempEnd - 0.2));
-                setTempStart(newStart);
-            } else if (dragType === 'resize-right') {
-                const newEnd = Math.min(MAX_TIME, Math.max(tempStart + 0.2, initialEnd + dTime));
-                setTempEnd(newEnd);
-            }
-        };
-        
-        const handleMouseUp = () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
-            
-            // Commit changes
-            setTempStart((currentStart) => {
-                setTempEnd((currentEnd) => {
-                    // Update Entry Delay
-                    let entryAnim = layer.animation?.entry || 'fade-up';
-                    let exitAnim = layer.animation?.exit;
-                    
-                    updateAnimation(layer.id, { 
-                        entry: entryAnim,
-                        config: { ...layer.animation?.config, delay: parseFloat(currentStart.toFixed(2)) } 
-                    });
+        isDragging.current = true;
+        dragType.current = type;
+        startX.current = e.clientX;
+        initialStart.current = tempStart;
+        initialEnd.current = tempEnd;
 
-                    // Update Exit Delay if end is not MAX_TIME
-                    if (currentEnd < MAX_TIME - 0.5) {
-                        updateAnimation(layer.id, {
-                            exit: exitAnim || 'fade-out',
-                            configExit: { ...layer.animation?.configExit, delay: parseFloat(currentEnd.toFixed(2)) }
-                        });
-                    } else if (!exitAnim) {
-                        // If it reaches the end, maybe remove exit animation to stay forever
-                        // Just keep it as is
-                    }
-
-                    return currentEnd;
-                });
-                return currentStart;
-            });
-        };
+        document.body.style.cursor = type === 'body' ? 'grabbing' : 'col-resize';
         
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseup', handleMouseUp);
     };
 
+    const handleMouseMove = (e) => {
+        if (!isDragging.current) return;
+        
+        const deltaX = e.clientX - startX.current;
+        const deltaTime = deltaX / timeScale;
+
+        if (dragType.current === 'start') {
+            const newStart = Math.max(0, Math.min(initialStart.current + deltaTime, tempEnd - 0.5));
+            setTempStart(newStart);
+        } else if (dragType.current === 'end') {
+            const newEnd = Math.max(tempStart + 0.5, Math.min(initialEnd.current + deltaTime, MAX_TIME));
+            setTempEnd(newEnd);
+        } else if (dragType.current === 'body') {
+            const duration = initialEnd.current - initialStart.current;
+            let newStart = initialStart.current + deltaTime;
+            let newEnd = initialEnd.current + deltaTime;
+
+            if (newStart < 0) {
+                newStart = 0;
+                newEnd = duration;
+            } else if (newEnd > MAX_TIME) {
+                newEnd = MAX_TIME;
+                newStart = MAX_TIME - duration;
+            }
+
+            setTempStart(newStart);
+            setTempEnd(newEnd);
+        }
+    };
+
+    const handleMouseUp = () => {
+        if (isDragging.current) {
+            isDragging.current = false;
+            document.body.style.cursor = 'default';
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+
+            // Apply changes to store
+            updateAnimation(layer.id, {
+                config: { delay: parseFloat(tempStart.toFixed(1)) },
+                configExit: { delay: parseFloat(tempEnd.toFixed(1)) }
+            });
+            
+            // Auto add exit animation if it didn't exist but we shortened the block
+            if (!layer.animation?.exit && tempEnd < MAX_TIME) {
+                updateAnimation(layer.id, {
+                    exit: 'fadeOut', // Default exit
+                    configExit: { delay: parseFloat(tempEnd.toFixed(1)), speed: 1 }
+                });
+            }
+        }
+    };
+
+    // Helper to extract a usable image url
+    const getThumbUrl = () => {
+        if (layer.type === 'image' && layer.content) return layer.content;
+        if (layer.content && layer.content.includes('<img')) {
+            const match = layer.content.match(/src="([^"]+)"/);
+            if (match) return match[1];
+        }
+        return null;
+    };
+    
+    const thumbUrl = getThumbUrl();
+    const displayName = layer.name || (layer.type === 'text' ? 'Teks' : (layer.type === 'image' ? 'Gambar' : 'Elemen'));
+
     return (
         <div 
-            className={`timeline-block absolute top-2 bottom-2 rounded-md border shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-visible bg-indigo-500 border-indigo-600 ${active ? 'ring-2 ring-indigo-400 ring-offset-1 z-20' : 'opacity-90 hover:opacity-100 z-10'}`}
+            className={`timeline-block absolute top-1 bottom-1 rounded-md shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-hidden ${active ? 'ring-2 ring-indigo-500 z-20 shadow-[0_0_15px_rgba(99,102,241,0.4)]' : 'hover:ring-1 hover:ring-indigo-400 z-10'}`}
             style={{ 
                 left: `${tempStart * timeScale}px`,
                 width: `${(tempEnd - tempStart) * timeScale}px`,
-                minWidth: '10px'
+                minWidth: '20px',
+                backgroundColor: '#374151', // gray-700
             }}
-            onMouseDown={(e) => handleDragStart(e, 'move')}
+            onMouseDown={(e) => handleMouseDown(e, 'body')}
         >
-            {renderThumbnail()}
-            <div className="px-2 flex-1 overflow-hidden whitespace-nowrap text-[10px] font-bold text-white tracking-wide z-10 relative">
-                {(tempEnd - tempStart).toFixed(1)}s
+            {/* Repeating Thumbnail Background */}
+            {thumbUrl && (
+                <div 
+                    className="absolute inset-0 pointer-events-none opacity-40 mix-blend-screen"
+                    style={{
+                        backgroundImage: `url('${thumbUrl}')`,
+                        backgroundSize: 'auto 100%',
+                        backgroundRepeat: 'repeat-x',
+                        backgroundPosition: 'left center'
+                    }}
+                ></div>
+            )}
+            
+            {!thumbUrl && (
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/60 to-purple-600/60 pointer-events-none"></div>
+            )}
+
+            {/* Entry Handle (Green) */}
+            <div 
+                className="absolute left-0 top-0 bottom-0 w-6 flex items-center justify-start group cursor-col-resize z-30 hover:bg-white/10"
+                onMouseDown={(e) => handleMouseDown(e, 'start')}
+            >
+                <div className="w-1.5 h-6 bg-green-400 rounded-r-md shadow-sm opacity-80 group-hover:opacity-100 group-hover:w-2 transition-all"></div>
             </div>
             
-            {/* Left Resizer Handle (Wider Hit Area) */}
-            <div 
-                className="absolute left-0 top-0 bottom-0 w-6 cursor-col-resize hover:bg-white/40 flex items-center justify-center rounded-l-md group z-30"
-                onMouseDown={(e) => handleDragStart(e, 'resize-left')}
-            >
-                <div className="w-1 h-4 bg-white/60 group-hover:bg-white rounded-full shadow-sm"></div>
+            {/* Name Label */}
+            <div className="absolute left-6 right-6 top-0 bottom-0 flex items-center px-2 pointer-events-none z-10 overflow-hidden">
+                <span className="text-[11px] font-bold text-white drop-shadow-md truncate bg-black/40 px-1.5 py-0.5 rounded backdrop-blur-sm shadow-sm border border-white/10">
+                    {displayName}
+                </span>
             </div>
 
-            {/* Right Resizer Handle (Wider Hit Area) */}
+            {/* Exit Handle (Red) */}
             <div 
-                className="absolute right-0 top-0 bottom-0 w-6 cursor-col-resize hover:bg-white/40 flex items-center justify-center rounded-r-md group z-30"
-                onMouseDown={(e) => handleDragStart(e, 'resize-right')}
+                className="absolute right-0 top-0 bottom-0 w-6 flex items-center justify-end group cursor-col-resize z-30 hover:bg-white/10"
+                onMouseDown={(e) => handleMouseDown(e, 'end')}
             >
-                <div className="w-1 h-4 bg-white/60 group-hover:bg-white rounded-full shadow-sm"></div>
+                <div className="w-1.5 h-6 bg-red-400 rounded-l-md shadow-sm opacity-80 group-hover:opacity-100 group-hover:w-2 transition-all"></div>
             </div>
         </div>
     );
