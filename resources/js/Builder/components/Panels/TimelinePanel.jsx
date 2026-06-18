@@ -56,8 +56,11 @@ const TimelinePanel = () => {
             setPanelHeight(Math.max(150, Math.min(newHeight, window.innerHeight * 0.8)));
         };
         const handleMouseUp = () => {
-            isResizing.current = false;
-            document.body.style.cursor = 'default';
+            if (isResizing.current) {
+                isResizing.current = false;
+                setIsDraggingResizer(false);
+                document.body.style.cursor = 'default';
+            }
         };
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseup', handleMouseUp);
@@ -135,7 +138,7 @@ const TimelinePanel = () => {
 
     return (
         <div 
-            className={`absolute bottom-[48px] left-0 right-0 transition-all duration-300 bg-white border-t border-gray-200 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-50 flex flex-col`}
+            className={`absolute bottom-[48px] left-0 right-0 ${!isDraggingResizer ? 'transition-all duration-300' : ''} bg-white border-t border-gray-200 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-50 flex flex-col`}
             style={{ 
                 height: isOpen ? `${panelHeight}px` : '40px',
                 transform: `translateY(0)`
@@ -148,6 +151,7 @@ const TimelinePanel = () => {
                     className="absolute top-0 left-0 right-0 h-2 -translate-y-1 cursor-row-resize z-50 hover:bg-indigo-500/20"
                     onMouseDown={() => {
                         isResizing.current = true;
+                        setIsDraggingResizer(true);
                         document.body.style.cursor = 'row-resize';
                     }}
                 ></div>
