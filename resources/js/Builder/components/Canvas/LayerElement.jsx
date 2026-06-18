@@ -255,28 +255,6 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
         loadFont('Caveat');
     }
 
-    // Structural Group (Wadah) - Invisible Wrapper Bypassing Rnd
-    if (layer.type === 'group') {
-        return (
-            <div 
-                ref={elementRef}
-                className="w-full h-full absolute pointer-events-none"
-                style={{
-                    left: 0, 
-                    top: 0,
-                    zIndex: layer.style?.zIndex || 1,
-                    opacity: layer.style?.opacity ?? 1,
-                }}
-            >
-                {layer.children?.map(child => (
-                    <div key={child.id} style={{ pointerEvents: 'auto' }}>
-                        <LayerElement layer={child} isChildOfGroup={true} sectionId={sectionId} />
-                    </div>
-                ))}
-            </div>
-        );
-    }
-
     const innerStructure = (
         <div ref={elementRef} className="w-full h-full relative" style={{ transform: `rotate(${layer.style?.rotation || 0}deg)`, opacity: layer.style?.opacity ?? 1 }}>
                 
@@ -588,8 +566,18 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 {layer.type === 'canvas_group' && (
                     <div className="w-full h-full relative pointer-events-none">
                         {layer.children?.map(child => (
-                            <div key={child.id} style={{ pointerEvents: 'auto' }}>
-                                <LayerElement layer={child} isChildOfGroup={true} sectionId={sectionId} />
+                            <div 
+                                key={child.id} 
+                                style={{ 
+                                    position: 'absolute', 
+                                    left: child.style?.x || 0, 
+                                    top: child.style?.y || 0, 
+                                    width: child.style?.width || 100, 
+                                    height: child.style?.height || 100,
+                                    zIndex: child.style?.zIndex || 1
+                                }}
+                            >
+                                <LayerElement layer={child} isChildOfGroup={true} />
                             </div>
                         ))}
                     </div>

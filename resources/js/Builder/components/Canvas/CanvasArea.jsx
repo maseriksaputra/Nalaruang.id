@@ -173,11 +173,11 @@ const CanvasArea = () => {
 
                         {section.layers?.map((layer) => (
                             <div key={layer.id} style={{ zIndex: layer.style?.zIndex || 1, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-                                {!layer.isHidden && (
-                                    <div style={{ pointerEvents: 'auto' }}>
-                                        <LayerElement layer={layer} sectionId={section.id} />
+                                {!layer.isHidden && layer.children?.map(child => (
+                                    <div key={child.id} style={{ pointerEvents: 'auto' }}>
+                                        <LayerElement layer={child} sectionId={section.id} />
                                     </div>
-                                )}
+                                ))}
                             </div>
                         ))}
 
