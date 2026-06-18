@@ -25869,14 +25869,14 @@ var TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, active
 				children: [(tempEnd - tempStart).toFixed(1), "s"]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "absolute left-0 top-0 bottom-0 w-3 cursor-col-resize hover:bg-white/40 flex items-center justify-center rounded-l-md group",
+				className: "absolute left-0 top-0 bottom-0 w-6 cursor-col-resize hover:bg-white/40 flex items-center justify-center rounded-l-md group z-30",
 				onMouseDown: (e) => handleDragStart(e, "resize-left"),
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-0.5 h-3 bg-white/50 group-hover:bg-white rounded-full" })
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-1 h-4 bg-white/60 group-hover:bg-white rounded-full shadow-sm" })
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "absolute right-0 top-0 bottom-0 w-3 cursor-col-resize hover:bg-white/40 flex items-center justify-center rounded-r-md group",
+				className: "absolute right-0 top-0 bottom-0 w-6 cursor-col-resize hover:bg-white/40 flex items-center justify-center rounded-r-md group z-30",
 				onMouseDown: (e) => handleDragStart(e, "resize-right"),
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-0.5 h-3 bg-white/50 group-hover:bg-white rounded-full" })
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-1 h-4 bg-white/60 group-hover:bg-white rounded-full shadow-sm" })
 			})
 		]
 	});
