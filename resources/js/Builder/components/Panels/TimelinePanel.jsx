@@ -102,13 +102,13 @@ const TimelinePanel = () => {
         
         // Immediate jump on click
         const initialScrollLeft = container.scrollLeft;
-        const initialX = e.clientX - rect.left + initialScrollLeft - 256; // 256 is left sidebar width
+        const initialX = e.clientX - rect.left + initialScrollLeft; 
         const initialTime = Math.max(0, Math.min(initialX / timeScale, MAX_TIME));
         setPlayheadPos(initialTime);
 
         const handleMouseMove = (moveEvent) => {
             const scrollLeft = container.scrollLeft;
-            const x = moveEvent.clientX - rect.left + scrollLeft - 256; // 256 is left sidebar width
+            const x = moveEvent.clientX - rect.left + scrollLeft; 
             const time = Math.max(0, Math.min(x / timeScale, MAX_TIME));
             setPlayheadPos(time);
         };
