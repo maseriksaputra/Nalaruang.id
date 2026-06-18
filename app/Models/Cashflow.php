@@ -3,9 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Cashflow extends Model
 {
+    use HasFactory;
+
+    protected static function booted()
+    {
+        static::saved(function ($cashflow) {
+            \Illuminate\Support\Facades\Cache::forget('last_bep_sync_time');
+        });
+        
+        static::deleted(function ($cashflow) {
+            \Illuminate\Support\Facades\Cache::forget('last_bep_sync_time');
+        });
+    }
+
     protected $fillable = [
         'service_id',
         'type',
@@ -14,6 +28,7 @@ class Cashflow extends Model
         'reference_type',
         'reference_id',
         'transaction_date',
+        'category',
     ];
 
     protected $casts = [

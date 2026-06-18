@@ -11,7 +11,8 @@ cards.forEach((c, i) => {
     let delay = (i+1) * 100;
     
     let dotColor = `var(--color-${c.color}-300)`;
-    if(c.color === 'brand') dotColor = '#F63EA1'; // Logo gradient end color
+    if(c.color === 'brand') dotColor = '#F63EA1';
+    if(c.color === 'pink') dotColor = '#f9a8d4'; // Logo gradient end color
     if(c.color === 'blue') dotColor = '#93c5fd';
     if(c.color === 'purple') dotColor = '#d8b4fe';
     if(c.color === 'emerald') dotColor = '#6ee7b7';

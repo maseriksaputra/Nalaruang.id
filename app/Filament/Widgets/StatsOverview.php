@@ -5,17 +5,39 @@ namespace App\Filament\Widgets;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
+use Carbon\Carbon;
+
 class StatsOverview extends BaseWidget
 {
+    use \Filament\Widgets\Concerns\InteractsWithPageFilters;
+    use \App\Filament\Traits\AppliesDashboardFilters;
+
     protected static ?int $sort = 1;
     protected static bool $isLazy = true;
 
     protected function getStats(): array
     {
-        $income = \App\Models\Cashflow::where('type', 'income')->sum('amount');
-        $expense = \App\Models\Cashflow::where('type', 'expense')->sum('amount');
-        $net = $income - $expense;
-        $orderCount = \App\Models\Cashflow::where('reference_type', 'App\Models\Order')->count();
+        $query = \App\Models\Cashflow::query();
+        $query = $this->applyFiltersToQuery($query);
+
+        $income = (clone $query)->where('type', 'income')->sum('amount');
+        $expense = (clone $query)->where('type', 'expense')->sum('amount');
+        $kasLaci = $income + $expense; // Seluruh kas masuk & keluar
+        
+        // Laba Bersih Murni (Tanpa campur tangan uang BEP / Suntikan Dana)
+        $realIncome = (clone $query)->where('type', 'income')
+            ->where(function($q) { $q->where('category', '!=', 'Tabungan BEP')->orWhereNull('category'); })
+            ->sum('amount');
+        $realExpense = (clone $query)->where('type', 'expense')
+            ->where(function($q) { $q->where('category', '!=', 'Tabungan BEP')->orWhereNull('category'); })
+            ->sum('amount');
+        $labaBersih = $realIncome + $realExpense;
+
+        $autoCollected = abs((clone $query)->where('reference_type', 'AUTO_BEP')->sum('amount'));
+        $manualCollected = abs((clone $query)->where('category', 'Tabungan BEP')->where('type', 'expense')->where('reference_type', '!=', 'AUTO_BEP')->sum('amount'));
+        $totalBep = $autoCollected + $manualCollected;
+        
+        $totalAset = $kasLaci + $totalBep;
 
         $formatValue = function ($amount) {
             $val = 'Rp ' . number_format($amount, 0, ',', '.');
@@ -30,21 +52,27 @@ class StatsOverview extends BaseWidget
                 ->url(\App\Filament\Resources\CashflowResource::getUrl('index'))
                 ->extraAttributes(['style' => 'background-color: rgba(16, 185, 129, 0.05);']),
             Stat::make('Total Pengeluaran', $formatValue($expense))
-                ->description('Seluruh kas keluar')
+                ->description('Termasuk tabungan BEP')
                 ->descriptionIcon('heroicon-m-arrow-trending-down')
                 ->color('danger')
                 ->url(\App\Filament\Resources\CashflowResource::getUrl('index'))
                 ->extraAttributes(['style' => 'background-color: rgba(239, 68, 68, 0.05);']),
-            Stat::make('Laba Bersih', $formatValue($net))
-                ->description('Pendapatan - Pengeluaran')
-                ->color($net >= 0 ? 'success' : 'danger')
-                ->url(\App\Filament\Resources\CashflowResource::getUrl('index'))
-                ->extraAttributes(['style' => $net >= 0 ? 'background-color: rgba(16, 185, 129, 0.05);' : 'background-color: rgba(239, 68, 68, 0.05);']),
-            Stat::make('Total Penjualan', new \Illuminate\Support\HtmlString('<span class="text-2xl xl:text-3xl tracking-tighter whitespace-nowrap">' . $orderCount . ' Pesanan</span>'))
-                ->description('Berdasarkan pesanan tercatat')
+            Stat::make('Laba Bersih Murni', $formatValue($labaBersih))
+                ->description('Dari operasional (tanpa hitung BEP)')
+                ->color($labaBersih >= 0 ? 'success' : 'danger')
+                ->extraAttributes(['style' => $labaBersih >= 0 ? 'background-color: rgba(16, 185, 129, 0.05);' : 'background-color: rgba(239, 68, 68, 0.05);']),
+            Stat::make('Sisa Kas (Di Laci)', $formatValue($kasLaci))
+                ->description('Uang operasional yang siap dipakai')
+                ->color($kasLaci >= 0 ? 'warning' : 'danger')
+                ->extraAttributes(['style' => 'background-color: rgba(245, 158, 11, 0.05);']),
+            Stat::make('Tabungan BEP', $formatValue($totalBep))
+                ->description('Tersimpan di kotak BEP')
+                ->color('success')
+                ->extraAttributes(['style' => 'background-color: rgba(16, 185, 129, 0.05);']),
+            Stat::make('Total Aset Keseluruhan', $formatValue($totalAset))
+                ->description('Laci Kasir + Tabungan BEP')
                 ->color('primary')
-                ->url(\App\Filament\Resources\OrderResource::getUrl('index'))
-                ->extraAttributes(['style' => 'background-color: rgba(99, 102, 241, 0.05);']),
+                ->extraAttributes(['style' => 'background-color: rgba(59, 130, 246, 0.05);']),
         ];
     }
 }

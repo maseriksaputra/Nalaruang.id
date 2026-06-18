@@ -33,6 +33,7 @@ class CashflowResource extends Resource
                         'ATK' => 'ATK',
                         'Printing' => 'Printing',
                         'Digital' => 'Digital',
+                        'Tabungan BEP' => 'Tabungan BEP',
                     ])
                     ->required()
                     ->label('Kategori'),
@@ -92,6 +93,7 @@ class CashflowResource extends Resource
                         'ATK' => 'info',
                         'Printing' => 'success',
                         'Digital' => 'primary',
+                        'Tabungan BEP' => 'indigo',
                         default => 'gray',
                     }),
                     
@@ -203,6 +205,7 @@ class CashflowResource extends Resource
                         'ATK' => 'ATK',
                         'Printing' => 'Printing',
                         'Digital' => 'Digital',
+                        'Tabungan BEP' => 'Tabungan BEP',
                     ])
                     ->label('Kategori Usaha'),
             ])

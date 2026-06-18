@@ -9,36 +9,30 @@ use Illuminate\Support\Facades\DB;
 
 class VisitorTrendChart extends ChartWidget
 {
+    use \Filament\Widgets\Concerns\InteractsWithPageFilters;
+    use \App\Filament\Traits\AppliesDashboardFilters;
+
     protected static bool $isLazy = true;
 
-    protected static ?string $heading = 'Statistik Kunjungan Server (30 Hari Terakhir)';
+    protected static ?string $heading = 'Statistik Kunjungan Server';
     protected static ?int $sort = 8;
     protected int | string | array $columnSpan = 1;
     protected static ?string $maxHeight = '275px';
 
     protected function getData(): array
     {
-        $startDate = Carbon::now()->subDays(29)->startOfDay();
-        $endDate = Carbon::now()->endOfDay();
-
-        $visits = InvitationVisitor::select(
+        $query = InvitationVisitor::select(
                 DB::raw('DATE(created_at) as date'),
                 DB::raw('count(*) as aggregate')
             )
-            ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('date')
-            ->orderBy('date')
-            ->get()
-            ->keyBy('date');
+            ->orderBy('date');
 
-        $labels = [];
-        $data = [];
+        $query = $this->applyFiltersToQuery($query, 'created_at');
+        $visits = $query->get();
 
-        for ($i = 29; $i >= 0; $i--) {
-            $date = Carbon::now()->subDays($i)->format('Y-m-d');
-            $labels[] = Carbon::parse($date)->format('d M');
-            $data[] = $visits->has($date) ? $visits[$date]->aggregate : 0;
-        }
+        $labels = $visits->pluck('date')->map(fn($d) => Carbon::parse($d)->format('d M'))->toArray();
+        $data = $visits->pluck('aggregate')->toArray();
 
         return [
             'datasets' => [

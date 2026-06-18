@@ -9,6 +9,9 @@ use Carbon\Carbon;
 
 class CashflowChart extends ChartWidget
 {
+    use \Filament\Widgets\Concerns\InteractsWithPageFilters;
+    use \App\Filament\Traits\AppliesDashboardFilters;
+
     protected static bool $isLazy = true;
 
     protected static ?string $heading = 'Arus Kas (Uang Masuk vs Uang Keluar)';
@@ -18,29 +21,27 @@ class CashflowChart extends ChartWidget
 
     protected function getData(): array
     {
-        $startDate = Carbon::now()->subDays(30);
-
-        $incomeData = Cashflow::select(
+        $qIncome = Cashflow::select(
             DB::raw('DATE(transaction_date) as date'),
             DB::raw('SUM(amount) as total')
         )
         ->where('type', 'income')
-        ->where('transaction_date', '>=', $startDate)
         ->groupBy('date')
-        ->orderBy('date')
-        ->get()
-        ->keyBy('date');
+        ->orderBy('date');
 
-        $expenseData = Cashflow::select(
+        $qExpense = Cashflow::select(
             DB::raw('DATE(transaction_date) as date'),
             DB::raw('SUM(amount) as total')
         )
         ->where('type', 'expense')
-        ->where('transaction_date', '>=', $startDate)
         ->groupBy('date')
-        ->orderBy('date')
-        ->get()
-        ->keyBy('date');
+        ->orderBy('date');
+
+        $qIncome = $this->applyFiltersToQuery($qIncome);
+        $qExpense = $this->applyFiltersToQuery($qExpense);
+
+        $incomeData = $qIncome->get()->keyBy('date');
+        $expenseData = $qExpense->get()->keyBy('date');
 
         // We need a unified array of dates
         $dates = $incomeData->keys()->merge($expenseData->keys())->unique()->sort()->values();

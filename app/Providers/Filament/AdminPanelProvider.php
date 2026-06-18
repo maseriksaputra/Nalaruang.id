@@ -69,7 +69,7 @@ class AdminPanelProvider extends PanelProvider
                     ->openUrlInNewTab()
             ])
             ->pages([
-                Pages\Dashboard::class,
+                \App\Filament\Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([

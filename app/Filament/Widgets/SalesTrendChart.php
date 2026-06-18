@@ -9,6 +9,9 @@ use Carbon\Carbon;
 
 class SalesTrendChart extends ChartWidget
 {
+    use \Filament\Widgets\Concerns\InteractsWithPageFilters;
+    use \App\Filament\Traits\AppliesDashboardFilters;
+
     protected static bool $isLazy = true;
 
     protected static ?string $heading = 'Tren Penjualan (Pesanan Masuk)';
@@ -18,15 +21,16 @@ class SalesTrendChart extends ChartWidget
 
     protected function getData(): array
     {
-        $data = Cashflow::select(
+        $query = Cashflow::select(
             DB::raw('DATE(transaction_date) as date'),
             DB::raw('COUNT(*) as count')
         )
         ->where('reference_type', 'App\Models\Order')
-        ->where('transaction_date', '>=', Carbon::now()->subDays(30))
         ->groupBy('date')
-        ->orderBy('date')
-        ->get();
+        ->orderBy('date');
+
+        $query = $this->applyFiltersToQuery($query);
+        $data = $query->get();
 
         return [
             'datasets' => [
