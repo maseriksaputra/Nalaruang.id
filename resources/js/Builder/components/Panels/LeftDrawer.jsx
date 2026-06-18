@@ -245,6 +245,7 @@ const LeftDrawer = () => {
 
     const [globalElements, setGlobalElements] = useState([]);
     const [isLoadingElements, setIsLoadingElements] = useState(false);
+    const [activeFolder, setActiveFolder] = useState(null);
     const [isUploadingAudio, setIsUploadingAudio] = useState(false);
     const [clientAudioAssets, setClientAudioAssets] = useState([]);
     const [isLoadingClientAudio, setIsLoadingClientAudio] = useState(false);
