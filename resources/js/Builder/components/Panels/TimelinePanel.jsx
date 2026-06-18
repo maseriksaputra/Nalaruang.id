@@ -32,11 +32,10 @@ const TimelinePanel = () => {
     const renderableLayers = useMemo(() => {
         let list = [];
         layers.forEach(layer => {
-            if (layer.type === 'group' && layer.children) {
-                // Flatten structural group children
-                layer.children.forEach(child => list.push(child));
-            } else {
+            if (layer.type === 'group') {
                 list.push(layer);
+            } else {
+                list.push({ id: `mock_track_${layer.id}`, name: 'Track', type: 'group', children: [layer], style: layer.style });
             }
         });
         // Sort by zIndex descending so higher elements are visually at the top tracks
@@ -269,24 +268,34 @@ const TimelinePanel = () => {
                             </div>
 
                             {/* Tracks */}
-                            <div className="flex flex-col py-2 relative z-10 px-4">
-                                {renderableLayers.map(layer => {
-                                    const startTime = layer.animation?.config?.delay || 0;
-                                    const hasExit = !!layer.animation?.exit;
-                                    // Default duration is 5s unless specified
-                                    const endTime = hasExit ? (layer.animation?.configExit?.delay || (startTime + 5)) : (startTime + 5);
-
+                            <div className="flex flex-col py-2 relative z-10 px-4 min-w-max">
+                                {renderableLayers.map((track, trackIndex) => {
                                     return (
-                                        <div key={layer.id} className="h-12 border-b border-gray-200 flex items-center relative w-full mb-1 hover:bg-gray-100/50">
-                                            <TimeBlock 
-                                                layer={layer}
-                                                startTime={startTime}
-                                                endTime={endTime}
-                                                timeScale={timeScale}
-                                                updateAnimation={updateLayerAnimation}
-                                                active={activeLayerIds.includes(layer.id)}
-                                                setActive={() => setActiveLayer(layer.id)}
-                                            />
+                                        <div key={track.id} className="h-12 border-b border-gray-200 flex items-center relative w-full mb-1 hover:bg-gray-100/50">
+                                            {/* Track Label */}
+                                            <div className="absolute left-0 top-0 bottom-0 w-24 bg-white/50 border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] backdrop-blur-sm pointer-events-none">
+                                                <span className="text-[10px] font-bold text-gray-500 truncate">{track.name || `Track ${trackIndex + 1}`}</span>
+                                            </div>
+
+                                            {/* Elements in this track */}
+                                            {track.children && track.children.map(layer => {
+                                                const startTime = layer.animation?.config?.delay || 0;
+                                                const hasExit = !!layer.animation?.exit;
+                                                const endTime = hasExit ? (layer.animation?.configExit?.delay || (startTime + 5)) : (startTime + 5);
+
+                                                return (
+                                                    <TimeBlock 
+                                                        key={layer.id}
+                                                        layer={layer}
+                                                        startTime={startTime}
+                                                        endTime={endTime}
+                                                        timeScale={timeScale}
+                                                        updateAnimation={updateLayerAnimation}
+                                                        active={activeLayerIds.includes(layer.id)}
+                                                        setActive={() => setActiveLayer(layer.id)}
+                                                    />
+                                                );
+                                            })}
                                         </div>
                                     );
                                 })}

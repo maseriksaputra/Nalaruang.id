@@ -363,8 +363,7 @@ const BuilderApp = () => {
                         </main>
 
                         <div 
-                            className={isPreviewMobile ? 'hidden' : 'absolute top-0 right-0 z-[60] flex pointer-events-none transition-all duration-300'}
-                            style={{ bottom: isTimelineOpen ? `${timelineHeight + 48}px` : '48px' }}
+                            className={isPreviewMobile ? 'hidden' : 'absolute top-0 right-0 bottom-0 z-[60] flex pointer-events-none transition-all duration-300'}
                         >
                             <RightInspector />
                         </div>

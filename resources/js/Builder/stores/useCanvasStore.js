@@ -55,8 +55,14 @@ const useCanvasStore = create(temporal((set, get) => ({
         }));
     },
 
+    lastPasteTime: 0,
+
     pasteElements: () => {
         set(produce((state) => {
+            const now = Date.now();
+            if (now - state.lastPasteTime < 300) return;
+            state.lastPasteTime = now;
+
             if (!state.clipboard || state.clipboard.length === 0) return;
             const section = state.sections.find(s => s.id === state.activeSectionId) || state.sections[0];
             if (!section) return;
@@ -708,7 +714,14 @@ const useCanvasStore = create(temporal((set, get) => ({
     updateLayerAnimation: (layerId, animationData) => {
         set(produce((state) => {
             const layer = findElement(state.sections, layerId);
-            if (layer) { layer.animation = { ...layer.animation, ...animationData }; }
+            if (layer) { 
+                layer.animation = { 
+                    ...layer.animation, 
+                    ...animationData,
+                    config: { ...(layer.animation?.config || {}), ...(animationData.config || {}) },
+                    configExit: { ...(layer.animation?.configExit || {}), ...(animationData.configExit || {}) }
+                }; 
+            }
         }));
         get().triggerAutoSave();
     },
