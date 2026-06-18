@@ -48,13 +48,13 @@ class AdminPanelProvider extends PanelProvider
                      ->label('Transaksi & Keuangan')
                      ->collapsible(false),
                 NavigationGroup::make()
+                     ->label('Manajemen Toko')
+                     ->collapsible(false),
+                NavigationGroup::make()
                      ->label('Lalu Lintas & Tamu')
                      ->collapsible(false),
                 NavigationGroup::make()
                      ->label('Manajemen Pelanggan')
-                     ->collapsible(false),
-                NavigationGroup::make()
-                     ->label('Manajemen Toko')
                      ->collapsible(false),
                 NavigationGroup::make()
                      ->label('Konten Website')
