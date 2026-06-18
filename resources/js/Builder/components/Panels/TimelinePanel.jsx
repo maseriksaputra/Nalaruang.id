@@ -122,7 +122,7 @@ const TimelinePanel = () => {
 
     return (
         <div 
-            className={`absolute bottom-[48px] left-0 transition-all duration-300 bg-white border-t border-gray-200 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-50 flex flex-col ${isRightSidebarOpen ? 'right-[320px]' : 'right-0'}`}
+            className={`absolute bottom-[48px] left-0 right-0 transition-all duration-300 bg-white border-t border-gray-200 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] z-50 flex flex-col`}
             style={{ 
                 height: isOpen ? `${panelHeight}px` : '40px',
                 transform: `translateY(0)`
@@ -422,7 +422,7 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             >
                 <div className="w-1.5 h-6 bg-green-400 rounded-r-md shadow-sm opacity-80 group-hover:opacity-100 group-hover:w-2 transition-all"></div>
                 {hasEntry && (
-                    <div className="absolute left-2 text-[8px] font-bold text-green-200 bg-green-900/60 px-1 py-0.5 rounded pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    <div className="absolute left-2 text-[8px] font-bold text-white bg-green-500 px-1 py-0.5 rounded shadow-sm pointer-events-none whitespace-nowrap z-40">
                         {entryAnimName}
                     </div>
                 )}
@@ -442,7 +442,7 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
             >
                 <div className="w-1.5 h-6 bg-red-400 rounded-l-md shadow-sm opacity-80 group-hover:opacity-100 group-hover:w-2 transition-all"></div>
                 {hasExit && (
-                    <div className="absolute right-2 text-[8px] font-bold text-red-200 bg-red-900/60 px-1 py-0.5 rounded pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    <div className="absolute right-2 text-[8px] font-bold text-white bg-red-500 px-1 py-0.5 rounded shadow-sm pointer-events-none whitespace-nowrap z-40">
                         {exitAnimName}
                     </div>
                 )}
