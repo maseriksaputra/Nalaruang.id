@@ -511,18 +511,21 @@ const TimeBlock = ({ layer, startTime, endTime, timeScale, updateAnimation, acti
                     }
                 }
             } else {
-                updateAnimation(layer.id, {
-                    config: { delay: parseFloat(currentStartRef.current.toFixed(1)) },
-                    configExit: { delay: parseFloat(currentEndRef.current.toFixed(1)) }
-                });
+                const currentConfig = layer.animation?.config || {};
+                const currentConfigExit = layer.animation?.configExit || {};
                 
-                // Auto add exit animation if it didn't exist but we shortened the block
-                if (!layer.animation?.exit && currentEndRef.current < MAX_TIME) {
-                    updateAnimation(layer.id, {
-                        exit: 'fadeOut', // Default exit
-                        configExit: { delay: parseFloat(currentEndRef.current.toFixed(1)), speed: 1 }
-                    });
+                const newAnimationData = {
+                    config: { ...currentConfig, delay: parseFloat(currentStartRef.current.toFixed(1)) },
+                    configExit: { ...currentConfigExit, delay: parseFloat(currentEndRef.current.toFixed(1)) }
+                };
+                
+                // Auto add exit animation if it didn't exist but we dragged the end handle backwards from MAX_TIME
+                if (!layer.animation?.exit && currentEndRef.current < 60) {
+                    newAnimationData.exit = 'fadeOut'; // Default exit
+                    if (!newAnimationData.configExit.speed) newAnimationData.configExit.speed = 1;
                 }
+                
+                updateAnimation(layer.id, newAnimationData);
             }
         }
     };
