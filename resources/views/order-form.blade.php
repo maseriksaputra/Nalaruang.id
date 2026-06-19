@@ -301,7 +301,7 @@
                     <div class="mt-8 pt-6 border-t border-gray-200">
                         <div class="flex justify-between items-center">
                             <span class="text-gray-600">Estimasi Total Harga:</span>
-                            <span class="text-3xl font-bold text-brand-800">
+                            <span class="text-3xl font-bold text-brand-600">
                                 Rp <span x-text="totalPrice.toLocaleString('id-ID')"></span>
                             </span>
                             <input type="hidden" name="calculated_total" x-bind:value="totalPrice">
@@ -312,14 +312,14 @@
 
                 <div class="bg-brand-50 rounded-xl p-6 mb-8 flex items-start gap-4">
                     <svg class="w-6 h-6 text-brand-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <p class="text-sm text-brand-800">
+                    <p class="text-sm text-brand-700">
                         Setelah menekan tombol di bawah, pesanan Anda akan tersimpan di sistem kami dan Anda akan langsung diarahkan ke WhatsApp Admin untuk mengirimkan foto-foto (prewedding/mempelai) serta melakukan konfirmasi.
                     </p>
                 </div>
 
                 <div class="flex justify-end gap-4">
                     <a href="{{ url()->previous() }}" class="px-8 py-3.5 border border-gray-300 text-gray-600 rounded-full text-sm font-semibold hover:bg-gray-50 transition">Kembali</a>
-                    <button type="submit" class="px-8 py-3.5 bg-brand-800 text-white rounded-full text-sm font-bold shadow-lg hover:bg-brand-900 transition transform hover:-translate-y-1">
+                    <button type="submit" class="px-8 py-3.5 bg-brand-600 text-white rounded-full text-sm font-bold shadow-lg hover:bg-brand-700 transition transform hover:-translate-y-1">
                         Simpan & Hubungi Admin (WA)
                     </button>
                 </div>

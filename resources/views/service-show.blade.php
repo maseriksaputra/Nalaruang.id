@@ -65,8 +65,8 @@
             <div class="flex flex-wrap gap-2 mb-10 border-b border-gray-200 pb-4" data-aos="fade-up">
                 @foreach($service->categories as $category)
                 <button @click="activeCategory = '{{ $category->id }}'" 
-                        :class="{'bg-brand-800 text-white shadow-md': activeCategory == '{{ $category->id }}', 'bg-white text-gray-600 hover:bg-gray-50': activeCategory != '{{ $category->id }}'}"
-                        class="px-6 py-2.5 rounded-full text-sm font-medium transition-colors duration-300 border border-gray-200">
+                        :class="{'bg-brand-600 text-white shadow-md': activeCategory == '{{ $category->id }}', 'bg-white text-gray-600 hover:bg-gray-50': activeCategory != '{{ $category->id }}'}"
+                        class="whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border border-gray-200">
                     {{ $category->name }}
                 </button>
                 @endforeach
@@ -130,7 +130,7 @@
                                         Rp <span x-text="parseFloat(template.price || 0).toLocaleString('id-ID')"></span>
                                     </div>
                                 </template>
-                                <div class="text-brand-800 font-bold" :class="template.discount_price ? 'text-base md:text-lg' : 'text-base md:text-lg'">
+                                <div class="text-brand-600 font-bold" :class="template.discount_price ? 'text-base md:text-lg' : 'text-base md:text-lg'">
                                     Rp <span x-text="parseFloat(template.discount_price || template.price || 0).toLocaleString('id-ID')"></span>
                                 </div>
                             </div>
@@ -151,7 +151,7 @@
             <div class="text-center mb-16" data-aos="fade-up">
                 <p class="text-brand-600 text-sm font-semibold tracking-widest mb-3 uppercase">Pilihan Harga</p>
                 <h2 class="text-3xl md:text-5xl font-serif text-brand-900 mb-6">Paket Spesial Kami</h2>
-                <div class="w-20 h-[1px] bg-brand-800 mx-auto"></div>
+                <div class="w-20 h-[1px] bg-brand-600 mx-auto"></div>
             </div>
 
             @if($service->packages->count() > 0)
@@ -168,7 +168,7 @@
                             <h3 class="text-2xl font-serif text-brand-900 mb-4">{{ $package->name }}</h3>
                             <div class="flex items-baseline justify-center gap-1 mb-2">
                                 <span class="text-sm text-gray-500 font-medium">Rp</span>
-                                <span class="text-4xl font-bold text-brand-800">{{ $package->price }}</span>
+                                <span class="text-4xl font-bold text-brand-600">{{ $package->price }}</span>
                             </div>
                             @if($package->description)
                             <p class="text-sm text-gray-500 mt-4">{{ $package->description }}</p>
@@ -187,7 +187,7 @@
                                 @endif
                             </ul>
 
-                            <button onclick="document.getElementById('packageFilter').value = '{{ $package->id }}'; document.getElementById('packageFilter').dispatchEvent(new Event('change')); document.getElementById('etalase').scrollIntoView({behavior: 'smooth'})" class="block w-full py-3.5 px-4 text-center rounded-xl text-sm font-semibold transition-colors duration-300 {{ $package->is_popular ? 'bg-brand-800 text-white hover:bg-brand-900 shadow-md' : 'bg-brand-50 text-brand-800 hover:bg-brand-100' }}">
+                            <button onclick="document.getElementById('packageFilter').value = '{{ $package->id }}'; document.getElementById('packageFilter').dispatchEvent(new Event('change')); document.getElementById('etalase').scrollIntoView({behavior: 'smooth'})" class="block w-full py-3.5 px-4 text-center rounded-xl text-sm font-semibold transition-colors duration-300 {{ $package->is_popular ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-md' : 'bg-brand-50 text-brand-600 hover:bg-brand-100' }}">
                                 Pilih Paket Ini
                             </button>
                         </div>
@@ -199,7 +199,11 @@
                     <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                     <h3 class="text-xl font-serif text-brand-900 mb-2">Paket Belum Tersedia</h3>
                     <p class="text-gray-500 max-w-md mx-auto">Kami sedang menyiapkan paket terbaik untuk layanan ini. Silakan hubungi kami untuk informasi lebih lanjut atau kustomisasi.</p>
-                    <a href="https://wa.me/6285196811112" target="_blank" class="inline-block mt-6 px-6 py-2.5 bg-brand-800 text-white rounded-full text-sm font-medium hover:bg-brand-900 transition-colors">Hubungi Kami</a>
+                    <a href="https://wa.me/6285196811112" target="_blank" class="inline-block mt-6 px-6 py-2.5 bg-brand-600 text-white rounded-full text-sm font-medium hover:bg-brand-700 transition-colors">Hubungi Kami</a>
+                </div>
+                <div class="text-center mt-12" data-aos="fade-up">
+                    <p class="text-gray-500 mb-4">Butuh kustomisasi khusus atau paket yang berbeda?</p>
+                    <a href="https://wa.me/6285196811112" target="_blank" class="inline-block mt-6 px-6 py-2.5 bg-brand-600 text-white rounded-full text-sm font-medium hover:bg-brand-700 transition-colors">Hubungi Kami</a>
                 </div>
             @endif
         </div>
