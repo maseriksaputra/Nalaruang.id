@@ -95,7 +95,7 @@ const RightInspector = () => {
             const config = {
                 debug: true,
                 device: 'cpu', // Fallback to cpu to avoid WebGPU silent fails
-                model: 'isnet_quantized', // More robust model
+                model: 'isnet_quint8', // More robust model
                 publicPath: 'https://static.imgly.com/@imgly/background-removal-data/1.7.0/dist/'
             };
             const blob = await removeBackground(originalUrl, config);

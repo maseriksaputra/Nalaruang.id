@@ -167,8 +167,7 @@ const ContextualToolbar = () => {
                     
                     <button 
                         onClick={() => {
-                            updateLayerStyle(activeLayer.id, { removeBg: !activeLayer.style?.removeBg });
-                            setInspectorTab('effects'); // Buka tab efek agar bisa atur toleransi
+                            setInspectorTab('effects');
                         }} 
                         className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors border ${activeLayer.style?.removeBg ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'text-gray-700 hover:bg-gray-100 border-transparent hover:border-gray-200'}`}
                     >
