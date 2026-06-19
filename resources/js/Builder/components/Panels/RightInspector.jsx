@@ -28,6 +28,8 @@ const AnimatedIcon = ({ anim, isText = false, isActive = false }) => {
     );
 };
 
+import { removeBackground } from '@imgly/background-removal';
+
 const RightInspector = () => {
     const activeLayerId = useCanvasStore(state => state.activeLayerId);
     const sections = useCanvasStore(state => state.sections);
@@ -90,12 +92,11 @@ const RightInspector = () => {
             // Save original URL before processing
             const originalUrl = layer.style?.url || layer.url;
             
-            // Dynamically import to avoid blocking main bundle
-            const { default: removeBackground } = await import('@imgly/background-removal');
-            
             const config = {
                 debug: true,
                 device: 'cpu', // Fallback to cpu to avoid WebGPU silent fails
+                model: 'isnet_quantized', // More robust model
+                publicPath: 'https://static.imgly.com/@imgly/background-removal-data/1.7.0/dist/'
             };
             const blob = await removeBackground(originalUrl, config);
             const file = new File([blob], `transparent_${Date.now()}.png`, { type: 'image/png' });
@@ -114,12 +115,14 @@ const RightInspector = () => {
                 updateLayerStyle(layer.id, { 
                     removeBg: true,
                     originalUrl: originalUrl,
-                    bgRemovedUrl: response.data.url
+                    bgRemovedUrl: response.data.url,
+                    backgroundColor: 'transparent',
+                    url: null
                 });
             }
         } catch (error) {
             console.error('Failed to remove background:', error);
-            alert('Gagal menghapus latar belakang. Silakan coba lagi nanti.');
+            alert('Gagal menghapus latar belakang: ' + (error.message || 'Silakan coba lagi nanti.'));
             updateLayerStyle(layer.id, { removeBg: false });
         } finally {
             setIsRemovingBg(false);
