@@ -208,7 +208,7 @@ class TemplateResource extends Resource
                                         Forms\Components\Select::make('portal_invitation_id')
                                             ->label('Pilih Desain')
                                             ->options(function () {
-                                                return \App\Models\Invitation::where('is_template', true)->orderBy('created_at', 'desc')->get()->mapWithKeys(function ($inv) {
+                                                return \App\Models\Invitation::where('is_template', true)->orderBy('created_at', 'desc')->get(['id', 'title'])->mapWithKeys(function ($inv) {
                                                     return [$inv->id => '#' . $inv->id . ' - ' . ($inv->title ?: 'Desain Tanpa Judul')];
                                                 });
                                             })
