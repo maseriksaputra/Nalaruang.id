@@ -19,6 +19,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
     <!-- Custom Tailwind Configuration -->
     <script>
         window.ASSET_URL = '{{ str_replace('test.txt', '', Storage::url('test.txt')) }}';
@@ -49,8 +52,7 @@
         }
     </script>
 
-    <!-- Tailwind CSS CDN (Moved here to ensure it loads AFTER the config) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+
 
     <style>
         body { background-color: #fdfbf7; }
