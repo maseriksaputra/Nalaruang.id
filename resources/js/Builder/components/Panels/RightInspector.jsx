@@ -93,21 +93,8 @@ const RightInspector = () => {
             // Save original URL before processing
             const originalUrl = layer.style?.url || layer.url;
 
-            // 1. Ambil gambar sebagai blob terlebih dahulu untuk mencegah error CORS di dalam imgly
-            let imageBlob;
-            try {
-                let fetchUrl = originalUrl;
-                // Hanya perbaiki Mixed Content jika URL berupa http:// dan browser menggunakan https://
-                if (typeof fetchUrl === 'string' && fetchUrl.startsWith('http://') && window.location.protocol === 'https:') {
-                    fetchUrl = fetchUrl.replace('http://', 'https://');
-                }
-                
-                const res = await fetch(fetchUrl);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                imageBlob = await res.blob();
-            } catch (e) {
-                throw new Error("Gagal mengunduh gambar sumber. " + e.message);
-            }
+            const imgEl = document.getElementById(`layer-img-${layer.id}`);
+            if (!imgEl) throw new Error("Gambar asli tidak ditemukan di layar.");
             
             const config = {
                 debug: true,
@@ -115,7 +102,7 @@ const RightInspector = () => {
                 model: 'isnet_quint8', // More robust model
                 publicPath: 'https://cdn.jsdelivr.net/npm/@imgly/background-removal-data@1.7.0/dist/'
             };
-            const blob = await removeBackground(imageBlob, config);
+            const blob = await removeBackground(imgEl, config);
             const file = new File([blob], `transparent_${Date.now()}.png`, { type: 'image/png' });
 
             const formData = new FormData();
