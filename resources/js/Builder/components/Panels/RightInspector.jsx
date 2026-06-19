@@ -99,8 +99,7 @@ const RightInspector = () => {
             const config = {
                 debug: true,
                 device: 'cpu', // Fallback to cpu to avoid WebGPU silent fails
-                model: 'isnet_quint8', // More robust model
-                publicPath: 'https://static.imgly.com/@imgly/background-removal-data/1.4.5/dist/'
+                model: 'isnet_quint8' // More robust model
             };
             const blob = await removeBackground(imgEl, config);
             const file = new File([blob], `transparent_${Date.now()}.png`, { type: 'image/png' });
