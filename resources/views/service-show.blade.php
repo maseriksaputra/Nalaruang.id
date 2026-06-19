@@ -74,9 +74,9 @@
             @endif
 
             <!-- Grid AlpineJS -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-6">
                 <template x-for="template in templates" :key="template.id">
-                    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div @click="window.location.href = '/order/' + template.id" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex flex-col h-full">
                         <div class="relative bg-gray-100 overflow-hidden"
                              x-bind:style="'aspect-ratio: ' + (template.image_aspect_ratio && template.image_aspect_ratio !== 'auto' ? (template.image_aspect_ratio.includes('/') ? template.image_aspect_ratio : '3/4') : 'auto')"
                              x-data="{ currentSlide: 0, slides: template.images ? [template.image, ...template.images].filter(Boolean) : (template.image ? [template.image] : ['']) }">
@@ -94,43 +94,43 @@
                             
                             <!-- Slider Controls -->
                             <div x-show="slides.length > 1" class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                                <button @click.prevent="currentSlide = currentSlide === 0 ? slides.length - 1 : currentSlide - 1" class="w-8 h-8 rounded-full bg-white/70 hover:bg-white text-gray-800 flex items-center justify-center shadow transition-colors">
+                                <button @click.stop="currentSlide = currentSlide === 0 ? slides.length - 1 : currentSlide - 1" class="w-8 h-8 rounded-full bg-white/70 hover:bg-white text-gray-800 flex items-center justify-center shadow transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                 </button>
-                                <button @click.prevent="currentSlide = currentSlide === slides.length - 1 ? 0 : currentSlide + 1" class="w-8 h-8 rounded-full bg-white/70 hover:bg-white text-gray-800 flex items-center justify-center shadow transition-colors">
+                                <button @click.stop="currentSlide = currentSlide === slides.length - 1 ? 0 : currentSlide + 1" class="w-8 h-8 rounded-full bg-white/70 hover:bg-white text-gray-800 flex items-center justify-center shadow transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                 </button>
                             </div>
                             
                             <!-- Overlay -->
-                            <div class="absolute inset-0 bg-brand-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center gap-3 z-10 pointer-events-none">
+                            <div class="absolute inset-0 bg-brand-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:flex flex-col justify-center items-center gap-3 z-10 pointer-events-none">
                                 <div class="pointer-events-auto flex flex-col gap-3">
                                     <template x-if="'{{ $service->slug }}' === 'event-digital'">
                                         <a x-bind:href="template.preview_url || '#'" 
                                            x-bind:target="template.preview_url ? '_blank' : '_self'"
-                                           x-on:click="if(!template.preview_url) { $event.preventDefault(); alert('Demo belum tersedia untuk produk ini.'); }"
+                                           @click.stop="if(!template.preview_url) { $event.preventDefault(); alert('Demo belum tersedia untuk produk ini.'); }"
                                            class="px-6 py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-sm font-medium transition backdrop-blur-sm text-center">
                                            Lihat Demo
                                         </a>
                                     </template>
-                                    <a x-bind:href="'/order/' + template.id" class="px-6 py-2 bg-brand-500 hover:bg-brand-400 text-white rounded-full text-sm font-bold transition shadow-lg text-center">
+                                    <a x-bind:href="'/order/' + template.id" @click.stop class="px-6 py-2 bg-brand-500 hover:bg-brand-400 text-white rounded-full text-sm font-bold transition shadow-lg text-center">
                                         Detail Produk
                                     </a>
                                 </div>
                             </div>
                         </div>
-                        <div class="p-6">
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="text-xl font-serif text-brand-900 group-hover:text-brand-600 transition" x-text="template.name"></h3>
-                                <span class="bg-brand-50 text-brand-600 text-[10px] font-bold uppercase px-2.5 py-1 rounded" x-show="template.category" x-text="template.category"></span>
+                        <div class="p-4 md:p-6 flex flex-col flex-grow">
+                            <div class="flex flex-col md:flex-row justify-between items-start mb-2 gap-1 md:gap-2">
+                                <h3 class="text-base md:text-xl font-serif text-brand-900 group-hover:text-brand-600 transition line-clamp-2 md:line-clamp-1 leading-snug" x-text="template.name"></h3>
+                                <span class="bg-brand-50 text-brand-600 text-[9px] md:text-[10px] font-bold uppercase px-2 py-1 rounded whitespace-nowrap self-start mt-1 md:mt-0" x-show="template.category" x-text="template.category"></span>
                             </div>
-                            <div class="mt-3 flex flex-col">
+                            <div class="mt-auto pt-3 flex flex-col">
                                 <template x-if="template.discount_price">
-                                    <div class="text-gray-400 text-xs line-through mb-0.5">
+                                    <div class="text-gray-400 text-[11px] md:text-xs line-through mb-0.5">
                                         Rp <span x-text="parseFloat(template.price || 0).toLocaleString('id-ID')"></span>
                                     </div>
                                 </template>
-                                <div class="text-brand-800 font-bold" :class="template.discount_price ? 'text-lg' : ''">
+                                <div class="text-brand-800 font-bold" :class="template.discount_price ? 'text-base md:text-lg' : 'text-base md:text-lg'">
                                     Rp <span x-text="parseFloat(template.discount_price || template.price || 0).toLocaleString('id-ID')"></span>
                                 </div>
                             </div>
