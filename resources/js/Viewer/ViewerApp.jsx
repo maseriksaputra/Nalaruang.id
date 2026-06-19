@@ -113,6 +113,19 @@ const ViewerApp = ({ previewData, onClosePreview }) => {
                     <PublicCanvas config={viewerData} />
                 </div>
             </div>
+
+            {/* Background Audio */}
+            {viewerData?.global_settings?.audioUrl && (
+                <audio 
+                    id="background-audio" 
+                    loop 
+                    autoPlay={viewerData.global_settings.audioTrigger === 'autoplay'}
+                >
+                    <source src={viewerData.global_settings.audioUrl} type="audio/mpeg" />
+                    <source src={viewerData.global_settings.audioUrl} type="audio/wav" />
+                    <source src={viewerData.global_settings.audioUrl} type="audio/ogg" />
+                </audio>
+            )}
         </div>
     );
 };

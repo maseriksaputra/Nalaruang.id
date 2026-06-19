@@ -115,16 +115,18 @@ const AnimationPanel = () => {
     }
 
     const setAnimation = (animId, isContinuous = false) => {
+        const previewConfig = { previewKey: Date.now() };
         if (isContinuous) {
-            updateLayerAnimation(activeLayer.id, { idle: animId });
-            if (!activeLayer.animation?.configIdle) {
-                updateLayerAnimation(activeLayer.id, { configIdle: { speed: 1 } });
-            }
+            updateLayerAnimation(activeLayer.id, { 
+                idle: animId,
+                config: { ...(activeLayer.animation?.config || {}), ...previewConfig },
+                configIdle: activeLayer.animation?.configIdle || { speed: 1 }
+            });
         } else {
-            updateLayerAnimation(activeLayer.id, { entry: animId });
-            if (!activeLayer.animation?.config) {
-                updateLayerAnimation(activeLayer.id, { config: { speed: 1.5 } });
-            }
+            updateLayerAnimation(activeLayer.id, { 
+                entry: animId,
+                config: { ...(activeLayer.animation?.config || { speed: 1.5 }), ...previewConfig }
+            });
         }
     };
 

@@ -271,7 +271,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
     }
 
     const innerStructure = (
-        <div ref={elementRef} className="w-full h-full relative" style={{ transform: `rotate(${layer.style?.rotation || 0}deg)`, opacity: layer.style?.opacity ?? 1, willChange: 'transform, opacity' }}>
+        <div className="w-full h-full relative" style={{ transform: `rotate(${layer.style?.rotation || 0}deg)`, opacity: layer.style?.opacity ?? 1, willChange: 'transform, opacity' }}>
                 
                 {/* Rotator Handle - Only visible when active */}
                 {isActive && !(layer.isLocked) && !isChildOfGroup && (
@@ -284,20 +284,22 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                     </div>
                 )}
                 
-                {/* Animation Wrapper */}
-                <div 
-                    className={`w-full h-full`}
-                    style={{
-                        transform: `scaleX(${layer.style?.flipX ? -1 : 1})`,
-                        borderRadius: (() => {
-                            if (layer.style?.borderRadius === undefined) return '0px';
-                            const r = `${layer.style.borderRadius}px`;
-                            switch(layer.style.borderRadiusType) {
-                                case 'top': return `${r} ${r} 0 0`;
-                                case 'bottom': return `0 0 ${r} ${r}`;
-                                case 'left': return `${r} 0 0 ${r}`;
-                                case 'right': return `0 ${r} ${r} 0`;
-                                case 'top-left': return `${r} 0 0 0`;
+                {/* GSAP Animation Wrapper */}
+                <div ref={elementRef} className="w-full h-full">
+                    {/* Content Wrapper */}
+                    <div 
+                        className={`w-full h-full`}
+                        style={{
+                            transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
+                            borderRadius: (() => {
+                                if (layer.style?.borderRadius === undefined) return '0px';
+                                const r = `${layer.style.borderRadius}px`;
+                                switch(layer.style.borderRadiusType) {
+                                    case 'top': return `${r} ${r} 0 0`;
+                                    case 'bottom': return `0 0 ${r} ${r}`;
+                                    case 'left': return `${r} 0 0 ${r}`;
+                                    case 'right': return `0 ${r} ${r} 0`;
+                                    case 'top-left': return `${r} 0 0 0`;
                                 case 'top-right': return `0 ${r} 0 0`;
                                 case 'bottom-right': return `0 0 ${r} 0`;
                                 case 'bottom-left': return `0 0 0 ${r}`;
@@ -367,6 +369,29 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                         }}
                     ></div>
                 )}
+
+                {/* Lottie Upload Fix */}
+                {(() => {
+                    if (layer.type === 'lottie') {
+                        let lottieData = layer.lottieJsonObj || layer.animationData;
+                        if (typeof lottieData === 'string') {
+                            try { lottieData = JSON.parse(lottieData); } catch(e) {}
+                        }
+                        if (lottieData) {
+                            return (
+                                <div className="w-full h-full relative pointer-events-none">
+                                    <Player 
+                                        src={lottieData}
+                                        loop={layer.animation?.loop !== false} 
+                                        autoplay={true}
+                                        style={{ width: '100%', height: '100%' }}
+                                    />
+                                </div>
+                            );
+                        }
+                    }
+                    return null;
+                })()}
 
                 {layer.type === 'image' && (
                     <div className="w-full h-full relative pointer-events-none">
@@ -529,25 +554,14 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
             </div>
         )}
 
-        {layer.type === 'custom_code' && (
-            <div 
-                className="w-full h-full relative"
-                style={{ pointerEvents: layer.isLocked ? 'none' : 'auto' }}
-            >
-                {layer.content && (
-                    <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: layer.content }} />
-                )}
-            </div>
-        )}
-
-                {layer.type === 'lottie' && (layer.lottieJsonObj || layer.animationData) && (
-                    <div className="w-full h-full relative pointer-events-none">
-                        <Player 
-                            src={layer.lottieJsonObj || layer.animationData}
-                            loop={layer.animation?.loop !== false} 
-                            autoplay={true}
-                            style={{ width: '100%', height: '100%' }}
-                        />
+                {layer.type === 'custom_code' && (
+                    <div 
+                        className="w-full h-full relative"
+                        style={{ pointerEvents: layer.isLocked ? 'none' : 'auto' }}
+                    >
+                        {layer.content && (
+                            <div className="w-full h-full" dangerouslySetInnerHTML={{ __html: layer.content }} />
+                        )}
                     </div>
                 )}
 
@@ -871,8 +885,8 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 )}
 
 
-                </div> {/* End Animation Wrapper */}
-                
+                </div> {/* End Content Wrapper */}
+            </div> {/* End GSAP Animation Wrapper */}
         </div>
     );
 

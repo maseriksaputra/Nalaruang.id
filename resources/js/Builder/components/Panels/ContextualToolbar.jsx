@@ -179,9 +179,13 @@ const ContextualToolbar = () => {
                     </button>
 
                     <div className="w-px h-5 bg-gray-300 mx-1"></div>
-                    <button onClick={() => updateLayerStyle(activeLayer.id, { flipX: !activeLayer.style?.flipX })} className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
+                    <button onClick={() => updateLayerStyle(activeLayer.id, { flipX: !activeLayer.style?.flipX })} className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200" title="Balik Horizontal">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
-                        Balik
+                        Balik H
+                    </button>
+                    <button onClick={() => updateLayerStyle(activeLayer.id, { flipY: !activeLayer.style?.flipY })} className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200" title="Balik Vertikal">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 8v12m0 0l-4-4m4 4l4-4m6 0V4m0 0l4 4m-4-4l-4 4"></path></svg>
+                        Balik V
                     </button>
                     <button onClick={() => updateLayerStyle(activeLayer.id, { borderRadius: (activeLayer.style?.borderRadius || 0) === 0 ? 16 : ((activeLayer.style?.borderRadius || 0) === 16 ? 9999 : 0) })} className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors border border-transparent hover:border-gray-200">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
