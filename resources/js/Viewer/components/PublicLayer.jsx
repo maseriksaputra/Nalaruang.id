@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Lottie from 'lottie-react';
+import { Player } from '@lottiefiles/react-lottie-player';
 import { applyAnimation, applyExitAnimation } from '../../Builder/utils/engineGSAP';
 import axios from 'axios';
 import gsap from 'gsap';
@@ -468,8 +468,8 @@ const PublicLayer = ({ layer }) => {
                     }
                     if (lottieData) {
                         return (
-                            <Lottie 
-                                animationData={lottieData}
+                            <Player 
+                                src={lottieData}
                                 loop={layer.animation?.loop !== false} 
                                 autoplay={true}
                                 style={{ width: '100%', height: '100%', pointerEvents: 'none' }}
