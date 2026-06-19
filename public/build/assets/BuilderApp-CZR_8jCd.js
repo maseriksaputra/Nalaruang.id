@@ -26133,7 +26133,7 @@ var TimelinePanel = () => {
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-px flex-1 bg-red-500 shadow-[0_0_4px_rgba(239,68,68,0.5)]" })]
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "flex flex-col py-2 relative z-10 px-4 min-w-max",
+								className: "flex flex-col pt-2 pb-48 relative z-10 px-4 min-w-max",
 								children: renderableLayers.map((track, trackIndex) => {
 									const isRealGroup = track.type === "group" && !track.id.startsWith("mock_track");
 									const isExpanded = expandedGroups.includes(track.id);

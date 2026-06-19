@@ -297,7 +297,7 @@ const TimelinePanel = () => {
                             </div>
 
                             {/* Tracks */}
-                            <div className="flex flex-col py-2 relative z-10 px-4 min-w-max">
+                            <div className="flex flex-col pt-2 pb-48 relative z-10 px-4 min-w-max">
                                 {renderableLayers.map((track, trackIndex) => {
                                     const isRealGroup = track.type === 'group' && !track.id.startsWith('mock_track');
                                     const isExpanded = expandedGroups.includes(track.id);
