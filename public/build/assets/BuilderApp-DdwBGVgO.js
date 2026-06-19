@@ -10129,7 +10129,30 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 			return;
 		}
 		if (layer.animation && elementRef.current) animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style);
+		const handlePlayAll = () => {
+			if (layer.animation && elementRef.current) __vitePreload(() => import("./ViewerApp-B7R1U7zf.js").then((n) => n.z).then((gsap) => {
+				gsap.default.set(elementRef.current, { clearProps: "all" });
+				if (animationInstance) {
+					animationInstance.kill();
+					if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
+				}
+				animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style);
+			}), __vite__mapDeps([0,1,2,3,4,5]));
+		};
+		const handleStopAll = () => {
+			if (animationInstance) {
+				animationInstance.kill();
+				if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
+			}
+			__vitePreload(() => import("./ViewerApp-B7R1U7zf.js").then((n) => n.z).then((gsap) => {
+				if (elementRef.current) gsap.default.set(elementRef.current, { clearProps: "all" });
+			}), __vite__mapDeps([0,1,2,3,4,5]));
+		};
+		window.addEventListener("builder:play_all_animations", handlePlayAll);
+		window.addEventListener("builder:stop_all_animations", handleStopAll);
 		return () => {
+			window.removeEventListener("builder:play_all_animations", handlePlayAll);
+			window.removeEventListener("builder:stop_all_animations", handleStopAll);
 			if (animationInstance) {
 				animationInstance.kill();
 				if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
@@ -26021,7 +26044,12 @@ var TimelinePanel = () => {
 									})
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									onClick: () => setIsPlaying(!isPlaying),
+									onClick: () => {
+										const newIsPlaying = !isPlaying;
+										setIsPlaying(newIsPlaying);
+										if (newIsPlaying) window.dispatchEvent(new Event("builder:play_all_animations"));
+										else window.dispatchEvent(new Event("builder:stop_all_animations"));
+									},
 									className: "p-1.5 bg-indigo-600 text-white hover:bg-indigo-700 rounded transition flex items-center justify-center w-8 h-8",
 									children: isPlaying ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 										className: "w-4 h-4",
@@ -28453,6 +28481,32 @@ var BuilderApp = () => {
 			window.removeEventListener("paste", handlePaste);
 		};
 	}, []);
+	const audioRef = (0, import_react.useRef)(null);
+	(0, import_react.useEffect)(() => {
+		const handlePlayAll = () => {
+			if (audioRef.current && global_settings?.audioUrl) {
+				audioRef.current.currentTime = global_settings.audioStart || 0;
+				audioRef.current.volume = (global_settings.audioVolume ?? 100) / 100;
+				audioRef.current.play().catch((e) => console.log("Audio play blocked in builder:", e));
+			}
+		};
+		const handleStopAll = () => {
+			if (audioRef.current) {
+				audioRef.current.pause();
+				audioRef.current.currentTime = global_settings?.audioStart || 0;
+			}
+		};
+		window.addEventListener("builder:play_all_animations", handlePlayAll);
+		window.addEventListener("builder:stop_all_animations", handleStopAll);
+		return () => {
+			window.removeEventListener("builder:play_all_animations", handlePlayAll);
+			window.removeEventListener("builder:stop_all_animations", handleStopAll);
+		};
+	}, [
+		global_settings?.audioUrl,
+		global_settings?.audioStart,
+		global_settings?.audioVolume
+	]);
 	(0, import_react.useEffect)(() => {
 		const id = window.__INVITATION_ID__;
 		const data = window.__CANVAS_DATA__;
@@ -28661,6 +28715,10 @@ var BuilderApp = () => {
 						})
 					})
 				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("audio", {
+				ref: audioRef,
+				src: global_settings?.audioUrl || ""
 			})
 		]
 	});

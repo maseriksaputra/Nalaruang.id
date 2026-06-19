@@ -180,6 +180,31 @@ const BuilderApp = () => {
         };
     }, []);
 
+    const audioRef = useRef(null);
+
+    useEffect(() => {
+        const handlePlayAll = () => {
+            if (audioRef.current && global_settings?.audioUrl) {
+                audioRef.current.currentTime = global_settings.audioStart || 0;
+                audioRef.current.volume = (global_settings.audioVolume ?? 100) / 100;
+                audioRef.current.play().catch(e => console.log('Audio play blocked in builder:', e));
+            }
+        };
+        const handleStopAll = () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = global_settings?.audioStart || 0;
+            }
+        };
+
+        window.addEventListener('builder:play_all_animations', handlePlayAll);
+        window.addEventListener('builder:stop_all_animations', handleStopAll);
+        return () => {
+            window.removeEventListener('builder:play_all_animations', handlePlayAll);
+            window.removeEventListener('builder:stop_all_animations', handleStopAll);
+        };
+    }, [global_settings?.audioUrl, global_settings?.audioStart, global_settings?.audioVolume]);
+
     useEffect(() => {
         const id = window.__INVITATION_ID__;
         const data = window.__CANVAS_DATA__;
@@ -370,6 +395,9 @@ const BuilderApp = () => {
                     </div>
                 </div>
             </div>
+            
+            {/* Background Audio Player for Timeline Preview */}
+            <audio ref={audioRef} src={global_settings?.audioUrl || ''} />
         </div>
     );
 };

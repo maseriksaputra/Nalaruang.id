@@ -220,8 +220,36 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
             animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style);
         }
         
+        const handlePlayAll = () => {
+            if (layer.animation && elementRef.current) {
+                import('gsap').then(gsap => {
+                    gsap.default.set(elementRef.current, { clearProps: "all" });
+                    if (animationInstance) {
+                        animationInstance.kill();
+                        if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
+                    }
+                    animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style);
+                });
+            }
+        };
+
+        const handleStopAll = () => {
+            if (animationInstance) {
+                animationInstance.kill();
+                if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
+            }
+            import('gsap').then(gsap => {
+                if (elementRef.current) gsap.default.set(elementRef.current, { clearProps: "all" });
+            });
+        };
+
+        window.addEventListener('builder:play_all_animations', handlePlayAll);
+        window.addEventListener('builder:stop_all_animations', handleStopAll);
+
         // Cleanup yang krusial agar memori tidak bocor saat layer dihapus/update
         return () => {
+            window.removeEventListener('builder:play_all_animations', handlePlayAll);
+            window.removeEventListener('builder:stop_all_animations', handleStopAll);
             if (animationInstance) {
                 animationInstance.kill();
                 if (animationInstance.scrollTrigger) {

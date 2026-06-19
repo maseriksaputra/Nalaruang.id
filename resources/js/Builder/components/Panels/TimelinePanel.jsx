@@ -189,7 +189,15 @@ const TimelinePanel = () => {
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path></svg>
                             </button>
                             <button 
-                                onClick={() => setIsPlaying(!isPlaying)}
+                                onClick={() => {
+                                    const newIsPlaying = !isPlaying;
+                                    setIsPlaying(newIsPlaying);
+                                    if (newIsPlaying) {
+                                        window.dispatchEvent(new Event('builder:play_all_animations'));
+                                    } else {
+                                        window.dispatchEvent(new Event('builder:stop_all_animations'));
+                                    }
+                                }}
                                 className="p-1.5 bg-indigo-600 text-white hover:bg-indigo-700 rounded transition flex items-center justify-center w-8 h-8"
                             >
                                 {isPlaying ? (
