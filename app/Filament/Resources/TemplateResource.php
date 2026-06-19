@@ -45,13 +45,21 @@ class TemplateResource extends Resource
                                                 $activeTab = request('activeTab');
                                                 if (!$activeTab || $activeTab === 'semua') return null;
                                                 
-                                                $serviceSlug = match($activeTab) {
-                                                    'cetak_fisik' => 'cetak-fisik-premium',
-                                                    'event_digital' => 'event-digital',
-                                                    'souvenir' => 'souvenir-merchandise',
-                                                    'web_app' => 'web-mobile-app',
-                                                    default => null,
-                                                };
+                                                $serviceSlug = null;
+                                                switch ($activeTab) {
+                                                    case 'cetak_fisik':
+                                                        $serviceSlug = 'cetak-fisik-premium';
+                                                        break;
+                                                    case 'event_digital':
+                                                        $serviceSlug = 'event-digital';
+                                                        break;
+                                                    case 'souvenir':
+                                                        $serviceSlug = 'souvenir-merchandise';
+                                                        break;
+                                                    case 'web_app':
+                                                        $serviceSlug = 'web-mobile-app';
+                                                        break;
+                                                }
                                                 
                                                 if ($serviceSlug) {
                                                     return \App\Models\Service::where('slug', $serviceSlug)->value('id');
