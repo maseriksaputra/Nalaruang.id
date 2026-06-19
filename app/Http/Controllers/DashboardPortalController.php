@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invitation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use App\Models\Guest;
+use App\Models\GuestLink;
 use App\Models\Rsvp;
 use App\Models\InvitationVisitor;
 use Carbon\Carbon;
@@ -31,7 +31,7 @@ class DashboardPortalController extends Controller
     public function getStatistics()
     {
         $totalVisitors = InvitationVisitor::count();
-        $totalGuests = Guest::count();
+        $totalGuests = GuestLink::count();
         $totalRsvp = Rsvp::count();
         $engagementRate = $totalGuests > 0 ? round(($totalVisitors / $totalGuests) * 100, 1) : 0;
 
@@ -63,7 +63,7 @@ class DashboardPortalController extends Controller
 
         // Top 10 Invitations
         $topInvitations = Invitation::select('id', 'title', 'slug', 'thumbnail_path')
-            ->withCount(['visitors', 'rsvps', 'guests'])
+            ->withCount(['visitors', 'rsvps', 'guestLinks'])
             ->orderBy('visitors_count', 'desc')
             ->orderBy('rsvps_count', 'desc')
             ->take(10)
@@ -82,7 +82,7 @@ class DashboardPortalController extends Controller
                     'thumbnail' => $thumbnail,
                     'visitors_count' => $inv->visitors_count,
                     'rsvps_count' => $inv->rsvps_count,
-                    'guests_count' => $inv->guests_count,
+                    'guests_count' => $inv->guest_links_count,
                 ];
             });
 

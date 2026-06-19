@@ -2,7 +2,7 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Guest;
+use App\Models\GuestLink;
 use App\Models\InvitationVisitor;
 use App\Models\Rsvp;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -19,7 +19,7 @@ class GuestEngagementStats extends BaseWidget
     protected function getStats(): array
     {
         $totalVisitors = InvitationVisitor::count();
-        $totalGuests = Guest::count();
+        $totalGuests = GuestLink::count();
         $totalRsvp = Rsvp::count();
 
         // Calculate engagement percentage safely
