@@ -13,6 +13,7 @@ const hexToRgb = (hex) => {
 const ChromaKeyImage = ({ src, targetColorHex = '#ffffff', tolerance = 50, className, style, alt }) => {
     const canvasRef = useRef(null);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [aspectRatio, setAspectRatio] = useState('auto');
 
     useEffect(() => {
         if (!src) return;
@@ -22,6 +23,8 @@ const ChromaKeyImage = ({ src, targetColorHex = '#ffffff', tolerance = 50, class
         img.onload = () => {
             const canvas = canvasRef.current;
             if (!canvas) return;
+
+            setAspectRatio(`${img.naturalWidth} / ${img.naturalHeight}`);
 
             const ctx = canvas.getContext('2d', { willReadFrequently: true });
             
@@ -81,7 +84,11 @@ const ChromaKeyImage = ({ src, targetColorHex = '#ffffff', tolerance = 50, class
             style={{ 
                 ...style, 
                 opacity: isLoaded ? (style?.opacity ?? 1) : 0, 
-                transition: 'opacity 0.2s'
+                transition: 'opacity 0.2s',
+                width: '100%',
+                height: '100%',
+                aspectRatio: aspectRatio,
+                objectFit: 'cover'
             }}
             title={alt}
         />
