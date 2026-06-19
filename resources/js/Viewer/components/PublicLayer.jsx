@@ -458,13 +458,26 @@ const PublicLayer = ({ layer }) => {
                 />
             )}
             
-            {layer.type === 'lottie' && layer.lottieJsonObj && (
-                <Lottie 
-                    animationData={layer.lottieJsonObj}
-                    loop={layer.animation?.loop !== false} 
-                    autoplay={true}
-                    style={{ width: '100%', height: '100%', pointerEvents: 'none' }}
-                />
+            {layer.type === 'lottie' && (
+                (() => {
+                    let lottieData = layer.lottieJsonObj || layer.animationData;
+                    if (typeof lottieData === 'string') {
+                        try { lottieData = JSON.parse(lottieData); } catch(e) {}
+                    } else if (lottieData && typeof lottieData === 'object') {
+                        lottieData = JSON.parse(JSON.stringify(lottieData));
+                    }
+                    if (lottieData) {
+                        return (
+                            <Lottie 
+                                animationData={lottieData}
+                                loop={layer.animation?.loop !== false} 
+                                autoplay={true}
+                                style={{ width: '100%', height: '100%', pointerEvents: 'none' }}
+                            />
+                        );
+                    }
+                    return null;
+                })()
             )}
 
             {layer.type === 'custom_path' && (

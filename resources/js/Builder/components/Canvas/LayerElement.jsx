@@ -404,6 +404,9 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                         let lottieData = layer.lottieJsonObj || layer.animationData;
                         if (typeof lottieData === 'string') {
                             try { lottieData = JSON.parse(lottieData); } catch(e) {}
+                        } else if (lottieData && typeof lottieData === 'object') {
+                            // Deep clone to prevent lottie-web from mutating the Zustand state object
+                            lottieData = JSON.parse(JSON.stringify(lottieData));
                         }
                         if (lottieData) {
                             return (
