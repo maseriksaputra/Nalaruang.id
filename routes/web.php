@@ -301,6 +301,24 @@ Route::middleware(['web', 'auth'])->group(function () {
 Route::put('/api/builder/invitations/{id}/auto-save', [\App\Http\Controllers\BuilderController::class, 'autoSave']);
 Route::post('/api/builder/invitations/{id}/save-as-template', [\App\Http\Controllers\BuilderController::class, 'saveAsTemplate']);
 
+Route::get('/api/proxy-image', function (\Illuminate\Http\Request $request) {
+    $url = $request->query('url');
+    if (!$url || !filter_var($url, FILTER_VALIDATE_URL)) {
+        return response('Invalid URL', 400);
+    }
+    try {
+        $context = stream_context_create(['http' => ['ignore_errors' => true]]);
+        $content = file_get_contents($url, false, $context);
+        if ($content === false) {
+            return response('Error fetching image', 500);
+        }
+        $mime = (new \finfo(FILEINFO_MIME_TYPE))->buffer($content);
+        return response($content)->header('Content-Type', $mime)->header('Access-Control-Allow-Origin', '*');
+    } catch (\Exception $e) {
+        return response('Error fetching image', 500);
+    }
+});
+
 // Route Viewer Engine Publik
 Route::get('/client/{slug}', [\App\Http\Controllers\ClientPortalController::class, 'show']);
 Route::post('/client/{slug}/links/batch', [\App\Http\Controllers\ClientPortalController::class, 'storeBatchGuestLinks']);

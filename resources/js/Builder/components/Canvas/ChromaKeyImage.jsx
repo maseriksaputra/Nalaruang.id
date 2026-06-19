@@ -39,6 +39,14 @@ const ChromaKeyImage = ({ src, targetColorHex = '#ffffff', tolerance = 50, class
             } catch (e) {}
         }
 
+        // Jika gambar benar-benar dari domain/host lain (seperti S3 atau CDN tanpa CORS)
+        // Proxy gambar melalui backend kita untuk mengubahnya menjadi same-origin
+        // Ini menghindari error SecurityError (Canvas Taint) saat melakukan getImageData.
+        if (!isSameOrigin) {
+            finalSrc = `/api/proxy-image?url=${encodeURIComponent(finalSrc)}`;
+            isSameOrigin = true;
+        }
+
         const img = new Image();
         if (!isSameOrigin) {
             img.crossOrigin = 'Anonymous';
