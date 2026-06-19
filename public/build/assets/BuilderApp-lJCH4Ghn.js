@@ -10321,7 +10321,6 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 									style: {
 										opacity: layer.style?.opacity !== void 0 ? layer.style.opacity : 1,
 										objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
-										transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
 										filter: `${layer.style?.imageFilter && layer.style.imageFilter !== "none" ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + " " : ""}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
 									}
 								}),
@@ -10439,7 +10438,6 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 										className: `w-full h-full object-cover ${isCropMode ? "cursor-move pointer-events-auto no-drag" : ""}`,
 										style: {
 											objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
-											transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
 											filter: `${layer.style?.brightness ? `brightness(${layer.style.brightness}) ` : ""}${layer.style?.contrast ? `contrast(${layer.style.contrast}) ` : ""}${layer.style?.saturate ? `saturate(${layer.style.saturate}) ` : ""}${layer.style?.blur ? `blur(${layer.style.blur}px) ` : ""}`.trim() || "none"
 										}
 									}), layer.style?.polaroidData?.filterId && layer.style.polaroidData.filterId !== "none" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { dangerouslySetInnerHTML: { __html: getFilterById(layer.style.polaroidData.filterId)?.getOverlay(100) || "" } })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
