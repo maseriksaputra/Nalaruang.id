@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-CClZikzx.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DFJsKKzR.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { a as produce, c as require_react, o as require_client, t as require_jsx_runtime } from "./jsx-runtime-Dot0F3-6.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-qj9Uo8cm.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-fFkRYDlq.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$1, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -16822,7 +16822,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-CClZikzx.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DFJsKKzR.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -33510,6 +33510,95 @@ var DesktopThumbnail = ({ settings }) => {
 	});
 };
 //#endregion
+//#region resources/js/Viewer/components/BackgroundAudio.jsx
+var BackgroundAudio = ({ settings }) => {
+	const audioRef = (0, import_react.useRef)(null);
+	const [isPlaying, setIsPlaying] = (0, import_react.useState)(false);
+	const { audioUrl, audioTrigger = "onclick", audioStart = 0, audioEnd = 0, audioVolume = 100, audioFadeIn = 0, audioFadeOut = 0, audioEffect = "none" } = settings || {};
+	const maxVolume = Math.min(1, Math.max(0, audioVolume / 100));
+	(0, import_react.useEffect)(() => {
+		const audio = audioRef.current;
+		if (!audio || !audioUrl) return;
+		let animationFrameId;
+		const handlePlay = () => {
+			setIsPlaying(true);
+			if (audioFadeIn > 0 && audio.currentTime <= audioStart + .5) audio.volume = 0;
+			else audio.volume = maxVolume;
+		};
+		const handlePause = () => {
+			setIsPlaying(false);
+		};
+		const handleTimeUpdate = () => {
+			if (!isPlaying) return;
+			const current = audio.currentTime;
+			const targetEnd = audioEnd > 0 && audioEnd > audioStart ? audioEnd : audio.duration;
+			if (targetEnd && current >= targetEnd) {
+				audio.currentTime = audioStart || 0;
+				if (audioFadeIn > 0) audio.volume = 0;
+				audio.play().catch((e) => console.log(e));
+				return;
+			}
+			if (audioFadeIn > 0 && current < audioStart + audioFadeIn) {
+				const newVol = (current - audioStart) / audioFadeIn * maxVolume;
+				audio.volume = Math.max(0, Math.min(maxVolume, newVol));
+			} else if (audioFadeOut > 0 && targetEnd && current > targetEnd - audioFadeOut) {
+				const newVol = (targetEnd - current) / audioFadeOut * maxVolume;
+				audio.volume = Math.max(0, Math.min(maxVolume, newVol));
+			} else audio.volume = maxVolume;
+		};
+		const onLoadedMetadata = () => {
+			if (audioStart > 0 && audio.currentTime < audioStart) audio.currentTime = audioStart;
+		};
+		audio.addEventListener("play", handlePlay);
+		audio.addEventListener("pause", handlePause);
+		audio.addEventListener("timeupdate", handleTimeUpdate);
+		audio.addEventListener("loadedmetadata", onLoadedMetadata);
+		return () => {
+			audio.removeEventListener("play", handlePlay);
+			audio.removeEventListener("pause", handlePause);
+			audio.removeEventListener("timeupdate", handleTimeUpdate);
+			audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+			cancelAnimationFrame(animationFrameId);
+		};
+	}, [
+		audioUrl,
+		audioStart,
+		audioEnd,
+		audioVolume,
+		audioFadeIn,
+		audioFadeOut,
+		isPlaying
+	]);
+	(0, import_react.useEffect)(() => {
+		if (audioRef.current && audioStart > 0) {
+			const end = audioEnd > 0 ? audioEnd : audioRef.current.duration;
+			if (audioRef.current.currentTime < audioStart || end && audioRef.current.currentTime > end) audioRef.current.currentTime = audioStart;
+		}
+	}, [audioStart, audioEnd]);
+	if (!audioUrl) return null;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("audio", {
+		id: "background-audio",
+		ref: audioRef,
+		loop: audioEnd <= 0,
+		autoPlay: audioTrigger === "autoplay",
+		crossOrigin: "anonymous",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("source", {
+				src: audioUrl,
+				type: "audio/mpeg"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("source", {
+				src: audioUrl,
+				type: "audio/wav"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("source", {
+				src: audioUrl,
+				type: "audio/ogg"
+			})
+		]
+	});
+};
+//#endregion
 //#region resources/js/Viewer/ViewerApp.jsx
 var ViewerApp = ({ previewData, onClosePreview }) => {
 	const isInsideBuilderPreview = window.location.pathname.includes("/builder/");
@@ -33628,25 +33717,7 @@ var ViewerApp = ({ previewData, onClosePreview }) => {
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PublicCanvas, { config: viewerData })
 				})
 			}),
-			viewerData?.global_settings?.audioUrl && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("audio", {
-				id: "background-audio",
-				loop: true,
-				autoPlay: viewerData.global_settings.audioTrigger === "autoplay",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("source", {
-						src: viewerData.global_settings.audioUrl,
-						type: "audio/mpeg"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("source", {
-						src: viewerData.global_settings.audioUrl,
-						type: "audio/wav"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("source", {
-						src: viewerData.global_settings.audioUrl,
-						type: "audio/ogg"
-					})
-				]
-			})
+			viewerData?.global_settings?.audioUrl && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BackgroundAudio, { settings: viewerData.global_settings })
 		]
 	});
 };

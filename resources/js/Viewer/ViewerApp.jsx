@@ -4,6 +4,7 @@ import '../bootstrap';
 import PublicCanvas from './components/PublicCanvas';
 import IframePreview from '../Builder/components/Canvas/IframePreview';
 import DesktopThumbnail from '../Builder/components/Canvas/DesktopThumbnail';
+import BackgroundAudio from './components/BackgroundAudio';
 
 const ViewerApp = ({ previewData, onClosePreview }) => {
     const isInsideBuilderPreview = window.location.pathname.includes('/builder/');
@@ -116,15 +117,7 @@ const ViewerApp = ({ previewData, onClosePreview }) => {
 
             {/* Background Audio */}
             {viewerData?.global_settings?.audioUrl && (
-                <audio 
-                    id="background-audio" 
-                    loop 
-                    autoPlay={viewerData.global_settings.audioTrigger === 'autoplay'}
-                >
-                    <source src={viewerData.global_settings.audioUrl} type="audio/mpeg" />
-                    <source src={viewerData.global_settings.audioUrl} type="audio/wav" />
-                    <source src={viewerData.global_settings.audioUrl} type="audio/ogg" />
-                </audio>
+                <BackgroundAudio settings={viewerData.global_settings} />
             )}
         </div>
     );
