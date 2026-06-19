@@ -97,14 +97,9 @@ const RightInspector = () => {
             let imageBlob;
             try {
                 let fetchUrl = originalUrl;
-                try {
-                    const urlObj = new URL(originalUrl);
-                    // Force same-origin path to avoid CORS/Mixed Content over ngrok/cloudflare tunnels
-                    if (urlObj.host !== window.location.host) {
-                        fetchUrl = urlObj.pathname + urlObj.search;
-                    }
-                } catch (e) {
-                    // Ignore if not a valid URL string
+                // Hanya perbaiki Mixed Content jika URL berupa http:// dan browser menggunakan https://
+                if (typeof fetchUrl === 'string' && fetchUrl.startsWith('http://') && window.location.protocol === 'https:') {
+                    fetchUrl = fetchUrl.replace('http://', 'https://');
                 }
                 
                 const res = await fetch(fetchUrl);
