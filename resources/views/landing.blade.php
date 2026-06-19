@@ -470,16 +470,15 @@
                                             </div>
                                         </div>
                                     @else
-                                        <template x-for="(slide, index) in slides" :key="index">
-                                            <img x-show="currentSlide === index"
-                                                 x-bind:src="slide ? (slide.startsWith('http') ? slide : window.ASSET_URL + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 
-                                                 class="portfolio-img absolute inset-0 w-full h-full object-cover" 
-                                                 alt="{{ $template->name }}" 
-                                                 onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000'"
-                                                 x-transition:enter="transition ease-out duration-300"
-                                                 x-transition:enter-start="opacity-0"
-                                                 x-transition:enter-end="opacity-100">
-                                        </template>
+                                        <div class="absolute inset-0 w-full h-full flex transition-transform duration-500 ease-out"
+                                             x-bind:style="'transform: translateX(-' + (currentSlide * 100) + '%)'">
+                                            <template x-for="(slide, index) in slides" :key="index">
+                                                <img x-bind:src="slide ? (slide.startsWith('http') ? slide : window.ASSET_URL + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 
+                                                     class="portfolio-img w-full h-full object-cover shrink-0" 
+                                                     alt="{{ $template->name }}" 
+                                                     onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000'">
+                                            </template>
+                                        </div>
                                     @endif
                                     
                                     <!-- Slider Controls untuk Gambar -->

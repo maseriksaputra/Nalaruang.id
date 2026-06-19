@@ -81,16 +81,14 @@
                              x-bind:style="'aspect-ratio: ' + (template.image_aspect_ratio && template.image_aspect_ratio !== 'auto' ? (template.image_aspect_ratio.includes('/') ? template.image_aspect_ratio : '3/4') : 'auto')"
                              x-data="{ currentSlide: 0, slides: template.images ? [template.image, ...template.images].filter(Boolean) : (template.image ? [template.image] : ['']), init() { if (this.slides.length > 1) { setInterval(() => { this.currentSlide = this.currentSlide === this.slides.length - 1 ? 0 : this.currentSlide + 1 }, 3000) } } }">
                             
-                            <!-- Template Image / Slider -->
-                            <template x-for="(slide, index) in slides" :key="index">
-                                <img x-show="currentSlide === index"
-                                     x-bind:src="slide ? (slide.startsWith('http') ? slide : window.ASSET_URL + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 
-                                     x-bind:alt="template.name" 
-                                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                                     x-transition:enter="transition ease-out duration-300"
-                                     x-transition:enter-start="opacity-0"
-                                     x-transition:enter-end="opacity-100" />
-                            </template>
+                            <div class="absolute inset-0 w-full h-full flex transition-transform duration-500 ease-out"
+                                 x-bind:style="'transform: translateX(-' + (currentSlide * 100) + '%)'">
+                                <template x-for="(slide, index) in slides" :key="index">
+                                    <img x-bind:src="slide ? (slide.startsWith('http') ? slide : window.ASSET_URL + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 
+                                         x-bind:alt="template.name" 
+                                         class="w-full h-full object-cover shrink-0 transition-transform duration-700 group-hover:scale-105" />
+                                </template>
+                            </div>
                             
                             <!-- Slider Controls -->
                             <div x-show="slides.length > 1" class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
