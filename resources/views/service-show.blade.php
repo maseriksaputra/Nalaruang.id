@@ -79,7 +79,7 @@
                     <div @click="window.location.href = '/order/' + template.id" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex flex-col h-full">
                         <div class="relative bg-gray-100 overflow-hidden"
                              x-bind:style="'aspect-ratio: ' + (template.image_aspect_ratio && template.image_aspect_ratio !== 'auto' ? (template.image_aspect_ratio.includes('/') ? template.image_aspect_ratio : '3/4') : 'auto')"
-                             x-data="{ currentSlide: 0, slides: template.images ? [template.image, ...template.images].filter(Boolean) : (template.image ? [template.image] : ['']) }">
+                             x-data="{ currentSlide: 0, slides: template.images ? [template.image, ...template.images].filter(Boolean) : (template.image ? [template.image] : ['']), init() { if (this.slides.length > 1) { setInterval(() => { this.currentSlide = this.currentSlide === this.slides.length - 1 ? 0 : this.currentSlide + 1 }, 3000) } } }">
                             
                             <!-- Template Image / Slider -->
                             <template x-for="(slide, index) in slides" :key="index">
