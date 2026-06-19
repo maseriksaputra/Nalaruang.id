@@ -141,6 +141,7 @@ class TemplateResource extends Resource
                                         Forms\Components\FileUpload::make('image')
                                             ->image()
                                             ->directory('templates')
+                                            ->visibility('public')
                                             ->maxSize(10240)
                                             ->label('Gambar Utama (Cover)')
                                             ->helperText('Maks. 10MB'),
@@ -149,6 +150,7 @@ class TemplateResource extends Resource
                                             ->multiple()
                                             ->reorderable()
                                             ->directory('templates')
+                                            ->visibility('public')
                                             ->maxSize(10240)
                                             ->label('Galeri Slideshow (Bisa lebih dari 1)')
                                             ->helperText('Maks. 10MB per gambar')
