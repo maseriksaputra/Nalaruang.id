@@ -18,8 +18,31 @@ const ChromaKeyImage = ({ src, targetColorHex = '#ffffff', tolerance = 50, class
     useEffect(() => {
         if (!src) return;
 
+        // Normalize URL to relative if hostname matches current host
+        // This prevents CORS issues when accessing http:// vs https:// on the same domain
+        let finalSrc = src;
+        let isSameOrigin = false;
+        
+        if (finalSrc.startsWith('data:')) {
+            isSameOrigin = true;
+        } else if (finalSrc.startsWith('/')) {
+            isSameOrigin = true;
+        } else {
+            try {
+                const urlObj = new URL(finalSrc);
+                if (urlObj.hostname === window.location.hostname) {
+                    finalSrc = urlObj.pathname + urlObj.search;
+                    isSameOrigin = true;
+                } else if (urlObj.origin === window.location.origin) {
+                    isSameOrigin = true;
+                }
+            } catch (e) {}
+        }
+
         const img = new Image();
-        img.crossOrigin = 'Anonymous';
+        if (!isSameOrigin) {
+            img.crossOrigin = 'Anonymous';
+        }
 
         const processImage = (imageElement, retryWithoutCors = false) => {
             const canvas = canvasRef.current;
@@ -76,10 +99,10 @@ const ChromaKeyImage = ({ src, targetColorHex = '#ffffff', tolerance = 50, class
                 console.error('Image failed to load entirely.');
                 setIsLoaded(true); // Biarkan tetap dirender (kosong) agar tidak error state
             };
-            fallbackImg.src = src;
+            fallbackImg.src = finalSrc;
         };
         
-        img.src = src;
+        img.src = finalSrc;
     }, [src, targetColorHex, tolerance]);
 
     return (

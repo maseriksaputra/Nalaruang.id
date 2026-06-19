@@ -98,15 +98,30 @@
                                onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 2px rgba(236,72,153,0.2)'"
                                onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                     </div>
-                    <div style="display: flex; gap: 8px; min-width: 150px;">
-                        <input type="number" wire:model.defer="manualQty" min="1" 
-                               style="width: 60px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; padding: 10px; text-align: center; outline: none;"
-                               onfocus="this.style.borderColor='#ec4899'; this.style.boxShadow='0 0 0 2px rgba(236,72,153,0.2)'"
-                               onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
+                    <div style="display: flex; gap: 8px; align-items: stretch;" x-data="{ qty: <?php if ((object) ('manualQty') instanceof \Livewire\WireDirective) : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('manualQty'->value()); ?>')<?php echo e('manualQty'->hasModifier('live') ? '.live' : ''); ?><?php else : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('manualQty'); ?>')<?php endif; ?> }">
+                        <div style="display: flex; align-items: stretch; border: 1px solid #d1d5db; border-radius: 8px; overflow: hidden; background-color: white; flex-shrink: 0; height: 42px;">
+                            <button type="button" @click="qty > 1 ? qty-- : qty = 1" 
+                                    style="width: 36px; display: flex; align-items: center; justify-content: center; background-color: #f3f4f6; color: #4b5563; font-weight: bold; border-right: 1px solid #d1d5db; transition: all 0.1s; cursor: pointer; user-select: none;"
+                                    onmousedown="this.style.backgroundColor='#e5e7eb'; this.style.transform='scale(0.95)'" 
+                                    onmouseup="this.style.backgroundColor='#f3f4f6'; this.style.transform='scale(1)'"
+                                    onmouseleave="this.style.backgroundColor='#f3f4f6'; this.style.transform='scale(1)'">
+                                −
+                            </button>
+                            <input type="number" x-model="qty" min="1" 
+                                   style="width: 48px; border: none; font-size: 14px; text-align: center; outline: none; -moz-appearance: textfield; margin: 0; padding: 0;"
+                                   class="no-spinners">
+                            <button type="button" @click="qty++" 
+                                    style="width: 36px; display: flex; align-items: center; justify-content: center; background-color: #f3f4f6; color: #4b5563; font-weight: bold; border-left: 1px solid #d1d5db; transition: all 0.1s; cursor: pointer; user-select: none;"
+                                    onmousedown="this.style.backgroundColor='#e5e7eb'; this.style.transform='scale(0.95)'" 
+                                    onmouseup="this.style.backgroundColor='#f3f4f6'; this.style.transform='scale(1)'"
+                                    onmouseleave="this.style.backgroundColor='#f3f4f6'; this.style.transform='scale(1)'">
+                                +
+                            </button>
+                        </div>
                         <button x-on:click="$wire.addManual(tab)" 
-                                style="flex: 1; background-color: #db2777; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; padding: 0 16px; cursor: pointer; box-shadow: 0 2px 4px rgba(219,39,119,0.3); transition: background-color 0.2s;"
+                                style="background-color: #db2777; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; padding: 0 16px; cursor: pointer; box-shadow: 0 2px 4px rgba(219,39,119,0.3); transition: background-color 0.2s; white-space: nowrap; height: 42px;"
                                 onmouseover="this.style.backgroundColor='#be185d'" onmouseout="this.style.backgroundColor='#db2777'" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
-                            + Tambah
+                            🛒 Tambah ke Keranjang
                         </button>
                     </div>
                 </div>
@@ -288,6 +303,12 @@ Contoh Output:
                 flex-direction: column;
                 gap: 24px;
             }
+        }
+        /* Hide number spinners */
+        .no-spinners::-webkit-outer-spin-button,
+        .no-spinners::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
         }
     </style>
  <?php echo $__env->renderComponent(); ?>
