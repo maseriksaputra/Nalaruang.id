@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.parent {
+  width: 500px;
+  height: 500px;
+  background-color: lightgray;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+.child-wrapper {
+  pointer-events: auto;
+}
+.rnd {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  position: absolute;
+  left: 50px;
+  top: 50px;
+  pointer-events: auto;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+  <div class="parent">
+    <div class="child-wrapper">
+      <div class="rnd" onclick="alert('Clicked!')">Click Me</div>
+    </div>
+  </div>
+</body>
+</html>

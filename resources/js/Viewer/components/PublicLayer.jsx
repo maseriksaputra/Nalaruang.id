@@ -257,7 +257,6 @@ const PublicLayer = ({ layer }) => {
             onClick={handleInteraction}
         >
             <div
-                ref={elementRef}
                 style={{
                     width: '100%',
                     height: '100%',
@@ -265,11 +264,12 @@ const PublicLayer = ({ layer }) => {
                     opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
                 }}
             >
-                <div style={{
-                    width: '100%',
-                    height: '100%',
-                    transform: `scaleX(${layer.style?.flipX ? -1 : 1})`,
-                    borderRadius: (() => {
+                <div ref={elementRef} style={{ width: '100%', height: '100%' }}>
+                    <div style={{
+                        width: '100%',
+                        height: '100%',
+                        transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
+                        borderRadius: (() => {
                         if (layer.style?.borderRadius === undefined) return '0px';
                         const r = `${layer.style.borderRadius}px`;
                         switch(layer.style.borderRadiusType) {
@@ -807,6 +807,7 @@ const PublicLayer = ({ layer }) => {
             )}
                 </div>
             </div>
+        </div>
         </div>
     );
 };
