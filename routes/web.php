@@ -27,9 +27,8 @@ Route::get('/debug-log', function () {
     $logFile = storage_path('logs/laravel.log');
     if (!file_exists($logFile)) return 'No log file';
     
-    $lines = file($logFile);
-    $lastLines = array_slice($lines, -100);
-    return response("<pre>" . implode("", $lastLines) . "</pre>");
+    $lines = shell_exec('tail -n 50 ' . escapeshellarg($logFile));
+    return response("<pre>" . htmlspecialchars($lines) . "</pre>");
 });
 
 // Route::get('/fix-cashflow-data', function() {
