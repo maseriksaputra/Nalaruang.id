@@ -113,6 +113,12 @@
                                            Lihat Demo
                                         </a>
                                     </template>
+                                    <template x-if="'{{ $service->slug }}' !== 'event-digital'">
+                                        <button @click.prevent.stop="$dispatch('open-lightbox', { images: slides })" 
+                                           class="px-6 py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-sm font-medium transition backdrop-blur-sm text-center">
+                                           Lihat Gambar
+                                        </button>
+                                    </template>
                                     <a x-bind:href="'/order/' + template.id" @click.stop class="px-6 py-2 bg-brand-500 hover:bg-brand-400 text-white rounded-full text-sm font-bold transition shadow-lg text-center">
                                         Detail Produk
                                     </a>
@@ -271,4 +277,5 @@
         </div>
     </section>
 
+@include('components.lightbox')
 @endsection

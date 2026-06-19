@@ -501,6 +501,11 @@
                                                class="w-full py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-xs font-medium transition backdrop-blur-sm text-center">
                                                 Lihat Demo
                                             </a>
+                                            @else
+                                            <button @click.prevent.stop="$dispatch('open-lightbox', { images: slides })" 
+                                               class="w-full py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-xs font-medium transition backdrop-blur-sm text-center">
+                                                Lihat Gambar
+                                            </button>
                                             @endif
                                             <a href="{{ route('order.create', ['template_id' => $template->id]) }}" class="w-full py-2 bg-brand-500 hover:bg-brand-400 text-white rounded-full text-xs font-bold transition shadow-lg text-center">
                                                 Detail Produk
@@ -804,10 +809,6 @@
             setInterval(nextSlide, 5000);
         });
     </script>
+@include('components.lightbox')
 </body>
-</html>
-
-
-
-
 
