@@ -27,7 +27,11 @@ class OrderController extends Controller
         
         $details = $request->except(['_token', 'template_id', 'customer_name', 'customer_phone', 'event_date', 'quantity', 'guest_list', 'custom_requests', 'calculated_total']);
 
-        $totalPrice = $request->calculated_total ?? (($template->price ?? ($template->package->price ?? 0)) * ($request->quantity ?? 1));
+        $basePrice = ($template->discount_price && $template->discount_price < $template->price) 
+            ? $template->discount_price 
+            : ($template->price ?? ($template->package->price ?? 0));
+            
+        $totalPrice = $request->calculated_total ?? ($basePrice * ($request->quantity ?? 1));
 
         $order = \App\Models\Order::create([
             'template_id' => $template->id,

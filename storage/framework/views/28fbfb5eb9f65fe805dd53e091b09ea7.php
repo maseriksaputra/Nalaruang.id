@@ -1,6 +1,4 @@
-@extends('layouts.main')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <section class="py-32 bg-sand min-h-screen">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -11,52 +9,47 @@
 
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden" data-aos="fade-up" data-aos-delay="100">
             <!-- Review Pesanan -->
-            @php
-                $finalPrice = ($template->discount_price && $template->discount_price < $template->price) 
-                    ? $template->discount_price 
-                    : ($template->price ?? ($template->package->price ?? 0));
-            @endphp
             <div class="p-8 bg-brand-900 text-white flex flex-col sm:flex-row items-center gap-6">
                 <div class="w-24 h-32 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
-                    @if($template->image)
-                    <img src="{{ asset('storage/' . $template->image) }}" alt="{{ $template->name }}" class="w-full h-full object-cover">
-                    @else
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($template->image): ?>
+                    <img src="<?php echo e(asset('storage/' . $template->image)); ?>" alt="<?php echo e($template->name); ?>" class="w-full h-full object-cover">
+                    <?php else: ?>
                     <div class="w-full h-full flex items-center justify-center text-gray-400 bg-brand-800 text-xs text-center p-2">
                         No Preview
                     </div>
-                    @endif
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </div>
                 <div class="flex-grow text-center sm:text-left">
-                    <span class="text-brand-500 text-xs font-bold uppercase tracking-wider">{{ $template->service->title ?? 'Layanan' }}</span>
-                    <h2 class="text-2xl font-serif mt-1 mb-2">{{ $template->name }}</h2>
-                    @if($template->package)
-                    <span class="inline-block px-3 py-1 bg-brand-800 rounded-full text-xs text-brand-100">Paket: {{ $template->package->name }}</span>
-                    @endif
+                    <span class="text-brand-500 text-xs font-bold uppercase tracking-wider"><?php echo e($template->service->title ?? 'Layanan'); ?></span>
+                    <h2 class="text-2xl font-serif mt-1 mb-2"><?php echo e($template->name); ?></h2>
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($template->package): ?>
+                    <span class="inline-block px-3 py-1 bg-brand-800 rounded-full text-xs text-brand-100">Paket: <?php echo e($template->package->name); ?></span>
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </div>
                 <div class="text-center sm:text-right">
                     <p class="text-brand-500 text-sm mb-1">Total Biaya</p>
-                    <p class="text-2xl font-bold">Rp {{ number_format($finalPrice, 0, ',', '.') }}</p>
+                    <p class="text-2xl font-bold">Rp <?php echo e(number_format($template->price ?? ($template->package->price ?? 0), 0, ',', '.')); ?></p>
                 </div>
             </div>
 
             <!-- Form Inputs -->
-            <form action="{{ route('order.store') }}" method="POST" class="p-8 md:p-12">
-                @csrf
-                <input type="hidden" name="template_id" value="{{ $template->id }}">
+            <form action="<?php echo e(route('order.store')); ?>" method="POST" class="p-8 md:p-12">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="template_id" value="<?php echo e($template->id); ?>">
 
-                @if ($errors->any())
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($errors->any()): ?>
                     <div class="mb-8 p-4 bg-red-50 border-l-4 border-red-500 text-red-700">
                         <ul class="list-disc pl-5">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li><?php echo e($error); ?></li>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </ul>
                     </div>
-                @endif
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 
-                @php
+                <?php
                     $formType = $template->serviceCategory->form_type ?? 'undangan';
-                @endphp
+                ?>
 
                 <!-- 1. Data Pemesan -->
                 <h3 class="text-xl font-serif text-brand-900 mb-6 pb-2 border-b border-gray-100">1. Data Pemesan</h3>
@@ -76,7 +69,7 @@
 
                 <div class="space-y-6 mb-10" x-data="{ 
                     quantity: 1, 
-                    basePrice: {{ $finalPrice }},
+                    basePrice: <?php echo e($template->price ?? ($template->package->price ?? 0)); ?>,
                     jenisKertas: 'Art Carton 260gsm',
                     laminasi: 'Tanpa Laminasi',
                     kustomWarna: false,
@@ -93,8 +86,8 @@
                         let addonsPerItem = 0;
                         let addonsFlat = 0;
                         
-                        let type = '{{ $formType }}';
-                        let service = '{{ $template->service->slug ?? '' }}';
+                        let type = '<?php echo e($formType); ?>';
+                        let service = '<?php echo e($template->service->slug ?? ''); ?>';
                         
                         if (type === 'undangan' && service !== 'event-digital') {
                             if (this.jenisKertas === 'Jasmine') addonsPerItem += 500;
@@ -132,9 +125,9 @@
                 }">
                     
                     <!-- Form Undangan -->
-                    @if($formType == 'undangan')
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($formType == 'undangan'): ?>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            @if($template->service && $template->service->slug != 'event-digital')
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($template->service && $template->service->slug != 'event-digital'): ?>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Acara</label>
                                 <input type="date" name="event_date" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition">
@@ -160,27 +153,27 @@
                                     <option value="Doff">Laminasi Doff (+Rp 200/pcs)</option>
                                 </select>
                             </div>
-                            @endif
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </div>
                         
-                        @if($template->service && $template->service->slug != 'event-digital')
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($template->service && $template->service->slug != 'event-digital'): ?>
                         <div class="mt-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Salin (Copy-Paste) Daftar Tamu Anda di sini</label>
                             <p class="text-xs text-gray-500 mb-2">Satu nama tamu per baris. Boleh dikosongkan terlebih dahulu jika belum siap.</p>
                             <textarea name="guest_list" rows="8" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition" placeholder="Contoh:&#10;Bapak Budi & Keluarga&#10;Ibu Siska&#10;Andi & Partner"></textarea>
                         </div>
-                        @else
+                        <?php else: ?>
                         <div class="mt-6 bg-brand-50 border border-brand-100 rounded-lg p-4 text-sm text-brand-800">
                             <p><strong>Informasi:</strong> Untuk Detail Acara (Tanggal, Lokasi) dan Daftar Tamu, Anda akan mengisi <strong>Formulir Khusus</strong> yang lebih lengkap dan interaktif setelah pesanan ini masuk.</p>
                         </div>
-                        @endif
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         
-                        @if($template->package && $template->package->is_customizable)
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($template->package && $template->package->is_customizable): ?>
                         <div class="mt-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Request Custom Tambahan</label>
                             <textarea name="custom_requests" rows="4" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition" placeholder="Contoh: Tolong ganti warna pita jadi merah maroon..."></textarea>
                             
-                            @if($template->service && $template->service->slug != 'event-digital')
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($template->service && $template->service->slug != 'event-digital'): ?>
                             <div class="mt-4 flex flex-col gap-3">
                                 <label class="flex items-center gap-3">
                                     <input type="checkbox" name="kustom_warna" value="Ya" x-model="kustomWarna" class="w-5 h-5 text-brand-600 rounded focus:ring-brand-500">
@@ -191,17 +184,17 @@
                                     <span class="text-sm text-gray-700">Kustom Elemen Desain / Layout (+Rp 100.000)</span>
                                 </label>
                             </div>
-                            @endif
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </div>
-                        @else
+                        <?php else: ?>
                         <div class="mt-6 bg-gray-50 border border-gray-200 rounded-lg p-4 text-sm text-gray-500">
-                            <p><strong>Catatan:</strong> Paket {{ $template->package->name ?? 'ini' }} tidak menyertakan fitur kustomisasi desain. Jika Anda membutuhkan fitur kustomisasi, silakan pilih desain dari paket Premium atau custom.</p>
+                            <p><strong>Catatan:</strong> Paket <?php echo e($template->package->name ?? 'ini'); ?> tidak menyertakan fitur kustomisasi desain. Jika Anda membutuhkan fitur kustomisasi, silakan pilih desain dari paket Premium atau custom.</p>
                         </div>
-                        @endif
-                    @endif
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
                     <!-- Form Yasin -->
-                    @if($formType == 'yasin')
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($formType == 'yasin'): ?>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Kuantitas / Jumlah Cetak</label>
@@ -243,10 +236,10 @@
                                 <textarea name="custom_requests" rows="3" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition" placeholder="Contoh: Tolong pakai font arab yang jelas..."></textarea>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
                     <!-- Form Lanyard -->
-                    @if($formType == 'lanyard')
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($formType == 'lanyard'): ?>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Kuantitas Lanyard/ID Card (Pcs)</label>
@@ -261,10 +254,10 @@
                                 <textarea name="custom_requests" rows="3" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition" placeholder="Jelaskan kebutuhan Anda atau beri tahu kami jika Anda akan mengirimkan file desain melalui WA."></textarea>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
                     <!-- Form Print / Fotocopy -->
-                    @if($formType == 'print')
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($formType == 'print'): ?>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Berapa Halaman? / Copies</label>
@@ -300,7 +293,7 @@
                                 <textarea name="custom_requests" rows="3" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition" placeholder="Contoh: Halaman 1-5 print warna, sisanya hitam putih. (Catatan: Anda akan diarahkan ke WhatsApp untuk mengirim file dokumennya)"></textarea>
                             </div>
                         </div>
-                    @endif
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
                     <!-- Harga Total Dinamis -->
                     <div class="mt-8 pt-6 border-t border-gray-200">
@@ -323,7 +316,7 @@
                 </div>
 
                 <div class="flex justify-end gap-4">
-                    <a href="{{ url()->previous() }}" class="px-8 py-3.5 border border-gray-300 text-gray-600 rounded-full text-sm font-semibold hover:bg-gray-50 transition">Kembali</a>
+                    <a href="<?php echo e(url()->previous()); ?>" class="px-8 py-3.5 border border-gray-300 text-gray-600 rounded-full text-sm font-semibold hover:bg-gray-50 transition">Kembali</a>
                     <button type="submit" class="px-8 py-3.5 bg-brand-600 text-white rounded-full text-sm font-bold shadow-lg hover:bg-brand-700 transition transform hover:-translate-y-1">
                         Simpan & Hubungi Admin (WA)
                     </button>
@@ -332,4 +325,6 @@
         </div>
     </div>
 </section>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\laragon\www\Undangan\resources\views\order-form.blade.php ENDPATH**/ ?>
