@@ -79,9 +79,9 @@
                     <div @click="window.location.href = '/order/' + template.id" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex flex-col h-full">
                         <div class="relative bg-gray-100 overflow-hidden"
                              x-bind:style="'aspect-ratio: ' + (template.image_aspect_ratio && template.image_aspect_ratio !== 'auto' ? (template.image_aspect_ratio.includes('/') ? template.image_aspect_ratio : '3/4') : 'auto')"
-                             x-data="{ currentSlide: 0, slides: template.images ? [template.image, ...template.images].filter(Boolean) : (template.image ? [template.image] : ['']), init() { if (this.slides.length > 1) { setInterval(() => { this.currentSlide = this.currentSlide === this.slides.length - 1 ? 0 : this.currentSlide + 1 }, 3000) } } }">
+                             x-data="{ currentSlide: 0, slides: template.images ? [template.image, ...template.images].filter(Boolean) : (template.image ? [template.image] : ['']), init() { if (this.slides.length > 1) { setInterval(() => { this.currentSlide = this.currentSlide === this.slides.length - 1 ? 0 : this.currentSlide + 1 }, 4000) } } }">
                             
-                            <div class="absolute inset-0 w-full h-full flex transition-transform duration-500 ease-out"
+                            <div class="absolute inset-0 w-full h-full flex transition-transform duration-700 ease-in-out"
                                  x-bind:style="'transform: translateX(-' + (currentSlide * 100) + '%)'">
                                 <template x-for="(slide, index) in slides" :key="index">
                                     <img x-bind:src="slide ? (slide.startsWith('http') ? slide : window.ASSET_URL + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 

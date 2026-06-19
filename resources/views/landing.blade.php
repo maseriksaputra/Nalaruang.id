@@ -447,7 +447,7 @@
                                     $allImages = [''];
                                 }
                             @endphp
-                            <div x-data="{ currentSlide: 0, slides: {{ json_encode($allImages) }}, init() { if (this.slides.length > 1) { setInterval(() => { this.currentSlide = this.currentSlide === this.slides.length - 1 ? 0 : this.currentSlide + 1 }, 3000) } } }" 
+                            <div x-data="{ currentSlide: 0, slides: {{ json_encode($allImages) }}, init() { if (this.slides.length > 1) { setInterval(() => { this.currentSlide = this.currentSlide === this.slides.length - 1 ? 0 : this.currentSlide + 1 }, 4000) } } }" 
                                  class="portfolio-item snap-start shrink-0 w-[220px] sm:w-[240px] group flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden" 
                                  data-aos="zoom-in" data-aos-delay="{{ $loop->iteration * 50 }}">
                                  
@@ -470,7 +470,7 @@
                                             </div>
                                         </div>
                                     @else
-                                        <div class="absolute inset-0 w-full h-full flex transition-transform duration-500 ease-out"
+                                        <div class="absolute inset-0 w-full h-full flex transition-transform duration-700 ease-in-out"
                                              x-bind:style="'transform: translateX(-' + (currentSlide * 100) + '%)'">
                                             <template x-for="(slide, index) in slides" :key="index">
                                                 <img x-bind:src="slide ? (slide.startsWith('http') ? slide : window.ASSET_URL + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 
