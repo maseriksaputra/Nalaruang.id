@@ -96,7 +96,18 @@ const RightInspector = () => {
             // 1. Ambil gambar sebagai blob terlebih dahulu untuk mencegah error CORS di dalam imgly
             let imageBlob;
             try {
-                const res = await fetch(originalUrl);
+                let fetchUrl = originalUrl;
+                try {
+                    const urlObj = new URL(originalUrl);
+                    // Force same-origin path to avoid CORS/Mixed Content over ngrok/cloudflare tunnels
+                    if (urlObj.host !== window.location.host) {
+                        fetchUrl = urlObj.pathname + urlObj.search;
+                    }
+                } catch (e) {
+                    // Ignore if not a valid URL string
+                }
+                
+                const res = await fetch(fetchUrl);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 imageBlob = await res.blob();
             } catch (e) {
