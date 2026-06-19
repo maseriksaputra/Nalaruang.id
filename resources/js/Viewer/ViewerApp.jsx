@@ -116,7 +116,7 @@ const ViewerApp = ({ previewData, onClosePreview }) => {
             </div>
 
             {/* Background Audio */}
-            {viewerData?.global_settings?.audioUrl && window.__IS_PREVIEW__ !== true && (
+            {viewerData?.global_settings?.audioUrl && window.__IS_PREVIEW__ !== true && !new URLSearchParams(window.location.search).has('preview') && (
                 <BackgroundAudio settings={viewerData.global_settings} />
             )}
         </div>
