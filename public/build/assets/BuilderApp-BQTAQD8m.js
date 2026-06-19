@@ -8688,7 +8688,7 @@ var ColorsPanel = () => {
 		updateLayerStyle(activeLayerId, updates);
 	};
 	const handleSelectGradient = (gradient) => {
-		if (!activeLayerId || activeLayer.type === "text") return;
+		if (!activeLayerId || activeLayer.type === "text" || activeLayer.type === "dynamic_guest_name") return;
 		const colors = gradient.match(/#[a-fA-F0-9]{6}/g) || ["#ffffff", "#000000"];
 		updateLayerStyle(activeLayerId, {
 			backgroundType: "linear-gradient",
@@ -17652,7 +17652,7 @@ var ContextualToolbar = () => {
 		})]
 	});
 	if (!activeLayer) return null;
-	const isText = activeLayer.type === "text";
+	const isText = activeLayer.type === "text" || activeLayer.type === "dynamic_guest_name";
 	const isImage = activeLayer.type === "image" || activeLayer.type === "polaroid";
 	const isShape = activeLayer.type === "shape";
 	const currentFontSize = parseInt(activeLayer.style?.fontSize) || 16;

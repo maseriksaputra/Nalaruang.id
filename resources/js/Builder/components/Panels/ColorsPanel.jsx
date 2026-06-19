@@ -62,7 +62,7 @@ const ColorsPanel = () => {
     };
 
     const handleSelectGradient = (gradient) => {
-        if (!activeLayerId || activeLayer.type === 'text') return; // gradients typically for shapes/backgrounds
+        if (!activeLayerId || activeLayer.type === 'text' || activeLayer.type === 'dynamic_guest_name') return; // gradients typically for shapes/backgrounds
         
         // Extract the two colors from linear-gradient for our simple gradient css
         // This is a naive extraction for the predefined ones

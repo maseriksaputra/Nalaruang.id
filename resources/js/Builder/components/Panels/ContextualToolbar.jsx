@@ -58,7 +58,7 @@ const ContextualToolbar = () => {
         return null;
     }
 
-    const isText = activeLayer.type === 'text';
+    const isText = activeLayer.type === 'text' || activeLayer.type === 'dynamic_guest_name';
     const isImage = activeLayer.type === 'image' || activeLayer.type === 'polaroid';
     const isShape = activeLayer.type === 'shape';
 
