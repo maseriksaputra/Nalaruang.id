@@ -249,6 +249,7 @@ const LeftDrawer = () => {
     const [isUploadingAudio, setIsUploadingAudio] = useState(false);
     const [clientAudioAssets, setClientAudioAssets] = useState([]);
     const [isLoadingClientAudio, setIsLoadingClientAudio] = useState(false);
+    const [searchGlobal, setSearchGlobal] = useState('');
 
     const fetchClientAudio = async () => {
         if (!window.__INVITATION_ID__) return;
@@ -695,7 +696,7 @@ const LeftDrawer = () => {
                             <div className="space-y-3">
                                 <div className="flex items-center gap-2 mb-2">
                                     <button 
-                                        onClick={() => setActiveFolder(null)}
+                                        onClick={() => { setActiveFolder(null); setSearchGlobal(''); }}
                                         className="p-1 hover:bg-gray-100 rounded text-gray-500 hover:text-indigo-600 transition"
                                         title="Kembali ke Folder"
                                     >
@@ -705,8 +706,17 @@ const LeftDrawer = () => {
                                         {activeFolder}
                                     </h3>
                                 </div>
+                                <div className="mb-3">
+                                    <input 
+                                        type="text" 
+                                        placeholder={`Cari di ${activeFolder}...`} 
+                                        value={searchGlobal}
+                                        onChange={(e) => setSearchGlobal(e.target.value)}
+                                        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none"
+                                    />
+                                </div>
                                 <div className="grid grid-cols-3 gap-2">
-                                    {globalElements.filter(el => (el.category || 'Umum') === activeFolder).map((el) => (
+                                    {globalElements.filter(el => (el.category || 'Umum') === activeFolder && (!searchGlobal || el.name.toLowerCase().includes(searchGlobal.toLowerCase()))).map((el) => (
                                         <div key={el.id} className="relative group">
                                             <button 
                                                 onClick={() => addLayer({ id: 'layer_' + Date.now(), ...el.payload })}
@@ -739,13 +749,56 @@ const LeftDrawer = () => {
                             </div>
                         ) : (
                             <div className="space-y-3">
-                                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between">
-                                    Koleksi Permanen
-                                    {isLoadingElements && <span className="text-[10px] text-indigo-500 normal-case animate-pulse">Memuat...</span>}
-                                </h3>
+                                <div className="flex items-center justify-between mb-2">
+                                    <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+                                        Koleksi Permanen
+                                        {isLoadingElements && <span className="text-[10px] text-indigo-500 normal-case animate-pulse">Memuat...</span>}
+                                    </h3>
+                                </div>
+                                <div className="mb-3">
+                                    <input 
+                                        type="text" 
+                                        placeholder="Cari semua koleksi..." 
+                                        value={searchGlobal}
+                                        onChange={(e) => setSearchGlobal(e.target.value)}
+                                        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none"
+                                    />
+                                </div>
                                 {globalElements.length === 0 && !isLoadingElements ? (
                                     <div className="text-center p-4 bg-gray-50 border border-dashed border-gray-200 rounded-lg text-xs text-gray-400">
                                         Belum ada elemen tersimpan.
+                                    </div>
+                                ) : searchGlobal ? (
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {globalElements.filter(el => el.name.toLowerCase().includes(searchGlobal.toLowerCase())).map((el) => (
+                                            <div key={el.id} className="relative group">
+                                                <button 
+                                                    onClick={() => addLayer({ id: 'layer_' + Date.now(), ...el.payload })}
+                                                    className="w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-indigo-500 hover:shadow-sm transition aspect-square"
+                                                    title={el.name}
+                                                >
+                                                    {el.type === 'image' && el.thumbnail_url ? (
+                                                        <img src={el.thumbnail_url} alt={el.name} className="w-8 h-8 object-contain mb-1" />
+                                                    ) : el.type === 'lottie' ? (
+                                                        <div className="w-8 h-8 bg-indigo-50 text-indigo-400 flex items-center justify-center rounded mb-1">
+                                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="w-8 h-8 bg-gray-100 flex items-center justify-center rounded mb-1">
+                                                            <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                        </div>
+                                                    )}
+                                                    <span className="text-[9px] font-semibold text-gray-600 truncate w-full text-center leading-tight">{el.name}</span>
+                                                </button>
+                                                <button 
+                                                    onClick={(e) => deleteGlobalElement(el.id, e)}
+                                                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition shadow-sm z-10"
+                                                    title="Hapus Elemen"
+                                                >
+                                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                </button>
+                                            </div>
+                                        ))}
                                     </div>
                                 ) : (
                                     <div className="grid grid-cols-2 gap-2">

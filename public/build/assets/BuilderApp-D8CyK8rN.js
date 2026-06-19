@@ -17876,6 +17876,7 @@ var LeftDrawer = () => {
 	const [isUploadingAudio, setIsUploadingAudio] = (0, import_react.useState)(false);
 	const [clientAudioAssets, setClientAudioAssets] = (0, import_react.useState)([]);
 	const [isLoadingClientAudio, setIsLoadingClientAudio] = (0, import_react.useState)(false);
+	const [searchGlobal, setSearchGlobal] = (0, import_react.useState)("");
 	const fetchClientAudio = async () => {
 		if (!window.__INVITATION_ID__) return;
 		setIsLoadingClientAudio(true);
@@ -18457,86 +18458,18 @@ var LeftDrawer = () => {
 					className: "space-y-3",
 					children: activeFolder ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "space-y-3",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center gap-2 mb-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-								onClick: () => setActiveFolder(null),
-								className: "p-1 hover:bg-gray-100 rounded text-gray-500 hover:text-indigo-600 transition",
-								title: "Kembali ke Folder",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-									className: "w-4 h-4",
-									fill: "none",
-									stroke: "currentColor",
-									viewBox: "0 0 24 24",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-										strokeLinecap: "round",
-										strokeLinejoin: "round",
-										strokeWidth: "2",
-										d: "M15 19l-7-7 7-7"
-									})
-								})
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-								className: "text-xs font-bold text-gray-700 uppercase tracking-wider flex-1 truncate",
-								children: activeFolder
-							})]
-						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "grid grid-cols-3 gap-2",
-							children: globalElements.filter((el) => (el.category || "Umum") === activeFolder).map((el) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "relative group",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									onClick: () => addLayer({
-										id: "layer_" + Date.now(),
-										...el.payload
-									}),
-									className: "w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-indigo-500 hover:shadow-sm transition aspect-square",
-									title: el.name,
-									children: [el.type === "image" && el.thumbnail_url ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-										src: el.thumbnail_url,
-										alt: el.name,
-										className: "w-8 h-8 object-contain mb-1"
-									}) : el.type === "lottie" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "w-8 h-8 bg-indigo-50 text-indigo-400 flex items-center justify-center rounded mb-1",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-											className: "w-5 h-5",
-											fill: "none",
-											stroke: "currentColor",
-											viewBox: "0 0 24 24",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-												strokeLinecap: "round",
-												strokeLinejoin: "round",
-												strokeWidth: "2",
-												d: "M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-												strokeLinecap: "round",
-												strokeLinejoin: "round",
-												strokeWidth: "2",
-												d: "M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-											})]
-										})
-									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "w-8 h-8 bg-gray-100 flex items-center justify-center rounded mb-1",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-											className: "w-4 h-4 text-gray-400",
-											fill: "none",
-											stroke: "currentColor",
-											viewBox: "0 0 24 24",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-												strokeLinecap: "round",
-												strokeLinejoin: "round",
-												strokeWidth: "2",
-												d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-											})
-										})
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-[9px] font-semibold text-gray-600 truncate w-full text-center leading-tight",
-										children: el.name
-									})]
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									onClick: (e) => deleteGlobalElement(el.id, e),
-									className: "absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition shadow-sm z-10",
-									title: "Hapus Elemen",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "flex items-center gap-2 mb-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									onClick: () => {
+										setActiveFolder(null);
+										setSearchGlobal("");
+									},
+									className: "p-1 hover:bg-gray-100 rounded text-gray-500 hover:text-indigo-600 transition",
+									title: "Kembali ke Folder",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-										className: "w-3 h-3",
+										className: "w-4 h-4",
 										fill: "none",
 										stroke: "currentColor",
 										viewBox: "0 0 24 24",
@@ -18544,34 +18477,82 @@ var LeftDrawer = () => {
 											strokeLinecap: "round",
 											strokeLinejoin: "round",
 											strokeWidth: "2",
-											d: "M6 18L18 6M6 6l12 12"
+											d: "M15 19l-7-7 7-7"
 										})
 									})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+									className: "text-xs font-bold text-gray-700 uppercase tracking-wider flex-1 truncate",
+									children: activeFolder
 								})]
-							}, el.id))
-						})]
-					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "space-y-3",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
-							className: "text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between",
-							children: ["Koleksi Permanen", isLoadingElements && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-[10px] text-indigo-500 normal-case animate-pulse",
-								children: "Memuat..."
-							})]
-						}), globalElements.length === 0 && !isLoadingElements ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "text-center p-4 bg-gray-50 border border-dashed border-gray-200 rounded-lg text-xs text-gray-400",
-							children: "Belum ada elemen tersimpan."
-						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "grid grid-cols-2 gap-2",
-							children: [...new Set(globalElements.map((el) => el.category || "Umum"))].map((folder) => {
-								const itemsInFolder = globalElements.filter((el) => (el.category || "Umum") === folder);
-								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-									onClick: () => setActiveFolder(folder),
-									className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "w-10 h-10 bg-indigo-50 flex items-center justify-center rounded-lg text-indigo-500",
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mb-3",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									type: "text",
+									placeholder: `Cari di ${activeFolder}...`,
+									value: searchGlobal,
+									onChange: (e) => setSearchGlobal(e.target.value),
+									className: "w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none"
+								})
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid grid-cols-3 gap-2",
+								children: globalElements.filter((el) => (el.category || "Umum") === activeFolder && (!searchGlobal || el.name.toLowerCase().includes(searchGlobal.toLowerCase()))).map((el) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "relative group",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										onClick: () => addLayer({
+											id: "layer_" + Date.now(),
+											...el.payload
+										}),
+										className: "w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-indigo-500 hover:shadow-sm transition aspect-square",
+										title: el.name,
+										children: [el.type === "image" && el.thumbnail_url ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+											src: el.thumbnail_url,
+											alt: el.name,
+											className: "w-8 h-8 object-contain mb-1"
+										}) : el.type === "lottie" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "w-8 h-8 bg-indigo-50 text-indigo-400 flex items-center justify-center rounded mb-1",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+												className: "w-5 h-5",
+												fill: "none",
+												stroke: "currentColor",
+												viewBox: "0 0 24 24",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+												})]
+											})
+										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "w-8 h-8 bg-gray-100 flex items-center justify-center rounded mb-1",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+												className: "w-4 h-4 text-gray-400",
+												fill: "none",
+												stroke: "currentColor",
+												viewBox: "0 0 24 24",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+												})
+											})
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[9px] font-semibold text-gray-600 truncate w-full text-center leading-tight",
+											children: el.name
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										onClick: (e) => deleteGlobalElement(el.id, e),
+										className: "absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition shadow-sm z-10",
+										title: "Hapus Elemen",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-											className: "w-6 h-6",
+											className: "w-3 h-3",
 											fill: "none",
 											stroke: "currentColor",
 											viewBox: "0 0 24 24",
@@ -18579,22 +18560,144 @@ var LeftDrawer = () => {
 												strokeLinecap: "round",
 												strokeLinejoin: "round",
 												strokeWidth: "2",
-												d: "M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+												d: "M6 18L18 6M6 6l12 12"
 											})
 										})
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "text-center",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: "text-[10px] font-bold text-gray-700 block truncate w-full",
-											children: folder
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-											className: "text-[9px] text-gray-400",
-											children: [itemsInFolder.length, " item"]
-										})]
 									})]
-								}, folder);
+								}, el.id))
 							})
-						})]
+						]
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "space-y-3",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flex items-center justify-between mb-2",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
+									className: "text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2",
+									children: ["Koleksi Permanen", isLoadingElements && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-[10px] text-indigo-500 normal-case animate-pulse",
+										children: "Memuat..."
+									})]
+								})
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "mb-3",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									type: "text",
+									placeholder: "Cari semua koleksi...",
+									value: searchGlobal,
+									onChange: (e) => setSearchGlobal(e.target.value),
+									className: "w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none"
+								})
+							}),
+							globalElements.length === 0 && !isLoadingElements ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "text-center p-4 bg-gray-50 border border-dashed border-gray-200 rounded-lg text-xs text-gray-400",
+								children: "Belum ada elemen tersimpan."
+							}) : searchGlobal ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid grid-cols-3 gap-2",
+								children: globalElements.filter((el) => el.name.toLowerCase().includes(searchGlobal.toLowerCase())).map((el) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "relative group",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										onClick: () => addLayer({
+											id: "layer_" + Date.now(),
+											...el.payload
+										}),
+										className: "w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-indigo-500 hover:shadow-sm transition aspect-square",
+										title: el.name,
+										children: [el.type === "image" && el.thumbnail_url ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+											src: el.thumbnail_url,
+											alt: el.name,
+											className: "w-8 h-8 object-contain mb-1"
+										}) : el.type === "lottie" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "w-8 h-8 bg-indigo-50 text-indigo-400 flex items-center justify-center rounded mb-1",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+												className: "w-5 h-5",
+												fill: "none",
+												stroke: "currentColor",
+												viewBox: "0 0 24 24",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+												})]
+											})
+										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "w-8 h-8 bg-gray-100 flex items-center justify-center rounded mb-1",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+												className: "w-4 h-4 text-gray-400",
+												fill: "none",
+												stroke: "currentColor",
+												viewBox: "0 0 24 24",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"
+												})
+											})
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[9px] font-semibold text-gray-600 truncate w-full text-center leading-tight",
+											children: el.name
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										onClick: (e) => deleteGlobalElement(el.id, e),
+										className: "absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition shadow-sm z-10",
+										title: "Hapus Elemen",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+											className: "w-3 h-3",
+											fill: "none",
+											stroke: "currentColor",
+											viewBox: "0 0 24 24",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+												strokeLinecap: "round",
+												strokeLinejoin: "round",
+												strokeWidth: "2",
+												d: "M6 18L18 6M6 6l12 12"
+											})
+										})
+									})]
+								}, el.id))
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "grid grid-cols-2 gap-2",
+								children: [...new Set(globalElements.map((el) => el.category || "Umum"))].map((folder) => {
+									const itemsInFolder = globalElements.filter((el) => (el.category || "Umum") === folder);
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+										onClick: () => setActiveFolder(folder),
+										className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "w-10 h-10 bg-indigo-50 flex items-center justify-center rounded-lg text-indigo-500",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+												className: "w-6 h-6",
+												fill: "none",
+												stroke: "currentColor",
+												viewBox: "0 0 24 24",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+												})
+											})
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "text-center",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "text-[10px] font-bold text-gray-700 block truncate w-full",
+												children: folder
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+												className: "text-[9px] text-gray-400",
+												children: [itemsInFolder.length, " item"]
+											})]
+										})]
+									}, folder);
+								})
+							})
+						]
 					})
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

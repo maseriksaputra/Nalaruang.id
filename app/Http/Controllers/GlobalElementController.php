@@ -9,7 +9,12 @@ class GlobalElementController extends Controller
 {
     public function index()
     {
-        $elements = GlobalElement::latest()->get();
+        // Ambil elemen global (bawaan sistem yang user_id = null) DAN elemen milik user ini
+        $elements = GlobalElement::where('user_id', auth()->id())
+            ->orWhereNull('user_id')
+            ->latest()
+            ->get();
+            
         return response()->json([
             'success' => true,
             'data' => $elements
@@ -26,6 +31,7 @@ class GlobalElementController extends Controller
         ]);
 
         $element = GlobalElement::create([
+            'user_id' => auth()->id(),
             'name' => $request->name,
             'type' => $request->type,
             'category' => $request->category ?? 'general',
@@ -63,7 +69,7 @@ class GlobalElementController extends Controller
 
     public function destroy($id)
     {
-        $element = GlobalElement::findOrFail($id);
+        $element = GlobalElement::where('user_id', auth()->id())->findOrFail($id);
         $element->delete();
 
         return response()->json([
