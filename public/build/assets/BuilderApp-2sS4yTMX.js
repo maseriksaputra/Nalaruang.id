@@ -21585,7 +21585,14 @@ var RightInspector = () => {
 													onClick: () => {
 														if (category.isContinuous) {
 															updateLayerAnimation(activeLayer.id, { idle: anim.id });
-															if (!activeLayer.animation?.configIdle) updateLayerAnimation(activeLayer.id, { configIdle: { speed: 1 } });
+															if (!activeLayer.animation?.configIdle) updateLayerAnimation(activeLayer.id, { configIdle: {
+																speed: 1,
+																previewKey: Date.now()
+															} });
+															else updateLayerAnimation(activeLayer.id, { configIdle: {
+																...activeLayer.animation.configIdle,
+																previewKey: Date.now()
+															} });
 														} else {
 															let dir = "default";
 															if (anim.id.includes("left")) dir = "left";
@@ -21606,7 +21613,8 @@ var RightInspector = () => {
 																	entry: anim.id,
 																	config: {
 																		...currentConfig,
-																		direction: dir
+																		direction: dir,
+																		previewKey: Date.now()
 																	}
 																});
 															} else {
@@ -21618,7 +21626,8 @@ var RightInspector = () => {
 																	exit: anim.id,
 																	configExit: {
 																		...currentConfigExit,
-																		direction: dir
+																		direction: dir,
+																		previewKey: Date.now()
 																	}
 																});
 															}
@@ -21665,7 +21674,8 @@ var RightInspector = () => {
 															};
 															updateLayerAnimation(activeLayer.id, { config: {
 																...currentConfig,
-																delay: parseFloat(e.target.value)
+																delay: parseFloat(e.target.value),
+																previewKey: Date.now()
 															} });
 														} else {
 															const currentConfigExit = activeLayer.animation?.configExit || {
@@ -21674,7 +21684,8 @@ var RightInspector = () => {
 															};
 															updateLayerAnimation(activeLayer.id, { configExit: {
 																...currentConfigExit,
-																delay: parseFloat(e.target.value)
+																delay: parseFloat(e.target.value),
+																previewKey: Date.now()
 															} });
 														}
 													},
@@ -21703,7 +21714,8 @@ var RightInspector = () => {
 															};
 															updateLayerAnimation(activeLayer.id, { config: {
 																...currentConfig,
-																speed: parseFloat(e.target.value)
+																speed: parseFloat(e.target.value),
+																previewKey: Date.now()
 															} });
 														} else {
 															const currentConfigExit = activeLayer.animation?.configExit || {
@@ -21712,7 +21724,8 @@ var RightInspector = () => {
 															};
 															updateLayerAnimation(activeLayer.id, { configExit: {
 																...currentConfigExit,
-																speed: parseFloat(e.target.value)
+																speed: parseFloat(e.target.value),
+																previewKey: Date.now()
 															} });
 														}
 													},
@@ -21762,14 +21775,16 @@ var RightInspector = () => {
 																	const currentConfig = activeLayer.animation?.config || { speed: 1.5 };
 																	updateLayerAnimation(activeLayer.id, { config: {
 																		...currentConfig,
-																		direction: dir.id
+																		direction: dir.id,
+																		previewKey: Date.now()
 																	} });
 																	if (activeLayer.animation.entry?.startsWith("slide-")) updateLayerAnimation(activeLayer.id, { entry: dir.mapTo });
 																} else {
 																	const currentConfigExit = activeLayer.animation?.configExit || { speed: 1.5 };
 																	updateLayerAnimation(activeLayer.id, { configExit: {
 																		...currentConfigExit,
-																		direction: dir.id
+																		direction: dir.id,
+																		previewKey: Date.now()
 																	} });
 																	if (activeLayer.animation.exit?.startsWith("slide-")) updateLayerAnimation(activeLayer.id, { exit: dir.mapTo });
 																}
@@ -21789,7 +21804,8 @@ var RightInspector = () => {
 															const currentConfig = activeLayer.animation?.config || { speed: 1.5 };
 															updateLayerAnimation(activeLayer.id, { config: {
 																...currentConfig,
-																trigger
+																trigger,
+																previewKey: Date.now()
 															} });
 														},
 														className: `flex-1 py-1.5 text-[10px] font-medium rounded-md transition ${(activeLayer.animation.config?.trigger || "onLoad") === trigger ? "bg-indigo-100 text-indigo-700" : "text-gray-500 hover:bg-gray-50"}`,
@@ -21843,7 +21859,8 @@ var RightInspector = () => {
 														};
 														updateLayerAnimation(activeLayer.id, { configIdle: {
 															...currentConfig,
-															windStrength: parseInt(e.target.value)
+															windStrength: parseInt(e.target.value),
+															previewKey: Date.now()
 														} });
 													},
 													className: "w-full accent-indigo-600"
@@ -21872,7 +21889,8 @@ var RightInspector = () => {
 														};
 														updateLayerAnimation(activeLayer.id, { configIdle: {
 															...currentConfig,
-															stiffness: parseInt(e.target.value)
+															stiffness: parseInt(e.target.value),
+															previewKey: Date.now()
 														} });
 													},
 													className: "w-full accent-indigo-600"
@@ -21901,7 +21919,8 @@ var RightInspector = () => {
 														};
 														updateLayerAnimation(activeLayer.id, { configIdle: {
 															...currentConfig,
-															damping: parseInt(e.target.value)
+															damping: parseInt(e.target.value),
+															previewKey: Date.now()
 														} });
 													},
 													className: "w-full accent-indigo-600"
@@ -21929,7 +21948,8 @@ var RightInspector = () => {
 																};
 																updateLayerAnimation(activeLayer.id, { configIdle: {
 																	...currentConfig,
-																	randomize: e.target.checked
+																	randomize: e.target.checked,
+																	previewKey: Date.now()
 																} });
 															}
 														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600" })]
@@ -21954,7 +21974,8 @@ var RightInspector = () => {
 													const currentConfig = activeLayer.animation?.configIdle || { speed: 1 };
 													updateLayerAnimation(activeLayer.id, { configIdle: {
 														...currentConfig,
-														speed: parseFloat(e.target.value)
+														speed: parseFloat(e.target.value),
+														previewKey: Date.now()
 													} });
 												},
 												className: "w-full accent-indigo-600"
