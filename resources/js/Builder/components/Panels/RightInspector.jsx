@@ -63,10 +63,10 @@ const RightInspector = () => {
         if (!checked) {
             // Restore original image if it exists
             if (layer.style?.originalUrl) {
+                useCanvasStore.getState().updateLayer(layer.id, { url: layer.style.originalUrl });
                 updateLayerStyle(layer.id, { 
                     removeBg: false,
-                    url: layer.style.originalUrl,
-                    bgRemovedUrl: null
+                    originalUrl: null
                 });
             } else {
                 updateLayerStyle(layer.id, { removeBg: false });
@@ -76,9 +76,9 @@ const RightInspector = () => {
 
         // If toggled ON and we already have a bgRemovedUrl, just use it
         if (layer.style?.bgRemovedUrl) {
+            useCanvasStore.getState().updateLayer(layer.id, { url: layer.style.bgRemovedUrl });
             updateLayerStyle(layer.id, { 
-                removeBg: true,
-                url: layer.style.bgRemovedUrl
+                removeBg: true
             });
             return;
         }
@@ -93,7 +93,11 @@ const RightInspector = () => {
             // Dynamically import to avoid blocking main bundle
             const { default: removeBackground } = await import('@imgly/background-removal');
             
-            const blob = await removeBackground(originalUrl);
+            const config = {
+                debug: true,
+                device: 'cpu', // Fallback to cpu to avoid WebGPU silent fails
+            };
+            const blob = await removeBackground(originalUrl, config);
             const file = new File([blob], `transparent_${Date.now()}.png`, { type: 'image/png' });
 
             const formData = new FormData();
@@ -105,11 +109,12 @@ const RightInspector = () => {
             });
 
             if (response.data && response.data.url) {
+                // Update the layer's main url property so everything (including inspector) updates
+                useCanvasStore.getState().updateLayer(layer.id, { url: response.data.url });
                 updateLayerStyle(layer.id, { 
                     removeBg: true,
                     originalUrl: originalUrl,
-                    bgRemovedUrl: response.data.url,
-                    url: response.data.url
+                    bgRemovedUrl: response.data.url
                 });
             }
         } catch (error) {

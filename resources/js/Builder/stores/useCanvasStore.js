@@ -775,10 +775,18 @@ const useCanvasStore = create(temporal((set, get) => ({
 
     updateLayerContent: (layerId, content) => {
         set(produce((state) => {
-            state.sections.forEach(section => {
-                const layer = findElement(state.sections, layerId);
-                if (layer) { layer.content = content; }
-            });
+            const layer = findElement(state.sections, layerId);
+            if (layer) { layer.content = content; }
+        }));
+        get().triggerAutoSave();
+    },
+
+    updateLayer: (layerId, data) => {
+        set(produce((state) => {
+            const layer = findElement(state.sections, layerId);
+            if (layer) {
+                Object.assign(layer, data);
+            }
         }));
         get().triggerAutoSave();
     },
