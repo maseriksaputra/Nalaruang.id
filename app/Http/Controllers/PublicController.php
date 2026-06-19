@@ -13,7 +13,7 @@ class PublicController extends Controller
     {
         // Get active services with their active templates to display on the landing page
         $services = \App\Models\Service::with(['templates' => function ($query) {
-            $query->where('is_active', true)->orderBy('sort_order')->orderBy('price', 'asc');
+            $query->where('is_active', true)->orderBy('created_at', 'desc');
         }])->where('is_active', true)->orderBy('sort_order')->get();
         
         $portfolios = \App\Models\Portfolio::where('is_active', true)->orderBy('sort_order')->get();

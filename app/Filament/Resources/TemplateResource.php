@@ -46,7 +46,7 @@ class TemplateResource extends Resource
                                                 if (!$activeTab || $activeTab === 'semua') return null;
                                                 
                                                 $serviceSlug = match($activeTab) {
-                                                    'cetak_fisik' => 'cetak-fisik',
+                                                    'cetak_fisik' => 'cetak-fisik-premium',
                                                     'event_digital' => 'event-digital',
                                                     'souvenir' => 'souvenir-merchandise',
                                                     'web_app' => 'web-mobile-app',
@@ -89,7 +89,7 @@ class TemplateResource extends Resource
                                                         $defaults = ['Animasi' => 'Animasi', 'Simpel' => 'Simpel', 'Elegan' => 'Elegan', 'Premium' => 'Premium'];
                                                     } elseif ($service->slug === 'web-mobile-app') {
                                                         $defaults = ['Company Profile' => 'Company Profile', 'E-Commerce' => 'E-Commerce', 'Sistem Informasi' => 'Sistem Informasi'];
-                                                    } elseif ($service->slug === 'cetak-fisik') {
+                                                    } elseif ($service->slug === 'cetak-fisik-premium' || $service->slug === 'undangan-cetak' || $service->slug === 'cetak-fisik') {
                                                         $defaults = ['A4' => 'A4', 'A3' => 'A3', 'Laminasi' => 'Laminasi', 'Art Paper' => 'Art Paper', 'HVS' => 'HVS', 'Buku Yasin' => 'Buku Yasin', 'ID Card' => 'ID Card'];
                                                     } elseif ($service->slug === 'souvenir-merchandise') {
                                                         $defaults = ['Lanyard' => 'Lanyard', 'ID Card' => 'ID Card', 'Paket Bundling' => 'Paket Bundling'];

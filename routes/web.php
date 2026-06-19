@@ -47,15 +47,23 @@ Route::get('/fix-services', function () {
             'sort_order' => 1
         ]
     );
-    \App\Models\Service::firstOrCreate(
-        ['slug' => 'undangan-cetak'],
-        [
-            'title' => 'Undangan Cetak',
-            'description' => 'Layanan cetak undangan premium.',
-            'is_active' => true,
-            'sort_order' => 2
-        ]
-    );
+    $cetakFisik = \App\Models\Service::where('slug', 'undangan-cetak')->orWhere('slug', 'cetak-fisik')->first();
+    if ($cetakFisik) {
+        $cetakFisik->update([
+            'slug' => 'cetak-fisik-premium',
+            'title' => 'Cetak Fisik Premium'
+        ]);
+    } else {
+        \App\Models\Service::firstOrCreate(
+            ['slug' => 'cetak-fisik-premium'],
+            [
+                'title' => 'Cetak Fisik Premium',
+                'description' => 'Layanan cetak undangan premium.',
+                'is_active' => true,
+                'sort_order' => 2
+            ]
+        );
+    }
     \App\Models\Service::firstOrCreate(
         ['slug' => 'souvenir-merchandise'],
         [
