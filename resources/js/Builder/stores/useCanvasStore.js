@@ -610,9 +610,9 @@ const useCanvasStore = create(temporal((set, get) => ({
                     ...el,
                     style: {
                         ...el.style,
-                        // Preserve original coordinates
-                        x: el.style?.x || 0,
-                        y: el.style?.y || 0
+                        // Convert absolute coordinates to relative coordinates
+                        x: (el.style?.x || 0) - minX,
+                        y: (el.style?.y || 0) - minY
                     }
                 };
             });
@@ -679,8 +679,8 @@ const useCanvasStore = create(temporal((set, get) => ({
                 ...child,
                 style: {
                     ...child.style,
-                    x: (child.style?.x || 0) + groupX,
-                    y: (child.style?.y || 0) + groupY,
+                    x: (parseFloat(child.style?.x) || 0) + parseFloat(groupX),
+                    y: (parseFloat(child.style?.y) || 0) + parseFloat(groupY),
                     zIndex: (child.style?.zIndex || 0) + (groupToUngroup.style?.zIndex || 0)
                 }
             }));

@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-3g5a-Ego.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DDbA-nEV.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { a as produce, c as require_react, o as require_client, t as require_jsx_runtime } from "./jsx-runtime-Dot0F3-6.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-DAdYBO84.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CcYpryEc.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$1, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -2858,8 +2858,8 @@ var useCanvasStore = create(temporal((set, get) => ({
 					...el,
 					style: {
 						...el.style,
-						x: el.style?.x || 0,
-						y: el.style?.y || 0
+						x: (el.style?.x || 0) - minX,
+						y: (el.style?.y || 0) - minY
 					}
 				};
 			});
@@ -2919,8 +2919,8 @@ var useCanvasStore = create(temporal((set, get) => ({
 				...child,
 				style: {
 					...child.style,
-					x: (child.style?.x || 0) + groupX,
-					y: (child.style?.y || 0) + groupY,
+					x: (parseFloat(child.style?.x) || 0) + parseFloat(groupX),
+					y: (parseFloat(child.style?.y) || 0) + parseFloat(groupY),
 					zIndex: (child.style?.zIndex || 0) + (groupToUngroup.style?.zIndex || 0)
 				}
 			}));
@@ -16822,7 +16822,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-3g5a-Ego.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DDbA-nEV.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
