@@ -28,7 +28,6 @@ const AnimatedIcon = ({ anim, isText = false, isActive = false }) => {
     );
 };
 
-import { removeBackground } from '@imgly/background-removal';
 
 const RightInspector = () => {
     const activeLayerId = useCanvasStore(state => state.activeLayerId);
@@ -96,12 +95,54 @@ const RightInspector = () => {
             const imgEl = document.getElementById(`layer-img-${layer.id}`);
             if (!imgEl) throw new Error("Gambar asli tidak ditemukan di layar.");
             
-            const config = {
-                debug: true,
-                device: 'cpu', // Fallback to cpu to avoid WebGPU silent fails
-                model: 'isnet_quint8' // More robust model
+            const removeSolidBackground = async (img) => {
+                return new Promise((resolve, reject) => {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        const w = img.naturalWidth || img.width || 500;
+                        const h = img.naturalHeight || img.height || 500;
+                        canvas.width = w;
+                        canvas.height = h;
+                        const ctx = canvas.getContext('2d');
+                        
+                        ctx.drawImage(img, 0, 0, w, h);
+                        const imageData = ctx.getImageData(0, 0, w, h);
+                        const data = imageData.data;
+                        
+                        // Deteksi warna latar belakang dari piksel sudut kiri atas
+                        const bgR = data[0];
+                        const bgG = data[1];
+                        const bgB = data[2];
+                        
+                        // Hapus piksel yang mirip dengan warna latar (Magic Wand / Chroma Key)
+                        const tolerance = 60; // Toleransi cukup besar untuk gradasi halus
+                        const colorDist = (r1,g1,b1,r2,g2,b2) => Math.sqrt((r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2);
+                        
+                        let hasRemoved = false;
+                        for (let i = 0; i < data.length; i += 4) {
+                            if (data[i+3] > 0 && colorDist(data[i], data[i+1], data[i+2], bgR, bgG, bgB) <= tolerance) {
+                                data[i+3] = 0;
+                                hasRemoved = true;
+                            }
+                        }
+                        
+                        if (!hasRemoved) {
+                            reject(new Error("Tidak ada latar dominan yang bisa dihapus."));
+                            return;
+                        }
+
+                        ctx.putImageData(imageData, 0, 0);
+                        canvas.toBlob((b) => {
+                            if (b) resolve(b);
+                            else reject(new Error("Gagal membuat blob gambar transparan"));
+                        }, 'image/png');
+                    } catch (e) {
+                        reject(new Error(e.message.includes('Tainted') ? "Gambar terblokir keamanan (Cross-Origin). Harap gunakan gambar yang baru di-upload." : e.message));
+                    }
+                });
             };
-            const blob = await removeBackground(imgEl, config);
+
+            const blob = await removeSolidBackground(imgEl);
             const file = new File([blob], `transparent_${Date.now()}.png`, { type: 'image/png' });
 
             const formData = new FormData();

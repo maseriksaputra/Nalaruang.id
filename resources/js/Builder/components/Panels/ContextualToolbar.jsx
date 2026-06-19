@@ -1,5 +1,6 @@
 import React from 'react';
 import useCanvasStore from '../../stores/useCanvasStore';
+import useUIStore from '../../stores/useUIStore';
 import { FONTS } from '../../utils/fonts';
 
 const ContextualToolbar = () => {
@@ -13,6 +14,7 @@ const ContextualToolbar = () => {
     const setInspectorTab = useCanvasStore(state => state.setInspectorTab);
     const duplicateLayer = useCanvasStore(state => state.duplicateLayer);
     const deleteElement = useCanvasStore(state => state.deleteElement);
+    const setIsRightSidebarOpen = useUIStore(state => state.setIsRightSidebarOpen);
     
     const findElement = (sections, id) => {
         for (const section of sections) {
@@ -168,6 +170,7 @@ const ContextualToolbar = () => {
                     <button 
                         onClick={() => {
                             setInspectorTab('effects');
+                            setIsRightSidebarOpen(true);
                         }} 
                         className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors border ${activeLayer.style?.removeBg ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'text-gray-700 hover:bg-gray-100 border-transparent hover:border-gray-200'}`}
                     >
@@ -207,11 +210,11 @@ const ContextualToolbar = () => {
 
             {/* COMMON TOOLS (Always visible) */}
             <div className="flex items-center gap-1 shrink-0 ml-1">
-                <button onClick={() => setInspectorTab('animation')} className="px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded transition-colors border border-transparent hover:border-gray-200 flex items-center gap-1" title="Animasikan">
+                <button onClick={() => { setInspectorTab('animation'); setIsRightSidebarOpen(true); }} className="px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded transition-colors border border-transparent hover:border-gray-200 flex items-center gap-1" title="Animasikan">
                     <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
                     Animasikan
                 </button>
-                <button onClick={() => setInspectorTab('design')} className="px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded transition-colors border border-transparent hover:border-gray-200 flex items-center gap-1" title="Posisi">
+                <button onClick={() => { setInspectorTab('design'); setIsRightSidebarOpen(true); }} className="px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded transition-colors border border-transparent hover:border-gray-200 flex items-center gap-1" title="Posisi">
                     Posisi
                 </button>
                 
