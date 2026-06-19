@@ -81,10 +81,7 @@ const ChromaKeyImage = ({ src, targetColorHex = '#ffffff', tolerance = 50, class
             style={{ 
                 ...style, 
                 opacity: isLoaded ? (style?.opacity ?? 1) : 0, 
-                transition: 'opacity 0.2s',
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain'
+                transition: 'opacity 0.2s'
             }}
             title={alt}
         />
