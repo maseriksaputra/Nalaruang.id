@@ -387,7 +387,6 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                         )}
                         <img 
                             id={`layer-img-${layer.id}`}
-                            crossOrigin="anonymous"
                             src={layer.style?.url || layer.url} 
                             alt="asset" 
                             draggable={false}
