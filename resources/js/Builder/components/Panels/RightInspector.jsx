@@ -4,6 +4,7 @@ import useUIStore from '../../stores/useUIStore';
 
 import { IMAGE_FILTERS } from '../../utils/imageFilters';
 import { FONTS } from '../../utils/fonts';
+import apiClient from '../../utils/apiClient';
 
 import { ANIMATION_CATEGORIES, ANIMATION_STYLES } from '../../utils/animations';
 
@@ -56,6 +57,69 @@ const RightInspector = () => {
     const setIsDrawingPath = useUIStore(state => state.setIsDrawingPath);
     const isRightSidebarOpen = useUIStore(state => state.isRightSidebarOpen);
     const setIsRightSidebarOpen = useUIStore(state => state.setIsRightSidebarOpen);
+    const [isRemovingBg, setIsRemovingBg] = useState(false);
+
+    const handleToggleRemoveBg = async (checked, layer) => {
+        if (!checked) {
+            // Restore original image if it exists
+            if (layer.style?.originalUrl) {
+                updateLayerStyle(layer.id, { 
+                    removeBg: false,
+                    url: layer.style.originalUrl,
+                    bgRemovedUrl: null
+                });
+            } else {
+                updateLayerStyle(layer.id, { removeBg: false });
+            }
+            return;
+        }
+
+        // If toggled ON and we already have a bgRemovedUrl, just use it
+        if (layer.style?.bgRemovedUrl) {
+            updateLayerStyle(layer.id, { 
+                removeBg: true,
+                url: layer.style.bgRemovedUrl
+            });
+            return;
+        }
+
+        // Run AI Background Removal
+        try {
+            setIsRemovingBg(true);
+            
+            // Save original URL before processing
+            const originalUrl = layer.style?.url || layer.url;
+            
+            // Dynamically import to avoid blocking main bundle
+            const { default: removeBackground } = await import('@imgly/background-removal');
+            
+            const blob = await removeBackground(originalUrl);
+            const file = new File([blob], `transparent_${Date.now()}.png`, { type: 'image/png' });
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Upload the transparent image to server to make it permanent
+            const response = await apiClient.post('/admin/builder/user-assets', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            if (response.data && response.data.url) {
+                updateLayerStyle(layer.id, { 
+                    removeBg: true,
+                    originalUrl: originalUrl,
+                    bgRemovedUrl: response.data.url,
+                    url: response.data.url
+                });
+            }
+        } catch (error) {
+            console.error('Failed to remove background:', error);
+            alert('Gagal menghapus latar belakang. Silakan coba lagi nanti.');
+            updateLayerStyle(layer.id, { removeBg: false });
+        } finally {
+            setIsRemovingBg(false);
+        }
+    };
 
     const renderToggleButton = () => (
         <button
@@ -2258,52 +2322,35 @@ const RightInspector = () => {
                             {/* Smart Background Removal */}
                             <div className="space-y-3 pb-4 border-b border-gray-100">
                                 <div className="flex items-center justify-between sticky top-0 bg-white/90 backdrop-blur py-1 z-10 border-b border-gray-100">
-                                    <h3 className="font-bold text-gray-800 text-xs uppercase tracking-wider">Hapus Latar Belakang</h3>
+                                    <h3 className="font-bold text-gray-800 text-xs uppercase tracking-wider">Hapus Latar Belakang (AI)</h3>
                                     <label className="relative inline-flex items-center cursor-pointer">
                                         <input 
                                             type="checkbox" 
                                             className="sr-only peer" 
                                             checked={activeLayer.style?.removeBg || false}
-                                            onChange={(e) => updateLayerStyle(activeLayer.id, { removeBg: e.target.checked })}
+                                            onChange={(e) => handleToggleRemoveBg(e.target.checked, activeLayer)}
+                                            disabled={isRemovingBg}
                                         />
-                                        <div className="w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+                                        <div className={`w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all ${isRemovingBg ? 'opacity-50' : 'peer-checked:bg-indigo-600'}`}></div>
                                     </label>
                                 </div>
                                 
-                                {activeLayer.style?.removeBg && (
-                                    <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 space-y-4 shadow-inner">
-                                        <div>
-                                            <div className="flex justify-between items-center mb-2">
-                                                <label className="text-[11px] font-bold text-gray-800">Toleransi Hapus Warna</label>
-                                                <span className="text-[10px] text-gray-500 font-medium bg-white px-2 py-0.5 rounded border border-gray-200">
-                                                    {activeLayer.style?.removeBgTolerance ?? 50}%
-                                                </span>
-                                            </div>
-                                            <input 
-                                                type="range" 
-                                                min="0" max="100" 
-                                                value={activeLayer.style?.removeBgTolerance ?? 50}
-                                                onChange={(e) => updateLayerStyle(activeLayer.id, { removeBgTolerance: parseInt(e.target.value) })}
-                                                className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
-                                            />
-                                            <p className="text-[9px] text-gray-500 mt-2 leading-relaxed">Geser ke kanan jika sisa latar masih terlihat, geser ke kiri jika objek utama ikut terhapus.</p>
+                                {isRemovingBg && (
+                                    <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex flex-col items-center justify-center space-y-3 shadow-inner">
+                                        <svg className="animate-spin h-6 w-6 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        <div className="text-center">
+                                            <p className="text-xs font-bold text-indigo-800">Sedang Menghapus Latar...</p>
+                                            <p className="text-[9px] text-indigo-600 mt-1">AI sedang memproses gambar Anda. Proses ini memakan waktu beberapa detik.</p>
                                         </div>
-                                        
-                                        <div>
-                                            <label className="text-[11px] font-bold text-gray-800 block mb-2">Pilih Warna Target</label>
-                                            <div className="flex items-center gap-2">
-                                                <input 
-                                                    type="color" 
-                                                    value={activeLayer.style?.removeBgColor || '#ffffff'}
-                                                    onChange={(e) => updateLayerStyle(activeLayer.id, { removeBgColor: e.target.value })}
-                                                    className="w-8 h-8 rounded cursor-pointer border-0 p-0"
-                                                />
-                                                <span className="text-xs text-gray-600 font-mono bg-white px-2 py-1 rounded border border-gray-200 uppercase flex-1 text-center">
-                                                    {activeLayer.style?.removeBgColor || '#FFFFFF'}
-                                                </span>
-                                            </div>
-                                            <p className="text-[9px] text-gray-500 mt-2">Warna dasar yang ingin dihilangkan secara otomatis (default: Putih).</p>
-                                        </div>
+                                    </div>
+                                )}
+                                
+                                {activeLayer.style?.removeBg && !isRemovingBg && (
+                                    <div className="bg-green-50 border border-green-100 rounded-xl p-3 shadow-inner">
+                                        <p className="text-[10px] text-green-700 text-center font-medium">Latar belakang berhasil dihapus oleh AI!</p>
                                     </div>
                                 )}
                             </div>

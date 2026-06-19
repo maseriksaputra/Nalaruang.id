@@ -13,7 +13,6 @@ import 'swiper/css/effect-fade';
 
 import { getFilterById } from '../../Builder/utils/imageFilters';
 import { loadFont } from '../../Builder/utils/fonts';
-import ChromaKeyImage from '../../Builder/components/Canvas/ChromaKeyImage';
 
 const CountdownDisplay = ({ targetDate, textColor, bgColor, bgImage, fontFamily, bgOpacity, gap, showSeconds, bgStyle }) => {
     const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -338,36 +337,21 @@ const PublicLayer = ({ layer }) => {
 
             {layer.type === 'image' && (
                 <div className={`w-full h-full relative pointer-events-none`}>
-                    {layer.style?.removeBg ? (
-                        <ChromaKeyImage 
-                            src={layer.url || layer.content}
-                            targetColorHex={layer.style?.removeBgColor || '#ffffff'}
-                            tolerance={layer.style?.removeBgTolerance ?? 50}
-                            alt=""
-                            className="w-full h-full object-cover pointer-events-none"
-                            style={{
-                                objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
-                                transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
-                                filter: `${layer.style?.imageFilter && layer.style.imageFilter !== 'none' ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + ' ' : ''}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
-                            }}
-                        />
-                    ) : (
-                        <img 
-                            src={layer.url || layer.content} 
-                            alt="" 
-                            loading="lazy"
-                            decoding="async"
-                            style={{ 
-                                opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
-                                width: '100%', 
-                                height: '100%', 
-                                objectFit: 'cover',
-                                objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
-                                transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
-                                filter: `${layer.style?.imageFilter && layer.style.imageFilter !== 'none' ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + ' ' : ''}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
-                            }} 
-                        />
-                    )}
+                    <img 
+                        src={layer.url || layer.content} 
+                        alt="" 
+                        loading="lazy"
+                        decoding="async"
+                        style={{ 
+                            opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
+                            width: '100%', 
+                            height: '100%', 
+                            objectFit: 'cover',
+                            objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
+                            transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
+                            filter: `${layer.style?.imageFilter && layer.style.imageFilter !== 'none' ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + ' ' : ''}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
+                        }} 
+                    />
                     {layer.style?.imageFilter && getFilterById(layer.style.imageFilter).getOverlay && (
                         <div dangerouslySetInnerHTML={{ __html: getFilterById(layer.style.imageFilter).getOverlay(layer.style.imageFilterIntensity ?? 100) }} />
                     )}

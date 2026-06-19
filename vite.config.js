@@ -24,7 +24,13 @@ export default defineConfig({
         },
     },
     build: {
-        minify: false
+        minify: false,
+        rollupOptions: {
+            external: ['onnxruntime-web/webgpu', 'onnxruntime-web']
+        }
+    },
+    optimizeDeps: {
+        exclude: ['@imgly/background-removal']
     },
     define: {
         'process.env': {}

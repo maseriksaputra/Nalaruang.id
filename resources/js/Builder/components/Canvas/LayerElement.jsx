@@ -7,7 +7,7 @@ import { pointsToSmoothedSvgPath } from '../../utils/pathSmoothing';
 import { applyAnimation } from '../../utils/engineGSAP';
 import { getFilterById } from '../../utils/imageFilters';
 import { loadFont } from '../../utils/fonts';
-import ChromaKeyImage from './ChromaKeyImage';
+
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCards, EffectCoverflow, EffectFade } from 'swiper/modules';
@@ -385,36 +385,21 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                             </button>
                         )}
-                        {layer.style?.removeBg ? (
-                            <ChromaKeyImage 
-                                src={layer.url || layer.content}
-                                targetColorHex={layer.style?.removeBgColor || '#ffffff'}
-                                tolerance={layer.style?.removeBgTolerance ?? 50}
-                                alt="Element Chroma Key"
-                                className={`w-full h-full object-cover pointer-events-none ${isCropMode ? 'cursor-move pointer-events-auto no-drag' : ''}`}
-                                style={{
-                                    objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
-                                    transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
-                                    filter: `${layer.style?.imageFilter && layer.style.imageFilter !== 'none' ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + ' ' : ''}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
-                                }}
-                            />
-                        ) : (
-                            <img 
-                                src={layer.style?.url || layer.url} 
-                                alt="asset" 
-                                draggable={false}
-                                onPointerDown={handleCropPointerDown}
-                                onPointerMove={handleCropPointerMove}
-                                onPointerUp={handleCropPointerUp}
-                                className={`w-full h-full object-cover pointer-events-none ${isCropMode ? 'cursor-move pointer-events-auto no-drag' : ''}`}
-                                style={{
-                                    opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
-                                    objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
-                                    transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
-                                    filter: `${layer.style?.imageFilter && layer.style.imageFilter !== 'none' ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + ' ' : ''}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
-                                }}
-                            />
-                        )}
+                        <img 
+                            src={layer.style?.url || layer.url} 
+                            alt="asset" 
+                            draggable={false}
+                            onPointerDown={handleCropPointerDown}
+                            onPointerMove={handleCropPointerMove}
+                            onPointerUp={handleCropPointerUp}
+                            className={`w-full h-full object-cover pointer-events-none ${isCropMode ? 'cursor-move pointer-events-auto no-drag' : ''}`}
+                            style={{
+                                opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
+                                objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
+                                transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
+                                filter: `${layer.style?.imageFilter && layer.style.imageFilter !== 'none' ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + ' ' : ''}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
+                            }}
+                        />
                         {/* Overlay effects for grain or vignette */}
                         {layer.style?.imageFilter && getFilterById(layer.style.imageFilter).getOverlay && (
                             <div dangerouslySetInnerHTML={{ __html: getFilterById(layer.style.imageFilter).getOverlay(layer.style.imageFilterIntensity ?? 100) }} />
