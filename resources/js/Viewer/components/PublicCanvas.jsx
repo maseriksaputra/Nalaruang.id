@@ -183,7 +183,7 @@ const PublicCanvas = ({ config }) => {
                             return section.layout.height;
                         }
                         if (index === 0) {
-                            return maxY > 0 ? `calc(max(844px, ${maxY}px))` : '844px';
+                            return '844px';
                         }
                         if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
                             return section.layout.minHeight;
