@@ -37,7 +37,7 @@ class Kasir extends Page
     public function getProductsProperty()
     {
         // Load all products so Alpine.js can filter them instantly on the frontend
-        return CashierProduct::orderBy('name', 'asc')->get();
+        return CashierProduct::all()->sortBy('name', SORT_NATURAL | SORT_FLAG_CASE)->values();
     }
 
     public function addToCart($productId, $name, $price, $category)
