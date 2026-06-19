@@ -7,6 +7,8 @@ const useUIStore = create((set) => ({
     setIsSaving: (val) => set({ isSaving: val }),
     isDrawingPath: false,
     setIsDrawingPath: (val) => set({ isDrawingPath: val }),
+    isRemovingBg: false,
+    setIsRemovingBg: (val) => set({ isRemovingBg: val }),
     currentPathPoints: [],
     setCurrentPathPoints: (points) => set({ currentPathPoints: points }),
     isRightSidebarOpen: true,
