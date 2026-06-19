@@ -20,25 +20,26 @@ class ClientPortalController extends Controller
         $rsvps = \App\Models\Rsvp::where('invitation_id', $invitation->id)->orderBy('created_at', 'desc')->get();
         
         // Traffic Data
-        $visitors = \Illuminate\Support\Facades\DB::table('invitation_visitors')
+        $totalViews = \Illuminate\Support\Facades\DB::table('invitation_visitors')
             ->where('invitation_id', $invitation->id)
-            ->get();
-            
-        $totalViews = $visitors->count();
+            ->count();
         
         // Aggregate by date for the last 30 days
         $startDate = now()->subDays(29)->startOfDay();
-        $dailyTraffic = $visitors->where('created_at', '>=', $startDate)
-            ->groupBy(function($item) {
-                return \Carbon\Carbon::parse($item->created_at)->format('Y-m-d');
-            });
+        
+        $dailyTraffic = \Illuminate\Support\Facades\DB::table('invitation_visitors')
+            ->where('invitation_id', $invitation->id)
+            ->where('created_at', '>=', $startDate)
+            ->selectRaw('DATE(created_at) as date, count(*) as count')
+            ->groupBy('date')
+            ->pluck('count', 'date');
             
         $trafficData = [];
         $trafficLabels = [];
         for ($i = 29; $i >= 0; $i--) {
             $dateStr = now()->subDays($i)->format('Y-m-d');
             $trafficLabels[] = now()->subDays($i)->format('d M');
-            $trafficData[] = isset($dailyTraffic[$dateStr]) ? $dailyTraffic[$dateStr]->count() : 0;
+            $trafficData[] = isset($dailyTraffic[$dateStr]) ? $dailyTraffic[$dateStr] : 0;
         }
         
         return view('client-portal', compact('invitation', 'links', 'rsvps', 'totalViews', 'trafficLabels', 'trafficData'));

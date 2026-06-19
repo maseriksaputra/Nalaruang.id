@@ -9,6 +9,7 @@
     <!-- Inject JSON Data untuk dikonsumsi oleh React -->
     <script>
         window.__INVITATION_DATA__ = @json($invitation->canvas_config ?? ['sections' => []]);
+        window.__IS_PREVIEW__ = {{ request()->has('preview') ? 'true' : 'false' }};
     </script>
     
     @viteReactRefresh
