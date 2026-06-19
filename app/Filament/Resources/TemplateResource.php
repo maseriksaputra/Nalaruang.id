@@ -141,13 +141,17 @@ class TemplateResource extends Resource
                                         Forms\Components\FileUpload::make('image')
                                             ->image()
                                             ->directory('templates')
-                                            ->label('Gambar Utama (Cover)'),
+                                            ->maxSize(2048)
+                                            ->label('Gambar Utama (Cover)')
+                                            ->helperText('Maks. 2MB (Batas Default Server)'),
                                         Forms\Components\FileUpload::make('images')
                                             ->image()
                                             ->multiple()
                                             ->reorderable()
                                             ->directory('templates')
+                                            ->maxSize(2048)
                                             ->label('Galeri Slideshow (Bisa lebih dari 1)')
+                                            ->helperText('Maks. 2MB per gambar')
                                             ->columnSpanFull(),
                                     ])->columns(2),
 
