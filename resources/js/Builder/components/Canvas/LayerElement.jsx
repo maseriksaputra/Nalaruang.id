@@ -213,7 +213,11 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 
         if (layer.animation && elementRef.current) {
             // isBuilder = true prevents ScrollTrigger and plays immediately
-            animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style);
+            const startAt = window.__BUILDER_PLAYHEAD_POS__ || 0;
+            animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, startAt);
+            if (window.__BUILDER_IS_PLAYING__ === false && animationInstance && typeof animationInstance.pause === 'function') {
+                animationInstance.pause();
+            }
         }
         
         const handlePlayAll = () => {
@@ -228,8 +232,11 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                         animationInstance.kill();
                         if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
                     }
-                    const currentPlayheadTime = useCanvasStore.getState().playheadPos || 0;
-                    animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, currentPlayheadTime);
+                    const startAt = window.__BUILDER_PLAYHEAD_POS__ || 0;
+                    animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, startAt);
+                    if (window.__BUILDER_IS_PLAYING__ === false && animationInstance && typeof animationInstance.pause === 'function') {
+                        animationInstance.pause();
+                    }
                 });
             }
         };

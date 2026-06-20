@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BIiwo_TH.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-CtdTDUYq.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-ZEdF0385.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-CbbVFH4F.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -6281,6 +6281,17 @@ var DraggableChildItem = ({ childId, child, parentId, isActive }) => {
 								strokeWidth: "2",
 								d: "M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
 							})]
+						}) : child.type === "canvas_group" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+							className: "w-3 h-3 text-indigo-500",
+							fill: "none",
+							stroke: "currentColor",
+							viewBox: "0 0 24 24",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+								strokeLinecap: "round",
+								strokeLinejoin: "round",
+								strokeWidth: "2",
+								d: "M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+							})
 						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							className: "text-[8px] font-bold text-gray-500 uppercase",
 							children: (child.type || "E").charAt(0)
@@ -6288,7 +6299,7 @@ var DraggableChildItem = ({ childId, child, parentId, isActive }) => {
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 						className: "text-xs font-medium text-gray-600 truncate",
-						children: child.content || (child.type === "image" ? "Gambar Asset" : "Elemen")
+						children: child.content || (child.type === "image" ? "Gambar Asset" : child.type === "canvas_group" ? child.name || "Grup Elemen" : "Elemen")
 					})
 				]
 			}),
@@ -19330,13 +19341,20 @@ var TimelinePanel = () => {
 	const [isDraggingResizer, setIsDraggingResizer] = (0, import_react.useState)(false);
 	const [timeScale, setTimeScale] = (0, import_react.useState)(100);
 	const [playheadPos, setPlayheadPos] = (0, import_react.useState)(0);
+	const playheadPosRef = (0, import_react.useRef)(0);
 	const [isPlaying, setIsPlaying] = (0, import_react.useState)(false);
 	const resizerRef = (0, import_react.useRef)(null);
 	const isResizing = (0, import_react.useRef)(false);
 	(0, import_react.useEffect)(() => {
-		if (!isPlaying) window.dispatchEvent(new CustomEvent("builder:time_update", { detail: { time: playheadPos } }));
+		if (!isPlaying) {
+			playheadPosRef.current = playheadPos;
+			window.__BUILDER_IS_PLAYING__ = false;
+			window.__BUILDER_PLAYHEAD_POS__ = playheadPos;
+			window.dispatchEvent(new CustomEvent("builder:time_update", { detail: { time: playheadPos } }));
+		} else window.__BUILDER_IS_PLAYING__ = true;
 	}, [playheadPos, isPlaying]);
 	const playheadRef = (0, import_react.useRef)(null);
+	const timeDisplayRef = (0, import_react.useRef)(null);
 	const isDraggingPlayhead = (0, import_react.useRef)(false);
 	const activeSection = activeCanvasMode === "desktop" ? {
 		id: "desktop",
@@ -19388,21 +19406,31 @@ var TimelinePanel = () => {
 			if (!lastTime) lastTime = time;
 			const deltaTime = (time - lastTime) / 1e3;
 			lastTime = time;
-			if (isPlaying) setPlayheadPos((prev) => {
-				let next = prev + deltaTime;
+			if (isPlaying) {
+				playheadPosRef.current += deltaTime;
+				let next = playheadPosRef.current;
 				if (next > MAX_TIME) {
 					setIsPlaying(false);
-					return 0;
+					setPlayheadPos(0);
+					window.__BUILDER_IS_PLAYING__ = false;
+					window.__BUILDER_PLAYHEAD_POS__ = 0;
+					return;
 				}
-				return next;
-			});
-			animationFrame = requestAnimationFrame(animate);
+				window.__BUILDER_PLAYHEAD_POS__ = next;
+				if (playheadRef.current) playheadRef.current.style.left = `${next * timeScale}px`;
+				if (timeDisplayRef.current) timeDisplayRef.current.innerText = `${next.toFixed(1)}s`;
+				animationFrame = requestAnimationFrame(animate);
+			}
 		};
-		if (isPlaying) animationFrame = requestAnimationFrame(animate);
+		if (isPlaying) {
+			playheadPosRef.current = playheadPos;
+			lastTime = performance.now();
+			animationFrame = requestAnimationFrame(animate);
+		} else setPlayheadPos(playheadPosRef.current);
 		return () => {
 			if (animationFrame) cancelAnimationFrame(animationFrame);
 		};
-	}, [isPlaying]);
+	}, [isPlaying, timeScale]);
 	const handlePlayheadDragStart = (e) => {
 		e.preventDefault();
 		isDraggingPlayhead.current = true;
@@ -19416,7 +19444,9 @@ var TimelinePanel = () => {
 		const handleMouseMove = (moveEvent) => {
 			const scrollLeft = container.scrollLeft;
 			const x = moveEvent.clientX - rect.left + scrollLeft;
-			setPlayheadPos(Math.max(0, Math.min(x / timeScale, MAX_TIME)));
+			const time = Math.max(0, Math.min(x / timeScale, MAX_TIME));
+			playheadPosRef.current = time;
+			setPlayheadPos(time);
 		};
 		const handleMouseUp = () => {
 			isDraggingPlayhead.current = false;
@@ -19541,6 +19571,7 @@ var TimelinePanel = () => {
 									})
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									ref: timeDisplayRef,
 									className: "text-xs font-mono text-gray-600 w-12 text-center",
 									children: [playheadPos.toFixed(1), "s"]
 								}),
@@ -19617,8 +19648,9 @@ var TimelinePanel = () => {
 								ref: playheadRef,
 								className: "absolute top-0 bottom-0 z-30 pointer-events-none flex flex-col items-center",
 								style: {
-									left: `${playheadPos * timeScale}px`,
-									transform: "translateX(-50%)"
+									left: `${(isPlaying ? playheadPosRef.current : playheadPos) * timeScale}px`,
+									transform: "translateX(-50%)",
+									willChange: "left"
 								},
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "w-3 h-3 rotate-45 bg-red-500 mt-5 pointer-events-auto cursor-ew-resize rounded-sm shadow-sm",

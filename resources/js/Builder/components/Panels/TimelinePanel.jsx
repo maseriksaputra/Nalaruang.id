@@ -21,6 +21,7 @@ const TimelinePanel = () => {
     const [isDraggingResizer, setIsDraggingResizer] = useState(false);
     const [timeScale, setTimeScale] = useState(100); // pixels per second (zoomed in for micro adjustments)
     const [playheadPos, setPlayheadPos] = useState(0); // in seconds
+    const playheadPosRef = useRef(0); // For smooth animation without re-renders
     const [isPlaying, setIsPlaying] = useState(false);
 
     const resizerRef = useRef(null);
@@ -28,11 +29,17 @@ const TimelinePanel = () => {
     
     useEffect(() => {
         if (!isPlaying) {
+            playheadPosRef.current = playheadPos;
+            window.__BUILDER_IS_PLAYING__ = false;
+            window.__BUILDER_PLAYHEAD_POS__ = playheadPos;
             window.dispatchEvent(new CustomEvent('builder:time_update', { detail: { time: playheadPos } }));
+        } else {
+            window.__BUILDER_IS_PLAYING__ = true;
         }
     }, [playheadPos, isPlaying]);
 
     const playheadRef = useRef(null);
+    const timeDisplayRef = useRef(null);
     const isDraggingPlayhead = useRef(false);
 
     const activeSection = activeCanvasMode === 'desktop' 
@@ -93,26 +100,43 @@ const TimelinePanel = () => {
             lastTime = time;
 
             if (isPlaying) {
-                setPlayheadPos(prev => {
-                    let next = prev + deltaTime;
-                    if (next > MAX_TIME) {
-                        setIsPlaying(false);
-                        return 0; // stop and reset
-                    }
-                    return next;
-                });
+                playheadPosRef.current += deltaTime;
+                let next = playheadPosRef.current;
+                
+                if (next > MAX_TIME) {
+                    setIsPlaying(false);
+                    setPlayheadPos(0); // stop and reset
+                    window.__BUILDER_IS_PLAYING__ = false;
+                    window.__BUILDER_PLAYHEAD_POS__ = 0;
+                    return;
+                }
+                
+                window.__BUILDER_PLAYHEAD_POS__ = next;
+                // Update DOM directly for smooth animation without React re-renders
+                if (playheadRef.current) {
+                    playheadRef.current.style.left = `${next * timeScale}px`;
+                }
+                if (timeDisplayRef.current) {
+                    timeDisplayRef.current.innerText = `${next.toFixed(1)}s`;
+                }
+                
+                animationFrame = requestAnimationFrame(animate);
             }
-            animationFrame = requestAnimationFrame(animate);
         };
 
         if (isPlaying) {
+            playheadPosRef.current = playheadPos; // sync before playing
+            lastTime = performance.now();
             animationFrame = requestAnimationFrame(animate);
+        } else {
+            // sync state back when paused
+            setPlayheadPos(playheadPosRef.current);
         }
 
         return () => {
             if (animationFrame) cancelAnimationFrame(animationFrame);
         };
-    }, [isPlaying]);
+    }, [isPlaying, timeScale]);
 
     const handlePlayheadDragStart = (e) => {
         e.preventDefault();
@@ -133,6 +157,7 @@ const TimelinePanel = () => {
             const scrollLeft = container.scrollLeft;
             const x = moveEvent.clientX - rect.left + scrollLeft; 
             const time = Math.max(0, Math.min(x / timeScale, MAX_TIME));
+            playheadPosRef.current = time;
             setPlayheadPos(time);
         };
         
@@ -216,7 +241,7 @@ const TimelinePanel = () => {
                                     <svg className="w-4 h-4 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path></svg>
                                 )}
                             </button>
-                            <span className="text-xs font-mono text-gray-600 w-12 text-center">
+                            <span ref={timeDisplayRef} className="text-xs font-mono text-gray-600 w-12 text-center">
                                 {playheadPos.toFixed(1)}s
                             </span>
                             
@@ -306,8 +331,9 @@ const TimelinePanel = () => {
                                 ref={playheadRef}
                                 className="absolute top-0 bottom-0 z-30 pointer-events-none flex flex-col items-center"
                                 style={{ 
-                                    left: `${playheadPos * timeScale}px`,
-                                    transform: 'translateX(-50%)'
+                                    left: `${(isPlaying ? playheadPosRef.current : playheadPos) * timeScale}px`,
+                                    transform: 'translateX(-50%)',
+                                    willChange: 'left'
                                 }}
                             >
                                 <div className="w-3 h-3 rotate-45 bg-red-500 mt-5 pointer-events-auto cursor-ew-resize rounded-sm shadow-sm" onMouseDown={handlePlayheadDragStart}></div>

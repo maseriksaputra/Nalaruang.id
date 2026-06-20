@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-FGJH_c8Z.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-RszyNTjy.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BIiwo_TH.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-ZEdF0385.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -2770,6 +2770,7 @@ var useCanvasStore = create(temporal((set, get) => ({
 			const elementsToGroup = [];
 			let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
 			const remainingLayers = [];
+			let trackToInject = null;
 			const findAndExtract = (layers) => {
 				for (const layer of layers) if (state.activeLayerIds.includes(layer.id)) {
 					elementsToGroup.push(layer);
@@ -2778,9 +2779,19 @@ var useCanvasStore = create(temporal((set, get) => ({
 					maxX = Math.max(maxX, (layer.style?.x || 0) + (parseFloat(layer.style?.width) || 0));
 					maxY = Math.max(maxY, (layer.style?.y || 0) + (parseFloat(layer.style?.height) || 0));
 				} else if (layer.children) {
-					const originalLen = layer.children.length;
-					layer.children = layer.children.filter((c) => !state.activeLayerIds.includes(c.id));
-					if (layer.children.length !== originalLen) elementsToGroup.push(...layer.children.filter((c) => state.activeLayerIds.includes(c.id)));
+					layer.children.length;
+					const extracted = layer.children.filter((c) => state.activeLayerIds.includes(c.id));
+					if (extracted.length > 0) {
+						if (!trackToInject) trackToInject = layer;
+						extracted.forEach((c) => {
+							elementsToGroup.push(c);
+							minX = Math.min(minX, c.style?.x || 0);
+							minY = Math.min(minY, c.style?.y || 0);
+							maxX = Math.max(maxX, (c.style?.x || 0) + (parseFloat(c.style?.width) || 0));
+							maxY = Math.max(maxY, (c.style?.y || 0) + (parseFloat(c.style?.height) || 0));
+						});
+						layer.children = layer.children.filter((c) => !state.activeLayerIds.includes(c.id));
+					}
 					remainingLayers.push(layer);
 				} else remainingLayers.push(layer);
 			};
@@ -2807,7 +2818,15 @@ var useCanvasStore = create(temporal((set, get) => ({
 				}
 			};
 			targetLayers.splice(0, targetLayers.length, ...remainingLayers);
-			targetLayers.push(newGroup);
+			if (trackToInject && trackToInject.children) trackToInject.children.push(newGroup);
+			else if (targetLayers.length > 0 && targetLayers[targetLayers.length - 1].children) targetLayers[targetLayers.length - 1].children.push(newGroup);
+			else targetLayers.push({
+				id: "layer_" + Date.now(),
+				type: "group",
+				name: "Layer Utama",
+				children: [newGroup],
+				style: { zIndex: 1 }
+			});
 			state.activeLayerId = newGroup.id;
 			state.activeLayerIds = [newGroup.id];
 		}));
@@ -20239,6 +20258,8 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 		trigger: "onScroll"
 	};
 	const trigger = config.trigger || "onScroll";
+	const hasEntryAnimation = !!layerAnimation.entry;
+	const globalDelay = parseFloat(config.delay) || 0;
 	if (layerAnimation.custom) try {
 		const customObj = new Function(`return ${layerAnimation.custom}`)();
 		const triggerElement = !isBuilder ? elementRef.closest("section") || elementRef : elementRef;
@@ -20257,38 +20278,76 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 	} catch (e) {
 		console.error("Invalid custom GSAP config", e);
 	}
-	if (layerAnimation.entry) {
-		const hasEntry = config.mode === "enter" || config.mode === "both" || !config.mode;
-		const hasExit = config.mode === "exit" || config.mode === "both";
-		const entryProps = getAnimationProps(layerAnimation.entry, false, config, layerStyle);
-		if (hasEntry) {
-			if (config.scale !== void 0 && config.scale !== 1) entryProps.scale = config.scale;
-			const toggleActionStr = hasExit || config.autoReverse ? "play reverse play reverse" : "play none none reverse";
-			const triggerElement = !isBuilder ? elementRef.closest("section") || elementRef : elementRef;
-			const tween = gsapWithCSS.from(elementRef, {
-				...entryProps,
-				...repeatConfig,
-				force3D: true,
-				autoRound: false,
-				scrollTrigger: !isBuilder && trigger === "onScroll" && trigger !== "onLoad" ? {
-					trigger: triggerElement,
-					start: "top 85%",
-					scroller: scrollScroller,
-					toggleActions: toggleActionStr
-				} : null
-			});
-			activeTweens.push(tween);
-		}
-	} else if (config.delay && config.delay > 0 && layerAnimation.idle !== "custom_timeline") {
-		const tween = gsapWithCSS.fromTo(elementRef, { opacity: 0 }, {
-			opacity: layerStyle?.opacity ?? 1,
-			duration: .01,
-			delay: config.delay,
-			immediateRender: true
+	if (layerAnimation.idle === "custom_timeline" && layerAnimation.custom_keyframes && layerAnimation.custom_keyframes.length > 0) {
+		const triggerElement = !isBuilder ? elementRef.closest("section") || elementRef : elementRef;
+		const keyframes = layerAnimation.custom_keyframes;
+		const baseX = parseFloat(layerStyle?.x) || 0;
+		const baseY = parseFloat(layerStyle?.y) || 0;
+		const getValidNum = (val, fallback) => {
+			if (val === void 0 || val === null || val === "") return fallback;
+			const parsed = parseFloat(val);
+			return isNaN(parsed) ? fallback : parsed;
+		};
+		const firstKf = keyframes[0];
+		if (!hasEntryAnimation) gsapWithCSS.set(elementRef, {
+			x: getValidNum(firstKf.x, baseX) - baseX,
+			y: getValidNum(firstKf.y, baseY) - baseY,
+			scale: getValidNum(firstKf.scale, layerStyle?.scale ?? 1),
+			rotation: getValidNum(firstKf.rotation, layerStyle?.rotation ?? 0),
+			opacity: globalDelay > 0 ? 0 : getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1),
+			...firstKf.width !== void 0 && { width: firstKf.width },
+			...firstKf.height !== void 0 && { height: firstKf.height }
 		});
-		activeTweens.push(tween);
-	}
-	if (layerAnimation.idle) if (layerAnimation.idle === "custom_path" && layerAnimation.custom_path_data) {
+		const tl = gsapWithCSS.timeline({
+			repeat: isLooping && !isBuilder ? -1 : 0,
+			delay: globalDelay,
+			scrollTrigger: !isBuilder && trigger === "onScroll" ? {
+				trigger: triggerElement,
+				start: "top 85%",
+				scroller: scrollScroller,
+				toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
+			} : null
+		});
+		if (!hasEntryAnimation && globalDelay > 0) tl.set(elementRef, {
+			opacity: getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1),
+			immediateRender: false
+		}, 0);
+		let absoluteTime = 0;
+		for (let i = 0; i < keyframes.length; i++) {
+			const kf = keyframes[i];
+			const kfDelay = parseFloat(kf.delay) || 0;
+			const kfDuration = parseFloat(kf.duration) || 1;
+			absoluteTime += kfDelay;
+			if (i === 0) tl.set(elementRef, {
+				x: getValidNum(kf.x, baseX) - baseX,
+				y: getValidNum(kf.y, baseY) - baseY,
+				opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
+				scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
+				rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
+				...kf.width !== void 0 && { width: kf.width },
+				...kf.height !== void 0 && { height: kf.height },
+				immediateRender: false
+			}, absoluteTime);
+			else {
+				tl.to(elementRef, {
+					x: getValidNum(kf.x, baseX) - baseX,
+					y: getValidNum(kf.y, baseY) - baseY,
+					opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
+					scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
+					rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
+					...kf.width !== void 0 && { width: kf.width },
+					...kf.height !== void 0 && { height: kf.height },
+					duration: kfDuration,
+					ease: kf.ease || "power1.inOut",
+					force3D: true,
+					autoRound: false,
+					immediateRender: false
+				}, absoluteTime);
+				absoluteTime += kfDuration;
+			}
+		}
+		activeTweens.push(tl);
+	} else if (layerAnimation.idle) if (layerAnimation.idle === "custom_path" && layerAnimation.custom_path_data) {
 		const { svgPath, ease = "power2.inOut", duration = 5, autoRotate = false } = layerAnimation.custom_path_data;
 		if (svgPath && svgPath.trim() !== "") {
 			const tween = gsapWithCSS.to(elementRef, {
@@ -20296,6 +20355,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 				ease,
 				repeat: isLooping ? -1 : 0,
 				yoyo: false,
+				delay: globalDelay,
 				motionPath: {
 					path: svgPath,
 					align: "self",
@@ -20305,81 +20365,14 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 			});
 			activeTweens.push(tween);
 		}
-	} else if (layerAnimation.idle === "custom_timeline" && layerAnimation.custom_keyframes && layerAnimation.custom_keyframes.length > 0) {
-		const triggerElement = !isBuilder ? elementRef.closest("section") || elementRef : elementRef;
-		const tl = gsapWithCSS.timeline({
-			repeat: isLooping && !isBuilder ? -1 : 0,
-			delay: config.delay || 0,
-			scrollTrigger: !isBuilder && trigger === "onScroll" ? {
-				trigger: triggerElement,
-				start: "top 85%",
-				scroller: scrollScroller,
-				toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
-			} : null
-		});
-		const baseX = parseFloat(layerStyle?.x) || 0;
-		const baseY = parseFloat(layerStyle?.y) || 0;
-		const getValidNum = (val, fallback) => {
-			if (val === void 0 || val === null || val === "") return fallback;
-			const parsed = parseFloat(val);
-			return isNaN(parsed) ? fallback : parsed;
-		};
-		const firstKf = layerAnimation.custom_keyframes[0];
-		const hasEntryAnimation = !!layerAnimation.entry;
-		if (firstKf && !hasEntryAnimation) gsapWithCSS.set(elementRef, {
-			x: getValidNum(firstKf.x, baseX) - baseX,
-			y: getValidNum(firstKf.y, baseY) - baseY,
-			opacity: config.delay && config.delay > 0 ? 0 : getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1),
-			scale: getValidNum(firstKf.scale, layerStyle?.scale ?? 1),
-			rotation: getValidNum(firstKf.rotation, layerStyle?.rotation ?? 0),
-			...firstKf.width !== void 0 && { width: firstKf.width },
-			...firstKf.height !== void 0 && { height: firstKf.height }
-		});
-		else if (!hasEntryAnimation) gsapWithCSS.set(elementRef, { opacity: config.delay && config.delay > 0 ? 0 : layerStyle?.opacity ?? 1 });
-		if (config.delay && config.delay > 0 && !hasEntryAnimation) tl.set(elementRef, {
-			opacity: getValidNum(firstKf?.opacity, layerStyle?.opacity ?? 1),
-			immediateRender: false,
-			overwrite: false
-		}, 0);
-		for (let i = 0; i < layerAnimation.custom_keyframes.length; i++) {
-			const kf = layerAnimation.custom_keyframes[i];
-			const kfDelay = kf.delay || 0;
-			if (i === 0) tl.set(elementRef, {
-				x: getValidNum(kf.x, baseX) - baseX,
-				y: getValidNum(kf.y, baseY) - baseY,
-				opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
-				scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
-				rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
-				...kf.width !== void 0 && { width: kf.width },
-				...kf.height !== void 0 && { height: kf.height },
-				immediateRender: false,
-				overwrite: false
-			}, `+=${kfDelay}`);
-			else tl.to(elementRef, {
-				x: getValidNum(kf.x, baseX) - baseX,
-				y: getValidNum(kf.y, baseY) - baseY,
-				opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
-				scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
-				rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
-				...kf.width !== void 0 && { width: kf.width },
-				...kf.height !== void 0 && { height: kf.height },
-				duration: kf.duration || 1,
-				delay: kfDelay,
-				ease: kf.ease || "none",
-				force3D: true,
-				autoRound: false,
-				overwrite: false
-			});
-		}
-		activeTweens.push(tl);
 	} else {
 		const configIdle = layerAnimation.configIdle || { speed: 1 };
 		const idleProps = getIdleProps(layerAnimation.idle, configIdle);
 		if (idleProps) {
-			const delay = layerAnimation.entry ? (config.speed || 1.5) + (config.delay || 0) : config.delay || 0;
+			const finalDelay = hasEntryAnimation ? (config.speed || 1.5) + globalDelay : globalDelay;
 			const tween = gsapWithCSS.to(elementRef, {
 				...idleProps,
-				delay,
+				delay: finalDelay,
 				force3D: true,
 				autoRound: false
 			});
@@ -20395,6 +20388,38 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 			}
 			activeTweens.push(tween);
 		}
+	}
+	if (hasEntryAnimation) {
+		const hasEntry = config.mode === "enter" || config.mode === "both" || !config.mode;
+		const hasExit = config.mode === "exit" || config.mode === "both";
+		const entryProps = getAnimationProps(layerAnimation.entry, false, config, layerStyle);
+		if (hasEntry) {
+			if (config.scale !== void 0 && config.scale !== 1) entryProps.scale = config.scale;
+			const toggleActionStr = hasExit || config.autoReverse ? "play reverse play reverse" : "play none none reverse";
+			const triggerElement = !isBuilder ? elementRef.closest("section") || elementRef : elementRef;
+			entryProps.delay = globalDelay;
+			const tween = gsapWithCSS.from(elementRef, {
+				...entryProps,
+				...repeatConfig,
+				force3D: true,
+				autoRound: false,
+				scrollTrigger: !isBuilder && trigger === "onScroll" && trigger !== "onLoad" ? {
+					trigger: triggerElement,
+					start: "top 85%",
+					scroller: scrollScroller,
+					toggleActions: toggleActionStr
+				} : null
+			});
+			activeTweens.push(tween);
+		}
+	} else if (!hasEntryAnimation && layerAnimation.idle !== "custom_timeline" && globalDelay > 0) {
+		const tween = gsapWithCSS.fromTo(elementRef, { opacity: 0 }, {
+			opacity: layerStyle?.opacity ?? 1,
+			duration: .01,
+			delay: globalDelay,
+			immediateRender: true
+		});
+		activeTweens.push(tween);
 	}
 	if (startAtTime > 0) activeTweens.forEach((t) => {
 		if (t && typeof t.totalTime === "function") {
@@ -25393,16 +25418,6 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 			width: newWidth,
 			height: newHeight
 		});
-		if (rndRef.current) {
-			rndRef.current.updatePosition({
-				x: newX,
-				y: newY
-			});
-			rndRef.current.updateSize({
-				width: newWidth,
-				height: newHeight
-			});
-		}
 	}, [
 		layer.style?.x,
 		layer.style?.y,
@@ -25418,7 +25433,11 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 			}), void 0);
 			return;
 		}
-		if (layer.animation && elementRef.current) animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style);
+		if (layer.animation && elementRef.current) {
+			const startAt = window.__BUILDER_PLAYHEAD_POS__ || 0;
+			animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, startAt);
+			if (window.__BUILDER_IS_PLAYING__ === false && animationInstance && typeof animationInstance.pause === "function") animationInstance.pause();
+		}
 		const handlePlayAll = () => {
 			if (visibilityRef.current) {
 				visibilityRef.current.style.opacity = "1";
@@ -25430,8 +25449,9 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 					animationInstance.kill();
 					if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
 				}
-				const currentPlayheadTime = useCanvasStore.getState().playheadPos || 0;
-				animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, currentPlayheadTime);
+				const startAt = window.__BUILDER_PLAYHEAD_POS__ || 0;
+				animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, startAt);
+				if (window.__BUILDER_IS_PLAYING__ === false && animationInstance && typeof animationInstance.pause === "function") animationInstance.pause();
 			}), void 0);
 		};
 		const handleStopAll = () => {
@@ -26229,6 +26249,25 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 										children: "(Daftar komentar akan muncul di sini saat tamu mengisi form RSVP)"
 									})
 								})]
+							}),
+							layer.type === "canvas_group" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "w-full h-full relative",
+								style: { pointerEvents: "none" },
+								children: layer.children?.map((child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									style: {
+										position: "absolute",
+										left: `${child.style?.x || 0}px`,
+										top: `${child.style?.y || 0}px`,
+										width: typeof child.style?.width === "number" ? `${child.style.width}px` : child.style?.width,
+										height: typeof child.style?.height === "number" ? `${child.style.height}px` : child.style?.height,
+										pointerEvents: "auto"
+									},
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayerElement, {
+										layer: child,
+										isChildOfGroup: true,
+										sectionId
+									})
+								}, child.id))
 							})
 						]
 					}), " "]
@@ -26246,9 +26285,9 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 			width: localSize.width,
 			height: localSize.height
 		},
-		defaultPosition: {
-			x: layer.style?.x || 0,
-			y: layer.style?.y || 0
+		position: {
+			x: localPos.x,
+			y: localPos.y
 		},
 		onDrag: (e, d) => {
 			let newX = d.x;
@@ -26324,10 +26363,6 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 				x: newX,
 				y: newY
 			};
-			if (rndRef.current && (newX !== d.x || newY !== d.y)) rndRef.current.updatePosition({
-				x: newX,
-				y: newY
-			});
 			if (useUIStore.getState().isDrawingPath) {
 				const last = pathRecordingRef.current[pathRecordingRef.current.length - 1];
 				if (!last || Math.hypot(elCenterX - last.x, elCenterY - last.y) > 5) {
@@ -28021,7 +28056,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-FGJH_c8Z.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-RszyNTjy.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -28937,7 +28972,8 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 		height: getPx(layer.style?.height ?? 100),
 		zIndex: layer.style?.zIndex || 1,
 		pointerEvents: layer.type === "canvas_group" ? "none" : "auto",
-		willChange: layer.animation ? "transform, opacity" : "auto"
+		willChange: "transform, opacity",
+		backfaceVisibility: "hidden"
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		id: layer.id,
@@ -29689,12 +29725,10 @@ var PublicCanvas = ({ config }) => {
 	const [isOpened, setIsOpened] = (0, import_react.useState)(false);
 	(0, import_react.useEffect)(() => {
 		if (isOpened) {
-			setTimeout(() => {
-				ScrollTrigger.refresh();
-			}, 50);
-			setTimeout(() => {
-				ScrollTrigger.refresh();
-			}, 1300);
+			const timer = setTimeout(() => {
+				ScrollTrigger.refresh(true);
+			}, 1250);
+			return () => clearTimeout(timer);
 		}
 	}, [isOpened]);
 	const [transitionType, setTransitionType] = (0, import_react.useState)("slide_up");

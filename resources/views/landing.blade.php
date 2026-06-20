@@ -225,8 +225,8 @@
                     <div class="absolute top-6 right-6 w-24 h-24 opacity-50 z-0" style="background-image: radial-gradient(#f9a8d4 2.5px, transparent 2.5px); background-size: 12px 12px;"></div>
                     
                     <!-- Gradient Blobs for dynamic background -->
-                    <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 group-hover:opacity-70 transition-opacity duration-700"></div>
-                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 group-hover:opacity-60 transition-opacity duration-700 delay-100"></div>
+                    <div class="absolute inset-0 bg-pink-200 mix-blend-multiply filter blur-3xl opacity-0 group-hover:opacity-40 transition-opacity duration-700"></div>
+                    <div class="absolute -bottom-10 -right-10 w-full h-full bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 group-hover:opacity-50 transition-opacity duration-700 delay-100"></div>
 
                     <!-- Multi-layer Wave Background -->
                     <svg class="absolute bottom-0 left-0 w-full opacity-60 group-hover:opacity-100 transition-opacity duration-700 z-0 transform translate-y-2 group-hover:translate-y-0" viewBox="0 0 1440 320" preserveAspectRatio="none">
@@ -268,8 +268,8 @@
                     <div class="absolute top-6 right-6 w-24 h-24 opacity-50 z-0" style="background-image: radial-gradient(#93c5fd 2.5px, transparent 2.5px); background-size: 12px 12px;"></div>
                     
                     <!-- Gradient Blobs for dynamic background -->
-                    <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 group-hover:opacity-70 transition-opacity duration-700"></div>
-                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 group-hover:opacity-60 transition-opacity duration-700 delay-100"></div>
+                    <div class="absolute inset-0 bg-blue-200 mix-blend-multiply filter blur-3xl opacity-0 group-hover:opacity-40 transition-opacity duration-700"></div>
+                    <div class="absolute -bottom-10 -right-10 w-full h-full bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 group-hover:opacity-50 transition-opacity duration-700 delay-100"></div>
 
                     <!-- Multi-layer Wave Background -->
                     <svg class="absolute bottom-0 left-0 w-full opacity-60 group-hover:opacity-100 transition-opacity duration-700 z-0 transform translate-y-2 group-hover:translate-y-0" viewBox="0 0 1440 320" preserveAspectRatio="none">
@@ -311,8 +311,8 @@
                     <div class="absolute top-6 right-6 w-24 h-24 opacity-50 z-0" style="background-image: radial-gradient(#d8b4fe 2.5px, transparent 2.5px); background-size: 12px 12px;"></div>
                     
                     <!-- Gradient Blobs for dynamic background -->
-                    <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 group-hover:opacity-70 transition-opacity duration-700"></div>
-                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 group-hover:opacity-60 transition-opacity duration-700 delay-100"></div>
+                    <div class="absolute inset-0 bg-purple-200 mix-blend-multiply filter blur-3xl opacity-0 group-hover:opacity-40 transition-opacity duration-700"></div>
+                    <div class="absolute -bottom-10 -right-10 w-full h-full bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 group-hover:opacity-50 transition-opacity duration-700 delay-100"></div>
 
                     <!-- Multi-layer Wave Background -->
                     <svg class="absolute bottom-0 left-0 w-full opacity-60 group-hover:opacity-100 transition-opacity duration-700 z-0 transform translate-y-2 group-hover:translate-y-0" viewBox="0 0 1440 320" preserveAspectRatio="none">
@@ -354,8 +354,8 @@
                     <div class="absolute top-6 right-6 w-24 h-24 opacity-50 z-0" style="background-image: radial-gradient(#6ee7b7 2.5px, transparent 2.5px); background-size: 12px 12px;"></div>
                     
                     <!-- Gradient Blobs for dynamic background -->
-                    <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-emerald-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 group-hover:opacity-70 transition-opacity duration-700"></div>
-                    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 group-hover:opacity-60 transition-opacity duration-700 delay-100"></div>
+                    <div class="absolute inset-0 bg-emerald-200 mix-blend-multiply filter blur-3xl opacity-0 group-hover:opacity-40 transition-opacity duration-700"></div>
+                    <div class="absolute -bottom-10 -right-10 w-full h-full bg-emerald-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 group-hover:opacity-50 transition-opacity duration-700 delay-100"></div>
 
                     <!-- Multi-layer Wave Background -->
                     <svg class="absolute bottom-0 left-0 w-full opacity-60 group-hover:opacity-100 transition-opacity duration-700 z-0 transform translate-y-2 group-hover:translate-y-0" viewBox="0 0 1440 320" preserveAspectRatio="none">
@@ -439,7 +439,7 @@
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </button>
 
-                        <div x-ref="slider" @scroll.passive="checkScroll" class="flex overflow-x-auto hide-scrollbar gap-4 md:gap-5 snap-x snap-mandatory pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 relative scroll-smooth">
+                        <div x-ref="slider" @scroll.passive="checkScroll" class="flex overflow-x-auto hide-scrollbar gap-2 sm:gap-4 md:gap-5 snap-x snap-mandatory pb-4 -mx-4 px-4 sm:mx-0 sm:px-0 relative scroll-smooth">
                             @foreach($service->templates as $template)
                             @php
                                 $allImages = array_values(array_filter(array_merge([$template->image], (array)$template->images)));
@@ -493,11 +493,10 @@
                                         } 
                                      } 
                                  }" 
-                                 class="portfolio-item snap-start shrink-0 w-[165px] sm:w-[200px] md:w-[240px] group flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden" 
+                                 class="portfolio-item snap-start shrink-0 w-[calc(50%-4px)] sm:w-[200px] md:w-[220px] group flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden" 
                                  data-aos="zoom-in" data-aos-delay="{{ $loop->iteration * 50 }}">
                                  
-                                <div class="relative w-full bg-sand group-hover:opacity-95 transition-opacity overflow-hidden"
-                                     style="aspect-ratio: {{ $template->image_aspect_ratio && $template->image_aspect_ratio !== 'auto' ? (str_contains($template->image_aspect_ratio, '/') ? $template->image_aspect_ratio : '3/4') : '3/4' }};">
+                                <div class="relative w-full bg-sand group-hover:opacity-95 transition-opacity overflow-hidden aspect-[4/5]">
                                     
                                     @php
                                         $validImages = array_filter($allImages);
