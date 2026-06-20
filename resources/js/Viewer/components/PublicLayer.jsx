@@ -252,7 +252,8 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
         height: getPx(layer.style?.height ?? 100),
         zIndex: layer.style?.zIndex || 1,
         pointerEvents: layer.type === 'canvas_group' ? 'none' : 'auto',
-        willChange: layer.animation ? 'transform, opacity' : 'auto'
+        willChange: 'transform, opacity',
+        backfaceVisibility: 'hidden'
     };
 
     return (

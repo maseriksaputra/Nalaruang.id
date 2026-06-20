@@ -16,14 +16,13 @@ const PublicCanvas = ({ config }) => {
 
     useEffect(() => {
         if (isOpened) {
-            // Refresh ScrollTrigger setelah elemen Halaman Isi berubah dari display:none ke block
-            setTimeout(() => {
-                ScrollTrigger.refresh();
-            }, 50);
-            // Refresh sekali lagi setelah animasi transisi buka undangan selesai
-            setTimeout(() => {
-                ScrollTrigger.refresh();
-            }, 1300);
+            // Biarkan DOM selesai me-render display:block dari section yang tersembunyi
+            // Cukup panggil refresh sekali setelah animasi selesai agar tidak memberatkan memori
+            const timer = setTimeout(() => {
+                ScrollTrigger.refresh(true);
+            }, 1250); // Waktu yang cukup setelah transisi slide-up selesai
+            
+            return () => clearTimeout(timer);
         }
     }, [isOpened]);
     const [transitionType, setTransitionType] = useState('slide_up');

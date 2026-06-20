@@ -153,9 +153,10 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                             ? document.getElementById('viewer-scroll-container') 
                             : undefined;
 
-    // Get config without mutating state
     const config = layerAnimation.config || { mode: 'enter', speed: 1.5, direction: 'up', trigger: 'onScroll' };
     const trigger = config.trigger || 'onScroll';
+    const hasEntryAnimation = !!layerAnimation.entry;
+    const globalDelay = parseFloat(config.delay) || 0;
 
     // Custom GSAP Code
     if (layerAnimation.custom) {
@@ -180,162 +181,125 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
         }
     }
 
-    // Main Animation (Entry / Exit / Both)
-    if (layerAnimation.entry) {
-        const hasEntry = config.mode === 'enter' || config.mode === 'both' || !config.mode;
-        const hasExit = config.mode === 'exit' || config.mode === 'both';
+    // -- 1. CUSTOM TIMELINE (Keyframes) LOGIC --
+    // We handle this entirely separately to mimic CapCut/Canva absolute timelines
+    if (layerAnimation.idle === 'custom_timeline' && layerAnimation.custom_keyframes && layerAnimation.custom_keyframes.length > 0) {
+        const triggerElement = !isBuilder ? (elementRef.closest('section') || elementRef) : elementRef;
+        const keyframes = layerAnimation.custom_keyframes;
         
-        const entryProps = getAnimationProps(layerAnimation.entry, false, config, layerStyle);
-            
-        if (hasEntry) {
-            if (config.scale !== undefined && config.scale !== 1) {
-                entryProps.scale = config.scale;
-            }
-            const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none reverse";
-            const triggerElement = !isBuilder ? (elementRef.closest('section') || elementRef) : elementRef;
+        const baseX = parseFloat(layerStyle?.x) || 0;
+        const baseY = parseFloat(layerStyle?.y) || 0;
+        const getValidNum = (val, fallback) => {
+            if (val === undefined || val === null || val === '') return fallback;
+            const parsed = parseFloat(val);
+            return isNaN(parsed) ? fallback : parsed;
+        };
 
-            const tween = gsap.from(elementRef, {
-                ...entryProps,
-                ...repeatConfig,
-                force3D: true,
-                autoRound: false,
-                scrollTrigger: (!isBuilder && trigger === 'onScroll') && trigger !== 'onLoad' ? { 
-                    trigger: triggerElement, 
-                    start: "top 85%", 
-                    scroller: scrollScroller,
-                    toggleActions: toggleActionStr 
-                } : null
+        const firstKf = keyframes[0];
+        
+        // Setup initial state: HIDE element entirely during global delay if there is no entry animation overriding it
+        if (!hasEntryAnimation) {
+            gsap.set(elementRef, {
+                x: getValidNum(firstKf.x, baseX) - baseX,
+                y: getValidNum(firstKf.y, baseY) - baseY,
+                scale: getValidNum(firstKf.scale, layerStyle?.scale ?? 1),
+                rotation: getValidNum(firstKf.rotation, layerStyle?.rotation ?? 0),
+                opacity: globalDelay > 0 ? 0 : getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1),
+                ...(firstKf.width !== undefined && { width: firstKf.width }),
+                ...(firstKf.height !== undefined && { height: firstKf.height })
             });
-            activeTweens.push(tween);
         }
-    } else if (config.delay && config.delay > 0 && layerAnimation.idle !== 'custom_timeline') {
-        // Fallback: If no entry animation but it has a timeline delay, hide it until delay
-        const tween = gsap.fromTo(elementRef, 
-            { opacity: 0 }, 
-            { opacity: layerStyle?.opacity ?? 1, duration: 0.01, delay: config.delay, immediateRender: true }
-        );
-        activeTweens.push(tween);
-    }
 
-    // Idle Animation (Continuous)
-    if (layerAnimation.idle) {
+        const tl = gsap.timeline({
+            repeat: (isLooping && !isBuilder) ? -1 : 0,
+            delay: globalDelay,
+            scrollTrigger: (!isBuilder && trigger === 'onScroll') ? {
+                trigger: triggerElement,
+                start: "top 85%",
+                scroller: scrollScroller,
+                toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
+            } : null
+        });
+
+        // Waktu absolut timeline dimulai dari 0 (yang mana aslinya sudah ter-delay oleh globalDelay)
+        if (!hasEntryAnimation && globalDelay > 0) {
+            tl.set(elementRef, { opacity: getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1), immediateRender: false }, 0);
+        }
+
+        // Loop titik pergerakan keyframe (K1 ke K2 ke K3 dst)
+        // Format CapCut: kf.delay adalah jeda SEBELUM bergerak ke titik ini, kf.duration adalah LAMA PERJALANAN ke titik ini.
+        let absoluteTime = 0;
+        for (let i = 0; i < keyframes.length; i++) {
+            const kf = keyframes[i];
+            const kfDelay = parseFloat(kf.delay) || 0;
+            const kfDuration = parseFloat(kf.duration) || 1;
+            
+            absoluteTime += kfDelay; // Wait before action
+
+            if (i === 0) {
+                // Keyframe pertama adalah STARTING POINT. Di CapCut, elemen langsung berada di K1.
+                tl.set(elementRef, {
+                    x: getValidNum(kf.x, baseX) - baseX,
+                    y: getValidNum(kf.y, baseY) - baseY,
+                    opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
+                    scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
+                    rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
+                    ...(kf.width !== undefined && { width: kf.width }),
+                    ...(kf.height !== undefined && { height: kf.height }),
+                    immediateRender: false
+                }, absoluteTime);
+            } else {
+                // Keyframe selanjutnya adalah TUJUAN PERGERAKAN (ANIMASI)
+                tl.to(elementRef, {
+                    x: getValidNum(kf.x, baseX) - baseX,
+                    y: getValidNum(kf.y, baseY) - baseY,
+                    opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
+                    scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
+                    rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
+                    ...(kf.width !== undefined && { width: kf.width }),
+                    ...(kf.height !== undefined && { height: kf.height }),
+                    duration: kfDuration,
+                    ease: kf.ease || "power1.inOut",
+                    force3D: true,
+                    autoRound: false,
+                    immediateRender: false
+                }, absoluteTime);
+                
+                absoluteTime += kfDuration; // Advance timeline playhead by movement duration
+            }
+        }
+        
+        activeTweens.push(tl);
+    } 
+    // -- 2. STANDARD IDLE ANIMATIONS --
+    else if (layerAnimation.idle) {
         if (layerAnimation.idle === 'custom_path' && layerAnimation.custom_path_data) {
-            const { 
-                svgPath, 
-                ease = "power2.inOut",
-                duration = 5,
-                autoRotate = false
-            } = layerAnimation.custom_path_data;
-
+            const { svgPath, ease = "power2.inOut", duration = 5, autoRotate = false } = layerAnimation.custom_path_data;
             if (svgPath && svgPath.trim() !== '') {
                 const tween = gsap.to(elementRef, {
                     duration: duration,
                     ease: ease, 
                     repeat: isLooping ? -1 : 0,
                     yoyo: false,
+                    delay: globalDelay,
                     motionPath: {
                         path: svgPath,
                         align: "self", 
-                        alignOrigin: [0.5, 0.5], // Tumpuan animasi persis di tengah elemen
+                        alignOrigin: [0.5, 0.5],
                         autoRotate: autoRotate
                     }
                 });
                 activeTweens.push(tween);
             }
-        } else if (layerAnimation.idle === 'custom_timeline' && layerAnimation.custom_keyframes && layerAnimation.custom_keyframes.length > 0) {
-            const triggerElement = !isBuilder ? (elementRef.closest('section') || elementRef) : elementRef;
-
-            const tl = gsap.timeline({
-                repeat: (isLooping && !isBuilder) ? -1 : 0,
-                delay: config.delay || 0,
-                scrollTrigger: (!isBuilder && trigger === 'onScroll') ? {
-                    trigger: triggerElement,
-                    start: "top 85%",
-                    scroller: scrollScroller,
-                    toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
-                } : null
-            });
-            
-            const baseX = parseFloat(layerStyle?.x) || 0;
-            const baseY = parseFloat(layerStyle?.y) || 0;
-            
-            const getValidNum = (val, fallback) => {
-                if (val === undefined || val === null || val === '') return fallback;
-                const parsed = parseFloat(val);
-                return isNaN(parsed) ? fallback : parsed;
-            };
-            
-            // Apply first keyframe immediately so it doesn't flicker in its original position
-            // before ScrollTrigger fires. ONLY IF there is no entry animation overriding it!
-            const firstKf = layerAnimation.custom_keyframes[0];
-            const hasEntryAnimation = !!layerAnimation.entry;
-
-            if (firstKf && !hasEntryAnimation) {
-                gsap.set(elementRef, {
-                    x: getValidNum(firstKf.x, baseX) - baseX,
-                    y: getValidNum(firstKf.y, baseY) - baseY,
-                    opacity: (config.delay && config.delay > 0) ? 0 : getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1),
-                    scale: getValidNum(firstKf.scale, layerStyle?.scale ?? 1),
-                    rotation: getValidNum(firstKf.rotation, layerStyle?.rotation ?? 0),
-                    ...(firstKf.width !== undefined && { width: firstKf.width }),
-                    ...(firstKf.height !== undefined && { height: firstKf.height })
-                });
-            } else if (!hasEntryAnimation) {
-                gsap.set(elementRef, {
-                    opacity: (config.delay && config.delay > 0) ? 0 : (layerStyle?.opacity ?? 1),
-                });
-            }
-            
-            // IF it was hidden by delay, reveal it exactly when timeline starts (time 0)
-            if (config.delay && config.delay > 0 && !hasEntryAnimation) {
-                tl.set(elementRef, { opacity: getValidNum(firstKf?.opacity, layerStyle?.opacity ?? 1), immediateRender: false, overwrite: false }, 0);
-            }
-            
-            // Loop dari titik 1 ke seterusnya
-            for (let i = 0; i < layerAnimation.custom_keyframes.length; i++) {
-                const kf = layerAnimation.custom_keyframes[i];
-                const kfDelay = kf.delay || 0;
-                
-                if (i === 0) {
-                    tl.set(elementRef, {
-                        x: getValidNum(kf.x, baseX) - baseX,
-                        y: getValidNum(kf.y, baseY) - baseY,
-                        opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
-                        scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
-                        rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
-                        ...(kf.width !== undefined && { width: kf.width }),
-                        ...(kf.height !== undefined && { height: kf.height }),
-                        immediateRender: false,
-                        overwrite: false
-                    }, `+=${kfDelay}`);
-                } else {
-                    tl.to(elementRef, {
-                        x: getValidNum(kf.x, baseX) - baseX,
-                        y: getValidNum(kf.y, baseY) - baseY,
-                        opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
-                        scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
-                        rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
-                        ...(kf.width !== undefined && { width: kf.width }),
-                        ...(kf.height !== undefined && { height: kf.height }),
-                        duration: kf.duration || 1,
-                        delay: kfDelay,
-                        ease: kf.ease || "none",
-                        force3D: true,
-                        autoRound: false,
-                        overwrite: false
-                    });
-                }
-            }
-            
-            activeTweens.push(tl);
         } else {
             const configIdle = layerAnimation.configIdle || { speed: 1 };
             const idleProps = getIdleProps(layerAnimation.idle, configIdle);
             if (idleProps) {
-                const delay = layerAnimation.entry ? (config.speed || 1.5) + (config.delay || 0) : (config.delay || 0);
+                // Jika digabung dengan Entry Animation, delay-nya adalah GlobalDelay + EntryDuration
+                const finalDelay = hasEntryAnimation ? (config.speed || 1.5) + globalDelay : globalDelay;
                 const tween = gsap.to(elementRef, {
                     ...idleProps,
-                    delay: delay,
+                    delay: finalDelay,
                     force3D: true,
                     autoRound: false
                 });
@@ -354,12 +318,50 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
         }
     }
 
+    // -- 3. ENTRY ANIMATION (Bawaan) --
+    if (hasEntryAnimation) {
+        const hasEntry = config.mode === 'enter' || config.mode === 'both' || !config.mode;
+        const hasExit = config.mode === 'exit' || config.mode === 'both';
+        const entryProps = getAnimationProps(layerAnimation.entry, false, config, layerStyle);
+            
+        if (hasEntry) {
+            if (config.scale !== undefined && config.scale !== 1) {
+                entryProps.scale = config.scale;
+            }
+            const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none reverse";
+            const triggerElement = !isBuilder ? (elementRef.closest('section') || elementRef) : elementRef;
+
+            // Pastikan delay diterapkan secara eksplisit
+            entryProps.delay = globalDelay;
+
+            const tween = gsap.from(elementRef, {
+                ...entryProps,
+                ...repeatConfig,
+                force3D: true,
+                autoRound: false,
+                scrollTrigger: (!isBuilder && trigger === 'onScroll') && trigger !== 'onLoad' ? { 
+                    trigger: triggerElement, 
+                    start: "top 85%", 
+                    scroller: scrollScroller,
+                    toggleActions: toggleActionStr 
+                } : null
+            });
+            activeTweens.push(tween);
+        }
+    } else if (!hasEntryAnimation && layerAnimation.idle !== 'custom_timeline' && globalDelay > 0) {
+        // Fallback: Elemen yang hanya punya delay tapi tidak punya Entry dan Timeline,
+        // akan disembunyikan secara harfiah, lalu dimunculkan setelah delay.
+        const tween = gsap.fromTo(elementRef, 
+            { opacity: 0 }, 
+            { opacity: layerStyle?.opacity ?? 1, duration: 0.01, delay: globalDelay, immediateRender: true }
+        );
+        activeTweens.push(tween);
+    }
+
     // Jika dipanggil dari Builder (isBuilder === true) dan ada playhead awal
     if (startAtTime > 0) {
         activeTweens.forEach(t => {
             if (t && typeof t.totalTime === 'function') {
-                // Force GSAP to evaluate starting properties BEFORE jumping to the middle
-                // This prevents issues where 'from' tweens get confused about their start/end values
                 t.totalTime(0); 
                 t.totalTime(startAtTime);
             }
@@ -372,7 +374,6 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 if (t.scrollTrigger) t.scrollTrigger.kill();
                 t.kill();
             });
-            // Reset transforms
             gsap.set(elementRef, { clearProps: "all" });
         }
     };
