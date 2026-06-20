@@ -241,16 +241,22 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             const baseX = parseFloat(layerStyle?.x) || 0;
             const baseY = parseFloat(layerStyle?.y) || 0;
             
+            const getValidNum = (val, fallback) => {
+                if (val === undefined || val === null || val === '') return fallback;
+                const parsed = parseFloat(val);
+                return isNaN(parsed) ? fallback : parsed;
+            };
+            
             // Apply first keyframe immediately so it doesn't flicker in its original position
             // before ScrollTrigger fires.
             const firstKf = layerAnimation.custom_keyframes[0];
             if (firstKf) {
                 gsap.set(elementRef, {
-                    x: (parseFloat(firstKf.x) || 0) - baseX,
-                    y: (parseFloat(firstKf.y) || 0) - baseY,
-                    opacity: firstKf.opacity ?? 1,
-                    scale: firstKf.scale ?? 1,
-                    rotation: firstKf.rotation ?? 0,
+                    x: getValidNum(firstKf.x, baseX) - baseX,
+                    y: getValidNum(firstKf.y, baseY) - baseY,
+                    opacity: getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1),
+                    scale: getValidNum(firstKf.scale, layerStyle?.scale ?? 1),
+                    rotation: getValidNum(firstKf.rotation, layerStyle?.rotation ?? 0),
                     ...(firstKf.width !== undefined && { width: firstKf.width }),
                     ...(firstKf.height !== undefined && { height: firstKf.height })
                 });
@@ -265,21 +271,21 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 const kf = layerAnimation.custom_keyframes[i];
                 if (i === 0) {
                     tl.set(elementRef, {
-                        x: (parseFloat(kf.x) || 0) - baseX,
-                        y: (parseFloat(kf.y) || 0) - baseY,
-                        opacity: kf.opacity ?? 1,
-                        scale: kf.scale ?? 1,
-                        rotation: kf.rotation ?? 0,
+                        x: getValidNum(kf.x, baseX) - baseX,
+                        y: getValidNum(kf.y, baseY) - baseY,
+                        opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
+                        scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
+                        rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
                         ...(kf.width !== undefined && { width: kf.width }),
                         ...(kf.height !== undefined && { height: kf.height })
                     });
                 } else {
                     tl.to(elementRef, {
-                        x: (parseFloat(kf.x) || 0) - baseX,
-                        y: (parseFloat(kf.y) || 0) - baseY,
-                        opacity: kf.opacity ?? 1,
-                        scale: kf.scale ?? 1,
-                        rotation: kf.rotation ?? 0,
+                        x: getValidNum(kf.x, baseX) - baseX,
+                        y: getValidNum(kf.y, baseY) - baseY,
+                        opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
+                        scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
+                        rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
                         ...(kf.width !== undefined && { width: kf.width }),
                         ...(kf.height !== undefined && { height: kf.height }),
                         duration: kf.duration || 1,
