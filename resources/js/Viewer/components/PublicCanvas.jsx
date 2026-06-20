@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import PublicLayer from './PublicLayer';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Particles from "@tsparticles/react";
 import { tsParticles } from "@tsparticles/engine";
 import { loadFireflyPreset } from "@tsparticles/preset-firefly";
@@ -12,6 +13,19 @@ const PublicCanvas = ({ config }) => {
     const [scale, setScale] = useState(1);
     const [scaledHeight, setScaledHeight] = useState('auto');
     const [isOpened, setIsOpened] = useState(false);
+
+    useEffect(() => {
+        if (isOpened) {
+            // Refresh ScrollTrigger setelah elemen Halaman Isi berubah dari display:none ke block
+            setTimeout(() => {
+                ScrollTrigger.refresh();
+            }, 50);
+            // Refresh sekali lagi setelah animasi transisi buka undangan selesai
+            setTimeout(() => {
+                ScrollTrigger.refresh();
+            }, 1300);
+        }
+    }, [isOpened]);
     const [transitionType, setTransitionType] = useState('slide_up');
     const containerRef = useRef(null);
     const innerRef = useRef(null);
