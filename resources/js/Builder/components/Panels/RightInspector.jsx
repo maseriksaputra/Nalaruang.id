@@ -1208,7 +1208,7 @@ const RightInspector = () => {
                                                                     const currentConfig = activeLayer.animation?.config || { speed: 1.5 };
                                                                     updateLayerAnimation(activeLayer.id, { config: { ...currentConfig, trigger, previewKey: Date.now() } });
                                                                 }}
-                                                                className={`flex-1 py-1.5 text-[10px] font-medium rounded-md transition ${(activeLayer.animation.config?.trigger || 'onLoad') === trigger ? 'bg-indigo-100 text-indigo-700' : 'text-gray-500 hover:bg-gray-50'}`}
+                                                                className={`flex-1 py-1.5 text-[10px] font-medium rounded-md transition ${(activeLayer.animation.config?.trigger || 'onScroll') === trigger ? 'bg-indigo-100 text-indigo-700' : 'text-gray-500 hover:bg-gray-50'}`}
                                                             >
                                                                 {trigger === 'onLoad' ? 'Saat Dimuat' : 'Saat Scroll'}
                                                             </button>

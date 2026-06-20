@@ -150,7 +150,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
     const activeTweens = [];
 
     // Get config without mutating state
-    const config = layerAnimation.config || { mode: 'enter', speed: 1.5, direction: 'up', trigger: 'onLoad' };
+    const config = layerAnimation.config || { mode: 'enter', speed: 1.5, direction: 'up', trigger: 'onScroll' };
+    const trigger = config.trigger || 'onScroll';
 
     // Custom GSAP Code
     if (layerAnimation.custom) {
@@ -185,7 +186,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 ...repeatConfig,
                 force3D: true,
                 autoRound: false,
-                scrollTrigger: (!isBuilder || config.trigger === 'onScroll') && config.trigger !== 'onLoad' ? { 
+                scrollTrigger: (!isBuilder || trigger === 'onScroll') && trigger !== 'onLoad' ? { 
                     trigger: elementRef, 
                     start: "top 85%", 
                     toggleActions: toggleActionStr 
@@ -230,7 +231,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
         } else if (layerAnimation.idle === 'custom_timeline' && layerAnimation.custom_keyframes && layerAnimation.custom_keyframes.length > 0) {
             const tl = gsap.timeline({
                 repeat: (isLooping && !isBuilder) ? -1 : 0,
-                scrollTrigger: (!isBuilder && config.trigger === 'onScroll') ? {
+                scrollTrigger: (!isBuilder && trigger === 'onScroll') ? {
                     trigger: elementRef,
                     start: "top 85%",
                     toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
@@ -289,7 +290,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                     force3D: true,
                     autoRound: false
                 });
-                if (!isBuilder && config.trigger === 'onScroll') {
+                if (!isBuilder && trigger === 'onScroll') {
                     tween.scrollTrigger = ScrollTrigger.create({
                         trigger: elementRef,
                         start: "top 85%",
