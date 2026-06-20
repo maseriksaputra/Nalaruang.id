@@ -54,11 +54,13 @@ const DraggableChildItem = ({ childId, child, parentId, isActive }) => {
                         <span className="text-[10px] font-bold text-gray-700 font-serif">T</span>
                     ) : child.type === 'lottie' ? (
                         <svg className="w-3 h-3 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    ) : child.type === 'canvas_group' ? (
+                        <svg className="w-3 h-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                     ) : (
                         <span className="text-[8px] font-bold text-gray-500 uppercase">{(child.type || 'E').charAt(0)}</span>
                     )}
                 </div>
-                <span className="text-xs font-medium text-gray-600 truncate">{child.content || (child.type === 'image' ? 'Gambar Asset' : 'Elemen')}</span>
+                <span className="text-xs font-medium text-gray-600 truncate">{child.content || (child.type === 'image' ? 'Gambar Asset' : child.type === 'canvas_group' ? (child.name || 'Grup Elemen') : 'Elemen')}</span>
             </div>
             <div className="flex items-center shrink-0 ml-2">
                 <button 
