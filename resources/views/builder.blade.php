@@ -12,9 +12,14 @@
         // Injeksi ID Undangan & Data JSON awal ke React
         window.__INVITATION_ID__ = {{ $invitation->id }};
         window.__ORDER_ID__ = {{ $invitation->order_id ? $invitation->order_id : 'null' }};
+        window.__INVITATION_TITLE__ = {!! json_encode($invitation->title) !!};
         window.__INVITATION_SLUG__ = "{{ $invitation->slug }}";
         window.__INVITATION_STATUS__ = "{{ $invitation->status }}";
         window.__INVITATION_EXPIRES_AT__ = "{{ $invitation->expires_at }}";
+        window.__IS_TEMPLATE__ = {{ $invitation->is_template ? 'true' : 'false' }};
+        window.__INVITATION_CATEGORY__ = {!! json_encode($invitation->category) !!};
+        window.__INVITATION_PRICE__ = {{ $invitation->price ?? 0 }};
+        window.__INVITATION_DESCRIPTION__ = {!! json_encode($invitation->description) !!};
         window.__CANVAS_DATA__ = @json($invitation->canvas_config ?? ['sections' => [], 'global_settings' => []]);
     </script>
     

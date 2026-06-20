@@ -1624,6 +1624,14 @@ const PortalApp = () => {
 
                                                         <div className="flex gap-2 mt-auto">
                                                             <button 
+                                                                onClick={() => {
+                                                                    window.open(`/admin/builder/${item.id}`, '_blank');
+                                                                }}
+                                                                className="flex-1 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/50 rounded-lg font-bold text-sm transition-colors text-center"
+                                                            >
+                                                                Edit Template
+                                                            </button>
+                                                            <button 
                                                                 onClick={async () => {
                                                                     try {
                                                                         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
