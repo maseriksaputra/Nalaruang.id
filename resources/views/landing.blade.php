@@ -450,30 +450,39 @@
                             <div x-data="{ 
                                     currentSlide: 0, 
                                     slides: {{ json_encode($allImages) }}, 
-                                    isTransitioning: true,
                                     get extendedSlides() { return this.slides.length > 1 ? [...this.slides, this.slides[0]] : this.slides; },
                                     next() {
-                                        if (this.currentSlide >= this.slides.length) return;
-                                        this.isTransitioning = true;
+                                        if (this.currentSlide >= this.slides.length || !this.$refs.slideTrack) return;
+                                        const track = this.$refs.slideTrack;
+                                        track.style.transition = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
                                         this.currentSlide++;
+                                        track.style.transform = `translateX(-${this.currentSlide * 100}%)`;
+
                                         if (this.currentSlide === this.slides.length) {
                                             setTimeout(() => {
-                                                this.isTransitioning = false;
+                                                track.style.transition = 'none';
                                                 this.currentSlide = 0;
+                                                track.style.transform = `translateX(0%)`;
                                             }, 700);
                                         }
                                     },
                                     prev() {
+                                        if (!this.$refs.slideTrack) return;
+                                        const track = this.$refs.slideTrack;
                                         if (this.currentSlide === 0) {
-                                            this.isTransitioning = false;
+                                            track.style.transition = 'none';
                                             this.currentSlide = this.slides.length;
+                                            track.style.transform = `translateX(-${this.currentSlide * 100}%)`;
+                                            
                                             setTimeout(() => {
-                                                this.isTransitioning = true;
+                                                track.style.transition = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
                                                 this.currentSlide--;
+                                                track.style.transform = `translateX(-${this.currentSlide * 100}%)`;
                                             }, 50);
                                         } else {
-                                            this.isTransitioning = true;
+                                            track.style.transition = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
                                             this.currentSlide--;
+                                            track.style.transform = `translateX(-${this.currentSlide * 100}%)`;
                                         }
                                     },
                                     init() { 
@@ -504,9 +513,7 @@
                                             </div>
                                         </div>
                                     @else
-                                        <div class="absolute inset-0 w-full h-full flex ease-in-out"
-                                             :class="isTransitioning ? 'transition-transform duration-700' : 'transition-none'"
-                                             x-bind:style="'transform: translateX(-' + (currentSlide * 100) + '%)'">
+                                        <div x-ref="slideTrack" class="absolute inset-0 w-full h-full flex" style="transform: translateX(0%); transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)">
                                             <template x-for="(slide, index) in extendedSlides" :key="index">
                                                 <img x-bind:src="slide ? (slide.startsWith('http') ? slide : window.ASSET_URL + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 
                                                      class="portfolio-img w-full h-full object-cover shrink-0" 
