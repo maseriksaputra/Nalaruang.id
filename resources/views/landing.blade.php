@@ -496,7 +496,7 @@
                                  class="portfolio-item snap-start shrink-0 w-[165px] sm:w-[200px] md:w-[240px] group flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden" 
                                  data-aos="zoom-in" data-aos-delay="{{ $loop->iteration * 50 }}">
                                  
-                                <div class="relative w-full bg-sand group-hover:opacity-95 transition-opacity"
+                                <div class="relative w-full bg-sand group-hover:opacity-95 transition-opacity overflow-hidden"
                                      style="aspect-ratio: {{ $template->image_aspect_ratio && $template->image_aspect_ratio !== 'auto' ? (str_contains($template->image_aspect_ratio, '/') ? $template->image_aspect_ratio : '3/4') : '3/4' }};">
                                     
                                     @php
