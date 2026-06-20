@@ -133,6 +133,23 @@ class TemplateResource extends Resource
                                             ->helperText('Biarkan 999 jika stok tidak terbatas.'),
                                     ])->columns(2),
 
+                                Forms\Components\Section::make('Deskripsi & Spesifikasi')
+                                    ->schema([
+                                        Forms\Components\RichEditor::make('description')
+                                            ->label('Deskripsi Lengkap Produk')
+                                            ->toolbarButtons([
+                                                'bold', 'italic', 'strike', 'link', 'h2', 'h3', 'bulletList', 'orderedList', 'redo', 'undo',
+                                            ])
+                                            ->columnSpanFull(),
+                                        Forms\Components\KeyValue::make('specifications')
+                                            ->label('Spesifikasi Teknis (Opsional)')
+                                            ->keyLabel('Atribut (Contoh: Bahan)')
+                                            ->valueLabel('Nilai (Contoh: Art Paper 260gsm)')
+                                            ->addActionLabel('Tambah Spesifikasi')
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->collapsed(),
+
                                 Forms\Components\Section::make('Media & Tampilan')
                                     ->schema([
                                         Forms\Components\Select::make('image_aspect_ratio')

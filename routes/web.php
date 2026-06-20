@@ -23,6 +23,8 @@ Route::post('/test-post-submit', function () {
 Route::get('/order/{template_id}', [OrderController::class, 'create'])->name('order.create');
 Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 
+Route::get('/p/{id}', [ProductController::class, 'show'])->name('product.show');
+
 Route::get('/debug-log', function () {
     $logFile = storage_path('logs/laravel.log');
     if (!file_exists($logFile)) return 'No log file';

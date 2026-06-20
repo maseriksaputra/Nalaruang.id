@@ -28,11 +28,14 @@ class Template extends Model
         'stok',
         'sort_order',
         'form_schema',
+        'description',
+        'specifications',
     ];
 
     protected $casts = [
         'images' => 'array',
         'form_schema' => 'array',
+        'specifications' => 'array',
     ];
 
     public function service()
