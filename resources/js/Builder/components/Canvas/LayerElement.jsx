@@ -337,7 +337,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
     }
 
     const innerStructure = (
-        <div className="w-full h-full relative" style={{ transform: `rotate(${layer.style?.rotation || 0}deg)`, opacity: layer.style?.opacity ?? 1, willChange: 'transform, opacity' }}>
+        <div className="w-full h-full relative" style={{ transform: `rotate(${layer.style?.rotation || 0}deg)`, opacity: layer.style?.opacity ?? 1 }}>
                 
                 {/* Rotator Handle - Only visible when active */}
                 {isActive && !(layer.isLocked) && !isChildOfGroup && (
