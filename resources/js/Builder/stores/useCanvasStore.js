@@ -510,38 +510,37 @@ const useCanvasStore = create(temporal((set, get) => ({
 
             const elementsToGroup = [];
             let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-            const remainingLayers = [];
             let trackToInject = null;
+            let injectIndex = -1;
 
-            const findAndExtract = (layers) => {
-                for (const layer of layers) {
+            const extractElements = (layers, parent = null) => {
+                for (let i = layers.length - 1; i >= 0; i--) {
+                    const layer = layers[i];
                     if (state.activeLayerIds.includes(layer.id)) {
-                        elementsToGroup.push(layer);
+                        elementsToGroup.unshift(layer);
                         minX = Math.min(minX, layer.style?.x || 0);
                         minY = Math.min(minY, layer.style?.y || 0);
                         maxX = Math.max(maxX, (layer.style?.x || 0) + (parseFloat(layer.style?.width) || 0));
                         maxY = Math.max(maxY, (layer.style?.y || 0) + (parseFloat(layer.style?.height) || 0));
-                    } else if (layer.children) {
-                        const originalLen = layer.children.length;
-                        const extracted = layer.children.filter(c => state.activeLayerIds.includes(c.id));
-                        if (extracted.length > 0) {
-                            if (!trackToInject) trackToInject = layer;
-                            extracted.forEach(c => {
-                                elementsToGroup.push(c);
-                                minX = Math.min(minX, c.style?.x || 0);
-                                minY = Math.min(minY, c.style?.y || 0);
-                                maxX = Math.max(maxX, (c.style?.x || 0) + (parseFloat(c.style?.width) || 0));
-                                maxY = Math.max(maxY, (c.style?.y || 0) + (parseFloat(c.style?.height) || 0));
-                            });
-                            layer.children = layer.children.filter(c => !state.activeLayerIds.includes(c.id));
+                        
+                        if (!trackToInject && parent) {
+                            trackToInject = parent;
+                            injectIndex = i;
+                        } else if (!trackToInject && !parent) {
+                            trackToInject = 'root';
+                            injectIndex = i;
                         }
-                        remainingLayers.push(layer);
-                    } else {
-                        remainingLayers.push(layer);
+                        
+                        layers.splice(i, 1);
+                    } else if (layer.children) {
+                        extractElements(layer.children, layer);
                     }
                 }
             };
-            findAndExtract(targetLayers);
+
+            extractElements(targetLayers);
+
+            if (elementsToGroup.length < 2) return;
 
             const groupChildren = elementsToGroup.map(el => ({
                 ...el,
@@ -553,19 +552,39 @@ const useCanvasStore = create(temporal((set, get) => ({
                 type: 'canvas_group',
                 name: 'Grup Baru',
                 children: groupChildren,
-                style: { x: minX, y: minY, width: maxX - minX, height: maxY - minY, zIndex: targetLayers.length + 1 }
+                style: { x: minX, y: minY, width: maxX - minX, height: maxY - minY, zIndex: 1 }
             };
 
-            targetLayers.splice(0, targetLayers.length, ...remainingLayers);
-            
-            if (trackToInject && trackToInject.children) {
-                trackToInject.children.push(newGroup);
-            } else if (targetLayers.length > 0 && targetLayers[targetLayers.length - 1].children) {
-                targetLayers[targetLayers.length - 1].children.push(newGroup);
+            if (trackToInject === 'root') {
+                const rootGroup = {
+                    id: 'layer_' + Date.now(),
+                    type: 'group',
+                    name: 'Layer Baru',
+                    children: [newGroup],
+                    style: { zIndex: 1 }
+                };
+                if (injectIndex !== -1) {
+                    targetLayers.splice(injectIndex, 0, rootGroup);
+                } else {
+                    targetLayers.push(rootGroup);
+                }
+            } else if (trackToInject && trackToInject.children) {
+                if (injectIndex !== -1) {
+                    trackToInject.children.splice(injectIndex, 0, newGroup);
+                } else {
+                    trackToInject.children.push(newGroup);
+                }
             } else {
-                targetLayers.push({ id: 'layer_' + Date.now(), type: 'group', name: 'Layer Utama', children: [newGroup], style: { zIndex: 1 } });
+                const rootGroup = {
+                    id: 'layer_' + Date.now(),
+                    type: 'group',
+                    name: 'Layer Baru',
+                    children: [newGroup],
+                    style: { zIndex: 1 }
+                };
+                targetLayers.push(rootGroup);
             }
-            
+
             state.activeLayerId = newGroup.id;
             state.activeLayerIds = [newGroup.id];
         }));
@@ -580,18 +599,24 @@ const useCanvasStore = create(temporal((set, get) => ({
 
             let groupToUngroup = null;
             let parentLayer = null;
+            let insertIndex = -1;
 
-            for (const layer of targetLayers) {
-                if (layer.id === groupId) { groupToUngroup = layer; break; }
-                if (layer.children) {
-                    const cIdx = layer.children.findIndex(c => c.id === groupId && c.type === 'canvas_group');
-                    if (cIdx !== -1) {
-                        groupToUngroup = layer.children.splice(cIdx, 1)[0];
-                        parentLayer = layer;
-                        break;
+            const findAndExtractGroup = (layers, parent = null) => {
+                for (let i = 0; i < layers.length; i++) {
+                    if (layers[i].id === groupId) {
+                        groupToUngroup = layers.splice(i, 1)[0];
+                        parentLayer = parent;
+                        insertIndex = i;
+                        return true;
+                    }
+                    if (layers[i].children) {
+                        if (findAndExtractGroup(layers[i].children, layers[i])) return true;
                     }
                 }
-            }
+                return false;
+            };
+
+            findAndExtractGroup(targetLayers);
 
             if (!groupToUngroup || !groupToUngroup.children) return;
 
@@ -604,10 +629,14 @@ const useCanvasStore = create(temporal((set, get) => ({
                 }
             }));
 
-            if (parentLayer) parentLayer.children.push(...newElements);
-            else targetLayers.push(...newElements);
+            if (parentLayer) {
+                parentLayer.children.splice(insertIndex, 0, ...newElements);
+            } else {
+                targetLayers.splice(insertIndex, 0, ...newElements);
+            }
 
             state.activeLayerId = newElements[0].id;
+            state.activeLayerIds = newElements.map(e => e.id);
         }));
         get().triggerAutoSave();
     },

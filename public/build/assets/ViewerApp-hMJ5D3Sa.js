@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-RszyNTjy.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BMW_R86d.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-ZEdF0385.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-By5QXJ6D.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -2769,33 +2769,30 @@ var useCanvasStore = create(temporal((set, get) => ({
 			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
 			const elementsToGroup = [];
 			let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-			const remainingLayers = [];
 			let trackToInject = null;
-			const findAndExtract = (layers) => {
-				for (const layer of layers) if (state.activeLayerIds.includes(layer.id)) {
-					elementsToGroup.push(layer);
-					minX = Math.min(minX, layer.style?.x || 0);
-					minY = Math.min(minY, layer.style?.y || 0);
-					maxX = Math.max(maxX, (layer.style?.x || 0) + (parseFloat(layer.style?.width) || 0));
-					maxY = Math.max(maxY, (layer.style?.y || 0) + (parseFloat(layer.style?.height) || 0));
-				} else if (layer.children) {
-					layer.children.length;
-					const extracted = layer.children.filter((c) => state.activeLayerIds.includes(c.id));
-					if (extracted.length > 0) {
-						if (!trackToInject) trackToInject = layer;
-						extracted.forEach((c) => {
-							elementsToGroup.push(c);
-							minX = Math.min(minX, c.style?.x || 0);
-							minY = Math.min(minY, c.style?.y || 0);
-							maxX = Math.max(maxX, (c.style?.x || 0) + (parseFloat(c.style?.width) || 0));
-							maxY = Math.max(maxY, (c.style?.y || 0) + (parseFloat(c.style?.height) || 0));
-						});
-						layer.children = layer.children.filter((c) => !state.activeLayerIds.includes(c.id));
-					}
-					remainingLayers.push(layer);
-				} else remainingLayers.push(layer);
+			let injectIndex = -1;
+			const extractElements = (layers, parent = null) => {
+				for (let i = layers.length - 1; i >= 0; i--) {
+					const layer = layers[i];
+					if (state.activeLayerIds.includes(layer.id)) {
+						elementsToGroup.unshift(layer);
+						minX = Math.min(minX, layer.style?.x || 0);
+						minY = Math.min(minY, layer.style?.y || 0);
+						maxX = Math.max(maxX, (layer.style?.x || 0) + (parseFloat(layer.style?.width) || 0));
+						maxY = Math.max(maxY, (layer.style?.y || 0) + (parseFloat(layer.style?.height) || 0));
+						if (!trackToInject && parent) {
+							trackToInject = parent;
+							injectIndex = i;
+						} else if (!trackToInject && !parent) {
+							trackToInject = "root";
+							injectIndex = i;
+						}
+						layers.splice(i, 1);
+					} else if (layer.children) extractElements(layer.children, layer);
+				}
 			};
-			findAndExtract(targetLayers);
+			extractElements(targetLayers);
+			if (elementsToGroup.length < 2) return;
 			const groupChildren = elementsToGroup.map((el) => ({
 				...el,
 				style: {
@@ -2814,19 +2811,31 @@ var useCanvasStore = create(temporal((set, get) => ({
 					y: minY,
 					width: maxX - minX,
 					height: maxY - minY,
-					zIndex: targetLayers.length + 1
+					zIndex: 1
 				}
 			};
-			targetLayers.splice(0, targetLayers.length, ...remainingLayers);
-			if (trackToInject && trackToInject.children) trackToInject.children.push(newGroup);
-			else if (targetLayers.length > 0 && targetLayers[targetLayers.length - 1].children) targetLayers[targetLayers.length - 1].children.push(newGroup);
-			else targetLayers.push({
-				id: "layer_" + Date.now(),
-				type: "group",
-				name: "Layer Utama",
-				children: [newGroup],
-				style: { zIndex: 1 }
-			});
+			if (trackToInject === "root") {
+				const rootGroup = {
+					id: "layer_" + Date.now(),
+					type: "group",
+					name: "Layer Baru",
+					children: [newGroup],
+					style: { zIndex: 1 }
+				};
+				if (injectIndex !== -1) targetLayers.splice(injectIndex, 0, rootGroup);
+				else targetLayers.push(rootGroup);
+			} else if (trackToInject && trackToInject.children) if (injectIndex !== -1) trackToInject.children.splice(injectIndex, 0, newGroup);
+			else trackToInject.children.push(newGroup);
+			else {
+				const rootGroup = {
+					id: "layer_" + Date.now(),
+					type: "group",
+					name: "Layer Baru",
+					children: [newGroup],
+					style: { zIndex: 1 }
+				};
+				targetLayers.push(rootGroup);
+			}
 			state.activeLayerId = newGroup.id;
 			state.activeLayerIds = [newGroup.id];
 		}));
@@ -2839,20 +2848,22 @@ var useCanvasStore = create(temporal((set, get) => ({
 			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
 			let groupToUngroup = null;
 			let parentLayer = null;
-			for (const layer of targetLayers) {
-				if (layer.id === groupId) {
-					groupToUngroup = layer;
-					break;
-				}
-				if (layer.children) {
-					const cIdx = layer.children.findIndex((c) => c.id === groupId && c.type === "canvas_group");
-					if (cIdx !== -1) {
-						groupToUngroup = layer.children.splice(cIdx, 1)[0];
-						parentLayer = layer;
-						break;
+			let insertIndex = -1;
+			const findAndExtractGroup = (layers, parent = null) => {
+				for (let i = 0; i < layers.length; i++) {
+					if (layers[i].id === groupId) {
+						groupToUngroup = layers.splice(i, 1)[0];
+						parentLayer = parent;
+						insertIndex = i;
+						return true;
+					}
+					if (layers[i].children) {
+						if (findAndExtractGroup(layers[i].children, layers[i])) return true;
 					}
 				}
-			}
+				return false;
+			};
+			findAndExtractGroup(targetLayers);
 			if (!groupToUngroup || !groupToUngroup.children) return;
 			const newElements = groupToUngroup.children.map((child) => ({
 				...child,
@@ -2862,9 +2873,10 @@ var useCanvasStore = create(temporal((set, get) => ({
 					y: (parseFloat(child.style?.y) || 0) + (parseFloat(groupToUngroup.style?.y) || 0)
 				}
 			}));
-			if (parentLayer) parentLayer.children.push(...newElements);
-			else targetLayers.push(...newElements);
+			if (parentLayer) parentLayer.children.splice(insertIndex, 0, ...newElements);
+			else targetLayers.splice(insertIndex, 0, ...newElements);
 			state.activeLayerId = newElements[0].id;
+			state.activeLayerIds = newElements.map((e) => e.id);
 		}));
 		get().triggerAutoSave();
 	},
@@ -28056,7 +28068,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-RszyNTjy.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BMW_R86d.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
