@@ -241,12 +241,24 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             const baseX = parseFloat(layerStyle?.x) || 0;
             const baseY = parseFloat(layerStyle?.y) || 0;
             
-            // GSAP already starts from current transform matrix applied by React.
-            // We only need to reset opacity/scale/rotation if they were overridden, 
-            // but for a timeline it's safer to just animate 'to' from the current state.
-            gsap.set(elementRef, {
-                opacity: layerStyle?.opacity ?? 1,
-            });
+            // Apply first keyframe immediately so it doesn't flicker in its original position
+            // before ScrollTrigger fires.
+            const firstKf = layerAnimation.custom_keyframes[0];
+            if (firstKf) {
+                gsap.set(elementRef, {
+                    x: (parseFloat(firstKf.x) || 0) - baseX,
+                    y: (parseFloat(firstKf.y) || 0) - baseY,
+                    opacity: firstKf.opacity ?? 1,
+                    scale: firstKf.scale ?? 1,
+                    rotation: firstKf.rotation ?? 0,
+                    ...(firstKf.width !== undefined && { width: firstKf.width }),
+                    ...(firstKf.height !== undefined && { height: firstKf.height })
+                });
+            } else {
+                gsap.set(elementRef, {
+                    opacity: layerStyle?.opacity ?? 1,
+                });
+            }
             
             // Loop dari titik 1 ke seterusnya
             for (let i = 0; i < layerAnimation.custom_keyframes.length; i++) {
