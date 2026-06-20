@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-SZaf3aAZ.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BiEQq4k6.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-CtRJUsFQ.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-d-9sGDnx.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -2334,6 +2334,16 @@ var findElement = (sections, id) => {
 	}
 	return null;
 };
+var findLayer = (layers, id) => {
+	if (!layers || !Array.isArray(layers)) return null;
+	const group = layers.find((l) => l.id === id);
+	if (group) return group;
+	for (const g of layers) if (g.children) {
+		const child = g.children.find((c) => c.id === id);
+		if (child) return child;
+	}
+	return null;
+};
 var useCanvasStore = create(temporal((set, get) => ({
 	invitationId: null,
 	global_settings: {},
@@ -2841,7 +2851,7 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	alignLayer: (layerId, alignment) => {
 		set(produce((state) => {
-			const layer = findElement(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
+			const layer = findLayer(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
 			if (layer) {
 				const canvasW = 390, canvasH = 844;
 				const w = parseFloat(layer.style.width) || 0, h = parseFloat(layer.style.height) || 0;
@@ -2857,7 +2867,7 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	updateLayerInteraction: (layerId, interactionObj) => {
 		set(produce((state) => {
-			const layer = findElement(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
+			const layer = findLayer(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
 			if (layer) layer.interaction = {
 				...layer.interaction,
 				...interactionObj
@@ -2867,7 +2877,7 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	updateLayerPosition: (layerId, position) => {
 		set(produce((state) => {
-			const layer = findElement(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
+			const layer = findLayer(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
 			if (layer) layer.style = {
 				...layer.style,
 				...position
@@ -2877,7 +2887,7 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	updateLayerSize: (layerId, width, height) => {
 		set(produce((state) => {
-			const layer = findElement(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
+			const layer = findLayer(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
 			if (layer) {
 				layer.style.width = width;
 				layer.style.height = height;
@@ -2887,7 +2897,7 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	updateLayerStyle: (layerId, styleData) => {
 		set(produce((state) => {
-			const layer = findElement(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
+			const layer = findLayer(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
 			if (layer) {
 				if (layer.type === "canvas_group" && layer.children && styleData.width && styleData.height) {
 					const ratioH = newH / oldH;
@@ -2947,7 +2957,7 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	offsetGroupChildrenTime: (groupId, deltaX) => {
 		set(produce((state) => {
-			const group = findElement(state.sections, groupId);
+			const group = findElement(state.activeCanvasMode === "desktop" ? [{ layers: state.global_settings.desktop_layers || [] }] : state.sections, groupId);
 			if (group && group.children) {
 				const shiftTime = (layer) => {
 					if (layer.animation?.config?.delay !== void 0) layer.animation.config.delay = Math.max(0, layer.animation.config.delay + deltaX);
@@ -2956,16 +2966,6 @@ var useCanvasStore = create(temporal((set, get) => ({
 				};
 				group.children.forEach(shiftTime);
 			}
-		}));
-		get().triggerAutoSave();
-	},
-	updateLayerInteraction: (layerId, interactionData) => {
-		set(produce((state) => {
-			const layer = findElement(state.sections, layerId);
-			if (layer) layer.interaction = {
-				...layer.interaction,
-				...interactionData
-			};
 		}));
 		get().triggerAutoSave();
 	},
@@ -28021,7 +28021,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-SZaf3aAZ.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BiEQq4k6.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);

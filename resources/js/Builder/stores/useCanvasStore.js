@@ -22,6 +22,19 @@ const findElement = (sections, id) => {
     return null;
 };
 
+const findLayer = (layers, id) => {
+    if (!layers || !Array.isArray(layers)) return null;
+    const group = layers.find(l => l.id === id);
+    if (group) return group;
+    for (const g of layers) {
+        if (g.children) {
+            const child = g.children.find(c => c.id === id);
+            if (child) return child;
+        }
+    }
+    return null;
+};
+
 const useCanvasStore = create(temporal((set, get) => ({
     invitationId: null,
     global_settings: {},
@@ -584,7 +597,7 @@ const useCanvasStore = create(temporal((set, get) => ({
     alignLayer: (layerId, alignment) => {
         set(produce((state) => {
             const targetLayers = state.activeCanvasMode === 'desktop' ? state.global_settings.desktop_layers : (state.sections.find(s => s.id === state.activeSectionId)?.layers || []);
-            const layer = findElement(targetLayers, layerId);
+            const layer = findLayer(targetLayers, layerId);
             if (layer) {
                 const canvasW = 390, canvasH = 844;
                 const w = parseFloat(layer.style.width) || 0, h = parseFloat(layer.style.height) || 0;
@@ -602,7 +615,7 @@ const useCanvasStore = create(temporal((set, get) => ({
     updateLayerInteraction: (layerId, interactionObj) => {
         set(produce((state) => {
             const targetLayers = state.activeCanvasMode === 'desktop' ? state.global_settings.desktop_layers : (state.sections.find(s => s.id === state.activeSectionId)?.layers || []);
-            const layer = findElement(targetLayers, layerId);
+            const layer = findLayer(targetLayers, layerId);
             if (layer) layer.interaction = { ...layer.interaction, ...interactionObj };
         }));
         get().triggerAutoSave();
@@ -611,7 +624,7 @@ const useCanvasStore = create(temporal((set, get) => ({
     updateLayerPosition: (layerId, position) => {
         set(produce((state) => {
             const targetLayers = state.activeCanvasMode === 'desktop' ? state.global_settings.desktop_layers : (state.sections.find(s => s.id === state.activeSectionId)?.layers || []);
-            const layer = findElement(targetLayers, layerId);
+            const layer = findLayer(targetLayers, layerId);
             if (layer) layer.style = { ...layer.style, ...position };
         }));
         get().triggerAutoSave();
@@ -620,7 +633,7 @@ const useCanvasStore = create(temporal((set, get) => ({
     updateLayerSize: (layerId, width, height) => {
         set(produce((state) => {
             const targetLayers = state.activeCanvasMode === 'desktop' ? state.global_settings.desktop_layers : (state.sections.find(s => s.id === state.activeSectionId)?.layers || []);
-            const layer = findElement(targetLayers, layerId);
+            const layer = findLayer(targetLayers, layerId);
             if (layer) { layer.style.width = width; layer.style.height = height; }
         }));
         get().triggerAutoSave();
@@ -629,7 +642,7 @@ const useCanvasStore = create(temporal((set, get) => ({
     updateLayerStyle: (layerId, styleData) => {
         set(produce((state) => {
             const targetLayers = state.activeCanvasMode === 'desktop' ? state.global_settings.desktop_layers : (state.sections.find(s => s.id === state.activeSectionId)?.layers || []);
-            const layer = findElement(targetLayers, layerId);
+            const layer = findLayer(targetLayers, layerId);
             if (layer) { 
                 if (layer.type === 'canvas_group' && layer.children && styleData.width && styleData.height) {
                     const ratioH = newH / oldH;
@@ -692,7 +705,8 @@ const useCanvasStore = create(temporal((set, get) => ({
 
     offsetGroupChildrenTime: (groupId, deltaX) => {
         set(produce((state) => {
-            const group = findElement(state.sections, groupId);
+            const contextSections = state.activeCanvasMode === 'desktop' ? [{ layers: state.global_settings.desktop_layers || [] }] : state.sections;
+            const group = findElement(contextSections, groupId);
             if (group && group.children) {
                 const shiftTime = (layer) => {
                     if (layer.animation?.config?.delay !== undefined) {
@@ -711,13 +725,7 @@ const useCanvasStore = create(temporal((set, get) => ({
         get().triggerAutoSave();
     },
 
-    updateLayerInteraction: (layerId, interactionData) => {
-        set(produce((state) => {
-            const layer = findElement(state.sections, layerId);
-            if (layer) { layer.interaction = { ...layer.interaction, ...interactionData }; }
-        }));
-        get().triggerAutoSave();
-    },
+
 
     updateGlobalSettings: (settingsData) => {
         set(produce((state) => {
