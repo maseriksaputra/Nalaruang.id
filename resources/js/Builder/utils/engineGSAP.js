@@ -271,7 +271,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             
             // IF it was hidden by delay, reveal it exactly when timeline starts (time 0)
             if (config.delay && config.delay > 0 && !hasEntryAnimation) {
-                tl.set(elementRef, { opacity: getValidNum(firstKf?.opacity, layerStyle?.opacity ?? 1), immediateRender: false }, 0);
+                tl.set(elementRef, { opacity: getValidNum(firstKf?.opacity, layerStyle?.opacity ?? 1), immediateRender: false, overwrite: false }, 0);
             }
             
             // Loop dari titik 1 ke seterusnya
@@ -288,7 +288,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                         rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
                         ...(kf.width !== undefined && { width: kf.width }),
                         ...(kf.height !== undefined && { height: kf.height }),
-                        immediateRender: false
+                        immediateRender: false,
+                        overwrite: false
                     }, `+=${kfDelay}`);
                 } else {
                     tl.to(elementRef, {
@@ -303,7 +304,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                         delay: kfDelay,
                         ease: kf.ease || "none",
                         force3D: true,
-                        autoRound: false
+                        autoRound: false,
+                        overwrite: false
                     });
                 }
             }
