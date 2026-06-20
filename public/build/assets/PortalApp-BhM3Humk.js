@@ -1,6 +1,5 @@
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
-import { a as produce$1, c as require_react, i as isDraftable$1, n as current$1, o as require_client, r as isDraft$1, s as require_react_dom, t as require_jsx_runtime } from "./jsx-runtime-Dot0F3-6.js";
-import { t as clsx } from "./clsx-DQoRUQAf.js";
+import { a as isDraftable$1, c as require_react_dom, i as isDraft$1, l as require_react, n as clsx, o as produce$1, r as current$1, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
 //#region node_modules/recharts/es6/util/excludeEventProps.js
 var EventKeys = [
 	"dangerouslySetInnerHTML",
@@ -26386,9 +26385,15 @@ var PortalApp = () => {
 												className: "text-gray-500 dark:text-gray-400 text-sm mb-6 flex-1 line-clamp-3",
 												children: item.description || "Tidak ada deskripsi atau batasan fitur yang diatur."
 											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 												className: "flex gap-2 mt-auto",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+													onClick: () => {
+														window.open(`/admin/builder/${item.id}`, "_blank");
+													},
+													className: "flex-1 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/50 rounded-lg font-bold text-sm transition-colors text-center",
+													children: "Edit Template"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 													onClick: async () => {
 														try {
 															const csrfToken = document.querySelector("meta[name=\"csrf-token\"]")?.getAttribute("content");
@@ -26400,7 +26405,7 @@ var PortalApp = () => {
 													},
 													className: "flex-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold text-sm transition-colors text-center",
 													children: "Buat Proyek"
-												})
+												})]
 											})
 										]
 									})

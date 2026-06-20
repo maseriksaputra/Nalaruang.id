@@ -2491,6 +2491,10 @@
     transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, ) !important;
   }
 
+  .animate-\[spin_4s_linear_infinite\] {
+    animation: 4s linear infinite spin;
+  }
+
   .animate-bounce {
     animation: var(--animate-bounce);
   }
@@ -6217,6 +6221,14 @@
     mix-blend-mode: exclusion;
   }
 
+  .mix-blend-hard-light {
+    mix-blend-mode: hard-light;
+  }
+
+  .mix-blend-lighten {
+    mix-blend-mode: lighten;
+  }
+
   .mix-blend-luminosity {
     mix-blend-mode: luminosity;
   }
@@ -7632,6 +7644,10 @@
       }
     }
 
+    .hover\:bg-indigo-600:hover {
+      background-color: var(--color-indigo-600);
+    }
+
     .hover\:bg-indigo-600\/40:hover {
       background-color: #4f39f666;
     }
@@ -7739,6 +7755,16 @@
     @supports (color: color-mix(in lab, red, red)) {
       .hover\:bg-white\/50:hover {
         background-color: color-mix(in oklab, var(--color-white) 50%, transparent);
+      }
+    }
+
+    .hover\:bg-white\/60:hover {
+      background-color: #fff9;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-white\/60:hover {
+        background-color: color-mix(in oklab, var(--color-white) 60%, transparent);
       }
     }
 
@@ -10662,6 +10688,16 @@
 
     .dark\:hover\:bg-gray-900:where(.dark, .dark *):hover {
       background-color: var(--color-gray-900);
+    }
+
+    .dark\:hover\:bg-indigo-900\/50:where(.dark, .dark *):hover {
+      background-color: #312c8580;
+    }
+
+    @supports (color: color-mix(in lab, red, red)) {
+      .dark\:hover\:bg-indigo-900\/50:where(.dark, .dark *):hover {
+        background-color: color-mix(in oklab, var(--color-indigo-900) 50%, transparent);
+      }
     }
 
     .dark\:hover\:bg-red-900\/20:where(.dark, .dark *):hover {

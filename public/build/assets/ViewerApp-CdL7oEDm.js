@@ -1,8 +1,8 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-Wm4d0mXf.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BNM56lQP.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
-import { a as produce, c as require_react, o as require_client, t as require_jsx_runtime } from "./jsx-runtime-Dot0F3-6.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-CWIflgPY.js";
-import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$1, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
+import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DvJxCO6R.js";
+import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
 	let state;
@@ -2322,7 +2322,9 @@ var useUIStore = create((set) => ({
 //#endregion
 //#region resources/js/Builder/stores/useCanvasStore.js
 var findElement = (sections, id) => {
+	if (!sections || !Array.isArray(sections)) return null;
 	for (const section of sections) {
+		if (!section || !section.layers) continue;
 		const group = section.layers.find((l) => l.id === id);
 		if (group) return group;
 		for (const g of section.layers) if (g.children) {
@@ -2338,7 +2340,13 @@ var useCanvasStore = create(temporal((set, get) => ({
 	sections: [],
 	activeLayerId: null,
 	activeLayerIds: [],
+	activeCanvasMode: "mobile",
 	clipboard: null,
+	setActiveCanvasMode: (mode) => set({
+		activeCanvasMode: mode,
+		activeLayerId: null,
+		activeLayerIds: []
+	}),
 	copyElements: () => {
 		set(produce((state) => {
 			if (state.activeLayerIds.length === 0) return;
@@ -2451,9 +2459,13 @@ var useCanvasStore = create(temporal((set, get) => ({
 		};
 		set({
 			invitationId: id,
-			global_settings,
+			global_settings: {
+				...global_settings,
+				desktop_layers: global_settings.desktop_layers || []
+			},
 			sections,
-			activeSectionId: sections[0].id
+			activeSectionId: sections[0].id,
+			activeCanvasMode: "mobile"
 		});
 	},
 	setActiveTab: (tab) => set({ activeTab: tab }),
@@ -2520,12 +2532,8 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	addLayer: (layerObj) => {
 		set(produce((state) => {
-			const section = state.sections.find((s) => s.id === state.activeSectionId) || state.sections[0];
-			if (section) if (layerObj.type === "group") {
-				let maxGroupZ = 0;
-				section.layers.forEach((g) => {
-					if (g.style && g.style.zIndex && g.style.zIndex > maxGroupZ) maxGroupZ = g.style.zIndex;
-				});
+			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
+			if (layerObj.type === "group") {
 				const newGroup = {
 					id: layerObj.id || "layer_" + Date.now(),
 					type: "group",
@@ -2533,27 +2541,23 @@ var useCanvasStore = create(temporal((set, get) => ({
 					children: [],
 					isHidden: false,
 					isLocked: false,
-					style: { zIndex: maxGroupZ + 1 }
+					style: { zIndex: targetLayers.length + 1 }
 				};
-				section.layers.push(newGroup);
+				targetLayers.push(newGroup);
 				state.activeLayerId = newGroup.id;
 			} else {
-				let activeGroup = section.layers.find((l) => l.id === state.activeLayerId);
-				if (!activeGroup) activeGroup = section.layers.find((g) => g.children?.some((c) => c.id === state.activeLayerId));
+				let activeGroup = targetLayers.find((l) => l.id === state.activeLayerId && l.type === "group");
+				if (!activeGroup && targetLayers.length > 0) activeGroup = targetLayers[targetLayers.length - 1];
 				if (!activeGroup) {
-					if (section.layers.length === 0) section.layers.push({
+					activeGroup = {
 						id: "layer_" + Date.now(),
 						type: "group",
-						name: "Layer 1",
+						name: "Layer Utama",
 						children: [],
 						style: { zIndex: 1 }
-					});
-					activeGroup = section.layers[section.layers.length - 1];
+					};
+					targetLayers.push(activeGroup);
 				}
-				let maxZ = 0;
-				activeGroup.children.forEach((c) => {
-					if (c.style && c.style.zIndex && c.style.zIndex > maxZ) maxZ = c.style.zIndex;
-				});
 				const newLayer = {
 					...layerObj,
 					id: layerObj.id || "elem_" + Date.now(),
@@ -2562,7 +2566,7 @@ var useCanvasStore = create(temporal((set, get) => ({
 						y: 50,
 						width: 200,
 						height: layerObj.type === "text" ? 50 : 200,
-						zIndex: maxZ + 1,
+						zIndex: (activeGroup.children?.length || 0) + 1,
 						color: "#000000",
 						fontSize: "24px",
 						...layerObj.style
@@ -2586,24 +2590,26 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	moveElementToGroup: (elementId, targetGroupId) => {
 		set(produce((state) => {
-			const section = state.sections.find((s) => s.id === state.activeSectionId);
-			if (!section) return;
+			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
 			let elementToMove = null;
 			let currentGroup = null;
 			const findAndRemove = (layers) => {
-				for (const layer of layers) if (layer.children) {
-					const childIndex = layer.children.findIndex((c) => c.id === elementId);
-					if (childIndex !== -1) {
-						elementToMove = layer.children[childIndex];
-						currentGroup = layer;
-						layer.children.splice(childIndex, 1);
-						return true;
+				for (let i = 0; i < layers.length; i++) {
+					const layer = layers[i];
+					if (layer.children) {
+						const childIndex = layer.children.findIndex((c) => c.id === elementId);
+						if (childIndex !== -1) {
+							elementToMove = layer.children[childIndex];
+							currentGroup = layer;
+							layer.children.splice(childIndex, 1);
+							return true;
+						}
+						if (findAndRemove(layer.children)) return true;
 					}
-					if (findAndRemove(layer.children)) return true;
 				}
 				return false;
 			};
-			findAndRemove(section.layers);
+			findAndRemove(targetLayers);
 			if (elementToMove) {
 				let targetGroup = null;
 				const findTarget = (layers) => {
@@ -2616,91 +2622,63 @@ var useCanvasStore = create(temporal((set, get) => ({
 					}
 					return false;
 				};
-				findTarget(section.layers);
-				if (targetGroup && targetGroup.children) {
-					elementToMove.style = {
-						...elementToMove.style,
-						zIndex: targetGroup.children.length + 1
-					};
-					targetGroup.children.push(elementToMove);
-				} else if (currentGroup && currentGroup.children) currentGroup.children.push(elementToMove);
+				findTarget(targetLayers);
+				if (targetGroup && targetGroup.children) targetGroup.children.push(elementToMove);
+				else if (currentGroup && currentGroup.children) currentGroup.children.push(elementToMove);
 			}
 		}));
 		get().triggerAutoSave();
 	},
 	moveElementToNewGroup: (elementId, insertAfterGroupId = null) => {
 		set(produce((state) => {
-			const section = state.sections.find((s) => s.id === state.activeSectionId);
-			if (!section) return;
+			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
 			let elementToMove = null;
 			const findAndRemove = (layers) => {
-				for (const layer of layers) if (layer.children) {
-					const childIndex = layer.children.findIndex((c) => c.id === elementId);
+				for (let i = 0; i < layers.length; i++) if (layers[i].children) {
+					const childIndex = layers[i].children.findIndex((c) => c.id === elementId);
 					if (childIndex !== -1) {
-						elementToMove = layer.children[childIndex];
-						layer.children.splice(childIndex, 1);
+						elementToMove = layers[i].children.splice(childIndex, 1)[0];
 						return true;
 					}
-					if (findAndRemove(layer.children)) return true;
+					if (findAndRemove(layers[i].children)) return true;
 				}
 				return false;
 			};
-			findAndRemove(section.layers);
+			findAndRemove(targetLayers);
 			if (elementToMove) {
-				let maxGroupZ = 0;
-				section.layers.forEach((g) => {
-					if (g.style && g.style.zIndex && g.style.zIndex > maxGroupZ) maxGroupZ = g.style.zIndex;
-				});
 				const newGroup = {
 					id: "layer_" + Date.now(),
 					type: "group",
 					name: "Layer Baru",
 					children: [elementToMove],
-					style: { zIndex: maxGroupZ + 1 }
+					style: { zIndex: targetLayers.length + 1 }
 				};
 				if (insertAfterGroupId) {
-					const idx = section.layers.findIndex((g) => g.id === insertAfterGroupId);
-					if (idx !== -1) section.layers.splice(idx + 1, 0, newGroup);
-					else section.layers.push(newGroup);
-				} else section.layers.push(newGroup);
+					const idx = targetLayers.findIndex((g) => g.id === insertAfterGroupId);
+					targetLayers.splice(idx + 1, 0, newGroup);
+				} else targetLayers.push(newGroup);
 			}
 		}));
 		get().triggerAutoSave();
 	},
 	moveLayerUp: (layerId) => {
 		set(produce((state) => {
-			const section = state.sections.find((s) => s.id === state.activeSectionId);
-			if (!section) return;
-			let gIndex = section.layers.findIndex((l) => l.id === layerId);
-			if (gIndex !== -1 && gIndex < section.layers.length - 1) {
-				const temp = section.layers[gIndex];
-				section.layers[gIndex] = section.layers[gIndex + 1];
-				section.layers[gIndex + 1] = temp;
-				section.layers.forEach((l, i) => {
-					if (!l.style) l.style = {};
-					l.style.zIndex = i + 1;
-				});
+			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
+			let gIndex = targetLayers.findIndex((l) => l.id === layerId);
+			if (gIndex !== -1 && gIndex < targetLayers.length - 1) {
+				[targetLayers[gIndex], targetLayers[gIndex + 1]] = [targetLayers[gIndex + 1], targetLayers[gIndex]];
 				return;
 			}
-			for (let i = 0; i < section.layers.length; i++) {
-				let g = section.layers[i];
+			for (let i = 0; i < targetLayers.length; i++) {
+				let g = targetLayers[i];
 				if (!g.children) continue;
 				let cIndex = g.children.findIndex((c) => c.id === layerId);
 				if (cIndex !== -1) {
-					if (cIndex < g.children.length - 1) {
-						const temp = g.children[cIndex];
-						g.children[cIndex] = g.children[cIndex + 1];
-						g.children[cIndex + 1] = temp;
-					} else if (i < section.layers.length - 1) {
+					if (cIndex < g.children.length - 1) [g.children[cIndex], g.children[cIndex + 1]] = [g.children[cIndex + 1], g.children[cIndex]];
+					else if (i < targetLayers.length - 1) {
 						const [child] = g.children.splice(cIndex, 1);
-						section.layers[i + 1].children = section.layers[i + 1].children || [];
-						section.layers[i + 1].children.unshift(child);
+						targetLayers[i + 1].children.unshift(child);
 					}
-					section.layers.forEach((layer) => {
-						if (layer.children) layer.children.forEach((c, idx) => {
-							c.style.zIndex = idx + 1;
-						});
-					});
 					return;
 				}
 			}
@@ -2709,38 +2687,22 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	moveLayerDown: (layerId) => {
 		set(produce((state) => {
-			const section = state.sections.find((s) => s.id === state.activeSectionId);
-			if (!section) return;
-			let gIndex = section.layers.findIndex((l) => l.id === layerId);
+			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
+			let gIndex = targetLayers.findIndex((l) => l.id === layerId);
 			if (gIndex > 0) {
-				const temp = section.layers[gIndex];
-				section.layers[gIndex] = section.layers[gIndex - 1];
-				section.layers[gIndex - 1] = temp;
-				section.layers.forEach((l, i) => {
-					if (!l.style) l.style = {};
-					l.style.zIndex = i + 1;
-				});
+				[targetLayers[gIndex], targetLayers[gIndex - 1]] = [targetLayers[gIndex - 1], targetLayers[gIndex]];
 				return;
 			}
-			for (let i = 0; i < section.layers.length; i++) {
-				let g = section.layers[i];
+			for (let i = 0; i < targetLayers.length; i++) {
+				let g = targetLayers[i];
 				if (!g.children) continue;
 				let cIndex = g.children.findIndex((c) => c.id === layerId);
 				if (cIndex !== -1) {
-					if (cIndex > 0) {
-						const temp = g.children[cIndex];
-						g.children[cIndex] = g.children[cIndex - 1];
-						g.children[cIndex - 1] = temp;
-					} else if (i > 0) {
+					if (cIndex > 0) [g.children[cIndex], g.children[cIndex - 1]] = [g.children[cIndex - 1], g.children[cIndex]];
+					else if (i > 0) {
 						const [child] = g.children.splice(cIndex, 1);
-						section.layers[i - 1].children = section.layers[i - 1].children || [];
-						section.layers[i - 1].children.push(child);
+						targetLayers[i - 1].children.push(child);
 					}
-					section.layers.forEach((layer) => {
-						if (layer.children) layer.children.forEach((c, idx) => {
-							c.style.zIndex = idx + 1;
-						});
-					});
 					return;
 				}
 			}
@@ -2749,32 +2711,20 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	moveLayerToFront: (layerId) => {
 		set(produce((state) => {
-			const section = state.sections.find((s) => s.id === state.activeSectionId);
-			if (!section) return;
-			let gIndex = section.layers.findIndex((l) => l.id === layerId);
-			if (gIndex !== -1 && gIndex < section.layers.length - 1) {
-				const layer = section.layers.splice(gIndex, 1)[0];
-				section.layers.push(layer);
-				section.layers.forEach((l, i) => {
-					if (!l.style) l.style = {};
-					l.style.zIndex = i + 1;
-				});
+			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
+			let gIndex = targetLayers.findIndex((l) => l.id === layerId);
+			if (gIndex !== -1 && gIndex < targetLayers.length - 1) {
+				const layer = targetLayers.splice(gIndex, 1)[0];
+				targetLayers.push(layer);
 				return;
 			}
-			for (let i = 0; i < section.layers.length; i++) {
-				let g = section.layers[i];
+			for (let i = 0; i < targetLayers.length; i++) {
+				let g = targetLayers[i];
 				if (!g.children) continue;
 				let cIndex = g.children.findIndex((c) => c.id === layerId);
 				if (cIndex !== -1) {
 					const [child] = g.children.splice(cIndex, 1);
-					const lastGroup = section.layers[section.layers.length - 1];
-					lastGroup.children = lastGroup.children || [];
-					lastGroup.children.push(child);
-					section.layers.forEach((layer) => {
-						if (layer.children) layer.children.forEach((c, idx) => {
-							c.style.zIndex = idx + 1;
-						});
-					});
+					targetLayers[targetLayers.length - 1].children.push(child);
 					return;
 				}
 			}
@@ -2783,32 +2733,20 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	moveLayerToBack: (layerId) => {
 		set(produce((state) => {
-			const section = state.sections.find((s) => s.id === state.activeSectionId);
-			if (!section) return;
-			let gIndex = section.layers.findIndex((l) => l.id === layerId);
+			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
+			let gIndex = targetLayers.findIndex((l) => l.id === layerId);
 			if (gIndex > 0) {
-				const layer = section.layers.splice(gIndex, 1)[0];
-				section.layers.unshift(layer);
-				section.layers.forEach((l, i) => {
-					if (!l.style) l.style = {};
-					l.style.zIndex = i + 1;
-				});
+				const layer = targetLayers.splice(gIndex, 1)[0];
+				targetLayers.unshift(layer);
 				return;
 			}
-			for (let i = 0; i < section.layers.length; i++) {
-				let g = section.layers[i];
+			for (let i = 0; i < targetLayers.length; i++) {
+				let g = targetLayers[i];
 				if (!g.children) continue;
 				let cIndex = g.children.findIndex((c) => c.id === layerId);
 				if (cIndex !== -1) {
 					const [child] = g.children.splice(cIndex, 1);
-					const firstGroup = section.layers[0];
-					firstGroup.children = firstGroup.children || [];
-					firstGroup.children.unshift(child);
-					section.layers.forEach((layer) => {
-						if (layer.children) layer.children.forEach((c, idx) => {
-							c.style.zIndex = idx + 1;
-						});
-					});
+					targetLayers[0].children.unshift(child);
 					return;
 				}
 			}
@@ -2818,54 +2756,35 @@ var useCanvasStore = create(temporal((set, get) => ({
 	groupElements: () => {
 		set(produce((state) => {
 			if (state.activeLayerIds.length < 2) return;
-			const section = state.sections.find((s) => s.id === state.activeSectionId) || state.sections[0];
-			if (!section) return;
+			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
 			const elementsToGroup = [];
 			let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-			let maxZ = 0;
 			const remainingLayers = [];
-			for (const layer of section.layers) if (state.activeLayerIds.includes(layer.id)) {
-				elementsToGroup.push(layer);
-				const x = parseFloat(layer.style?.x) || 0;
-				const y = parseFloat(layer.style?.y) || 0;
-				const w = parseFloat(layer.style?.width) || 0;
-				const h = parseFloat(layer.style?.height) || 0;
-				minX = Math.min(minX, x);
-				minY = Math.min(minY, y);
-				maxX = Math.max(maxX, x + w);
-				maxY = Math.max(maxY, y + h);
-				if ((layer.style?.zIndex || 0) > maxZ) maxZ = layer.style.zIndex;
-			} else if (layer.type === "group" && layer.children) {
-				const remainingChildren = [];
-				for (const child of layer.children) if (state.activeLayerIds.includes(child.id)) {
-					elementsToGroup.push(child);
-					const x = child.style?.x || 0;
-					const y = child.style?.y || 0;
-					const w = parseFloat(child.style?.width) || 0;
-					const h = parseFloat(child.style?.height) || 0;
-					minX = Math.min(minX, x);
-					minY = Math.min(minY, y);
-					maxX = Math.max(maxX, x + w);
-					maxY = Math.max(maxY, y + h);
-					if ((child.style?.zIndex || 0) > maxZ) maxZ = child.style.zIndex;
-				} else remainingChildren.push(child);
-				layer.children = remainingChildren;
-				remainingLayers.push(layer);
-			} else remainingLayers.push(layer);
-			if (elementsToGroup.length < 2) return;
-			const groupChildren = elementsToGroup.map((el) => {
-				return {
-					...el,
-					style: {
-						...el.style,
-						x: (el.style?.x || 0) - minX,
-						y: (el.style?.y || 0) - minY
-					}
-				};
-			});
-			const newGroupId = "group_" + Date.now();
+			const findAndExtract = (layers) => {
+				for (const layer of layers) if (state.activeLayerIds.includes(layer.id)) {
+					elementsToGroup.push(layer);
+					minX = Math.min(minX, layer.style?.x || 0);
+					minY = Math.min(minY, layer.style?.y || 0);
+					maxX = Math.max(maxX, (layer.style?.x || 0) + (parseFloat(layer.style?.width) || 0));
+					maxY = Math.max(maxY, (layer.style?.y || 0) + (parseFloat(layer.style?.height) || 0));
+				} else if (layer.children) {
+					const originalLen = layer.children.length;
+					layer.children = layer.children.filter((c) => !state.activeLayerIds.includes(c.id));
+					if (layer.children.length !== originalLen) elementsToGroup.push(...layer.children.filter((c) => state.activeLayerIds.includes(c.id)));
+					remainingLayers.push(layer);
+				} else remainingLayers.push(layer);
+			};
+			findAndExtract(targetLayers);
+			const groupChildren = elementsToGroup.map((el) => ({
+				...el,
+				style: {
+					...el.style,
+					x: (el.style?.x || 0) - minX,
+					y: (el.style?.y || 0) - minY
+				}
+			}));
 			const newGroup = {
-				id: newGroupId,
+				id: "group_" + Date.now(),
 				type: "canvas_group",
 				name: "Grup Baru",
 				children: groupChildren,
@@ -2874,24 +2793,13 @@ var useCanvasStore = create(temporal((set, get) => ({
 					y: minY,
 					width: maxX - minX,
 					height: maxY - minY,
-					zIndex: maxZ + 1
+					zIndex: targetLayers.length + 1
 				}
 			};
-			let mainGroup = remainingLayers[remainingLayers.length - 1];
-			if (!mainGroup || mainGroup.type !== "group") {
-				mainGroup = {
-					id: "layer_" + Date.now(),
-					type: "group",
-					name: "Layer Utama",
-					children: [],
-					style: { zIndex: 1 }
-				};
-				remainingLayers.push(mainGroup);
-			}
-			mainGroup.children.push(newGroup);
-			section.layers = remainingLayers;
-			state.activeLayerId = newGroupId;
-			state.activeLayerIds = [newGroupId];
+			targetLayers.splice(0, targetLayers.length, ...remainingLayers);
+			targetLayers.push(newGroup);
+			state.activeLayerId = newGroup.id;
+			state.activeLayerIds = [newGroup.id];
 		}));
 		get().triggerAutoSave();
 	},
@@ -2899,60 +2807,57 @@ var useCanvasStore = create(temporal((set, get) => ({
 		set(produce((state) => {
 			if (state.activeLayerIds.length !== 1) return;
 			const groupId = state.activeLayerIds[0];
-			const section = state.sections.find((s) => s.id === state.activeSectionId) || state.sections[0];
-			if (!section) return;
+			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
 			let groupToUngroup = null;
 			let parentLayer = null;
-			for (const layer of section.layers) if (layer.children) {
-				const cIdx = layer.children.findIndex((c) => c.id === groupId && c.type === "canvas_group");
-				if (cIdx !== -1) {
-					groupToUngroup = layer.children[cIdx];
-					parentLayer = layer;
-					layer.children.splice(cIdx, 1);
+			for (const layer of targetLayers) {
+				if (layer.id === groupId) {
+					groupToUngroup = layer;
 					break;
 				}
+				if (layer.children) {
+					const cIdx = layer.children.findIndex((c) => c.id === groupId && c.type === "canvas_group");
+					if (cIdx !== -1) {
+						groupToUngroup = layer.children.splice(cIdx, 1)[0];
+						parentLayer = layer;
+						break;
+					}
+				}
 			}
-			if (!groupToUngroup || !groupToUngroup.children || groupToUngroup.children.length === 0) return;
-			const groupX = groupToUngroup.style?.x || 0;
-			const groupY = groupToUngroup.style?.y || 0;
+			if (!groupToUngroup || !groupToUngroup.children) return;
 			const newElements = groupToUngroup.children.map((child) => ({
 				...child,
 				style: {
 					...child.style,
-					x: (parseFloat(child.style?.x) || 0) + parseFloat(groupX),
-					y: (parseFloat(child.style?.y) || 0) + parseFloat(groupY),
-					zIndex: (child.style?.zIndex || 0) + (groupToUngroup.style?.zIndex || 0)
+					x: (parseFloat(child.style?.x) || 0) + (parseFloat(groupToUngroup.style?.x) || 0),
+					y: (parseFloat(child.style?.y) || 0) + (parseFloat(groupToUngroup.style?.y) || 0)
 				}
 			}));
-			parentLayer.children.push(...newElements);
-			state.activeLayerId = newElements[newElements.length - 1].id;
-			state.activeLayerIds = newElements.map((el) => el.id);
+			if (parentLayer) parentLayer.children.push(...newElements);
+			else targetLayers.push(...newElements);
+			state.activeLayerId = newElements[0].id;
 		}));
 		get().triggerAutoSave();
 	},
 	alignLayer: (layerId, alignment) => {
 		set(produce((state) => {
-			state.sections.forEach((section) => {
-				const layer = findElement(state.sections, layerId);
-				if (layer) {
-					const canvasWidth = 390;
-					const canvasHeight = 844;
-					const w = parseFloat(layer.style.width) || 0;
-					const h = parseFloat(layer.style.height) || 0;
-					if (alignment === "left") layer.style.x = 0;
-					if (alignment === "right") layer.style.x = canvasWidth - w;
-					if (alignment === "center") layer.style.x = (canvasWidth - w) / 2;
-					if (alignment === "top") layer.style.y = 0;
-					if (alignment === "bottom") layer.style.y = canvasHeight - h;
-					if (alignment === "middle") layer.style.y = (canvasHeight - h) / 2;
-				}
-			});
+			const layer = findElement(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
+			if (layer) {
+				const canvasW = 390, canvasH = 844;
+				const w = parseFloat(layer.style.width) || 0, h = parseFloat(layer.style.height) || 0;
+				if (alignment === "left") layer.style.x = 0;
+				if (alignment === "right") layer.style.x = canvasW - w;
+				if (alignment === "center") layer.style.x = (canvasW - w) / 2;
+				if (alignment === "top") layer.style.y = 0;
+				if (alignment === "bottom") layer.style.y = canvasH - h;
+				if (alignment === "middle") layer.style.y = (canvasH - h) / 2;
+			}
 		}));
 		get().triggerAutoSave();
 	},
 	updateLayerInteraction: (layerId, interactionObj) => {
 		set(produce((state) => {
-			const layer = findElement(state.sections, layerId);
+			const layer = findElement(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
 			if (layer) layer.interaction = {
 				...layer.interaction,
 				...interactionObj
@@ -2960,19 +2865,19 @@ var useCanvasStore = create(temporal((set, get) => ({
 		}));
 		get().triggerAutoSave();
 	},
-	updateLayerPosition: (layerId, x, y) => {
+	updateLayerPosition: (layerId, position) => {
 		set(produce((state) => {
-			const layer = findElement(state.sections, layerId);
-			if (layer) {
-				layer.style.x = x;
-				layer.style.y = y;
-			}
+			const layer = findElement(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
+			if (layer) layer.style = {
+				...layer.style,
+				...position
+			};
 		}));
 		get().triggerAutoSave();
 	},
 	updateLayerSize: (layerId, width, height) => {
 		set(produce((state) => {
-			const layer = findElement(state.sections, layerId);
+			const layer = findElement(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
 			if (layer) {
 				layer.style.width = width;
 				layer.style.height = height;
@@ -2982,14 +2887,9 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	updateLayerStyle: (layerId, styleData) => {
 		set(produce((state) => {
-			const layer = findElement(state.sections, layerId);
+			const layer = findElement(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
 			if (layer) {
 				if (layer.type === "canvas_group" && layer.children && styleData.width && styleData.height) {
-					const oldW = parseFloat(layer.style.width) || 1;
-					const oldH = parseFloat(layer.style.height) || 1;
-					const newW = parseFloat(styleData.width) || 1;
-					const newH = parseFloat(styleData.height) || 1;
-					const ratioW = newW / oldW;
 					const ratioH = newH / oldH;
 					const scaleChildren = (children) => {
 						children.forEach((c) => {
@@ -3015,21 +2915,21 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	updateLayerContent: (layerId, content) => {
 		set(produce((state) => {
-			const layer = findElement(state.sections, layerId);
+			const layer = findElement(state.activeCanvasMode === "desktop" ? [{ layers: state.global_settings.desktop_layers || [] }] : state.sections, layerId);
 			if (layer) layer.content = content;
 		}));
 		get().triggerAutoSave();
 	},
 	updateLayer: (layerId, data) => {
 		set(produce((state) => {
-			const layer = findElement(state.sections, layerId);
+			const layer = findElement(state.activeCanvasMode === "desktop" ? [{ layers: state.global_settings.desktop_layers || [] }] : state.sections, layerId);
 			if (layer) Object.assign(layer, data);
 		}));
 		get().triggerAutoSave();
 	},
 	updateLayerAnimation: (layerId, animationData) => {
 		set(produce((state) => {
-			const layer = findElement(state.sections, layerId);
+			const layer = findElement(state.activeCanvasMode === "desktop" ? [{ layers: state.global_settings.desktop_layers || [] }] : state.sections, layerId);
 			if (layer) layer.animation = {
 				...layer.animation,
 				...animationData,
@@ -3080,26 +2980,25 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	toggleLayerVisibility: (layerId) => {
 		set(produce((state) => {
-			state.sections.forEach((section) => {
-				const layer = findElement(state.sections, layerId);
-				if (layer) layer.isHidden = !layer.isHidden;
-			});
+			const layer = findElement(state.activeCanvasMode === "desktop" ? [{ layers: state.global_settings.desktop_layers || [] }] : state.sections, layerId);
+			if (layer) layer.isHidden = !layer.isHidden;
 		}));
 		get().triggerAutoSave();
 	},
 	toggleLayerLock: (layerId) => {
 		set(produce((state) => {
-			state.sections.forEach((section) => {
-				const layer = findElement(state.sections, layerId);
-				if (layer) layer.isLocked = !layer.isLocked;
-			});
+			const layer = findElement(state.activeCanvasMode === "desktop" ? [{ layers: state.global_settings.desktop_layers || [] }] : state.sections, layerId);
+			if (layer) layer.isLocked = !layer.isLocked;
 		}));
 		get().triggerAutoSave();
 	},
 	setLayers: (newLayers) => {
 		set(produce((state) => {
-			const section = state.sections.find((s) => s.id === state.activeSectionId);
-			if (section) section.layers = newLayers;
+			if (state.activeCanvasMode === "desktop") state.global_settings.desktop_layers = newLayers;
+			else {
+				const section = state.sections.find((s) => s.id === state.activeSectionId);
+				if (section) section.layers = newLayers;
+			}
 		}));
 		get().triggerAutoSave();
 	},
@@ -3111,50 +3010,56 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	deleteElement: (elementId) => {
 		set(produce((state) => {
-			state.sections.forEach((section) => {
-				section.layers = section.layers.filter((l) => l.id !== elementId);
-				section.layers.forEach((g) => {
+			if (state.activeCanvasMode === "desktop" && state.global_settings?.desktop_layers) {
+				state.global_settings.desktop_layers = state.global_settings.desktop_layers.filter((l) => l.id !== elementId);
+				state.global_settings.desktop_layers.forEach((g) => {
 					if (g.children) g.children = g.children.filter((c) => c.id !== elementId);
 				});
+			} else state.sections.forEach((section) => {
+				if (section.layers) {
+					section.layers = section.layers.filter((l) => l.id !== elementId);
+					section.layers.forEach((g) => {
+						if (g.children) g.children = g.children.filter((c) => c.id !== elementId);
+					});
+				}
 			});
 			if (state.activeLayerId === elementId) state.activeLayerId = null;
+			state.activeLayerIds = state.activeLayerIds.filter((id) => id !== elementId);
 		}));
 		get().triggerAutoSave();
 	},
 	duplicateLayer: (layerId) => {
 		set(produce((state) => {
-			const section = state.sections.find((s) => s.id === state.activeSectionId);
-			if (section) {
-				let foundGroupIndex = section.layers.findIndex((l) => l.id === layerId);
-				if (foundGroupIndex !== -1) {
-					const originalLayer = section.layers[foundGroupIndex];
-					const newLayer = JSON.parse(JSON.stringify(originalLayer));
-					newLayer.id = "layer_" + Date.now();
-					newLayer.children = newLayer.children.map((c) => ({
-						...c,
-						id: "elem_" + Math.random().toString(36).substr(2, 9)
-					}));
-					if (newLayer.style) newLayer.style.zIndex = section.layers.length + 1;
-					section.layers.push(newLayer);
-					state.activeLayerId = newLayer.id;
-				} else section.layers.forEach((group) => {
-					if (group.children) {
-						const childIndex = group.children.findIndex((c) => c.id === layerId);
-						if (childIndex !== -1) {
-							const originalChild = group.children[childIndex];
-							const newChild = JSON.parse(JSON.stringify(originalChild));
-							newChild.id = "elem_" + Date.now();
-							if (newChild.style) {
-								newChild.style.x += 20;
-								newChild.style.y += 20;
-								newChild.style.zIndex = group.children.length + 1;
-							}
-							group.children.push(newChild);
-							state.activeLayerId = newChild.id;
+			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
+			let foundGroupIndex = targetLayers.findIndex((l) => l.id === layerId);
+			if (foundGroupIndex !== -1) {
+				const originalLayer = targetLayers[foundGroupIndex];
+				const newLayer = JSON.parse(JSON.stringify(originalLayer));
+				newLayer.id = "layer_" + Date.now();
+				newLayer.children = newLayer.children?.map((c) => ({
+					...c,
+					id: "elem_" + Math.random().toString(36).substr(2, 9)
+				})) || [];
+				if (newLayer.style) newLayer.style.zIndex = targetLayers.length + 1;
+				targetLayers.push(newLayer);
+				state.activeLayerId = newLayer.id;
+			} else targetLayers.forEach((group) => {
+				if (group.children) {
+					const childIndex = group.children.findIndex((c) => c.id === layerId);
+					if (childIndex !== -1) {
+						const originalChild = group.children[childIndex];
+						const newChild = JSON.parse(JSON.stringify(originalChild));
+						newChild.id = "elem_" + Date.now();
+						if (newChild.style) {
+							newChild.style.x = (parseFloat(newChild.style.x) || 0) + 20;
+							newChild.style.y = (parseFloat(newChild.style.y) || 0) + 20;
+							newChild.style.zIndex = group.children.length + 1;
 						}
+						group.children.push(newChild);
+						state.activeLayerId = newChild.id;
 					}
-				});
-			}
+				}
+			});
 		}));
 		get().triggerAutoSave();
 	}
@@ -3168,6 +3073,2191 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	limit: 50
 }));
+//#endregion
+//#region node_modules/prop-types/lib/ReactPropTypesSecret.js
+/**
+* Copyright (c) 2013-present, Facebook, Inc.
+*
+* This source code is licensed under the MIT license found in the
+* LICENSE file in the root directory of this source tree.
+*/
+var require_ReactPropTypesSecret = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
+}));
+//#endregion
+//#region node_modules/prop-types/factoryWithThrowingShims.js
+/**
+* Copyright (c) 2013-present, Facebook, Inc.
+*
+* This source code is licensed under the MIT license found in the
+* LICENSE file in the root directory of this source tree.
+*/
+var require_factoryWithThrowingShims = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	var ReactPropTypesSecret = require_ReactPropTypesSecret();
+	function emptyFunction() {}
+	function emptyFunctionWithReset() {}
+	emptyFunctionWithReset.resetWarningCache = emptyFunction;
+	module.exports = function() {
+		function shim(props, propName, componentName, location, propFullName, secret) {
+			if (secret === ReactPropTypesSecret) return;
+			var err = /* @__PURE__ */ new Error("Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types");
+			err.name = "Invariant Violation";
+			throw err;
+		}
+		shim.isRequired = shim;
+		function getShim() {
+			return shim;
+		}
+		var ReactPropTypes = {
+			array: shim,
+			bigint: shim,
+			bool: shim,
+			func: shim,
+			number: shim,
+			object: shim,
+			string: shim,
+			symbol: shim,
+			any: shim,
+			arrayOf: getShim,
+			element: shim,
+			elementType: shim,
+			instanceOf: getShim,
+			node: shim,
+			objectOf: getShim,
+			oneOf: getShim,
+			oneOfType: getShim,
+			shape: getShim,
+			exact: getShim,
+			checkPropTypes: emptyFunctionWithReset,
+			resetWarningCache: emptyFunction
+		};
+		ReactPropTypes.PropTypes = ReactPropTypes;
+		return ReactPropTypes;
+	};
+}));
+//#endregion
+//#region node_modules/prop-types/index.js
+var require_prop_types = /* @__PURE__ */ __commonJSMin(((exports, module) => {
+	module.exports = require_factoryWithThrowingShims()();
+}));
+//#endregion
+//#region node_modules/react-draggable/build/cjs/chunk-D5BXCJ5G.mjs
+var import_prop_types = /* @__PURE__ */ __toESM(require_prop_types(), 1);
+var import_react_dom = /* @__PURE__ */ __toESM(require_react_dom(), 1);
+function findInArray(array, callback) {
+	for (let i = 0, length = array.length; i < length; i++) if (callback.apply(callback, [
+		array[i],
+		i,
+		array
+	])) return array[i];
+}
+function isFunction(func) {
+	return typeof func === "function" || Object.prototype.toString.call(func) === "[object Function]";
+}
+function isNum(num) {
+	return typeof num === "number" && !isNaN(num);
+}
+function int(a) {
+	return parseInt(a, 10);
+}
+function dontSetMe(props, propName, componentName) {
+	if (props[propName]) return /* @__PURE__ */ new Error(`Invalid prop ${propName} passed to ${componentName} - do not set this, set it on the child.`);
+}
+var prefixes = [
+	"Moz",
+	"Webkit",
+	"O",
+	"ms"
+];
+function getPrefix(prop = "transform") {
+	var _a, _b;
+	if (typeof window === "undefined") return "";
+	const style = (_b = (_a = window.document) == null ? void 0 : _a.documentElement) == null ? void 0 : _b.style;
+	if (!style) return "";
+	if (prop in style) return "";
+	for (let i = 0; i < prefixes.length; i++) if (browserPrefixToKey(prop, prefixes[i]) in style) return prefixes[i];
+	return "";
+}
+function browserPrefixToKey(prop, prefix) {
+	return prefix ? `${prefix}${kebabToTitleCase(prop)}` : prop;
+}
+function kebabToTitleCase(str) {
+	let out = "";
+	let shouldCapitalize = true;
+	for (let i = 0; i < str.length; i++) if (shouldCapitalize) {
+		out += str[i].toUpperCase();
+		shouldCapitalize = false;
+	} else if (str[i] === "-") shouldCapitalize = true;
+	else out += str[i];
+	return out;
+}
+var getPrefix_default = getPrefix();
+var matchesSelectorFunc = "";
+function matchesSelector(el, selector) {
+	var _a;
+	if (!matchesSelectorFunc) matchesSelectorFunc = (_a = findInArray([
+		"matches",
+		"webkitMatchesSelector",
+		"mozMatchesSelector",
+		"msMatchesSelector",
+		"oMatchesSelector"
+	], function(method) {
+		return isFunction(el[method]);
+	})) != null ? _a : "";
+	const matchFn = el[matchesSelectorFunc];
+	if (!isFunction(matchFn)) return false;
+	return Boolean(matchFn.call(el, selector));
+}
+function matchesSelectorAndParentsTo(el, selector, baseNode) {
+	let node = el;
+	do {
+		if (matchesSelector(node, selector)) return true;
+		if (node === baseNode) return false;
+		node = node.parentNode;
+	} while (node);
+	return false;
+}
+function addEvent(el, event, handler, inputOptions) {
+	if (!el) return;
+	const options = {
+		capture: true,
+		...inputOptions
+	};
+	const listener = handler;
+	if (el.addEventListener) el.addEventListener(event, listener, options);
+	else if (el.attachEvent) el.attachEvent("on" + event, listener);
+	else el["on" + event] = listener;
+}
+function removeEvent(el, event, handler, inputOptions) {
+	if (!el) return;
+	const options = {
+		capture: true,
+		...inputOptions
+	};
+	const listener = handler;
+	if (el.removeEventListener) el.removeEventListener(event, listener, options);
+	else if (el.detachEvent) el.detachEvent("on" + event, listener);
+	else el["on" + event] = null;
+}
+function outerHeight(node) {
+	let height = node.clientHeight;
+	const computedStyle = node.ownerDocument.defaultView.getComputedStyle(node);
+	height += int(computedStyle.borderTopWidth);
+	height += int(computedStyle.borderBottomWidth);
+	return height;
+}
+function outerWidth(node) {
+	let width = node.clientWidth;
+	const computedStyle = node.ownerDocument.defaultView.getComputedStyle(node);
+	width += int(computedStyle.borderLeftWidth);
+	width += int(computedStyle.borderRightWidth);
+	return width;
+}
+function innerHeight(node) {
+	let height = node.clientHeight;
+	const computedStyle = node.ownerDocument.defaultView.getComputedStyle(node);
+	height -= int(computedStyle.paddingTop);
+	height -= int(computedStyle.paddingBottom);
+	return height;
+}
+function innerWidth(node) {
+	let width = node.clientWidth;
+	const computedStyle = node.ownerDocument.defaultView.getComputedStyle(node);
+	width -= int(computedStyle.paddingLeft);
+	width -= int(computedStyle.paddingRight);
+	return width;
+}
+function offsetXYFromParent(evt, offsetParent, scale) {
+	const offsetParentRect = offsetParent === offsetParent.ownerDocument.body ? {
+		left: 0,
+		top: 0
+	} : offsetParent.getBoundingClientRect();
+	return {
+		x: (evt.clientX + offsetParent.scrollLeft - offsetParentRect.left) / scale,
+		y: (evt.clientY + offsetParent.scrollTop - offsetParentRect.top) / scale
+	};
+}
+function createCSSTransform(controlPos, positionOffset) {
+	const translation = getTranslation(controlPos, positionOffset, "px");
+	return { [browserPrefixToKey("transform", getPrefix_default)]: translation };
+}
+function createSVGTransform(controlPos, positionOffset) {
+	return getTranslation(controlPos, positionOffset, "");
+}
+function getTranslation({ x, y }, positionOffset, unitSuffix) {
+	let translation = `translate(${x}${unitSuffix},${y}${unitSuffix})`;
+	if (positionOffset) translation = `translate(${`${typeof positionOffset.x === "string" ? positionOffset.x : positionOffset.x + unitSuffix}`}, ${`${typeof positionOffset.y === "string" ? positionOffset.y : positionOffset.y + unitSuffix}`})` + translation;
+	return translation;
+}
+function getTouch(e, identifier) {
+	return e.targetTouches && findInArray(e.targetTouches, (t) => identifier === t.identifier) || e.changedTouches && findInArray(e.changedTouches, (t) => identifier === t.identifier);
+}
+function getTouchIdentifier(e) {
+	if (e.targetTouches && e.targetTouches[0]) return e.targetTouches[0].identifier;
+	if (e.changedTouches && e.changedTouches[0]) return e.changedTouches[0].identifier;
+}
+function addUserSelectStyles(doc) {
+	if (!doc) return;
+	let styleEl = doc.getElementById("react-draggable-style-el");
+	if (!styleEl) {
+		styleEl = doc.createElement("style");
+		styleEl.type = "text/css";
+		styleEl.id = "react-draggable-style-el";
+		styleEl.innerHTML = ".react-draggable-transparent-selection *::-moz-selection {all: inherit;}\n";
+		styleEl.innerHTML += ".react-draggable-transparent-selection *::selection {all: inherit;}\n";
+		doc.getElementsByTagName("head")[0].appendChild(styleEl);
+	}
+	if (doc.body) addClassName(doc.body, "react-draggable-transparent-selection");
+}
+function scheduleRemoveUserSelectStyles(doc) {
+	if (window.requestAnimationFrame) window.requestAnimationFrame(() => {
+		removeUserSelectStyles(doc);
+	});
+	else removeUserSelectStyles(doc);
+}
+function removeUserSelectStyles(doc) {
+	if (!doc) return;
+	try {
+		if (doc.body) removeClassName(doc.body, "react-draggable-transparent-selection");
+		const ieSelection = doc.selection;
+		if (ieSelection) ieSelection.empty();
+		else {
+			const selection = (doc.defaultView || window).getSelection();
+			if (selection && selection.type !== "Caret") selection.removeAllRanges();
+		}
+	} catch {}
+}
+function addClassName(el, className) {
+	if (el.classList) el.classList.add(className);
+	else if (!el.className.match(new RegExp(`(?:^|\\s)${className}(?!\\S)`))) el.className += ` ${className}`;
+}
+function removeClassName(el, className) {
+	if (el.classList) el.classList.remove(className);
+	else el.className = el.className.replace(new RegExp(`(?:^|\\s)${className}(?!\\S)`, "g"), "");
+}
+function getBoundPosition(draggable, x, y) {
+	if (!draggable.props.bounds) return [x, y];
+	let { bounds } = draggable.props;
+	bounds = typeof bounds === "string" ? bounds : cloneBounds(bounds);
+	const node = findDOMNode(draggable);
+	if (typeof bounds === "string") {
+		const { ownerDocument } = node;
+		const ownerWindow = ownerDocument.defaultView;
+		if (!ownerWindow) throw new Error("Cannot resolve the owner window of the draggable node.");
+		let boundNode;
+		if (bounds === "parent") boundNode = node.parentNode;
+		else boundNode = node.getRootNode().querySelector(bounds);
+		if (!(boundNode instanceof ownerWindow.HTMLElement)) throw new Error("Bounds selector \"" + bounds + "\" could not find an element.");
+		const boundNodeEl = boundNode;
+		const nodeStyle = ownerWindow.getComputedStyle(node);
+		const boundNodeStyle = ownerWindow.getComputedStyle(boundNodeEl);
+		bounds = {
+			left: -node.offsetLeft + int(boundNodeStyle.paddingLeft) + int(nodeStyle.marginLeft),
+			top: -node.offsetTop + int(boundNodeStyle.paddingTop) + int(nodeStyle.marginTop),
+			right: innerWidth(boundNodeEl) - outerWidth(node) - node.offsetLeft + int(boundNodeStyle.paddingRight) - int(nodeStyle.marginRight),
+			bottom: innerHeight(boundNodeEl) - outerHeight(node) - node.offsetTop + int(boundNodeStyle.paddingBottom) - int(nodeStyle.marginBottom)
+		};
+	}
+	if (isNum(bounds.right)) x = Math.min(x, bounds.right);
+	if (isNum(bounds.bottom)) y = Math.min(y, bounds.bottom);
+	if (isNum(bounds.left)) x = Math.max(x, bounds.left);
+	if (isNum(bounds.top)) y = Math.max(y, bounds.top);
+	return [x, y];
+}
+function snapToGrid(grid, pendingX, pendingY) {
+	return [Math.round(pendingX / grid[0]) * grid[0], Math.round(pendingY / grid[1]) * grid[1]];
+}
+function canDragX(draggable) {
+	return draggable.props.axis === "both" || draggable.props.axis === "x";
+}
+function canDragY(draggable) {
+	return draggable.props.axis === "both" || draggable.props.axis === "y";
+}
+function getControlPosition(e, touchIdentifier, draggableCore) {
+	const touchObj = typeof touchIdentifier === "number" ? getTouch(e, touchIdentifier) : null;
+	if (typeof touchIdentifier === "number" && !touchObj) return null;
+	const node = findDOMNode(draggableCore);
+	const offsetParent = draggableCore.props.offsetParent || node.offsetParent || node.ownerDocument.body;
+	return offsetXYFromParent(touchObj || e, offsetParent, draggableCore.props.scale);
+}
+function createCoreData(draggable, x, y) {
+	const isStart = !isNum(draggable.lastX);
+	const node = findDOMNode(draggable);
+	if (isStart) return {
+		node,
+		deltaX: 0,
+		deltaY: 0,
+		lastX: x,
+		lastY: y,
+		x,
+		y
+	};
+	else return {
+		node,
+		deltaX: x - draggable.lastX,
+		deltaY: y - draggable.lastY,
+		lastX: draggable.lastX,
+		lastY: draggable.lastY,
+		x,
+		y
+	};
+}
+function createDraggableData(draggable, coreData) {
+	const scale = draggable.props.scale;
+	return {
+		node: coreData.node,
+		x: draggable.state.x + coreData.deltaX / scale,
+		y: draggable.state.y + coreData.deltaY / scale,
+		deltaX: coreData.deltaX / scale,
+		deltaY: coreData.deltaY / scale,
+		lastX: draggable.state.x,
+		lastY: draggable.state.y
+	};
+}
+function cloneBounds(bounds) {
+	return {
+		left: bounds.left,
+		top: bounds.top,
+		right: bounds.right,
+		bottom: bounds.bottom
+	};
+}
+function findDOMNode(draggable) {
+	const node = draggable.findDOMNode();
+	if (!node) throw new Error("<DraggableCore>: Unmounted during event!");
+	return node;
+}
+function log(...args) {
+	if ({}.DRAGGABLE_DEBUG) console.log(...args);
+}
+var eventsFor = {
+	touch: {
+		start: "touchstart",
+		move: "touchmove",
+		stop: "touchend"
+	},
+	mouse: {
+		start: "mousedown",
+		move: "mousemove",
+		stop: "mouseup"
+	}
+};
+var dragEventFor = eventsFor.mouse;
+var DraggableCore = class extends import_react.Component {
+	constructor() {
+		super(...arguments);
+		this.dragging = false;
+		this.lastX = NaN;
+		this.lastY = NaN;
+		this.touchIdentifier = null;
+		this.mounted = false;
+		this.handleDragStart = (e) => {
+			this.props.onMouseDown(e);
+			if (!this.props.allowAnyClick && (typeof e.button === "number" && e.button !== 0 || e.ctrlKey)) return false;
+			const thisNode = this.findDOMNode();
+			if (!thisNode || !thisNode.ownerDocument || !thisNode.ownerDocument.body) throw new Error("<DraggableCore> not mounted on DragStart!");
+			const { ownerDocument } = thisNode;
+			if (this.props.disabled || !(e.target instanceof ownerDocument.defaultView.Node) || this.props.handle && !matchesSelectorAndParentsTo(e.target, this.props.handle, thisNode) || this.props.cancel && matchesSelectorAndParentsTo(e.target, this.props.cancel, thisNode)) return;
+			if (e.type === "touchstart" && !this.props.allowMobileScroll) e.preventDefault();
+			const touchIdentifier = getTouchIdentifier(e);
+			this.touchIdentifier = touchIdentifier;
+			const position = getControlPosition(e, touchIdentifier, this);
+			if (position == null) return;
+			const { x, y } = position;
+			const coreEvent = createCoreData(this, x, y);
+			log("DraggableCore: handleDragStart: %j", coreEvent);
+			log("calling", this.props.onStart);
+			if (this.props.onStart(e, coreEvent) === false || this.mounted === false) return;
+			if (this.props.enableUserSelectHack) addUserSelectStyles(ownerDocument);
+			this.dragging = true;
+			this.lastX = x;
+			this.lastY = y;
+			addEvent(ownerDocument, dragEventFor.move, this.handleDrag);
+			addEvent(ownerDocument, dragEventFor.stop, this.handleDragStop);
+		};
+		this.handleDrag = (e) => {
+			const position = getControlPosition(e, this.touchIdentifier, this);
+			if (position == null) return;
+			let { x, y } = position;
+			if (Array.isArray(this.props.grid)) {
+				let deltaX = x - this.lastX, deltaY = y - this.lastY;
+				[deltaX, deltaY] = snapToGrid(this.props.grid, deltaX, deltaY);
+				if (!deltaX && !deltaY) return;
+				x = this.lastX + deltaX;
+				y = this.lastY + deltaY;
+			}
+			const coreEvent = createCoreData(this, x, y);
+			log("DraggableCore: handleDrag: %j", coreEvent);
+			if (this.props.onDrag(e, coreEvent) === false || this.mounted === false) {
+				try {
+					this.handleDragStop(new MouseEvent("mouseup"));
+				} catch {
+					const event = document.createEvent("MouseEvents");
+					event.initMouseEvent("mouseup", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+					this.handleDragStop(event);
+				}
+				return;
+			}
+			this.lastX = x;
+			this.lastY = y;
+		};
+		this.handleDragStop = (e) => {
+			if (!this.dragging) return;
+			const position = getControlPosition(e, this.touchIdentifier, this);
+			if (position == null) return;
+			let { x, y } = position;
+			if (Array.isArray(this.props.grid)) {
+				let deltaX = x - this.lastX || 0;
+				let deltaY = y - this.lastY || 0;
+				[deltaX, deltaY] = snapToGrid(this.props.grid, deltaX, deltaY);
+				x = this.lastX + deltaX;
+				y = this.lastY + deltaY;
+			}
+			const coreEvent = createCoreData(this, x, y);
+			if (this.props.onStop(e, coreEvent) === false || this.mounted === false) return false;
+			const thisNode = this.findDOMNode();
+			if (thisNode) {
+				if (this.props.enableUserSelectHack) scheduleRemoveUserSelectStyles(thisNode.ownerDocument);
+			}
+			log("DraggableCore: handleDragStop: %j", coreEvent);
+			this.dragging = false;
+			this.lastX = NaN;
+			this.lastY = NaN;
+			if (thisNode) {
+				log("DraggableCore: Removing handlers");
+				removeEvent(thisNode.ownerDocument, dragEventFor.move, this.handleDrag);
+				removeEvent(thisNode.ownerDocument, dragEventFor.stop, this.handleDragStop);
+			}
+		};
+		this.onMouseDown = (e) => {
+			dragEventFor = eventsFor.mouse;
+			return this.handleDragStart(e);
+		};
+		this.onMouseUp = (e) => {
+			dragEventFor = eventsFor.mouse;
+			return this.handleDragStop(e);
+		};
+		this.onTouchStart = (e) => {
+			dragEventFor = eventsFor.touch;
+			return this.handleDragStart(e);
+		};
+		this.onTouchEnd = (e) => {
+			dragEventFor = eventsFor.touch;
+			return this.handleDragStop(e);
+		};
+	}
+	componentDidMount() {
+		this.mounted = true;
+		const thisNode = this.findDOMNode();
+		if (thisNode) addEvent(thisNode, eventsFor.touch.start, this.onTouchStart, { passive: false });
+	}
+	componentWillUnmount() {
+		this.mounted = false;
+		const thisNode = this.findDOMNode();
+		if (thisNode) {
+			const { ownerDocument } = thisNode;
+			removeEvent(ownerDocument, eventsFor.mouse.move, this.handleDrag);
+			removeEvent(ownerDocument, eventsFor.touch.move, this.handleDrag);
+			removeEvent(ownerDocument, eventsFor.mouse.stop, this.handleDragStop);
+			removeEvent(ownerDocument, eventsFor.touch.stop, this.handleDragStop);
+			removeEvent(thisNode, eventsFor.touch.start, this.onTouchStart, { passive: false });
+			if (this.props.enableUserSelectHack) scheduleRemoveUserSelectStyles(ownerDocument);
+		}
+	}
+	findDOMNode() {
+		var _a;
+		if ((_a = this.props) == null ? void 0 : _a.nodeRef) return this.props.nodeRef.current;
+		const legacyReactDOM = import_react_dom.default;
+		if (typeof legacyReactDOM.findDOMNode === "function") return legacyReactDOM.findDOMNode(this);
+		log("react-draggable: ReactDOM.findDOMNode is not available in React 19+. You must provide a nodeRef prop. See: https://github.com/react-grid-layout/react-draggable#noderef");
+		return null;
+	}
+	render() {
+		return import_react.cloneElement(import_react.Children.only(this.props.children), {
+			onMouseDown: this.onMouseDown,
+			onMouseUp: this.onMouseUp,
+			onTouchEnd: this.onTouchEnd
+		});
+	}
+};
+DraggableCore.displayName = "DraggableCore";
+DraggableCore.propTypes = {
+	/**
+	* `allowAnyClick` allows dragging using any mouse button.
+	* By default, we only accept the left button.
+	*
+	* Defaults to `false`.
+	*/
+	allowAnyClick: import_prop_types.default.bool,
+	/**
+	* `allowMobileScroll` turns off cancellation of the 'touchstart' event
+	* on mobile devices. Only enable this if you are having trouble with click
+	* events. Prefer using 'handle' / 'cancel' instead.
+	*
+	* Defaults to `false`.
+	*/
+	allowMobileScroll: import_prop_types.default.bool,
+	children: import_prop_types.default.node.isRequired,
+	/**
+	* `disabled`, if true, stops the <Draggable> from dragging. All handlers,
+	* with the exception of `onMouseDown`, will not fire.
+	*/
+	disabled: import_prop_types.default.bool,
+	/**
+	* By default, we add 'user-select:none' attributes to the document body
+	* to prevent ugly text selection during drag. If this is causing problems
+	* for your app, set this to `false`.
+	*/
+	enableUserSelectHack: import_prop_types.default.bool,
+	/**
+	* `offsetParent`, if set, uses the passed DOM node to compute drag offsets
+	* instead of using the parent node.
+	*/
+	offsetParent: function(props, propName) {
+		if (props[propName] && props[propName].nodeType !== 1) throw new Error("Draggable's offsetParent must be a DOM Node.");
+	},
+	/**
+	* `grid` specifies the x and y that dragging should snap to.
+	*/
+	grid: import_prop_types.default.arrayOf(import_prop_types.default.number),
+	/**
+	* `handle` specifies a selector to be used as the handle that initiates drag.
+	*
+	* Example:
+	*
+	* ```jsx
+	*   let App = React.createClass({
+	*       render: function () {
+	*         return (
+	*            <Draggable handle=".handle">
+	*              <div>
+	*                  <div className="handle">Click me to drag</div>
+	*                  <div>This is some other content</div>
+	*              </div>
+	*           </Draggable>
+	*         );
+	*       }
+	*   });
+	* ```
+	*/
+	handle: import_prop_types.default.string,
+	/**
+	* `cancel` specifies a selector to be used to prevent drag initialization.
+	*
+	* Example:
+	*
+	* ```jsx
+	*   let App = React.createClass({
+	*       render: function () {
+	*           return(
+	*               <Draggable cancel=".cancel">
+	*                   <div>
+	*                     <div className="cancel">You can't drag from here</div>
+	*                     <div>Dragging here works fine</div>
+	*                   </div>
+	*               </Draggable>
+	*           );
+	*       }
+	*   });
+	* ```
+	*/
+	cancel: import_prop_types.default.string,
+	nodeRef: import_prop_types.default.object,
+	/**
+	* Called when dragging starts.
+	* If this function returns the boolean false, dragging will be canceled.
+	*/
+	onStart: import_prop_types.default.func,
+	/**
+	* Called while dragging.
+	* If this function returns the boolean false, dragging will be canceled.
+	*/
+	onDrag: import_prop_types.default.func,
+	/**
+	* Called when dragging stops.
+	* If this function returns the boolean false, the drag will remain active.
+	*/
+	onStop: import_prop_types.default.func,
+	/**
+	* A workaround option which can be passed if onMouseDown needs to be accessed,
+	* since it'll always be blocked (as there is internal use of onMouseDown)
+	*/
+	onMouseDown: import_prop_types.default.func,
+	/**
+	* `scale`, if set, applies scaling while dragging an element
+	*/
+	scale: import_prop_types.default.number,
+	/**
+	* These properties should be defined on the child, not here.
+	*/
+	className: dontSetMe,
+	style: dontSetMe,
+	transform: dontSetMe
+};
+DraggableCore.defaultProps = {
+	allowAnyClick: false,
+	allowMobileScroll: false,
+	disabled: false,
+	enableUserSelectHack: true,
+	onStart: function() {},
+	onDrag: function() {},
+	onStop: function() {},
+	onMouseDown: function() {},
+	scale: 1
+};
+var Draggable = class extends import_react.Component {
+	constructor(props) {
+		super(props);
+		this.onDragStart = (e, coreData) => {
+			log("Draggable: onDragStart: %j", coreData);
+			if (this.props.onStart(e, createDraggableData(this, coreData)) === false) return false;
+			this.setState({
+				dragging: true,
+				dragged: true
+			});
+		};
+		this.onDrag = (e, coreData) => {
+			if (!this.state.dragging) return false;
+			log("Draggable: onDrag: %j", coreData);
+			const uiData = createDraggableData(this, coreData);
+			const newState = {
+				x: uiData.x,
+				y: uiData.y,
+				slackX: 0,
+				slackY: 0
+			};
+			if (this.props.bounds) {
+				const { x, y } = newState;
+				newState.x += this.state.slackX;
+				newState.y += this.state.slackY;
+				const [newStateX, newStateY] = getBoundPosition(this, newState.x, newState.y);
+				newState.x = newStateX;
+				newState.y = newStateY;
+				newState.slackX = this.state.slackX + (x - newState.x);
+				newState.slackY = this.state.slackY + (y - newState.y);
+				uiData.x = newState.x;
+				uiData.y = newState.y;
+				uiData.deltaX = newState.x - this.state.x;
+				uiData.deltaY = newState.y - this.state.y;
+			}
+			if (this.props.onDrag(e, uiData) === false) return false;
+			this.setState(newState);
+		};
+		this.onDragStop = (e, coreData) => {
+			if (!this.state.dragging) return false;
+			if (this.props.onStop(e, createDraggableData(this, coreData)) === false) return false;
+			log("Draggable: onDragStop: %j", coreData);
+			const newState = {
+				dragging: false,
+				slackX: 0,
+				slackY: 0
+			};
+			if (Boolean(this.props.position)) {
+				const { x, y } = this.props.position;
+				newState.x = x;
+				newState.y = y;
+			}
+			this.setState(newState);
+		};
+		this.state = {
+			dragging: false,
+			dragged: false,
+			x: props.position ? props.position.x : props.defaultPosition.x,
+			y: props.position ? props.position.y : props.defaultPosition.y,
+			prevPropsPosition: { ...props.position },
+			slackX: 0,
+			slackY: 0,
+			isElementSVG: false
+		};
+		if (props.position && !(props.onDrag || props.onStop)) console.warn("A `position` was applied to this <Draggable>, without drag handlers. This will make this component effectively undraggable. Please attach `onDrag` or `onStop` handlers so you can adjust the `position` of this element.");
+	}
+	static getDerivedStateFromProps({ position }, { prevPropsPosition }) {
+		if (position && (!prevPropsPosition || position.x !== prevPropsPosition.x || position.y !== prevPropsPosition.y)) {
+			log("Draggable: getDerivedStateFromProps %j", {
+				position,
+				prevPropsPosition
+			});
+			return {
+				x: position.x,
+				y: position.y,
+				prevPropsPosition: { ...position }
+			};
+		}
+		return null;
+	}
+	componentDidMount() {
+		if (typeof window.SVGElement !== "undefined" && this.findDOMNode() instanceof window.SVGElement) this.setState({ isElementSVG: true });
+	}
+	componentWillUnmount() {
+		if (this.state.dragging) this.setState({ dragging: false });
+	}
+	findDOMNode() {
+		var _a;
+		if ((_a = this.props) == null ? void 0 : _a.nodeRef) return this.props.nodeRef.current;
+		const legacyReactDOM = import_react_dom.default;
+		if (typeof legacyReactDOM.findDOMNode === "function") return legacyReactDOM.findDOMNode(this);
+		return null;
+	}
+	render() {
+		const { axis, bounds, children, defaultPosition, defaultClassName, defaultClassNameDragging, defaultClassNameDragged, position, positionOffset, scale, ...draggableCoreProps } = this.props;
+		let style = {};
+		let svgTransform = null;
+		const draggable = !Boolean(position) || this.state.dragging;
+		const validPosition = position || defaultPosition;
+		const transformOpts = {
+			x: canDragX(this) && draggable ? this.state.x : validPosition.x,
+			y: canDragY(this) && draggable ? this.state.y : validPosition.y
+		};
+		if (this.state.isElementSVG) svgTransform = createSVGTransform(transformOpts, positionOffset);
+		else style = createCSSTransform(transformOpts, positionOffset);
+		const onlyChild = import_react.Children.only(children);
+		const className = clsx(onlyChild.props.className || "", defaultClassName, {
+			[defaultClassNameDragging]: this.state.dragging,
+			[defaultClassNameDragged]: this.state.dragged
+		});
+		return /* @__PURE__ */ import_react.createElement(DraggableCore, {
+			...draggableCoreProps,
+			onStart: this.onDragStart,
+			onDrag: this.onDrag,
+			onStop: this.onDragStop
+		}, import_react.cloneElement(onlyChild, {
+			className,
+			style: {
+				...onlyChild.props.style,
+				...style
+			},
+			transform: svgTransform
+		}));
+	}
+};
+Draggable.displayName = "Draggable";
+Draggable.propTypes = {
+	...DraggableCore.propTypes,
+	/**
+	* `axis` determines which axis the draggable can move.
+	*
+	*  Note that all callbacks will still return data as normal. This only
+	*  controls flushing to the DOM.
+	*
+	* 'both' allows movement horizontally and vertically.
+	* 'x' limits movement to horizontal axis.
+	* 'y' limits movement to vertical axis.
+	* 'none' limits all movement.
+	*
+	* Defaults to 'both'.
+	*/
+	axis: import_prop_types.default.oneOf([
+		"both",
+		"x",
+		"y",
+		"none"
+	]),
+	/**
+	* `bounds` determines the range of movement available to the element.
+	* Available values are:
+	*
+	* 'parent' restricts movement within the Draggable's parent node.
+	*
+	* Alternatively, pass an object with the following properties, all of which are optional:
+	*
+	* {left: LEFT_BOUND, right: RIGHT_BOUND, bottom: BOTTOM_BOUND, top: TOP_BOUND}
+	*
+	* All values are in px.
+	*
+	* Example:
+	*
+	* ```jsx
+	*   let App = React.createClass({
+	*       render: function () {
+	*         return (
+	*            <Draggable bounds={{right: 300, bottom: 300}}>
+	*              <div>Content</div>
+	*           </Draggable>
+	*         );
+	*       }
+	*   });
+	* ```
+	*/
+	bounds: import_prop_types.default.oneOfType([
+		import_prop_types.default.shape({
+			left: import_prop_types.default.number,
+			right: import_prop_types.default.number,
+			top: import_prop_types.default.number,
+			bottom: import_prop_types.default.number
+		}),
+		import_prop_types.default.string,
+		import_prop_types.default.oneOf([false])
+	]),
+	defaultClassName: import_prop_types.default.string,
+	defaultClassNameDragging: import_prop_types.default.string,
+	defaultClassNameDragged: import_prop_types.default.string,
+	/**
+	* `defaultPosition` specifies the x and y that the dragged item should start at
+	*
+	* Example:
+	*
+	* ```jsx
+	*      let App = React.createClass({
+	*          render: function () {
+	*              return (
+	*                  <Draggable defaultPosition={{x: 25, y: 25}}>
+	*                      <div>I start with transformX: 25px and transformY: 25px;</div>
+	*                  </Draggable>
+	*              );
+	*          }
+	*      });
+	* ```
+	*/
+	defaultPosition: import_prop_types.default.shape({
+		x: import_prop_types.default.number,
+		y: import_prop_types.default.number
+	}),
+	positionOffset: import_prop_types.default.shape({
+		x: import_prop_types.default.oneOfType([import_prop_types.default.number, import_prop_types.default.string]),
+		y: import_prop_types.default.oneOfType([import_prop_types.default.number, import_prop_types.default.string])
+	}),
+	/**
+	* `position`, if present, defines the current position of the element.
+	*
+	*  This is similar to how form elements in React work - if no `position` is supplied, the component
+	*  is uncontrolled.
+	*
+	* Example:
+	*
+	* ```jsx
+	*      let App = React.createClass({
+	*          render: function () {
+	*              return (
+	*                  <Draggable position={{x: 25, y: 25}}>
+	*                      <div>I start with transformX: 25px and transformY: 25px;</div>
+	*                  </Draggable>
+	*              );
+	*          }
+	*      });
+	* ```
+	*/
+	position: import_prop_types.default.shape({
+		x: import_prop_types.default.number,
+		y: import_prop_types.default.number
+	}),
+	/**
+	* These properties should be defined on the child, not here.
+	*/
+	className: dontSetMe,
+	style: dontSetMe,
+	transform: dontSetMe
+};
+Draggable.defaultProps = {
+	...DraggableCore.defaultProps,
+	axis: "both",
+	bounds: false,
+	defaultClassName: "react-draggable",
+	defaultClassNameDragging: "react-draggable-dragging",
+	defaultClassNameDragged: "react-draggable-dragged",
+	defaultPosition: {
+		x: 0,
+		y: 0
+	},
+	scale: 1
+};
+//#endregion
+//#region node_modules/react-draggable/build/cjs/cjs.mjs
+var cjs_default = Draggable;
+//#endregion
+//#region node_modules/re-resizable/lib/resizer.js
+var import_jsx_runtime = require_jsx_runtime();
+var __assign$3 = function() {
+	__assign$3 = Object.assign || function(t) {
+		for (var s, i = 1, n = arguments.length; i < n; i++) {
+			s = arguments[i];
+			for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+		}
+		return t;
+	};
+	return __assign$3.apply(this, arguments);
+};
+var rowSizeBase = {
+	width: "100%",
+	height: "10px",
+	top: "0px",
+	left: "0px",
+	cursor: "row-resize"
+};
+var colSizeBase = {
+	width: "10px",
+	height: "100%",
+	top: "0px",
+	left: "0px",
+	cursor: "col-resize"
+};
+var edgeBase = {
+	width: "20px",
+	height: "20px",
+	position: "absolute",
+	zIndex: 1
+};
+var styles = {
+	top: __assign$3(__assign$3({}, rowSizeBase), { top: "-5px" }),
+	right: __assign$3(__assign$3({}, colSizeBase), {
+		left: void 0,
+		right: "-5px"
+	}),
+	bottom: __assign$3(__assign$3({}, rowSizeBase), {
+		top: void 0,
+		bottom: "-5px"
+	}),
+	left: __assign$3(__assign$3({}, colSizeBase), { left: "-5px" }),
+	topRight: __assign$3(__assign$3({}, edgeBase), {
+		right: "-10px",
+		top: "-10px",
+		cursor: "ne-resize"
+	}),
+	bottomRight: __assign$3(__assign$3({}, edgeBase), {
+		right: "-10px",
+		bottom: "-10px",
+		cursor: "se-resize"
+	}),
+	bottomLeft: __assign$3(__assign$3({}, edgeBase), {
+		left: "-10px",
+		bottom: "-10px",
+		cursor: "sw-resize"
+	}),
+	topLeft: __assign$3(__assign$3({}, edgeBase), {
+		left: "-10px",
+		top: "-10px",
+		cursor: "nw-resize"
+	})
+};
+var Resizer = (0, import_react.memo)(function(props) {
+	var onResizeStart = props.onResizeStart, direction = props.direction, children = props.children, replaceStyles = props.replaceStyles, className = props.className;
+	var onMouseDown = (0, import_react.useCallback)(function(e) {
+		onResizeStart(e, direction);
+	}, [onResizeStart, direction]);
+	var onTouchStart = (0, import_react.useCallback)(function(e) {
+		onResizeStart(e, direction);
+	}, [onResizeStart, direction]);
+	var style = (0, import_react.useMemo)(function() {
+		return __assign$3(__assign$3({
+			position: "absolute",
+			userSelect: "none"
+		}, styles[direction]), replaceStyles !== null && replaceStyles !== void 0 ? replaceStyles : {});
+	}, [replaceStyles, direction]);
+	return (0, import_jsx_runtime.jsx)("div", {
+		className: className || void 0,
+		style,
+		onMouseDown,
+		onTouchStart,
+		children
+	});
+});
+//#endregion
+//#region node_modules/re-resizable/lib/index.js
+var __extends$2 = (function() {
+	var extendStatics = function(d, b) {
+		extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d, b) {
+			d.__proto__ = b;
+		} || function(d, b) {
+			for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
+		};
+		return extendStatics(d, b);
+	};
+	return function(d, b) {
+		if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+		extendStatics(d, b);
+		function __() {
+			this.constructor = d;
+		}
+		d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+})();
+var __assign$2 = function() {
+	__assign$2 = Object.assign || function(t) {
+		for (var s, i = 1, n = arguments.length; i < n; i++) {
+			s = arguments[i];
+			for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+		}
+		return t;
+	};
+	return __assign$2.apply(this, arguments);
+};
+var DEFAULT_SIZE = {
+	width: "auto",
+	height: "auto"
+};
+var clamp$1 = function(n, min, max) {
+	return Math.max(Math.min(n, max), min);
+};
+var snap$1 = function(n, size, gridGap) {
+	var v = Math.round(n / size);
+	return v * size + gridGap * (v - 1);
+};
+var hasDirection = function(dir, target) {
+	return new RegExp(dir, "i").test(target);
+};
+var isTouchEvent = function(event) {
+	return Boolean(event.touches && event.touches.length);
+};
+var isMouseEvent = function(event) {
+	return Boolean((event.clientX || event.clientX === 0) && (event.clientY || event.clientY === 0));
+};
+var findClosestSnap = function(n, snapArray, snapGap) {
+	if (snapGap === void 0) snapGap = 0;
+	var closestGapIndex = snapArray.reduce(function(prev, curr, index) {
+		return Math.abs(curr - n) < Math.abs(snapArray[prev] - n) ? index : prev;
+	}, 0);
+	var gap = Math.abs(snapArray[closestGapIndex] - n);
+	return snapGap === 0 || gap < snapGap ? snapArray[closestGapIndex] : n;
+};
+var getStringSize = function(n) {
+	n = n.toString();
+	if (n === "auto") return n;
+	if (n.endsWith("px")) return n;
+	if (n.endsWith("%")) return n;
+	if (n.endsWith("vh")) return n;
+	if (n.endsWith("vw")) return n;
+	if (n.endsWith("vmax")) return n;
+	if (n.endsWith("vmin")) return n;
+	return "".concat(n, "px");
+};
+var getPixelSize = function(size, parentSize, innerWidth, innerHeight) {
+	if (size && typeof size === "string") {
+		if (size.endsWith("px")) return Number(size.replace("px", ""));
+		if (size.endsWith("%")) {
+			var ratio = Number(size.replace("%", "")) / 100;
+			return parentSize * ratio;
+		}
+		if (size.endsWith("vw")) {
+			var ratio = Number(size.replace("vw", "")) / 100;
+			return innerWidth * ratio;
+		}
+		if (size.endsWith("vh")) {
+			var ratio = Number(size.replace("vh", "")) / 100;
+			return innerHeight * ratio;
+		}
+	}
+	return size;
+};
+var calculateNewMax = function(parentSize, innerWidth, innerHeight, maxWidth, maxHeight, minWidth, minHeight) {
+	maxWidth = getPixelSize(maxWidth, parentSize.width, innerWidth, innerHeight);
+	maxHeight = getPixelSize(maxHeight, parentSize.height, innerWidth, innerHeight);
+	minWidth = getPixelSize(minWidth, parentSize.width, innerWidth, innerHeight);
+	minHeight = getPixelSize(minHeight, parentSize.height, innerWidth, innerHeight);
+	return {
+		maxWidth: typeof maxWidth === "undefined" ? void 0 : Number(maxWidth),
+		maxHeight: typeof maxHeight === "undefined" ? void 0 : Number(maxHeight),
+		minWidth: typeof minWidth === "undefined" ? void 0 : Number(minWidth),
+		minHeight: typeof minHeight === "undefined" ? void 0 : Number(minHeight)
+	};
+};
+/**
+* transform T | [T, T] to [T, T]
+* @param val
+* @returns
+*/
+var normalizeToPair = function(val) {
+	return Array.isArray(val) ? val : [val, val];
+};
+var definedProps = [
+	"as",
+	"ref",
+	"style",
+	"className",
+	"grid",
+	"gridGap",
+	"snap",
+	"bounds",
+	"boundsByDirection",
+	"size",
+	"defaultSize",
+	"minWidth",
+	"minHeight",
+	"maxWidth",
+	"maxHeight",
+	"lockAspectRatio",
+	"lockAspectRatioExtraWidth",
+	"lockAspectRatioExtraHeight",
+	"enable",
+	"handleStyles",
+	"handleClasses",
+	"handleWrapperStyle",
+	"handleWrapperClass",
+	"children",
+	"onResizeStart",
+	"onResize",
+	"onResizeStop",
+	"handleComponent",
+	"scale",
+	"resizeRatio",
+	"snapGap"
+];
+var baseClassName = "__resizable_base__";
+var Resizable = function(_super) {
+	__extends$2(Resizable, _super);
+	function Resizable(props) {
+		var _a, _b, _c, _d;
+		var _this = _super.call(this, props) || this;
+		_this.ratio = 1;
+		_this.resizable = null;
+		_this.parentLeft = 0;
+		_this.parentTop = 0;
+		_this.resizableLeft = 0;
+		_this.resizableRight = 0;
+		_this.resizableTop = 0;
+		_this.resizableBottom = 0;
+		_this.targetLeft = 0;
+		_this.targetTop = 0;
+		_this.delta = {
+			width: 0,
+			height: 0
+		};
+		_this.appendBase = function() {
+			if (!_this.resizable || !_this.window) return null;
+			var parent = _this.parentNode;
+			if (!parent) return null;
+			var element = _this.window.document.createElement("div");
+			element.style.width = "100%";
+			element.style.height = "100%";
+			element.style.position = "absolute";
+			element.style.transform = "scale(0, 0)";
+			element.style.left = "0";
+			element.style.flex = "0 0 100%";
+			if (element.classList) element.classList.add(baseClassName);
+			else element.className += baseClassName;
+			parent.appendChild(element);
+			return element;
+		};
+		_this.removeBase = function(base) {
+			var parent = _this.parentNode;
+			if (!parent) return;
+			parent.removeChild(base);
+		};
+		_this.state = {
+			isResizing: false,
+			width: (_b = (_a = _this.propsSize) === null || _a === void 0 ? void 0 : _a.width) !== null && _b !== void 0 ? _b : "auto",
+			height: (_d = (_c = _this.propsSize) === null || _c === void 0 ? void 0 : _c.height) !== null && _d !== void 0 ? _d : "auto",
+			direction: "right",
+			original: {
+				x: 0,
+				y: 0,
+				width: 0,
+				height: 0
+			},
+			backgroundStyle: {
+				height: "100%",
+				width: "100%",
+				backgroundColor: "rgba(0,0,0,0)",
+				cursor: "auto",
+				opacity: 0,
+				position: "fixed",
+				zIndex: 9999,
+				top: "0",
+				left: "0",
+				bottom: "0",
+				right: "0"
+			},
+			flexBasis: void 0
+		};
+		_this.onResizeStart = _this.onResizeStart.bind(_this);
+		_this.onMouseMove = _this.onMouseMove.bind(_this);
+		_this.onMouseUp = _this.onMouseUp.bind(_this);
+		return _this;
+	}
+	Object.defineProperty(Resizable.prototype, "parentNode", {
+		get: function() {
+			if (!this.resizable) return null;
+			return this.resizable.parentNode;
+		},
+		enumerable: false,
+		configurable: true
+	});
+	Object.defineProperty(Resizable.prototype, "window", {
+		get: function() {
+			if (!this.resizable) return null;
+			if (!this.resizable.ownerDocument) return null;
+			return this.resizable.ownerDocument.defaultView;
+		},
+		enumerable: false,
+		configurable: true
+	});
+	Object.defineProperty(Resizable.prototype, "propsSize", {
+		get: function() {
+			return this.props.size || this.props.defaultSize || DEFAULT_SIZE;
+		},
+		enumerable: false,
+		configurable: true
+	});
+	Object.defineProperty(Resizable.prototype, "size", {
+		get: function() {
+			var width = 0;
+			var height = 0;
+			if (this.resizable && this.window) {
+				var orgWidth = this.resizable.offsetWidth;
+				var orgHeight = this.resizable.offsetHeight;
+				var orgPosition = this.resizable.style.position;
+				if (orgPosition !== "relative") this.resizable.style.position = "relative";
+				width = this.resizable.style.width !== "auto" ? this.resizable.offsetWidth : orgWidth;
+				height = this.resizable.style.height !== "auto" ? this.resizable.offsetHeight : orgHeight;
+				this.resizable.style.position = orgPosition;
+			}
+			return {
+				width,
+				height
+			};
+		},
+		enumerable: false,
+		configurable: true
+	});
+	Object.defineProperty(Resizable.prototype, "sizeStyle", {
+		get: function() {
+			var _this = this;
+			var size = this.props.size;
+			var getSize = function(key) {
+				var _a;
+				if (typeof _this.state[key] === "undefined" || _this.state[key] === "auto") return "auto";
+				if (_this.propsSize && _this.propsSize[key] && ((_a = _this.propsSize[key]) === null || _a === void 0 ? void 0 : _a.toString().endsWith("%"))) {
+					if (_this.state[key].toString().endsWith("%")) return _this.state[key].toString();
+					var parentSize = _this.getParentSize();
+					var percent = Number(_this.state[key].toString().replace("px", "")) / parentSize[key] * 100;
+					return "".concat(percent, "%");
+				}
+				return getStringSize(_this.state[key]);
+			};
+			return {
+				width: size && typeof size.width !== "undefined" && !this.state.isResizing ? getStringSize(size.width) : getSize("width"),
+				height: size && typeof size.height !== "undefined" && !this.state.isResizing ? getStringSize(size.height) : getSize("height")
+			};
+		},
+		enumerable: false,
+		configurable: true
+	});
+	Resizable.prototype.getParentSize = function() {
+		if (!this.parentNode) {
+			if (!this.window) return {
+				width: 0,
+				height: 0
+			};
+			return {
+				width: this.window.innerWidth,
+				height: this.window.innerHeight
+			};
+		}
+		var base = this.appendBase();
+		if (!base) return {
+			width: 0,
+			height: 0
+		};
+		var wrapChanged = false;
+		var wrap = this.parentNode.style.flexWrap;
+		if (wrap !== "wrap") {
+			wrapChanged = true;
+			this.parentNode.style.flexWrap = "wrap";
+		}
+		base.style.position = "relative";
+		base.style.minWidth = "100%";
+		base.style.minHeight = "100%";
+		var size = {
+			width: base.offsetWidth,
+			height: base.offsetHeight
+		};
+		if (wrapChanged) this.parentNode.style.flexWrap = wrap;
+		this.removeBase(base);
+		return size;
+	};
+	Resizable.prototype.bindEvents = function() {
+		if (this.window) {
+			this.window.addEventListener("mouseup", this.onMouseUp);
+			this.window.addEventListener("mousemove", this.onMouseMove);
+			this.window.addEventListener("mouseleave", this.onMouseUp);
+			this.window.addEventListener("touchmove", this.onMouseMove, {
+				capture: true,
+				passive: false
+			});
+			this.window.addEventListener("touchend", this.onMouseUp);
+		}
+	};
+	Resizable.prototype.unbindEvents = function() {
+		if (this.window) {
+			this.window.removeEventListener("mouseup", this.onMouseUp);
+			this.window.removeEventListener("mousemove", this.onMouseMove);
+			this.window.removeEventListener("mouseleave", this.onMouseUp);
+			this.window.removeEventListener("touchmove", this.onMouseMove, true);
+			this.window.removeEventListener("touchend", this.onMouseUp);
+		}
+	};
+	Resizable.prototype.componentDidMount = function() {
+		if (!this.resizable || !this.window) return;
+		var computedStyle = this.window.getComputedStyle(this.resizable);
+		this.setState({
+			width: this.state.width || this.size.width,
+			height: this.state.height || this.size.height,
+			flexBasis: computedStyle.flexBasis !== "auto" ? computedStyle.flexBasis : void 0
+		});
+	};
+	Resizable.prototype.componentWillUnmount = function() {
+		if (this.window) this.unbindEvents();
+	};
+	Resizable.prototype.createSizeForCssProperty = function(newSize, kind) {
+		var propsSize = this.propsSize && this.propsSize[kind];
+		return this.state[kind] === "auto" && this.state.original[kind] === newSize && (typeof propsSize === "undefined" || propsSize === "auto") ? "auto" : newSize;
+	};
+	Resizable.prototype.calculateNewMaxFromBoundary = function(maxWidth, maxHeight) {
+		var boundsByDirection = this.props.boundsByDirection;
+		var direction = this.state.direction;
+		var widthByDirection = boundsByDirection && hasDirection("left", direction);
+		var heightByDirection = boundsByDirection && hasDirection("top", direction);
+		var boundWidth;
+		var boundHeight;
+		if (this.props.bounds === "parent") {
+			var parent_1 = this.parentNode;
+			if (parent_1) {
+				boundWidth = widthByDirection ? this.resizableRight - this.parentLeft : parent_1.offsetWidth + (this.parentLeft - this.resizableLeft);
+				boundHeight = heightByDirection ? this.resizableBottom - this.parentTop : parent_1.offsetHeight + (this.parentTop - this.resizableTop);
+			}
+		} else if (this.props.bounds === "window") {
+			if (this.window) {
+				boundWidth = widthByDirection ? this.resizableRight : this.window.innerWidth - this.resizableLeft;
+				boundHeight = heightByDirection ? this.resizableBottom : this.window.innerHeight - this.resizableTop;
+			}
+		} else if (this.props.bounds) {
+			boundWidth = widthByDirection ? this.resizableRight - this.targetLeft : this.props.bounds.offsetWidth + (this.targetLeft - this.resizableLeft);
+			boundHeight = heightByDirection ? this.resizableBottom - this.targetTop : this.props.bounds.offsetHeight + (this.targetTop - this.resizableTop);
+		}
+		if (boundWidth && Number.isFinite(boundWidth)) maxWidth = maxWidth && maxWidth < boundWidth ? maxWidth : boundWidth;
+		if (boundHeight && Number.isFinite(boundHeight)) maxHeight = maxHeight && maxHeight < boundHeight ? maxHeight : boundHeight;
+		return {
+			maxWidth,
+			maxHeight
+		};
+	};
+	Resizable.prototype.calculateNewSizeFromDirection = function(clientX, clientY) {
+		var scale = this.props.scale || 1;
+		var _a = normalizeToPair(this.props.resizeRatio || 1), resizeRatioX = _a[0], resizeRatioY = _a[1];
+		var _b = this.state, direction = _b.direction, original = _b.original;
+		var _c = this.props, lockAspectRatio = _c.lockAspectRatio, lockAspectRatioExtraHeight = _c.lockAspectRatioExtraHeight, lockAspectRatioExtraWidth = _c.lockAspectRatioExtraWidth;
+		var newWidth = original.width;
+		var newHeight = original.height;
+		var extraHeight = lockAspectRatioExtraHeight || 0;
+		var extraWidth = lockAspectRatioExtraWidth || 0;
+		if (hasDirection("right", direction)) {
+			newWidth = original.width + (clientX - original.x) * resizeRatioX / scale;
+			if (lockAspectRatio) newHeight = (newWidth - extraWidth) / this.ratio + extraHeight;
+		}
+		if (hasDirection("left", direction)) {
+			newWidth = original.width - (clientX - original.x) * resizeRatioX / scale;
+			if (lockAspectRatio) newHeight = (newWidth - extraWidth) / this.ratio + extraHeight;
+		}
+		if (hasDirection("bottom", direction)) {
+			newHeight = original.height + (clientY - original.y) * resizeRatioY / scale;
+			if (lockAspectRatio) newWidth = (newHeight - extraHeight) * this.ratio + extraWidth;
+		}
+		if (hasDirection("top", direction)) {
+			newHeight = original.height - (clientY - original.y) * resizeRatioY / scale;
+			if (lockAspectRatio) newWidth = (newHeight - extraHeight) * this.ratio + extraWidth;
+		}
+		return {
+			newWidth,
+			newHeight
+		};
+	};
+	Resizable.prototype.calculateNewSizeFromAspectRatio = function(newWidth, newHeight, max, min) {
+		var _a = this.props, lockAspectRatio = _a.lockAspectRatio, lockAspectRatioExtraHeight = _a.lockAspectRatioExtraHeight, lockAspectRatioExtraWidth = _a.lockAspectRatioExtraWidth;
+		var computedMinWidth = typeof min.width === "undefined" ? 10 : min.width;
+		var computedMaxWidth = typeof max.width === "undefined" || max.width < 0 ? newWidth : max.width;
+		var computedMinHeight = typeof min.height === "undefined" ? 10 : min.height;
+		var computedMaxHeight = typeof max.height === "undefined" || max.height < 0 ? newHeight : max.height;
+		var extraHeight = lockAspectRatioExtraHeight || 0;
+		var extraWidth = lockAspectRatioExtraWidth || 0;
+		if (lockAspectRatio) {
+			var extraMinWidth = (computedMinHeight - extraHeight) * this.ratio + extraWidth;
+			var extraMaxWidth = (computedMaxHeight - extraHeight) * this.ratio + extraWidth;
+			var extraMinHeight = (computedMinWidth - extraWidth) / this.ratio + extraHeight;
+			var extraMaxHeight = (computedMaxWidth - extraWidth) / this.ratio + extraHeight;
+			var lockedMinWidth = Math.max(computedMinWidth, extraMinWidth);
+			var lockedMaxWidth = Math.min(computedMaxWidth, extraMaxWidth);
+			var lockedMinHeight = Math.max(computedMinHeight, extraMinHeight);
+			var lockedMaxHeight = Math.min(computedMaxHeight, extraMaxHeight);
+			newWidth = clamp$1(newWidth, lockedMinWidth, lockedMaxWidth);
+			newHeight = clamp$1(newHeight, lockedMinHeight, lockedMaxHeight);
+		} else {
+			newWidth = clamp$1(newWidth, computedMinWidth, computedMaxWidth);
+			newHeight = clamp$1(newHeight, computedMinHeight, computedMaxHeight);
+		}
+		return {
+			newWidth,
+			newHeight
+		};
+	};
+	Resizable.prototype.setBoundingClientRect = function() {
+		var adjustedScale = 1 / (this.props.scale || 1);
+		if (this.props.bounds === "parent") {
+			var parent_2 = this.parentNode;
+			if (parent_2) {
+				var parentRect = parent_2.getBoundingClientRect();
+				this.parentLeft = parentRect.left * adjustedScale;
+				this.parentTop = parentRect.top * adjustedScale;
+			}
+		}
+		if (this.props.bounds && typeof this.props.bounds !== "string") {
+			var targetRect = this.props.bounds.getBoundingClientRect();
+			this.targetLeft = targetRect.left * adjustedScale;
+			this.targetTop = targetRect.top * adjustedScale;
+		}
+		if (this.resizable) {
+			var _a = this.resizable.getBoundingClientRect(), left = _a.left, top_1 = _a.top, right = _a.right, bottom = _a.bottom;
+			this.resizableLeft = left * adjustedScale;
+			this.resizableRight = right * adjustedScale;
+			this.resizableTop = top_1 * adjustedScale;
+			this.resizableBottom = bottom * adjustedScale;
+		}
+	};
+	Resizable.prototype.onResizeStart = function(event, direction) {
+		if (!this.resizable || !this.window) return;
+		var clientX = 0;
+		var clientY = 0;
+		if (event.nativeEvent && isMouseEvent(event.nativeEvent)) {
+			clientX = event.nativeEvent.clientX;
+			clientY = event.nativeEvent.clientY;
+		} else if (event.nativeEvent && isTouchEvent(event.nativeEvent)) {
+			clientX = event.nativeEvent.touches[0].clientX;
+			clientY = event.nativeEvent.touches[0].clientY;
+		}
+		if (this.props.onResizeStart) {
+			if (this.resizable) {
+				if (this.props.onResizeStart(event, direction, this.resizable) === false) return;
+			}
+		}
+		if (this.props.size) {
+			if (typeof this.props.size.height !== "undefined" && this.props.size.height !== this.state.height) this.setState({ height: this.props.size.height });
+			if (typeof this.props.size.width !== "undefined" && this.props.size.width !== this.state.width) this.setState({ width: this.props.size.width });
+		}
+		this.ratio = typeof this.props.lockAspectRatio === "number" ? this.props.lockAspectRatio : this.size.width / this.size.height;
+		var flexBasis;
+		var computedStyle = this.window.getComputedStyle(this.resizable);
+		if (computedStyle.flexBasis !== "auto") {
+			var parent_3 = this.parentNode;
+			if (parent_3) {
+				var dir = this.window.getComputedStyle(parent_3).flexDirection;
+				this.flexDir = dir.startsWith("row") ? "row" : "column";
+				flexBasis = computedStyle.flexBasis;
+			}
+		}
+		this.setBoundingClientRect();
+		this.bindEvents();
+		var state = {
+			original: {
+				x: clientX,
+				y: clientY,
+				width: this.size.width,
+				height: this.size.height
+			},
+			isResizing: true,
+			backgroundStyle: __assign$2(__assign$2({}, this.state.backgroundStyle), { cursor: this.window.getComputedStyle(event.target).cursor || "auto" }),
+			direction,
+			flexBasis
+		};
+		this.setState(state);
+	};
+	Resizable.prototype.onMouseMove = function(event) {
+		var _this = this;
+		if (!this.state.isResizing || !this.resizable || !this.window) return;
+		if (this.window.TouchEvent && isTouchEvent(event)) try {
+			event.preventDefault();
+			event.stopPropagation();
+		} catch (e) {}
+		var _a = this.props, maxWidth = _a.maxWidth, maxHeight = _a.maxHeight, minWidth = _a.minWidth, minHeight = _a.minHeight;
+		var clientX = isTouchEvent(event) ? event.touches[0].clientX : event.clientX;
+		var clientY = isTouchEvent(event) ? event.touches[0].clientY : event.clientY;
+		var _b = this.state, direction = _b.direction, original = _b.original, width = _b.width, height = _b.height;
+		var parentSize = this.getParentSize();
+		var max = calculateNewMax(parentSize, this.window.innerWidth, this.window.innerHeight, maxWidth, maxHeight, minWidth, minHeight);
+		maxWidth = max.maxWidth;
+		maxHeight = max.maxHeight;
+		minWidth = max.minWidth;
+		minHeight = max.minHeight;
+		var _c = this.calculateNewSizeFromDirection(clientX, clientY), newHeight = _c.newHeight, newWidth = _c.newWidth;
+		var boundaryMax = this.calculateNewMaxFromBoundary(maxWidth, maxHeight);
+		if (this.props.snap && this.props.snap.x) newWidth = findClosestSnap(newWidth, this.props.snap.x, this.props.snapGap);
+		if (this.props.snap && this.props.snap.y) newHeight = findClosestSnap(newHeight, this.props.snap.y, this.props.snapGap);
+		var newSize = this.calculateNewSizeFromAspectRatio(newWidth, newHeight, {
+			width: boundaryMax.maxWidth,
+			height: boundaryMax.maxHeight
+		}, {
+			width: minWidth,
+			height: minHeight
+		});
+		newWidth = newSize.newWidth;
+		newHeight = newSize.newHeight;
+		if (this.props.grid) {
+			var newGridWidth = snap$1(newWidth, this.props.grid[0], this.props.gridGap ? this.props.gridGap[0] : 0);
+			var newGridHeight = snap$1(newHeight, this.props.grid[1], this.props.gridGap ? this.props.gridGap[1] : 0);
+			var gap = this.props.snapGap || 0;
+			var w = gap === 0 || Math.abs(newGridWidth - newWidth) <= gap ? newGridWidth : newWidth;
+			var h = gap === 0 || Math.abs(newGridHeight - newHeight) <= gap ? newGridHeight : newHeight;
+			newWidth = w;
+			newHeight = h;
+		}
+		var delta = {
+			width: newWidth - original.width,
+			height: newHeight - original.height
+		};
+		this.delta = delta;
+		if (width && typeof width === "string") {
+			if (width.endsWith("%")) {
+				var percent = newWidth / parentSize.width * 100;
+				newWidth = "".concat(percent, "%");
+			} else if (width.endsWith("vw")) {
+				var vw = newWidth / this.window.innerWidth * 100;
+				newWidth = "".concat(vw, "vw");
+			} else if (width.endsWith("vh")) {
+				var vh = newWidth / this.window.innerHeight * 100;
+				newWidth = "".concat(vh, "vh");
+			}
+		}
+		if (height && typeof height === "string") {
+			if (height.endsWith("%")) {
+				var percent = newHeight / parentSize.height * 100;
+				newHeight = "".concat(percent, "%");
+			} else if (height.endsWith("vw")) {
+				var vw = newHeight / this.window.innerWidth * 100;
+				newHeight = "".concat(vw, "vw");
+			} else if (height.endsWith("vh")) {
+				var vh = newHeight / this.window.innerHeight * 100;
+				newHeight = "".concat(vh, "vh");
+			}
+		}
+		var newState = {
+			width: this.createSizeForCssProperty(newWidth, "width"),
+			height: this.createSizeForCssProperty(newHeight, "height")
+		};
+		if (this.flexDir === "row") newState.flexBasis = newState.width;
+		else if (this.flexDir === "column") newState.flexBasis = newState.height;
+		var widthChanged = this.state.width !== newState.width;
+		var heightChanged = this.state.height !== newState.height;
+		var flexBaseChanged = this.state.flexBasis !== newState.flexBasis;
+		var changed = widthChanged || heightChanged || flexBaseChanged;
+		if (changed) (0, import_react_dom.flushSync)(function() {
+			_this.setState(newState);
+		});
+		if (this.props.onResize) {
+			if (changed) this.props.onResize(event, direction, this.resizable, delta);
+		}
+	};
+	Resizable.prototype.onMouseUp = function(event) {
+		var _a, _b, _c = this.state, isResizing = _c.isResizing, direction = _c.direction;
+		_c.original;
+		if (!isResizing || !this.resizable) return;
+		if (this.props.onResizeStop) this.props.onResizeStop(event, direction, this.resizable, this.delta);
+		if (this.props.size) this.setState({
+			width: (_a = this.props.size.width) !== null && _a !== void 0 ? _a : "auto",
+			height: (_b = this.props.size.height) !== null && _b !== void 0 ? _b : "auto"
+		});
+		this.unbindEvents();
+		this.setState({
+			isResizing: false,
+			backgroundStyle: __assign$2(__assign$2({}, this.state.backgroundStyle), { cursor: "auto" })
+		});
+	};
+	Resizable.prototype.updateSize = function(size) {
+		var _a, _b;
+		this.setState({
+			width: (_a = size.width) !== null && _a !== void 0 ? _a : "auto",
+			height: (_b = size.height) !== null && _b !== void 0 ? _b : "auto"
+		});
+	};
+	Resizable.prototype.renderResizer = function() {
+		var _this = this;
+		var _a = this.props, enable = _a.enable, handleStyles = _a.handleStyles, handleClasses = _a.handleClasses, handleWrapperStyle = _a.handleWrapperStyle, handleWrapperClass = _a.handleWrapperClass, handleComponent = _a.handleComponent;
+		if (!enable) return null;
+		return (0, import_jsx_runtime.jsx)("div", {
+			className: handleWrapperClass,
+			style: handleWrapperStyle,
+			children: Object.keys(enable).map(function(dir) {
+				if (enable[dir] !== false) return (0, import_jsx_runtime.jsx)(Resizer, {
+					direction: dir,
+					onResizeStart: _this.onResizeStart,
+					replaceStyles: handleStyles && handleStyles[dir],
+					className: handleClasses && handleClasses[dir],
+					children: handleComponent && handleComponent[dir] ? handleComponent[dir] : null
+				}, dir);
+				return null;
+			})
+		});
+	};
+	Resizable.prototype.render = function() {
+		var _this = this;
+		var extendsProps = Object.keys(this.props).reduce(function(acc, key) {
+			if (definedProps.indexOf(key) !== -1) return acc;
+			acc[key] = _this.props[key];
+			return acc;
+		}, {});
+		var style = __assign$2(__assign$2(__assign$2({
+			position: "relative",
+			userSelect: this.state.isResizing ? "none" : "auto"
+		}, this.props.style), this.sizeStyle), {
+			maxWidth: this.props.maxWidth,
+			maxHeight: this.props.maxHeight,
+			minWidth: this.props.minWidth,
+			minHeight: this.props.minHeight,
+			boxSizing: "border-box",
+			flexShrink: 0
+		});
+		if (this.state.flexBasis) style.flexBasis = this.state.flexBasis;
+		return (0, import_jsx_runtime.jsxs)(this.props.as || "div", __assign$2({
+			style,
+			className: this.props.className
+		}, extendsProps, {
+			ref: function(c) {
+				if (c) _this.resizable = c;
+			},
+			children: [
+				this.state.isResizing && (0, import_jsx_runtime.jsx)("div", { style: this.state.backgroundStyle }),
+				this.props.children,
+				this.renderResizer()
+			]
+		}));
+	};
+	Resizable.defaultProps = {
+		as: "div",
+		onResizeStart: function() {},
+		onResize: function() {},
+		onResizeStop: function() {},
+		enable: {
+			top: true,
+			right: true,
+			bottom: true,
+			left: true,
+			topRight: true,
+			bottomRight: true,
+			bottomLeft: true,
+			topLeft: true
+		},
+		style: {},
+		grid: [1, 1],
+		gridGap: [0, 0],
+		lockAspectRatio: false,
+		lockAspectRatioExtraWidth: 0,
+		lockAspectRatioExtraHeight: 0,
+		scale: 1,
+		resizeRatio: 1,
+		snapGap: 0
+	};
+	return Resizable;
+}(import_react.PureComponent);
+//#endregion
+//#region node_modules/react-rnd/lib/index.js
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+var extendStatics$1 = function(d, b) {
+	extendStatics$1 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d, b) {
+		d.__proto__ = b;
+	} || function(d, b) {
+		for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	};
+	return extendStatics$1(d, b);
+};
+function __extends$1(d, b) {
+	extendStatics$1(d, b);
+	function __() {
+		this.constructor = d;
+	}
+	d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+}
+var __assign$1 = function() {
+	__assign$1 = Object.assign || function __assign(t) {
+		for (var s, i = 1, n = arguments.length; i < n; i++) {
+			s = arguments[i];
+			for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+		}
+		return t;
+	};
+	return __assign$1.apply(this, arguments);
+};
+function __rest$1(s, e) {
+	var t = {};
+	for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+	if (s != null && typeof Object.getOwnPropertySymbols === "function") {
+		for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+	}
+	return t;
+}
+var resizableStyle = {
+	width: "auto",
+	height: "auto",
+	display: "inline-block",
+	position: "absolute",
+	top: 0,
+	left: 0
+};
+var getEnableResizingByFlag = function(flag) {
+	return {
+		bottom: flag,
+		bottomLeft: flag,
+		bottomRight: flag,
+		left: flag,
+		right: flag,
+		top: flag,
+		topLeft: flag,
+		topRight: flag
+	};
+};
+var Rnd = function(_super) {
+	__extends$1(Rnd, _super);
+	function Rnd(props) {
+		var _this = _super.call(this, props) || this;
+		_this.resizingPosition = {
+			x: 0,
+			y: 0
+		};
+		_this.offsetFromParent = {
+			left: 0,
+			top: 0
+		};
+		_this.resizableElement = { current: null };
+		_this.originalPosition = {
+			x: 0,
+			y: 0
+		};
+		_this.state = {
+			resizing: false,
+			bounds: {
+				top: 0,
+				right: 0,
+				bottom: 0,
+				left: 0
+			},
+			maxWidth: props.maxWidth,
+			maxHeight: props.maxHeight
+		};
+		_this.onResizeStart = _this.onResizeStart.bind(_this);
+		_this.onResize = _this.onResize.bind(_this);
+		_this.onResizeStop = _this.onResizeStop.bind(_this);
+		_this.onDragStart = _this.onDragStart.bind(_this);
+		_this.onDrag = _this.onDrag.bind(_this);
+		_this.onDragStop = _this.onDragStop.bind(_this);
+		_this.getMaxSizesFromProps = _this.getMaxSizesFromProps.bind(_this);
+		return _this;
+	}
+	Rnd.prototype.componentDidMount = function() {
+		this.updateOffsetFromParent();
+		var _a = this.offsetFromParent, left = _a.left, top = _a.top;
+		var _b = this.getDraggablePosition(), x = _b.x, y = _b.y;
+		this.draggable.setState({
+			x: x - left,
+			y: y - top
+		});
+		this.forceUpdate();
+	};
+	Rnd.prototype.getDraggablePosition = function() {
+		var _a = this.draggable.state;
+		return {
+			x: _a.x,
+			y: _a.y
+		};
+	};
+	Rnd.prototype.getParent = function() {
+		return this.resizable && this.resizable.parentNode;
+	};
+	Rnd.prototype.getParentSize = function() {
+		return this.resizable.getParentSize();
+	};
+	Rnd.prototype.getMaxSizesFromProps = function() {
+		return {
+			maxWidth: typeof this.props.maxWidth === "undefined" ? Number.MAX_SAFE_INTEGER : this.props.maxWidth,
+			maxHeight: typeof this.props.maxHeight === "undefined" ? Number.MAX_SAFE_INTEGER : this.props.maxHeight
+		};
+	};
+	Rnd.prototype.getSelfElement = function() {
+		return this.resizable && this.resizable.resizable;
+	};
+	Rnd.prototype.getOffsetHeight = function(boundary) {
+		var scale = this.props.scale;
+		switch (this.props.bounds) {
+			case "window": return window.innerHeight / scale;
+			case "body": return document.body.offsetHeight / scale;
+			default: return boundary.offsetHeight;
+		}
+	};
+	Rnd.prototype.getOffsetWidth = function(boundary) {
+		var scale = this.props.scale;
+		switch (this.props.bounds) {
+			case "window": return window.innerWidth / scale;
+			case "body": return document.body.offsetWidth / scale;
+			default: return boundary.offsetWidth;
+		}
+	};
+	Rnd.prototype.onDragStart = function(e, data) {
+		if (this.props.onDragStart && this.props.onDragStart(e, data) === false) return false;
+		var pos = this.getDraggablePosition();
+		this.originalPosition = pos;
+		if (!this.props.bounds) return;
+		var parent = this.getParent();
+		var scale = this.props.scale;
+		var boundary;
+		if (this.props.bounds === "parent") boundary = parent;
+		else if (this.props.bounds === "body") {
+			var parentRect_1 = parent.getBoundingClientRect();
+			var parentLeft_1 = parentRect_1.left;
+			var parentTop_1 = parentRect_1.top;
+			var bodyRect = document.body.getBoundingClientRect();
+			var left_1 = -(parentLeft_1 - parent.offsetLeft * scale - bodyRect.left) / scale;
+			var top_1 = -(parentTop_1 - parent.offsetTop * scale - bodyRect.top) / scale;
+			var right = (document.body.offsetWidth - this.resizable.size.width * scale) / scale + left_1;
+			var bottom = (document.body.offsetHeight - this.resizable.size.height * scale) / scale + top_1;
+			return this.setState({ bounds: {
+				top: top_1,
+				right,
+				bottom,
+				left: left_1
+			} });
+		} else if (this.props.bounds === "window") {
+			if (!this.resizable) return;
+			var parentRect_2 = parent.getBoundingClientRect();
+			var parentLeft_2 = parentRect_2.left;
+			var parentTop_2 = parentRect_2.top;
+			var left_2 = -(parentLeft_2 - parent.offsetLeft * scale) / scale;
+			var top_2 = -(parentTop_2 - parent.offsetTop * scale) / scale;
+			var right = (window.innerWidth - this.resizable.size.width * scale) / scale + left_2;
+			var bottom = (window.innerHeight - this.resizable.size.height * scale) / scale + top_2;
+			return this.setState({ bounds: {
+				top: top_2,
+				right,
+				bottom,
+				left: left_2
+			} });
+		} else if (typeof this.props.bounds === "string") boundary = document.querySelector(this.props.bounds);
+		else if (this.props.bounds instanceof HTMLElement) boundary = this.props.bounds;
+		if (!(boundary instanceof HTMLElement) || !(parent instanceof HTMLElement)) return;
+		var boundaryRect = boundary.getBoundingClientRect();
+		var boundaryLeft = boundaryRect.left;
+		var boundaryTop = boundaryRect.top;
+		var parentRect = parent.getBoundingClientRect();
+		var parentLeft = parentRect.left;
+		var parentTop = parentRect.top;
+		var left = (boundaryLeft - parentLeft) / scale;
+		var top = boundaryTop - parentTop;
+		if (!this.resizable) return;
+		this.updateOffsetFromParent();
+		var offset = this.offsetFromParent;
+		this.setState({ bounds: {
+			top: top - offset.top,
+			right: left + (boundary.offsetWidth - this.resizable.size.width) - offset.left / scale,
+			bottom: top + (boundary.offsetHeight - this.resizable.size.height) - offset.top,
+			left: left - offset.left / scale
+		} });
+	};
+	Rnd.prototype.onDrag = function(e, data) {
+		if (!this.props.onDrag) return;
+		var _a = this.offsetFromParent, left = _a.left, top = _a.top;
+		if (!this.props.dragAxis || this.props.dragAxis === "both") return this.props.onDrag(e, __assign$1(__assign$1({}, data), {
+			x: data.x + left,
+			y: data.y + top
+		}));
+		else if (this.props.dragAxis === "x") return this.props.onDrag(e, __assign$1(__assign$1({}, data), {
+			x: data.x + left,
+			y: this.originalPosition.y + top,
+			deltaY: 0
+		}));
+		else if (this.props.dragAxis === "y") return this.props.onDrag(e, __assign$1(__assign$1({}, data), {
+			x: this.originalPosition.x + left,
+			y: data.y + top,
+			deltaX: 0
+		}));
+	};
+	Rnd.prototype.onDragStop = function(e, data) {
+		if (!this.props.onDragStop) return;
+		var _a = this.offsetFromParent, left = _a.left, top = _a.top;
+		if (!this.props.dragAxis || this.props.dragAxis === "both") return this.props.onDragStop(e, __assign$1(__assign$1({}, data), {
+			x: data.x + left,
+			y: data.y + top
+		}));
+		else if (this.props.dragAxis === "x") return this.props.onDragStop(e, __assign$1(__assign$1({}, data), {
+			x: data.x + left,
+			y: this.originalPosition.y + top,
+			deltaY: 0
+		}));
+		else if (this.props.dragAxis === "y") return this.props.onDragStop(e, __assign$1(__assign$1({}, data), {
+			x: this.originalPosition.x + left,
+			y: data.y + top,
+			deltaX: 0
+		}));
+	};
+	Rnd.prototype.onResizeStart = function(e, dir, elementRef) {
+		if (this.props.onResizeStart && this.props.onResizeStart(e, dir, elementRef) === false) return false;
+		e.stopPropagation();
+		this.setState({ resizing: true });
+		var scale = this.props.scale;
+		var offset = this.offsetFromParent;
+		var pos = this.getDraggablePosition();
+		this.resizingPosition = {
+			x: pos.x + offset.left,
+			y: pos.y + offset.top
+		};
+		this.originalPosition = pos;
+		if (this.props.bounds) {
+			var parent_1 = this.getParent();
+			var boundary = void 0;
+			if (this.props.bounds === "parent") boundary = parent_1;
+			else if (this.props.bounds === "body") boundary = document.body;
+			else if (this.props.bounds === "window") boundary = window;
+			else if (typeof this.props.bounds === "string") boundary = document.querySelector(this.props.bounds);
+			else if (this.props.bounds instanceof HTMLElement) boundary = this.props.bounds;
+			var self_1 = this.getSelfElement();
+			if (self_1 instanceof Element && (boundary instanceof HTMLElement || boundary === window) && parent_1 instanceof HTMLElement) {
+				var _a = this.getMaxSizesFromProps(), maxWidth = _a.maxWidth, maxHeight = _a.maxHeight;
+				var parentSize = this.getParentSize();
+				if (maxWidth && typeof maxWidth === "string") {
+					if (maxWidth.endsWith("%")) {
+						var ratio = Number(maxWidth.replace("%", "")) / 100;
+						maxWidth = parentSize.width * ratio;
+					} else if (maxWidth.endsWith("px")) maxWidth = Number(maxWidth.replace("px", ""));
+				}
+				if (maxHeight && typeof maxHeight === "string") {
+					if (maxHeight.endsWith("%")) {
+						var ratio = Number(maxHeight.replace("%", "")) / 100;
+						maxHeight = parentSize.height * ratio;
+					} else if (maxHeight.endsWith("px")) maxHeight = Number(maxHeight.replace("px", ""));
+				}
+				var selfRect = self_1.getBoundingClientRect();
+				var selfLeft = selfRect.left;
+				var selfTop = selfRect.top;
+				var boundaryRect = this.props.bounds === "window" ? {
+					left: 0,
+					top: 0
+				} : boundary.getBoundingClientRect();
+				var boundaryLeft = boundaryRect.left;
+				var boundaryTop = boundaryRect.top;
+				var offsetWidth = this.getOffsetWidth(boundary);
+				var offsetHeight = this.getOffsetHeight(boundary);
+				var hasLeft = dir.toLowerCase().endsWith("left");
+				var hasRight = dir.toLowerCase().endsWith("right");
+				var hasTop = dir.startsWith("top");
+				var hasBottom = dir.startsWith("bottom");
+				if ((hasLeft || hasTop) && this.resizable) {
+					var max = (selfLeft - boundaryLeft) / scale + this.resizable.size.width;
+					this.setState({ maxWidth: max > Number(maxWidth) ? maxWidth : max });
+				}
+				if (hasRight || this.props.lockAspectRatio && !hasLeft && !hasTop) {
+					var max = offsetWidth + (boundaryLeft - selfLeft) / scale;
+					this.setState({ maxWidth: max > Number(maxWidth) ? maxWidth : max });
+				}
+				if ((hasTop || hasLeft) && this.resizable) {
+					var max = (selfTop - boundaryTop) / scale + this.resizable.size.height;
+					this.setState({ maxHeight: max > Number(maxHeight) ? maxHeight : max });
+				}
+				if (hasBottom || this.props.lockAspectRatio && !hasTop && !hasLeft) {
+					var max = offsetHeight + (boundaryTop - selfTop) / scale;
+					this.setState({ maxHeight: max > Number(maxHeight) ? maxHeight : max });
+				}
+			}
+		} else this.setState({
+			maxWidth: this.props.maxWidth,
+			maxHeight: this.props.maxHeight
+		});
+	};
+	Rnd.prototype.onResize = function(e, direction, elementRef, delta) {
+		var _this = this;
+		var newPos = {
+			x: this.originalPosition.x,
+			y: this.originalPosition.y
+		};
+		var left = -delta.width;
+		var top = -delta.height;
+		if ([
+			"top",
+			"left",
+			"topLeft",
+			"bottomLeft",
+			"topRight"
+		].includes(direction)) if (direction === "bottomLeft") newPos.x += left;
+		else if (direction === "topRight") newPos.y += top;
+		else {
+			newPos.x += left;
+			newPos.y += top;
+		}
+		var draggableState = this.draggable.state;
+		if (newPos.x !== draggableState.x || newPos.y !== draggableState.y) (0, import_react_dom.flushSync)(function() {
+			_this.draggable.setState(newPos);
+		});
+		this.updateOffsetFromParent();
+		var offset = this.offsetFromParent;
+		var x = this.getDraggablePosition().x + offset.left;
+		var y = this.getDraggablePosition().y + offset.top;
+		this.resizingPosition = {
+			x,
+			y
+		};
+		if (!this.props.onResize) return;
+		this.props.onResize(e, direction, elementRef, delta, {
+			x,
+			y
+		});
+	};
+	Rnd.prototype.onResizeStop = function(e, direction, elementRef, delta) {
+		this.setState({ resizing: false });
+		var _a = this.getMaxSizesFromProps(), maxWidth = _a.maxWidth, maxHeight = _a.maxHeight;
+		this.setState({
+			maxWidth,
+			maxHeight
+		});
+		if (this.props.onResizeStop) this.props.onResizeStop(e, direction, elementRef, delta, this.resizingPosition);
+	};
+	Rnd.prototype.updateSize = function(size) {
+		if (!this.resizable) return;
+		this.resizable.updateSize({
+			width: size.width,
+			height: size.height
+		});
+	};
+	Rnd.prototype.updatePosition = function(position) {
+		this.draggable.setState(position);
+	};
+	Rnd.prototype.updateOffsetFromParent = function() {
+		var scale = this.props.scale;
+		var parent = this.getParent();
+		var self = this.getSelfElement();
+		if (!parent || self === null) return {
+			top: 0,
+			left: 0
+		};
+		var parentRect = parent.getBoundingClientRect();
+		var parentLeft = parentRect.left;
+		var parentTop = parentRect.top;
+		var selfRect = self.getBoundingClientRect();
+		var position = this.getDraggablePosition();
+		var scrollLeft = parent.scrollLeft;
+		var scrollTop = parent.scrollTop;
+		this.offsetFromParent = {
+			left: selfRect.left - parentLeft + scrollLeft - position.x * scale,
+			top: selfRect.top - parentTop + scrollTop - position.y * scale
+		};
+	};
+	Rnd.prototype.render = function() {
+		var _this = this, _a = this.props, disableDragging = _a.disableDragging, style = _a.style, dragHandleClassName = _a.dragHandleClassName, position = _a.position, onMouseDown = _a.onMouseDown, onMouseUp = _a.onMouseUp, dragAxis = _a.dragAxis, dragGrid = _a.dragGrid, bounds = _a.bounds, enableUserSelectHack = _a.enableUserSelectHack, cancel = _a.cancel, children = _a.children;
+		_a.onResizeStart;
+		_a.onResize;
+		_a.onResizeStop;
+		_a.onDragStart;
+		_a.onDrag;
+		_a.onDragStop;
+		var resizeHandleStyles = _a.resizeHandleStyles, resizeHandleClasses = _a.resizeHandleClasses, resizeHandleComponent = _a.resizeHandleComponent, enableResizing = _a.enableResizing, resizeGrid = _a.resizeGrid, resizeHandleWrapperClass = _a.resizeHandleWrapperClass, resizeHandleWrapperStyle = _a.resizeHandleWrapperStyle, scale = _a.scale, allowAnyClick = _a.allowAnyClick, dragPositionOffset = _a.dragPositionOffset, resizableProps = __rest$1(_a, [
+			"disableDragging",
+			"style",
+			"dragHandleClassName",
+			"position",
+			"onMouseDown",
+			"onMouseUp",
+			"dragAxis",
+			"dragGrid",
+			"bounds",
+			"enableUserSelectHack",
+			"cancel",
+			"children",
+			"onResizeStart",
+			"onResize",
+			"onResizeStop",
+			"onDragStart",
+			"onDrag",
+			"onDragStop",
+			"resizeHandleStyles",
+			"resizeHandleClasses",
+			"resizeHandleComponent",
+			"enableResizing",
+			"resizeGrid",
+			"resizeHandleWrapperClass",
+			"resizeHandleWrapperStyle",
+			"scale",
+			"allowAnyClick",
+			"dragPositionOffset"
+		]);
+		var defaultValue = this.props.default ? __assign$1({}, this.props.default) : void 0;
+		delete resizableProps.default;
+		var cursorStyle = disableDragging || dragHandleClassName ? { cursor: "auto" } : { cursor: "move" };
+		var innerStyle = __assign$1(__assign$1(__assign$1({}, resizableStyle), cursorStyle), style);
+		var _b = this.offsetFromParent, left = _b.left, top = _b.top;
+		var draggablePosition;
+		if (position) draggablePosition = {
+			x: position.x - left,
+			y: position.y - top
+		};
+		var pos = this.state.resizing ? void 0 : draggablePosition;
+		var dragAxisOrUndefined = this.state.resizing ? "both" : dragAxis;
+		return (0, import_react.createElement)(cjs_default, {
+			ref: function(c) {
+				if (!c) return;
+				_this.draggable = c;
+			},
+			handle: dragHandleClassName ? ".".concat(dragHandleClassName) : void 0,
+			defaultPosition: defaultValue,
+			onMouseDown,
+			onMouseUp,
+			onStart: this.onDragStart,
+			onDrag: this.onDrag,
+			onStop: this.onDragStop,
+			axis: dragAxisOrUndefined,
+			disabled: disableDragging,
+			grid: dragGrid,
+			bounds: bounds ? this.state.bounds : void 0,
+			position: pos,
+			enableUserSelectHack,
+			cancel,
+			scale,
+			allowAnyClick,
+			nodeRef: this.resizableElement,
+			positionOffset: dragPositionOffset
+		}, (0, import_react.createElement)(Resizable, __assign$1({}, resizableProps, {
+			ref: function(c) {
+				if (!c) return;
+				_this.resizable = c;
+				_this.resizableElement.current = c.resizable;
+			},
+			defaultSize: defaultValue,
+			size: this.props.size,
+			enable: typeof enableResizing === "boolean" ? getEnableResizingByFlag(enableResizing) : enableResizing,
+			onResizeStart: this.onResizeStart,
+			onResize: this.onResize,
+			onResizeStop: this.onResizeStop,
+			style: innerStyle,
+			minWidth: this.props.minWidth,
+			minHeight: this.props.minHeight,
+			maxWidth: this.state.resizing ? this.state.maxWidth : this.props.maxWidth,
+			maxHeight: this.state.resizing ? this.state.maxHeight : this.props.maxHeight,
+			grid: resizeGrid,
+			handleWrapperClass: resizeHandleWrapperClass,
+			handleWrapperStyle: resizeHandleWrapperStyle,
+			lockAspectRatio: this.props.lockAspectRatio,
+			lockAspectRatioExtraWidth: this.props.lockAspectRatioExtraWidth,
+			lockAspectRatioExtraHeight: this.props.lockAspectRatioExtraHeight,
+			handleStyles: resizeHandleStyles,
+			handleClasses: resizeHandleClasses,
+			handleComponent: resizeHandleComponent,
+			scale: this.props.scale
+		}), children));
+	};
+	Rnd.defaultProps = {
+		maxWidth: Number.MAX_SAFE_INTEGER,
+		maxHeight: Number.MAX_SAFE_INTEGER,
+		scale: 1,
+		onResizeStart: function() {},
+		onResize: function() {},
+		onResizeStop: function() {},
+		onDragStart: function() {},
+		onDrag: function() {},
+		onDragStop: function() {}
+	};
+	return Rnd;
+}(import_react.PureComponent);
 //#endregion
 //#region node_modules/@lottiefiles/react-lottie-player/dist/lottie-react.esm.js
 /*! *****************************************************************************
@@ -10835,6 +12925,34 @@ var ColorPicker = function(t) {
 	}, e;
 }(import_react.Component);
 //#endregion
+//#region resources/js/Builder/utils/pathSmoothing.js
+/**
+* Utility functions for SVG Path Generation and Smoothing
+*/
+/**
+* Converts an array of coordinate objects {x, y} into an SVG Path string
+* using Quadratic Bezier curves for a smoother appearance.
+* 
+* @param {Array<{x: number, y: number}>} points - The recorded points
+* @returns {string} - The SVG path string
+*/
+var pointsToSmoothedSvgPath = (points) => {
+	if (!points || points.length === 0) return "";
+	if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
+	if (points.length === 2) return `M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`;
+	let path = `M ${points[0].x} ${points[0].y} `;
+	for (let i = 1; i < points.length - 1; i++) {
+		const p1 = points[i];
+		const p2 = points[i + 1];
+		const midX = (p1.x + p2.x) / 2;
+		const midY = (p1.y + p2.y) / 2;
+		path += `Q ${p1.x} ${p1.y}, ${midX} ${midY} `;
+	}
+	const lastPoint = points[points.length - 1];
+	path += `L ${lastPoint.x} ${lastPoint.y}`;
+	return path;
+};
+//#endregion
 //#region node_modules/gsap/gsap-core.js
 function _assertThisInitialized(self) {
 	if (self === void 0) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -18117,8 +20235,9 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 		mode: "enter",
 		speed: 1.5,
 		direction: "up",
-		trigger: "onLoad"
+		trigger: "onScroll"
 	};
+	const trigger = config.trigger || "onScroll";
 	if (layerAnimation.custom) try {
 		const customObj = new Function(`return ${layerAnimation.custom}`)();
 		const tween = gsapWithCSS.from(elementRef, {
@@ -18147,7 +20266,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 				...repeatConfig,
 				force3D: true,
 				autoRound: false,
-				scrollTrigger: (!isBuilder || config.trigger === "onScroll") && config.trigger !== "onLoad" ? {
+				scrollTrigger: (!isBuilder || trigger === "onScroll") && trigger !== "onLoad" ? {
 					trigger: elementRef,
 					start: "top 85%",
 					toggleActions: toggleActionStr
@@ -18184,32 +20303,48 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 	} else if (layerAnimation.idle === "custom_timeline" && layerAnimation.custom_keyframes && layerAnimation.custom_keyframes.length > 0) {
 		const tl = gsapWithCSS.timeline({
 			repeat: isLooping && !isBuilder ? -1 : 0,
-			scrollTrigger: !isBuilder && config.trigger === "onScroll" ? {
-				trigger: elementRef,
+			delay: config.delay || 0,
+			scrollTrigger: !isBuilder && trigger === "onScroll" ? {
+				trigger: elementRef.closest(".public-layer-element") || elementRef.closest(".layer-wrapper") || elementRef,
 				start: "top 85%",
 				toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
 			} : null
 		});
-		const baseX = layerStyle?.x || 0;
-		const baseY = layerStyle?.y || 0;
-		gsapWithCSS.set(elementRef, { opacity: layerStyle?.opacity ?? 1 });
+		const baseX = parseFloat(layerStyle?.x) || 0;
+		const baseY = parseFloat(layerStyle?.y) || 0;
+		const getValidNum = (val, fallback) => {
+			if (val === void 0 || val === null || val === "") return fallback;
+			const parsed = parseFloat(val);
+			return isNaN(parsed) ? fallback : parsed;
+		};
+		const firstKf = layerAnimation.custom_keyframes[0];
+		if (firstKf) gsapWithCSS.set(elementRef, {
+			x: getValidNum(firstKf.x, baseX) - baseX,
+			y: getValidNum(firstKf.y, baseY) - baseY,
+			opacity: getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1),
+			scale: getValidNum(firstKf.scale, layerStyle?.scale ?? 1),
+			rotation: getValidNum(firstKf.rotation, layerStyle?.rotation ?? 0),
+			...firstKf.width !== void 0 && { width: firstKf.width },
+			...firstKf.height !== void 0 && { height: firstKf.height }
+		});
+		else gsapWithCSS.set(elementRef, { opacity: layerStyle?.opacity ?? 1 });
 		for (let i = 0; i < layerAnimation.custom_keyframes.length; i++) {
 			const kf = layerAnimation.custom_keyframes[i];
 			if (i === 0) tl.set(elementRef, {
-				x: kf.x - baseX,
-				y: kf.y - baseY,
-				opacity: kf.opacity ?? 1,
-				scale: kf.scale ?? 1,
-				rotation: kf.rotation ?? 0,
+				x: getValidNum(kf.x, baseX) - baseX,
+				y: getValidNum(kf.y, baseY) - baseY,
+				opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
+				scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
+				rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
 				...kf.width !== void 0 && { width: kf.width },
 				...kf.height !== void 0 && { height: kf.height }
 			});
 			else tl.to(elementRef, {
-				x: kf.x - baseX,
-				y: kf.y - baseY,
-				opacity: kf.opacity ?? 1,
-				scale: kf.scale ?? 1,
-				rotation: kf.rotation ?? 0,
+				x: getValidNum(kf.x, baseX) - baseX,
+				y: getValidNum(kf.y, baseY) - baseY,
+				opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
+				scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
+				rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
 				...kf.width !== void 0 && { width: kf.width },
 				...kf.height !== void 0 && { height: kf.height },
 				duration: kf.duration || 1,
@@ -18230,7 +20365,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 				force3D: true,
 				autoRound: false
 			});
-			if (!isBuilder && config.trigger === "onScroll") tween.scrollTrigger = ScrollTrigger.create({
+			if (!isBuilder && trigger === "onScroll") tween.scrollTrigger = ScrollTrigger.create({
 				trigger: elementRef,
 				start: "top 85%",
 				animation: tween,
@@ -18557,6 +20692,28 @@ var IMAGE_FILTERS = [
 		name: "Find Edges",
 		category: "Distorsi & Artistik",
 		getCss: (i) => `invert(${lerp(0, 1, i)}) grayscale(${lerp(0, 1, i)}) contrast(${lerp(1, 2, i)})`
+	},
+	{
+		id: "engraving",
+		name: "Engraving (Toile de Jouy)",
+		category: "Distorsi & Artistik",
+		getCss: (i) => `grayscale(1) contrast(${lerp(1.5, 3, i)}) brightness(${lerp(1, 1.2, i)})`,
+		getOverlay: (i, layer) => {
+			let maskCss = "";
+			if (layer) {
+				const imgUrl = layer.type === "polaroid" ? layer.style?.polaroidData?.image : layer.style?.url || layer.url;
+				if (imgUrl) {
+					const cropX = layer.style?.cropX ?? 50;
+					const cropY = layer.style?.cropY ?? 50;
+					maskCss = `mask-image: url('${imgUrl}'); mask-size: cover; mask-position: ${cropX}% ${cropY}%; mask-repeat: no-repeat; -webkit-mask-image: url('${imgUrl}'); -webkit-mask-size: cover; -webkit-mask-position: ${cropX}% ${cropY}%; -webkit-mask-repeat: no-repeat;`;
+				}
+			}
+			return `
+            <div class="absolute inset-0 pointer-events-none mix-blend-hard-light" style="opacity: ${lerp(.3, .85, i)}; background-image: url('data:image/svg+xml,%3Csvg width=\\'6\\' height=\\'6\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cpath d=\\'M-1 7L7 -1M-1 1L1 -1M5 7L7 5\\' stroke=\\'%23666\\' stroke-width=\\'1\\'/%3E%3C/svg%3E'); background-size: 3px 3px; ${maskCss}"></div>
+            <div class="absolute inset-0 pointer-events-none mix-blend-lighten" style="background-color: var(--engraving-line, #7b3131); opacity: ${lerp(.5, 1, i)}; ${maskCss}"></div>
+            <div class="absolute inset-0 pointer-events-none mix-blend-multiply" style="background-color: var(--engraving-bg, #fdf5e6); opacity: ${lerp(.5, 1, i)}; ${maskCss}"></div>
+            `;
+		}
 	}
 ];
 var getFilterById = (id) => IMAGE_FILTERS.find((f) => f.id === id) || IMAGE_FILTERS[0];
@@ -22989,8 +25146,1310 @@ function EffectCards({ swiper, extendParams, on }) {
 	});
 }
 //#endregion
+//#region resources/js/Builder/components/Canvas/LayerElement.jsx
+var hexToRgba$1 = (hex, opacity = 100) => {
+	hex = (hex || "#ffffff").replace("#", "");
+	if (hex.length === 3) hex = hex.split("").map((x) => x + x).join("");
+	return `rgba(${parseInt(hex.substring(0, 2), 16) || 0}, ${parseInt(hex.substring(2, 4), 16) || 0}, ${parseInt(hex.substring(4, 6), 16) || 0}, ${opacity / 100})`;
+};
+var getGradientCss$1 = (style) => {
+	if (style?.backgroundType === "solid") return style.backgroundColor || "#ffffff";
+	if (style?.backgroundType === "linear-gradient" || style?.backgroundType === "radial-gradient") {
+		const color1 = hexToRgba$1(style.gradientStart || "#ffffff", style.gradientStartOpacity ?? 100);
+		const color2 = hexToRgba$1(style.gradientEnd || "#000000", style.gradientEndOpacity ?? 100);
+		if (style.backgroundType === "linear-gradient") return `linear-gradient(${style.gradientAngle ?? 90}deg, ${color1}, ${color2})`;
+		return `radial-gradient(circle, ${color1}, ${color2})`;
+	}
+	return "transparent";
+};
+var getShadowCss$1 = (style) => {
+	if (!style?.isShadowActive) return "none";
+	let x = style.shadowX || 0;
+	let y = style.shadowY || 0;
+	if (style.shadowDistance !== void 0 && style.shadowAngle !== void 0) {
+		const angleRad = style.shadowAngle * Math.PI / 180;
+		x = Math.round(style.shadowDistance * Math.cos(angleRad));
+		y = Math.round(style.shadowDistance * Math.sin(angleRad));
+	}
+	const blur = style.shadowBlur || 0;
+	const rgbaColor = hexToRgba$1(style.shadowColor || "#000000", (style.shadowOpacity ?? .5) * 100);
+	return `drop-shadow(${x}px ${y}px ${blur}px ${rgbaColor})`;
+};
+var ResizeHandle = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-3 h-3 bg-white border-2 border-indigo-500 rounded-full shadow pointer-events-auto hover:bg-indigo-50 transition-colors" });
+var CountdownDisplay$1 = ({ targetDate, textColor, bgColor, bgImage, fontFamily, bgOpacity, gap, showSeconds, bgStyle }) => {
+	const [timeLeft, setTimeLeft] = (0, import_react.useState)({
+		days: 12,
+		hours: 8,
+		minutes: 45,
+		seconds: 0
+	});
+	(0, import_react.useEffect)(() => {
+		if (!targetDate) return;
+		const target = new Date(targetDate).getTime();
+		const interval = setInterval(() => {
+			const distance = target - (/* @__PURE__ */ new Date()).getTime();
+			if (distance < 0) {
+				setTimeLeft({
+					days: 0,
+					hours: 0,
+					minutes: 0,
+					seconds: 0
+				});
+				clearInterval(interval);
+				return;
+			}
+			setTimeLeft({
+				days: Math.floor(distance / (1e3 * 60 * 60 * 24)),
+				hours: Math.floor(distance % (1e3 * 60 * 60 * 24) / (1e3 * 60 * 60)),
+				minutes: Math.floor(distance % (1e3 * 60 * 60) / (1e3 * 60)),
+				seconds: Math.floor(distance % (1e3 * 60) / 1e3)
+			});
+		}, 1e3);
+		return () => clearInterval(interval);
+	}, [targetDate]);
+	const getBgColorWithOpacity = (hex, opacity) => {
+		if (!hex) return "transparent";
+		if (hex.startsWith("rgba")) return hex;
+		let c;
+		if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+			c = hex.substring(1).split("");
+			if (c.length == 3) c = [
+				c[0],
+				c[0],
+				c[1],
+				c[1],
+				c[2],
+				c[2]
+			];
+			c = "0x" + c.join("");
+			return "rgba(" + [
+				c >> 16 & 255,
+				c >> 8 & 255,
+				c & 255
+			].join(",") + "," + (opacity !== void 0 ? opacity : .8) + ")";
+		}
+		return hex;
+	};
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: `w-full h-full flex items-center justify-center rounded-xl pointer-events-none relative overflow-hidden ${!bgStyle || bgStyle === "glass" ? "backdrop-blur-sm" : ""}`,
+		style: { backgroundColor: bgImage ? "transparent" : getBgColorWithOpacity(bgColor || "#111827", bgOpacity) },
+		children: [bgImage && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "absolute inset-0 w-full h-full bg-cover bg-center",
+			style: {
+				backgroundImage: `url(${bgImage})`,
+				opacity: bgOpacity !== void 0 ? bgOpacity : .8
+			}
+		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "flex text-center relative z-10",
+			style: {
+				color: textColor || "white",
+				fontFamily: fontFamily || "monospace",
+				gap: `${gap !== void 0 ? gap : 16}px`
+			},
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "block text-3xl font-bold",
+					children: String(timeLeft.days).padStart(2, "0")
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-[10px] uppercase tracking-widest opacity-70",
+					children: "Hari"
+				})] }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-3xl font-bold opacity-80",
+					children: ":"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "block text-3xl font-bold",
+					children: String(timeLeft.hours).padStart(2, "0")
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-[10px] uppercase tracking-widest opacity-70",
+					children: "Jam"
+				})] }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-3xl font-bold opacity-80",
+					children: ":"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "block text-3xl font-bold",
+					children: String(timeLeft.minutes).padStart(2, "0")
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-[10px] uppercase tracking-widest opacity-70",
+					children: "Mnt"
+				})] }),
+				showSeconds && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-3xl font-bold opacity-80",
+					children: ":"
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "block text-3xl font-bold",
+					children: String(timeLeft.seconds).padStart(2, "0")
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: "text-[10px] uppercase tracking-widest opacity-70",
+					children: "Dtk"
+				})] })] })
+			]
+		})]
+	});
+};
+var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
+	if (layer.isHidden) return null;
+	useCanvasStore((state) => state.updateLayerPosition);
+	const zoom = useCanvasStore((state) => state.zoom);
+	const activeTab = useCanvasStore((state) => state.activeTab);
+	const [localPos, setLocalPos] = (0, import_react.useState)({
+		x: layer.style?.x || 0,
+		y: layer.style?.y || 0
+	});
+	const [localSize, setLocalSize] = (0, import_react.useState)({
+		width: layer.style?.width || 100,
+		height: layer.style?.height || 100
+	});
+	const [isDragging, setIsDragging] = (0, import_react.useState)(false);
+	const [isEditing, setIsEditing] = (0, import_react.useState)(false);
+	const isActive = useCanvasStore((state) => state.activeLayerIds?.includes(layer.id) || state.activeLayerId === layer.id);
+	const isCropMode = activeTab === "edit_image" && isActive;
+	const elementRef = (0, import_react.useRef)(null);
+	const rndRef = (0, import_react.useRef)(null);
+	const localPosRef = (0, import_react.useRef)({
+		x: layer.style?.x || 0,
+		y: layer.style?.y || 0
+	});
+	(0, import_react.useEffect)(() => {
+		localPosRef.current = localPos;
+	}, [localPos]);
+	const dragStartRef = (0, import_react.useRef)(null);
+	const handleCropPointerDown = (e) => {
+		if (!isCropMode) return;
+		e.stopPropagation();
+		dragStartRef.current = {
+			x: e.clientX,
+			y: e.clientY
+		};
+		e.target.setPointerCapture(e.pointerId);
+	};
+	const handleCropPointerMove = (e) => {
+		if (!isCropMode || !dragStartRef.current) return;
+		e.stopPropagation();
+		const deltaX = e.clientX - dragStartRef.current.x;
+		const deltaY = e.clientY - dragStartRef.current.y;
+		const currentCrop = layer.style?.crop || {
+			x: 0,
+			y: 0
+		};
+		useCanvasStore.getState().updateLayerStyle(layer.id, { crop: {
+			...currentCrop,
+			x: currentCrop.x - deltaX,
+			y: currentCrop.y - deltaY
+		} });
+		dragStartRef.current = {
+			x: e.clientX,
+			y: e.clientY
+		};
+	};
+	const handleCropPointerUp = (e) => {
+		if (!isCropMode || !dragStartRef.current) return;
+		e.stopPropagation();
+		dragStartRef.current = null;
+		e.target.releasePointerCapture(e.pointerId);
+	};
+	(0, import_react.useEffect)(() => {
+		const newX = layer.style?.x || 0;
+		const newY = layer.style?.y || 0;
+		const newWidth = layer.style?.width || 100;
+		const newHeight = layer.style?.height || 100;
+		setLocalPos({
+			x: newX,
+			y: newY
+		});
+		setLocalSize({
+			width: newWidth,
+			height: newHeight
+		});
+		if (rndRef.current) {
+			rndRef.current.updatePosition({
+				x: newX,
+				y: newY
+			});
+			rndRef.current.updateSize({
+				width: newWidth,
+				height: newHeight
+			});
+		}
+	}, [
+		layer.style?.x,
+		layer.style?.y,
+		layer.style?.width,
+		layer.style?.height
+	]);
+	(0, import_react.useEffect)(() => {
+		let animationInstance = null;
+		const isPreviewing = layer.animation?.config?.previewKey && Date.now() - layer.animation.config.previewKey < 2e3;
+		if (isActive && !isPreviewing) {
+			__vitePreload(() => Promise.resolve().then(() => gsap_exports).then((gsap) => {
+				if (elementRef.current) gsap.default.set(elementRef.current, { clearProps: "all" });
+			}), void 0);
+			return;
+		}
+		if (layer.animation && elementRef.current) animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style);
+		const handlePlayAll = () => {
+			if (layer.animation && elementRef.current) __vitePreload(() => Promise.resolve().then(() => gsap_exports).then((gsap) => {
+				gsap.default.set(elementRef.current, { clearProps: "all" });
+				if (animationInstance) {
+					animationInstance.kill();
+					if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
+				}
+				animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style);
+			}), void 0);
+		};
+		const handleStopAll = () => {
+			if (animationInstance) {
+				animationInstance.kill();
+				if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
+			}
+			__vitePreload(() => Promise.resolve().then(() => gsap_exports).then((gsap) => {
+				if (elementRef.current) gsap.default.set(elementRef.current, { clearProps: "all" });
+			}), void 0);
+		};
+		window.addEventListener("builder:play_all_animations", handlePlayAll);
+		window.addEventListener("builder:stop_all_animations", handleStopAll);
+		return () => {
+			window.removeEventListener("builder:play_all_animations", handlePlayAll);
+			window.removeEventListener("builder:stop_all_animations", handleStopAll);
+			if (animationInstance) {
+				animationInstance.kill();
+				if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
+			}
+			__vitePreload(() => Promise.resolve().then(() => gsap_exports).then((gsap) => {
+				if (elementRef.current) gsap.default.set(elementRef.current, { clearProps: "all" });
+			}), void 0);
+		};
+	}, [layer.animation, isActive]);
+	const handleRotateStart = (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		const rect = elementRef.current.getBoundingClientRect();
+		const centerX = rect.left + rect.width / 2;
+		const centerY = rect.top + rect.height / 2;
+		const handleMouseMove = (moveEvent) => {
+			const dx = moveEvent.clientX - centerX;
+			const dy = moveEvent.clientY - centerY;
+			const rotation = (Math.atan2(dy, dx) * (180 / Math.PI) + 90 + 360) % 360;
+			useCanvasStore.getState().updateLayerStyle(layer.id, { rotation: Math.round(rotation) });
+		};
+		const handleMouseUp = () => {
+			document.removeEventListener("mousemove", handleMouseMove);
+			document.removeEventListener("mouseup", handleMouseUp);
+		};
+		document.addEventListener("mousemove", handleMouseMove);
+		document.addEventListener("mouseup", handleMouseUp);
+	};
+	if (layer.type === "text" || layer.type === "dynamic_guest_name") loadFont(layer.style?.fontFamily);
+	if (layer.type === "polaroid") loadFont("Caveat");
+	const innerStructure = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		className: "w-full h-full relative",
+		style: {
+			transform: `rotate(${layer.style?.rotation || 0}deg)`,
+			opacity: layer.style?.opacity ?? 1,
+			willChange: "transform, opacity"
+		},
+		children: [
+			isActive && !layer.isLocked && !isChildOfGroup && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				onMouseDown: handleRotateStart,
+				className: "absolute -top-10 left-1/2 -translate-x-1/2 w-5 h-5 bg-white border-2 border-indigo-500 rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center z-10 shadow hover:bg-indigo-50 transition-colors pointer-events-auto",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+					className: "w-3 h-3 text-indigo-500",
+					fill: "none",
+					stroke: "currentColor",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+						strokeLinecap: "round",
+						strokeLinejoin: "round",
+						strokeWidth: "2",
+						d: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+					})
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-[1.5px] h-5 bg-indigo-500 absolute top-5" })]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				ref: elementRef,
+				className: "w-full h-full",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: `w-full h-full`,
+					style: {
+						transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
+						borderRadius: (() => {
+							if (layer.style?.borderRadius === void 0) return "0px";
+							const r = `${layer.style.borderRadius}px`;
+							switch (layer.style.borderRadiusType) {
+								case "top": return `${r} ${r} 0 0`;
+								case "bottom": return `0 0 ${r} ${r}`;
+								case "left": return `${r} 0 0 ${r}`;
+								case "right": return `0 ${r} ${r} 0`;
+								case "top-left": return `${r} 0 0 0`;
+								case "top-right": return `0 ${r} 0 0`;
+								case "bottom-right": return `0 0 ${r} 0`;
+								case "bottom-left": return `0 0 0 ${r}`;
+								default: return r;
+							}
+						})(),
+						overflow: layer.style?.borderRadius ? "hidden" : "visible",
+						filter: getShadowCss$1(layer.style),
+						background: layer.type === "image" || layer.type === "text" || layer.type === "dynamic_guest_name" ? "transparent" : getGradientCss$1(layer.style),
+						borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : void 0,
+						borderStyle: layer.style?.borderStyle || (layer.style?.borderWidth ? "solid" : void 0),
+						borderColor: layer.style?.borderColor,
+						boxSizing: "border-box"
+					},
+					children: [
+						(layer.type === "text" || layer.type === "dynamic_guest_name") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: `w-full h-full overflow-hidden flex outline-none border-none ${isEditing ? "no-drag !select-text !pointer-events-auto" : ""}`,
+							style: {
+								color: layer.style?.color || "#000000",
+								fontSize: layer.style?.fontSize ? String(layer.style.fontSize).includes("px") || String(layer.style.fontSize).includes("rem") || String(layer.style.fontSize).includes("em") ? layer.style.fontSize : `${layer.style.fontSize}px` : "16px",
+								fontFamily: layer.style?.fontFamily || "sans-serif",
+								fontWeight: layer.style?.fontWeight || "normal",
+								textAlign: layer.style?.textAlign || "left",
+								justifyContent: layer.style?.textAlign === "center" ? "center" : layer.style?.textAlign === "right" ? "flex-end" : "flex-start",
+								alignItems: "center",
+								textDecoration: layer.style?.textDecoration,
+								fontStyle: layer.style?.fontStyle,
+								letterSpacing: layer.style?.letterSpacing,
+								lineHeight: layer.style?.lineHeight,
+								textShadow: layer.style?.textShadow,
+								cursor: isEditing ? "text" : layer.isLocked ? "default" : "move",
+								userSelect: isEditing ? "text" : "none",
+								WebkitUserSelect: isEditing ? "text" : "none"
+							},
+							contentEditable: isEditing,
+							suppressContentEditableWarning: true,
+							onDoubleClick: (e) => {
+								e.stopPropagation();
+								setIsEditing(true);
+								const target = e.target;
+								setTimeout(() => {
+									target.focus();
+									const range = document.createRange();
+									range.selectNodeContents(target);
+									const sel = window.getSelection();
+									sel.removeAllRanges();
+									sel.addRange(range);
+								}, 50);
+							},
+							onBlur: (e) => {
+								setIsEditing(false);
+								useCanvasStore.getState().updateLayerContent(layer.id, e.target.innerText);
+							},
+							children: layer.content
+						}),
+						layer.type === "shape" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "w-full h-full relative pointer-events-none",
+							style: {
+								backgroundColor: layer.style?.backgroundColor || "#e0e7ff",
+								borderRadius: layer.style?.borderRadius || "0px"
+							}
+						}),
+						(() => {
+							if (layer.type === "lottie") {
+								let lottieData = layer.lottieJsonObj || layer.animationData;
+								if (typeof lottieData === "string") try {
+									lottieData = JSON.parse(lottieData);
+								} catch (e) {}
+								else if (lottieData && typeof lottieData === "object") lottieData = JSON.parse(JSON.stringify(lottieData));
+								if (lottieData) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "w-full h-full relative pointer-events-none",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Player, {
+										src: lottieData,
+										loop: layer.animation?.loop !== false,
+										autoplay: true,
+										style: {
+											width: "100%",
+											height: "100%"
+										}
+									})
+								});
+							}
+							return null;
+						})(),
+						layer.type === "image" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "w-full h-full relative pointer-events-none",
+							children: [
+								isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									onClick: () => {
+										useUIStore.getState().setAssetSelectionTarget({
+											layerId: layer.id,
+											layerType: "image",
+											multiple: false
+										});
+									},
+									className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
+									title: "Ubah Gambar",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+										className: "w-4 h-4",
+										fill: "none",
+										stroke: "currentColor",
+										viewBox: "0 0 24 24",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+											strokeLinecap: "round",
+											strokeLinejoin: "round",
+											strokeWidth: "2",
+											d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+										})
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+									id: `layer-img-${layer.id}`,
+									src: layer.style?.url || layer.url,
+									alt: "asset",
+									draggable: false,
+									onPointerDown: handleCropPointerDown,
+									onPointerMove: handleCropPointerMove,
+									onPointerUp: handleCropPointerUp,
+									className: `w-full h-full object-cover pointer-events-none ${isCropMode ? "cursor-move pointer-events-auto no-drag" : ""}`,
+									style: {
+										opacity: layer.style?.opacity !== void 0 ? layer.style.opacity : 1,
+										objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
+										filter: `${layer.style?.imageFilter && layer.style.imageFilter !== "none" ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + " " : ""}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
+									}
+								}),
+								layer.style?.imageFilter && getFilterById(layer.style.imageFilter).getOverlay && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { dangerouslySetInnerHTML: { __html: getFilterById(layer.style.imageFilter).getOverlay(layer.style.imageFilterIntensity ?? 100, layer) } })
+							]
+						}),
+						layer.type === "frame" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "w-full h-full relative pointer-events-none flex items-center justify-center overflow-hidden",
+							children: [isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: () => {
+									useUIStore.getState().setAssetSelectionTarget({
+										layerId: layer.id,
+										layerType: "frame",
+										multiple: true
+									});
+								},
+								className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
+								title: "Isi Wadah Bingkai",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+									className: "w-4 h-4",
+									fill: "none",
+									stroke: "currentColor",
+									viewBox: "0 0 24 24",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+										strokeLinecap: "round",
+										strokeLinejoin: "round",
+										strokeWidth: "2",
+										d: "M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+									})
+								})
+							}), layer.style?.mediaUrls && layer.style.mediaUrls.length > 0 ? layer.style.mediaUrls[0].startsWith("data:video") || layer.style.mediaUrls[0].endsWith(".mp4") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("video", {
+								src: layer.style.mediaUrls[0],
+								autoPlay: true,
+								muted: true,
+								loop: true,
+								playsInline: true,
+								className: "w-full h-full object-cover pointer-events-none"
+							}) : layer.style.mediaUrls.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "w-full h-full relative",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+									src: layer.style.mediaUrls[0],
+									className: "w-full h-full object-cover pointer-events-none",
+									alt: "Frame"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "absolute bottom-2 left-1/2 -translate-x-1/2 text-[9px] bg-black/60 text-white px-2 py-1 rounded-full whitespace-nowrap",
+									children: [
+										"Album (",
+										layer.style.mediaUrls.length,
+										" Foto)"
+									]
+								})]
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+								src: layer.style.mediaUrls[0],
+								alt: "Frame Media",
+								className: "w-full h-full object-cover pointer-events-none"
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "w-full h-full flex items-center justify-center bg-gray-100",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+									className: "w-10 h-10 text-gray-300",
+									fill: "none",
+									stroke: "currentColor",
+									viewBox: "0 0 24 24",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+										strokeLinecap: "round",
+										strokeLinejoin: "round",
+										strokeWidth: "1.5",
+										d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+									})
+								})
+							})]
+						}),
+						layer.type === "polaroid" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "w-full h-full relative pointer-events-none bg-white flex flex-col p-3",
+							style: {
+								paddingBottom: "3.5rem",
+								transform: layer.style?.polaroidData?.type === "tilted" ? "rotate(-3deg)" : "none",
+								boxShadow: layer.style?.isShadowActive ? "none" : "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
+							},
+							children: [
+								layer.style?.polaroidData?.type === "taped" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-8 bg-amber-100/60 rotate-2 z-10",
+									style: { backdropFilter: "blur(2px)" }
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "w-full flex-1 relative overflow-hidden bg-gray-100 border border-gray-200",
+									children: [isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										onClick: () => {
+											useUIStore.getState().setAssetSelectionTarget({
+												layerId: layer.id,
+												layerType: "polaroid",
+												multiple: false
+											});
+										},
+										className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
+										title: "Ubah Foto Polaroid",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+											className: "w-4 h-4",
+											fill: "none",
+											stroke: "currentColor",
+											viewBox: "0 0 24 24",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+												strokeLinecap: "round",
+												strokeLinejoin: "round",
+												strokeWidth: "2",
+												d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+											})
+										})
+									}), layer.style?.polaroidData?.image ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+										src: layer.style.polaroidData.image,
+										alt: "Polaroid",
+										draggable: false,
+										onPointerDown: handleCropPointerDown,
+										onPointerMove: handleCropPointerMove,
+										onPointerUp: handleCropPointerUp,
+										className: `w-full h-full object-cover ${isCropMode ? "cursor-move pointer-events-auto no-drag" : ""}`,
+										style: {
+											objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
+											filter: `${layer.style?.brightness ? `brightness(${layer.style.brightness}) ` : ""}${layer.style?.contrast ? `contrast(${layer.style.contrast}) ` : ""}${layer.style?.saturate ? `saturate(${layer.style.saturate}) ` : ""}${layer.style?.blur ? `blur(${layer.style.blur}px) ` : ""}`.trim() || "none"
+										}
+									}), layer.style?.polaroidData?.filterId && layer.style.polaroidData.filterId !== "none" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { dangerouslySetInnerHTML: { __html: getFilterById(layer.style.polaroidData.filterId)?.getOverlay(100, {
+										type: "polaroid",
+										style: layer.style
+									}) || "" } })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "w-full h-full flex items-center justify-center text-gray-400",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+											className: "w-8 h-8",
+											fill: "none",
+											stroke: "currentColor",
+											viewBox: "0 0 24 24",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+												strokeLinecap: "round",
+												strokeLinejoin: "round",
+												strokeWidth: "2",
+												d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+											})
+										})
+									})]
+								}),
+								layer.style?.polaroidData?.caption && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "absolute bottom-3 left-0 w-full text-center text-gray-800 text-[18px] font-bold",
+									style: {
+										fontFamily: "'Caveat', cursive",
+										lineHeight: 1
+									},
+									children: layer.style.polaroidData.caption
+								})
+							]
+						}),
+						layer.type === "video" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "w-full h-full relative pointer-events-none",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("video", {
+								src: layer.url,
+								autoPlay: true,
+								loop: true,
+								muted: true,
+								playsInline: true,
+								className: "w-full h-full object-cover pointer-events-none",
+								style: { filter: `brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})` }
+							})
+						}),
+						layer.type === "custom_code" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "w-full h-full relative",
+							style: { pointerEvents: layer.isLocked ? "none" : "auto" },
+							children: layer.content && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "w-full h-full",
+								dangerouslySetInnerHTML: { __html: layer.content }
+							})
+						}),
+						layer.type === "custom_path" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+							width: "100%",
+							height: "100%",
+							viewBox: "0 0 100 100",
+							preserveAspectRatio: "none",
+							className: "pointer-events-none",
+							style: { overflow: "visible" },
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+								id: layer.id + "_path",
+								d: "M 10 90 Q 30 10 70 50 T 90 10",
+								fill: "transparent",
+								stroke: isActive ? "#6366f1" : "rgba(99,102,241,0.2)",
+								strokeWidth: "2",
+								strokeDasharray: "4 4"
+							})
+						}),
+						layer.type === "canvas_group" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "w-full h-full relative pointer-events-none",
+							children: layer.children?.map((child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								style: {
+									position: "absolute",
+									left: child.style?.x || 0,
+									top: child.style?.y || 0,
+									width: child.style?.width || 100,
+									height: child.style?.height || 100,
+									zIndex: child.style?.zIndex || 1
+								},
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayerElement, {
+									layer: child,
+									isChildOfGroup: true
+								})
+							}, child.id))
+						}),
+						layer.type === "interactive_countdown" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CountdownDisplay$1, {
+							targetDate: layer.style?.countdownTarget,
+							textColor: layer.style?.countdownColor,
+							bgColor: layer.style?.countdownBgColor,
+							bgImage: layer.style?.countdownBgImage,
+							fontFamily: layer.style?.fontFamily,
+							bgOpacity: layer.style?.countdownBgOpacity,
+							gap: layer.style?.countdownGap,
+							showSeconds: layer.style?.countdownShowSeconds,
+							bgStyle: layer.style?.countdownBgStyle
+						}),
+						layer.type === "photo_album" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "w-full h-full pointer-events-none relative flex items-center justify-center overflow-hidden",
+							children: [isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: () => {
+									useUIStore.getState().setAssetSelectionTarget({
+										layerId: layer.id,
+										layerType: "photo_album",
+										multiple: true
+									});
+								},
+								className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
+								title: "Isi Wadah Album",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+									className: "w-4 h-4",
+									fill: "none",
+									stroke: "currentColor",
+									viewBox: "0 0 24 24",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+										strokeLinecap: "round",
+										strokeLinejoin: "round",
+										strokeWidth: "2",
+										d: "M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+									})
+								})
+							}), !layer.style?.albumData?.images || layer.style.albumData.images.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "w-full h-full flex flex-col items-center justify-center bg-gray-100 rounded-xl border-2 border-dashed border-gray-300 overflow-hidden",
+								style: { borderRadius: layer.style?.albumData?.shape === "circle" ? "50%" : layer.style?.albumData?.shape === "rounded" ? "1rem" : layer.style?.albumData?.shape === "pill" ? "9999px" : layer.style?.albumData?.shape === "arch" ? "10rem 10rem 0 0" : "0" },
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+									className: "w-8 h-8 text-gray-400 mb-2",
+									fill: "none",
+									stroke: "currentColor",
+									viewBox: "0 0 24 24",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+										strokeLinecap: "round",
+										strokeLinejoin: "round",
+										strokeWidth: "2",
+										d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+									})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[10px] font-bold text-gray-400",
+									children: "Wadah Album Kosong"
+								})]
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Swiper, {
+								modules: [
+									Autoplay,
+									EffectCards,
+									EffectCoverflow,
+									EffectFade
+								],
+								effect: layer.style?.albumData?.animationStyle || "slide",
+								direction: layer.style?.albumData?.direction || "horizontal",
+								speed: layer.style?.albumData?.speed || 500,
+								observer: true,
+								observeParents: true,
+								grabCursor: false,
+								centeredSlides: true,
+								slidesPerView: 1,
+								loop: layer.style?.albumData?.animationStyle === "cards" ? false : (layer.style?.albumData?.images?.length || 0) > 2,
+								autoplay: {
+									delay: layer.style?.albumData?.autoplayDelay || 2500,
+									disableOnInteraction: false
+								},
+								coverflowEffect: layer.style?.albumData?.animationStyle === "coverflow" ? {
+									rotate: 50,
+									stretch: 0,
+									depth: 100,
+									modifier: 1,
+									slideShadows: false
+								} : void 0,
+								fadeEffect: layer.style?.albumData?.animationStyle === "fade" ? { crossFade: true } : void 0,
+								cardsEffect: layer.style?.albumData?.animationStyle === "cards" ? { slideShadows: false } : void 0,
+								style: {
+									width: "100%",
+									height: "100%"
+								},
+								children: (layer.style?.albumData?.images || []).map((img, idx) => {
+									const polaroidTheme = layer.style?.albumData?.polaroidTheme;
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SwiperSlide, {
+										style: {
+											width: "100%",
+											height: "100%"
+										},
+										children: polaroidTheme && polaroidTheme !== "none" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: `polaroid-wrapper polaroid-${polaroidTheme}`,
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "polaroid-image-container",
+												style: { borderRadius: layer.style?.albumData?.shape === "circle" ? "50%" : layer.style?.albumData?.shape === "rounded" ? "1rem" : layer.style?.albumData?.shape === "pill" ? "9999px" : layer.style?.albumData?.shape === "arch" ? "10rem 10rem 0 0" : "0" },
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+													src: img.url,
+													alt: img.caption || `Slide ${idx + 1}`,
+													style: {
+														width: "100%",
+														height: "100%",
+														objectFit: "cover",
+														filter: `${img.filterId && img.filterId !== "none" ? getFilterById(img.filterId).getCss(img.filterIntensity ?? 100) + " " : ""}brightness(${img.brightness ?? 1}) contrast(${img.contrast ?? 1}) saturate(${img.saturate ?? 1}) blur(${img.blur ?? 0}px)`.trim()
+													}
+												})
+											}), img.caption && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "polaroid-caption",
+												children: img.caption
+											})]
+										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											style: {
+												position: "relative",
+												width: "100%",
+												height: "100%",
+												overflow: "hidden",
+												borderRadius: layer.style?.albumData?.shape === "circle" ? "50%" : layer.style?.albumData?.shape === "rounded" ? "1rem" : layer.style?.albumData?.shape === "pill" ? "9999px" : layer.style?.albumData?.shape === "arch" ? "10rem 10rem 0 0" : "0"
+											},
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+												src: img.url,
+												alt: img.caption || `Slide ${idx + 1}`,
+												style: {
+													width: "100%",
+													height: "100%",
+													objectFit: "cover",
+													filter: getFilterById(img.filterId) || "none"
+												}
+											})
+										})
+									}, idx);
+								})
+							}, `${layer.style?.albumData?.animationStyle || "slide"}-${layer.style?.albumData?.direction || "horizontal"}-${layer.style?.albumData?.speed || 500}-${layer.style?.albumData?.autoplayDelay || 2500}`)]
+						}),
+						layer.type === "interactive_rsvp" && (() => {
+							const theme = layer.style?.rsvpTheme || "solid";
+							let containerStyle = {
+								backgroundColor: layer.style?.backgroundColor || "#ffffff",
+								backgroundImage: layer.style?.backgroundImageUrl ? `url(${layer.style.backgroundImageUrl})` : "none",
+								backgroundSize: "cover",
+								backgroundPosition: "center",
+								borderRadius: layer.style?.borderRadius || "0.75rem",
+								borderWidth: layer.style?.borderWidth,
+								borderColor: layer.style?.borderColor,
+								borderStyle: layer.style?.borderWidth ? "solid" : "none",
+								color: layer.style?.textColor || "#1f2937"
+							};
+							const hexToRgba = (hex, alpha) => {
+								if (!hex || !hex.startsWith("#")) return hex;
+								return `rgba(${parseInt(hex.slice(1, 3), 16) || 0}, ${parseInt(hex.slice(3, 5), 16) || 0}, ${parseInt(hex.slice(5, 7), 16) || 0}, ${alpha})`;
+							};
+							const finalInputBg = hexToRgba(layer.style?.inputBackgroundColor || "#f3f4f6", layer.style?.inputBackgroundOpacity ?? 1);
+							let inputStyle = {
+								backgroundColor: finalInputBg,
+								color: layer.style?.textColor || "#9ca3af",
+								border: "none",
+								borderRadius: "0.5rem"
+							};
+							let buttonStyle = {
+								backgroundColor: layer.style?.buttonColor || "#4f46e5",
+								color: layer.style?.buttonTextColor || "#ffffff",
+								borderRadius: "0.5rem"
+							};
+							let wrapperClass = "w-full h-full flex flex-col items-center justify-center pointer-events-none p-4 space-y-3 relative";
+							if (theme === "glass") {
+								containerStyle.backgroundColor = layer.style?.backgroundColor ? layer.style.backgroundColor : "rgba(255, 255, 255, 0.2)";
+								containerStyle.backdropFilter = "blur(10px)";
+								containerStyle.boxShadow = "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)";
+								inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : "rgba(255, 255, 255, 0.5)";
+								inputStyle.backdropFilter = "blur(4px)";
+							} else if (theme === "classic") {
+								containerStyle.borderStyle = "double";
+								containerStyle.borderWidth = layer.style?.borderWidth || "6px";
+								containerStyle.borderColor = layer.style?.borderColor || "#d97706";
+								containerStyle.borderRadius = "0";
+								inputStyle.border = "1px solid " + (layer.style?.borderColor || "#d97706");
+								inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : "transparent";
+								buttonStyle.borderRadius = "0";
+							} else if (theme === "romance") {
+								containerStyle.borderRadius = "2rem";
+								containerStyle.boxShadow = "0 10px 25px -5px rgba(225,29,72,0.1), 0 8px 10px -6px rgba(225,29,72,0.1)";
+								inputStyle.borderRadius = "1rem";
+								buttonStyle.borderRadius = "1rem";
+							} else if (theme === "adat") {
+								containerStyle.borderRadius = "3rem 3rem 0 0";
+								containerStyle.borderTop = `8px solid ${layer.style?.borderColor || "#8b5a2b"}`;
+								containerStyle.borderBottom = `8px solid ${layer.style?.borderColor || "#8b5a2b"}`;
+								inputStyle.borderBottom = "2px solid " + (layer.style?.borderColor || "#8b5a2b");
+								inputStyle.borderRadius = "0";
+								inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : "transparent";
+							} else if (theme === "minimalist") {
+								containerStyle.borderStyle = "dashed";
+								containerStyle.borderWidth = "1px";
+								containerStyle.borderColor = layer.style?.borderColor || "#9ca3af";
+								inputStyle.borderBottom = "1px solid #d1d5db";
+								inputStyle.borderRadius = "0";
+								inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : "transparent";
+							} else if (theme === "rustic") {
+								containerStyle.borderStyle = "solid";
+								containerStyle.borderWidth = "4px";
+								containerStyle.borderColor = layer.style?.borderColor || "#78716c";
+								containerStyle.outline = "2px dashed " + (layer.style?.borderColor || "#78716c");
+								containerStyle.outlineOffset = "-8px";
+							}
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: wrapperClass,
+								style: containerStyle,
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+									className: "font-serif text-center z-10",
+									style: {
+										fontSize: layer.style?.fontSize || "1.25rem",
+										color: layer.style?.textColor || "#1f2937",
+										marginBottom: "4px"
+									},
+									children: "Kehadiran Anda"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "w-full flex-1 flex flex-col gap-2 z-10",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "h-10 w-full flex items-center px-3 text-sm shrink-0",
+											style: inputStyle,
+											children: "Nama Lengkap..."
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "h-10 w-full flex items-center px-3 text-sm shrink-0",
+											style: inputStyle,
+											children: "Pilih Kehadiran..."
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "flex-1 w-full flex items-start p-3 text-sm min-h-[3rem]",
+											style: inputStyle,
+											children: "Pesan/Doa..."
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "h-10 w-full flex items-center justify-center font-bold mt-1 shrink-0",
+											style: buttonStyle,
+											children: "Kirim RSVP"
+										})
+									]
+								})]
+							});
+						})(),
+						layer.type === "interactive_map" && (() => {
+							const mapOpacity = layer.style?.mapOpacity ?? 1;
+							const isButtonOnly = layer.style?.mapDisplayType === "button_only";
+							const buttonText = layer.style?.mapButtonText || "Buka Google Maps";
+							const buttonColor = layer.style?.mapButtonColor || "#ef4444";
+							const buttonTextColor = layer.style?.mapButtonTextColor || "#ffffff";
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "w-full h-full bg-gray-200 flex items-center justify-center rounded-xl border border-gray-300 pointer-events-none relative overflow-hidden",
+								style: {
+									opacity: mapOpacity,
+									background: isButtonOnly ? "transparent" : void 0,
+									borderColor: isButtonOnly ? "transparent" : void 0
+								},
+								children: [!isButtonOnly && (layer.content && layer.content.includes("<iframe") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "w-full h-full pointer-events-none [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0",
+									dangerouslySetInnerHTML: { __html: layer.content }
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "absolute inset-0 w-full h-full",
+									style: {
+										backgroundImage: "url(/map_placeholder.png)",
+										backgroundSize: "cover",
+										backgroundPosition: "center"
+									}
+								})), (!layer.content?.includes("<iframe") || isButtonOnly) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur px-5 py-2.5 rounded-full shadow-md flex items-center gap-2.5 text-sm font-bold z-10 pointer-events-none",
+									style: {
+										backgroundColor: isButtonOnly ? buttonColor : "rgba(255, 255, 255, 0.95)",
+										color: isButtonOnly ? buttonTextColor : "#1f2937"
+									},
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+										className: "w-5 h-5",
+										style: { color: isButtonOnly ? buttonTextColor : "#ef4444" },
+										fill: "currentColor",
+										viewBox: "0 0 24 24",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" })
+									}), buttonText]
+								})]
+							});
+						})(),
+						layer.type === "interactive_copy" && (() => {
+							const bgOpacity = layer.style?.bgOpacity ?? 1;
+							const textOpacity = layer.style?.textOpacity ?? 1;
+							const hexToRgba = (hex, opacity = 1) => {
+								hex = (hex || "#ffffff").replace("#", "");
+								if (hex.length === 3) hex = hex.split("").map((x) => x + x).join("");
+								return `rgba(${parseInt(hex.substring(0, 2), 16) || 0}, ${parseInt(hex.substring(2, 4), 16) || 0}, ${parseInt(hex.substring(4, 6), 16) || 0}, ${opacity})`;
+							};
+							const bgColor = layer.style?.backgroundColor || "#ffffff";
+							const textColor = layer.style?.textColor || "#1f2937";
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "w-full h-full flex items-center justify-between shadow-sm pointer-events-none px-4",
+								style: {
+									backgroundColor: hexToRgba(bgColor, bgOpacity),
+									borderRadius: layer.style?.borderRadius || "0.75rem",
+									borderWidth: layer.style?.borderWidth || "1px",
+									borderColor: layer.style?.borderColor || "#e5e7eb",
+									borderStyle: layer.style?.borderWidth ? "solid" : layer.style?.borderColor ? "solid" : "none",
+									boxShadow: layer.style?.isShadowActive ? `0px ${layer.style?.shadowY || 4}px 6px -1px rgba(0, 0, 0, 0.1)` : "none"
+								},
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-base font-mono font-bold w-full",
+									style: { color: hexToRgba(textColor, textOpacity) },
+									children: layer.content || ""
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ml-2",
+									style: {
+										backgroundColor: layer.style?.iconBgColor || "#e0e7ff",
+										color: layer.style?.iconColor || "#4f46e5"
+									},
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+										className: "w-4 h-4",
+										fill: "none",
+										stroke: "currentColor",
+										viewBox: "0 0 24 24",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+											strokeLinecap: "round",
+											strokeLinejoin: "round",
+											strokeWidth: "2",
+											d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+										})
+									})
+								})]
+							});
+						})(),
+						layer.type === "interactive_comments" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "w-full h-full flex flex-col pointer-events-none overflow-hidden",
+							style: {
+								backgroundColor: layer.style?.backgroundColor || "#f8fafc",
+								borderRadius: layer.style?.borderRadius || "1rem",
+								padding: layer.style?.padding || "1rem",
+								color: layer.style?.color || "#333333",
+								borderWidth: layer.style?.borderWidth || 0,
+								borderColor: layer.style?.borderColor || "#e2e8f0",
+								borderStyle: layer.style?.borderWidth ? "solid" : "none"
+							},
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+								className: "text-sm font-bold mb-3 border-b border-gray-200 pb-2",
+								style: { color: layer.style?.color || "#333333" },
+								children: "Ucapan & Doa"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "flex-1 overflow-hidden opacity-50 flex flex-col items-center justify-center",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[10px] text-gray-400",
+									children: "(Daftar komentar akan muncul di sini saat tamu mengisi form RSVP)"
+								})
+							})]
+						})
+					]
+				}), " "]
+			}),
+			" "
+		]
+	});
+	const snapTargetsRef = (0, import_react.useRef)([]);
+	const pathRecordingRef = (0, import_react.useRef)([]);
+	if (isChildOfGroup) return innerStructure;
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Rnd, {
+		ref: rndRef,
+		size: {
+			width: localSize.width,
+			height: localSize.height
+		},
+		defaultPosition: {
+			x: layer.style?.x || 0,
+			y: layer.style?.y || 0
+		},
+		onDrag: (e, d) => {
+			let newX = d.x;
+			let newY = d.y;
+			let activeLines = [];
+			const SNAP_THRESHOLD = 5;
+			const store = useCanvasStore.getState();
+			const isDesktop = sectionId === "desktop";
+			const section = isDesktop ? { layout: { height: 720 } } : store.sections.find((s) => s.id === sectionId);
+			const sectionWidth = isDesktop ? 1280 : 375;
+			const sectionHeight = parseInt(section?.layout?.height || 844);
+			const elWidth = typeof localSize.width === "string" ? parseFloat(localSize.width) : localSize.width;
+			const elHeight = typeof localSize.height === "string" ? parseFloat(localSize.height) : localSize.height;
+			const elCenterX = newX + elWidth / 2;
+			const elCenterY = newY + elHeight / 2;
+			if (!e.shiftKey) {
+				const centerX = sectionWidth / 2;
+				if (Math.abs(elCenterX - centerX) < SNAP_THRESHOLD) {
+					newX = centerX - elWidth / 2;
+					activeLines.push({
+						axis: "x",
+						position: centerX,
+						type: "center"
+					});
+				}
+				const centerY = sectionHeight / 2;
+				if (Math.abs(elCenterY - centerY) < SNAP_THRESHOLD) {
+					newY = centerY - elHeight / 2;
+					activeLines.push({
+						axis: "y",
+						position: centerY,
+						type: "center"
+					});
+				}
+				snapTargetsRef.current.forEach(({ ox, oy, ow, oh }) => {
+					if (Math.abs(newX - ox) < SNAP_THRESHOLD) {
+						newX = ox;
+						activeLines.push({
+							axis: "x",
+							position: ox
+						});
+					}
+					if (Math.abs(newY - oy) < SNAP_THRESHOLD) {
+						newY = oy;
+						activeLines.push({
+							axis: "y",
+							position: oy
+						});
+					}
+					const otherCX = ox + ow / 2;
+					if (Math.abs(newX + elWidth / 2 - otherCX) < SNAP_THRESHOLD) {
+						newX = otherCX - elWidth / 2;
+						activeLines.push({
+							axis: "x",
+							position: otherCX
+						});
+					}
+					const otherCY = oy + oh / 2;
+					if (Math.abs(newY + elHeight / 2 - otherCY) < SNAP_THRESHOLD) {
+						newY = otherCY - elHeight / 2;
+						activeLines.push({
+							axis: "y",
+							position: otherCY
+						});
+					}
+				});
+			}
+			setLocalPos({
+				x: newX,
+				y: newY
+			});
+			localPosRef.current = {
+				x: newX,
+				y: newY
+			};
+			if (rndRef.current && (newX !== d.x || newY !== d.y)) rndRef.current.updatePosition({
+				x: newX,
+				y: newY
+			});
+			if (useUIStore.getState().isDrawingPath) {
+				const last = pathRecordingRef.current[pathRecordingRef.current.length - 1];
+				if (!last || Math.hypot(elCenterX - last.x, elCenterY - last.y) > 5) {
+					pathRecordingRef.current.push({
+						x: elCenterX,
+						y: elCenterY
+					});
+					useUIStore.getState().setCurrentPathPoints([...pathRecordingRef.current]);
+				}
+			} else useUIStore.getState().setSnapLines(activeLines);
+		},
+		onDragStart: () => {
+			setIsDragging(true);
+			if (sectionId !== "desktop") useCanvasStore.getState().setActiveSection(sectionId);
+			if (useUIStore.getState().isDrawingPath) {
+				pathRecordingRef.current = [];
+				const elWidth = typeof localSize.width === "string" ? parseFloat(localSize.width) : localSize.width;
+				const elHeight = typeof localSize.height === "string" ? parseFloat(localSize.height) : localSize.height;
+				const startPoint = {
+					x: localPos.x + elWidth / 2,
+					y: localPos.y + elHeight / 2
+				};
+				pathRecordingRef.current.push(startPoint);
+				useUIStore.getState().setCurrentPathPoints([startPoint]);
+			}
+			const store = useCanvasStore.getState();
+			const isDesktop = sectionId === "desktop";
+			let otherLayers = [];
+			if (isDesktop) otherLayers = (store.global_settings?.desktop_layers || []).filter((l) => l.id !== layer.id);
+			else otherLayers = store.sections.reduce((acc, s) => {
+				if (s.id !== sectionId) return acc;
+				let layers = [];
+				s.layers.forEach((l) => {
+					if (l.id !== layer.id) layers.push(l);
+					if (l.children) l.children.forEach((c) => {
+						if (c.id !== layer.id) layers.push(c);
+					});
+				});
+				return acc.concat(layers);
+			}, []);
+			snapTargetsRef.current = otherLayers.map((other) => ({
+				ox: parseFloat(other.style?.x || 0),
+				oy: parseFloat(other.style?.y || 0),
+				ow: parseFloat(other.style?.width || 100),
+				oh: parseFloat(other.style?.height || 100)
+			}));
+		},
+		onDragStop: (e, d) => {
+			setIsDragging(false);
+			useUIStore.getState().setSnapLines([]);
+			let wasDrawing = false;
+			if (useUIStore.getState().isDrawingPath) {
+				wasDrawing = true;
+				useUIStore.getState().setIsDrawingPath(false);
+				useUIStore.getState().setCurrentPathPoints([]);
+				const points = pathRecordingRef.current;
+				if (points.length > 2) {
+					const svgPath = pointsToSmoothedSvgPath(points);
+					useCanvasStore.getState().updateLayerAnimation(layer.id, {
+						idle: "custom_path",
+						custom_path_data: {
+							svgPath,
+							ease: "power2.inOut",
+							duration: 5,
+							autoRotate: false
+						}
+					});
+				}
+				pathRecordingRef.current = [];
+			}
+			if (!wasDrawing) {
+				const finalPos = localPosRef.current;
+				if (finalPos.x !== layer.style?.x || finalPos.y !== layer.style?.y) useCanvasStore.getState().updateLayerStyle(layer.id, {
+					x: finalPos.x,
+					y: finalPos.y
+				});
+			} else {
+				const originalX = parseFloat(layer.style?.x || 0);
+				const originalY = parseFloat(layer.style?.y || 0);
+				setLocalPos({
+					x: originalX,
+					y: originalY
+				});
+				localPosRef.current = {
+					x: originalX,
+					y: originalY
+				};
+			}
+		},
+		onResize: (e, direction, ref, delta, position) => {
+			setLocalSize({
+				width: ref.style.width,
+				height: ref.style.height
+			});
+			setLocalPos(position);
+		},
+		onResizeStop: (e, direction, ref, delta, position) => {
+			const currentWidth = typeof layer.style?.width === "number" ? `${layer.style.width}px` : layer.style?.width;
+			const currentHeight = typeof layer.style?.height === "number" ? `${layer.style.height}px` : layer.style?.height;
+			if (position.x !== layer.style?.x || position.y !== layer.style?.y || ref.style.width !== currentWidth || ref.style.height !== currentHeight) useCanvasStore.getState().updateLayerStyle(layer.id, {
+				x: position.x,
+				y: position.y,
+				width: ref.style.width,
+				height: ref.style.height
+			});
+		},
+		disableDragging: layer.isLocked || isEditing,
+		enableResizing: isActive && !layer.isLocked && !isEditing,
+		cancel: ".no-drag",
+		scale: zoom,
+		style: {
+			zIndex: layer.style?.zIndex || 1,
+			opacity: layer.style?.opacity ?? 1
+		},
+		resizeHandleComponent: isActive && !layer.isLocked ? {
+			topLeft: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResizeHandle, {}),
+			topRight: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResizeHandle, {}),
+			bottomLeft: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResizeHandle, {}),
+			bottomRight: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResizeHandle, {})
+		} : {
+			topLeft: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, {}),
+			topRight: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, {}),
+			bottomLeft: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, {}),
+			bottomRight: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, {})
+		},
+		className: `layer-wrapper ${layer.isLocked ? isActive ? "pointer-events-auto cursor-default" : "pointer-events-none" : "pointer-events-auto hover:cursor-move"} ${isActive ? "active-layer outline outline-1 outline-indigo-500 rounded" : ""}`,
+		onClick: (e) => {
+			if (layer.isLocked && !isActive) return;
+			e.stopPropagation();
+			if (sectionId !== "desktop") useCanvasStore.getState().setActiveSection(sectionId);
+			useCanvasStore.getState().setActiveLayer(layer.id, e.shiftKey || e.ctrlKey || e.metaKey);
+		},
+		onMouseDown: (e) => {
+			e.stopPropagation();
+		},
+		children: [isActive && !layer.isLocked && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "absolute -top-10 right-0 flex items-center bg-white rounded shadow-md border border-gray-200 z-50 pointer-events-auto overflow-hidden",
+			onMouseDown: (e) => e.stopPropagation(),
+			children: [(layer.type === "text" || layer.type === "dynamic_guest_name") && !isEditing && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				onClick: (e) => {
+					e.stopPropagation();
+					setIsEditing(true);
+					setTimeout(() => {
+						if (elementRef.current) {
+							const target = elementRef.current.querySelector("[contenteditable]");
+							if (target) {
+								target.focus();
+								const range = document.createRange();
+								range.selectNodeContents(target);
+								const sel = window.getSelection();
+								sel.removeAllRanges();
+								sel.addRange(range);
+							}
+						}
+					}, 50);
+				},
+				className: "w-8 h-8 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors border-r border-gray-100",
+				title: "Edit Teks",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+					className: "w-4 h-4",
+					fill: "none",
+					stroke: "currentColor",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+						strokeLinecap: "round",
+						strokeLinejoin: "round",
+						strokeWidth: "2",
+						d: "M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+					})
+				})
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				onClick: (e) => {
+					e.stopPropagation();
+					useCanvasStore.getState().toggleLayerLock(layer.id);
+					useCanvasStore.getState().setActiveLayer(null);
+				},
+				className: "w-8 h-8 flex items-center justify-center text-gray-500 hover:text-amber-600 hover:bg-amber-50 transition-colors",
+				title: "Kunci Elemen",
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+					className: "w-4 h-4",
+					fill: "none",
+					stroke: "currentColor",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+						strokeLinecap: "round",
+						strokeLinejoin: "round",
+						strokeWidth: "2",
+						d: "M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
+					})
+				})
+			})]
+		}), innerStructure]
+	}, `rnd-${layer.id}`);
+};
+//#endregion
 //#region resources/js/Builder/components/Canvas/IframePreview.jsx
-var import_jsx_runtime = require_jsx_runtime();
 var IframePreview = ({ htmlContent, style }) => {
 	const iframeRef = (0, import_react.useRef)(null);
 	(0, import_react.useEffect)(() => {
@@ -23484,7 +26943,7 @@ function updateColorValue(data, decrease, delta) {
 		}
 	}
 	if (data.velocity && decay !== identity) data.velocity *= decay;
-	data.value = clamp$1(data.value, min, max);
+	data.value = clamp$2(data.value, min, max);
 }
 function updateColor(color, delta) {
 	if (!color) return;
@@ -24488,7 +27947,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-Wm4d0mXf.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BNM56lQP.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -25296,7 +28755,7 @@ var getShadowCss = (style) => {
 	const rgbaColor = hexToRgba(style.shadowColor || "#000000", (style.shadowOpacity ?? .5) * 100);
 	return `drop-shadow(${x}px ${y}px ${blur}px ${rgbaColor})`;
 };
-var PublicLayer = ({ layer }) => {
+var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 	if (layer.isHidden) return null;
 	const elementRef = (0, import_react.useRef)(null);
 	const [rsvpForm, setRsvpForm] = (0, import_react.useState)({
@@ -25340,18 +28799,25 @@ var PublicLayer = ({ layer }) => {
 		}
 	}, [layer.type]);
 	(0, import_react.useEffect)(() => {
-		let animationInstance = null;
-		if (layer.animation && elementRef.current) animationInstance = applyAnimation(elementRef.current, layer.animation, false, layer.style);
+		if (!elementRef.current) return;
+		if (!isCoverPage && !isOpened) return;
+		let animationCtx = null;
+		if (layer.animation) animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style);
+		return () => {
+			if (animationCtx && animationCtx.kill) animationCtx.kill();
+		};
+	}, [
+		layer,
+		isOpened,
+		isCoverPage
+	]);
+	(0, import_react.useEffect)(() => {
 		const handlePlayExit = () => {
 			if (layer.animation?.exit && elementRef.current) applyExitAnimation(elementRef.current, layer.animation, layer.style);
 		};
 		window.addEventListener("builder:play_exit_animations", handlePlayExit);
 		return () => {
 			window.removeEventListener("builder:play_exit_animations", handlePlayExit);
-			if (animationInstance) {
-				animationInstance.kill();
-				if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
-			}
 		};
 	}, [layer.animation]);
 	const handleInteraction = (e) => {
@@ -26125,7 +29591,11 @@ var PublicLayer = ({ layer }) => {
 								height: "100%",
 								position: "relative"
 							},
-							children: layer.children?.map((child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PublicLayer, { layer: child }, child.id))
+							children: layer.children?.map((child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PublicLayer, {
+								layer: child,
+								isOpened,
+								isCoverPage
+							}, child.id))
 						}),
 						layer.custom_injection && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { dangerouslySetInnerHTML: { __html: layer.custom_injection } })
 					]
@@ -26142,6 +29612,16 @@ var PublicCanvas = ({ config }) => {
 	const [scale, setScale] = (0, import_react.useState)(1);
 	const [scaledHeight, setScaledHeight] = (0, import_react.useState)("auto");
 	const [isOpened, setIsOpened] = (0, import_react.useState)(false);
+	(0, import_react.useEffect)(() => {
+		if (isOpened) {
+			setTimeout(() => {
+				ScrollTrigger.refresh();
+			}, 50);
+			setTimeout(() => {
+				ScrollTrigger.refresh();
+			}, 1300);
+		}
+	}, [isOpened]);
 	const [transitionType, setTransitionType] = (0, import_react.useState)("slide_up");
 	const containerRef = (0, import_react.useRef)(null);
 	const innerRef = (0, import_react.useRef)(null);
@@ -26356,7 +29836,11 @@ var PublicCanvas = ({ config }) => {
 								height: "100%",
 								pointerEvents: "none"
 							},
-							children: !layer.isHidden && layer.children?.map((child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PublicLayer, { layer: child }, child.id))
+							children: !layer.isHidden && layer.children?.map((child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PublicLayer, {
+								layer: child,
+								isOpened,
+								isCoverPage: index === 0
+							}, child.id))
 						}, layer.id))
 					}, section.id);
 				})
@@ -26369,6 +29853,7 @@ var PublicCanvas = ({ config }) => {
 var DesktopThumbnail = ({ settings }) => {
 	const { enabled, media = [], video_loop = true, album_duration = 3e3, transition_speed = 1e3, transition_effect = "fade", overlay_text = "", text_animation = "fade-up", background_color = "#1a1a1a" } = settings?.desktop_thumbnail || {};
 	if (!enabled) return null;
+	const desktopLayers = settings?.desktop_layers || [];
 	const getMediaInfo = (item) => {
 		if (!item) return {
 			url: "",
@@ -26455,17 +29940,48 @@ var DesktopThumbnail = ({ settings }) => {
 			})
 		});
 	};
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "w-full h-full relative overflow-hidden flex items-end justify-start p-12 lg:p-24",
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+		className: "w-full h-full relative overflow-hidden flex items-end justify-start",
 		style: { backgroundColor: background_color },
-		children: [
+		children: desktopLayers.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+			className: "absolute inset-0 w-full h-full z-0",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "w-full h-full relative",
+				style: {
+					position: "absolute",
+					top: 0,
+					left: 0,
+					width: "100%",
+					height: "100%"
+				},
+				children: desktopLayers.map((layer) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					style: {
+						zIndex: layer.style?.zIndex || 1,
+						position: "absolute",
+						top: 0,
+						left: 0,
+						width: "100%",
+						height: "100%",
+						pointerEvents: "none"
+					},
+					children: !layer.isHidden && layer.children?.map((child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						style: { pointerEvents: "auto" },
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayerElement, {
+							layer: child,
+							sectionId: "desktop",
+							isViewer: true
+						})
+					}, child.id))
+				}, layer.id))
+			})
+		}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "absolute inset-0 z-0 w-full h-full",
 				children: renderMedia()
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none z-[1]" }),
 			overlay_text && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: `relative z-10 text-left text-white max-w-3xl pb-12`,
+				className: `relative z-10 text-left text-white max-w-3xl pb-12 p-12 lg:p-24`,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 					className: `font-serif whitespace-pre-line leading-tight drop-shadow-2xl ${text_animation !== "none" ? "animate-" + text_animation : ""}`,
 					style: {
@@ -26475,7 +29991,7 @@ var DesktopThumbnail = ({ settings }) => {
 					children: overlay_text
 				})
 			})
-		]
+		] })
 	});
 };
 //#endregion
@@ -26545,12 +30061,11 @@ var BackgroundAudio = ({ settings }) => {
 		}
 	}, [audioStart, audioEnd]);
 	if (!audioUrl) return null;
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("audio", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("audio", {
 		id: "background-audio",
 		ref: audioRef,
 		loop: audioEnd <= 0,
 		autoPlay: audioTrigger === "autoplay",
-		crossOrigin: "anonymous",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("source", {
 				src: audioUrl,
@@ -26565,7 +30080,43 @@ var BackgroundAudio = ({ settings }) => {
 				type: "audio/ogg"
 			})
 		]
-	});
+	}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+		onClick: () => {
+			if (audioRef.current) if (isPlaying) audioRef.current.pause();
+			else audioRef.current.play().catch((e) => console.log(e));
+		},
+		className: `fixed bottom-6 right-6 z-[9999] w-11 h-11 bg-white/40 backdrop-blur-md border border-white/50 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:bg-white/60 hover:scale-110 ${isPlaying ? "animate-[spin_4s_linear_infinite]" : ""}`,
+		title: isPlaying ? "Jeda Musik" : "Putar Musik",
+		children: isPlaying ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+			className: "w-5 h-5 text-gray-800",
+			fill: "currentColor",
+			viewBox: "0 0 24 24",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" })
+		}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+			className: "w-5 h-5 text-gray-800",
+			fill: "none",
+			stroke: "currentColor",
+			strokeWidth: "2",
+			strokeLinecap: "round",
+			strokeLinejoin: "round",
+			viewBox: "0 0 24 24",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M11 5L6 9H2v6h4l5 4V5z" }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("line", {
+					x1: "23",
+					y1: "9",
+					x2: "17",
+					y2: "15"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("line", {
+					x1: "17",
+					y1: "9",
+					x2: "23",
+					y2: "15"
+				})
+			]
+		})
+	})] });
 };
 //#endregion
 //#region resources/js/Viewer/ViewerApp.jsx
@@ -26693,4 +30244,4 @@ var ViewerApp = ({ previewData, onClosePreview }) => {
 var root = document.getElementById("viewer-root");
 if (root) (0, import_client.createRoot)(root).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ViewerApp, {}));
 //#endregion
-export { EffectFade as A, Player as B, AnimatableColor as C, IframePreview as D, OutMode as E, loadFont as F, useUIStore as H, IMAGE_FILTERS as I, getFilterById as L, Swiper as M, SwiperSlide as N, EffectCards as O, FONTS as P, applyAnimation as R, ValueWithRandom as S, ParticleOutType as T, apiClient as U, useCanvasStore as V, useStore as W, getHslFromAnimation as _, mouseLeaveEvent as a, rangeColorToHsl as b, touchCancelEvent as c, touchStartEvent as d, ViewerApp as default, InteractorType as f, alterHsl as g, r as h, mouseDownEvent as i, Autoplay as j, EffectCoverflow as k, touchEndEvent as l, InteractivityDetect as m, loadFireflyPreset as n, mouseMoveEvent as o, Interactivity as p, clickEvent as r, mouseUpEvent as s, loadSnowPreset as t, touchMoveEvent as u, getStyleFromHsl as v, OptionsColor as w, rangeColorToRgb as x, getStyleFromRgb as y, gsap_exports as z };
+export { loadFont as A, AnimatableColor as C, IframePreview as D, OutMode as E, apiClient as F, useStore as I, pointsToSmoothedSvgPath as M, useCanvasStore as N, LayerElement as O, useUIStore as P, ValueWithRandom as S, ParticleOutType as T, getHslFromAnimation as _, mouseLeaveEvent as a, rangeColorToHsl as b, touchCancelEvent as c, touchStartEvent as d, ViewerApp as default, InteractorType as f, alterHsl as g, r as h, mouseDownEvent as i, IMAGE_FILTERS as j, FONTS as k, touchEndEvent as l, InteractivityDetect as m, loadFireflyPreset as n, mouseMoveEvent as o, Interactivity as p, clickEvent as r, mouseUpEvent as s, loadSnowPreset as t, touchMoveEvent as u, getStyleFromHsl as v, OptionsColor as w, rangeColorToRgb as x, getStyleFromRgb as y };

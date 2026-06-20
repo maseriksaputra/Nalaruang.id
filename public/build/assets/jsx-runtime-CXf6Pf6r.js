@@ -10468,6 +10468,21 @@ function currentImpl(value) {
 }
 var produce = new Immer2().produce;
 //#endregion
+//#region node_modules/clsx/dist/clsx.mjs
+function r(e) {
+	var t, f, n = "";
+	if ("string" == typeof e || "number" == typeof e) n += e;
+	else if ("object" == typeof e) if (Array.isArray(e)) {
+		var o = e.length;
+		for (t = 0; t < o; t++) e[t] && (f = r(e[t])) && (n && (n += " "), n += f);
+	} else for (f in e) e[f] && (n && (n += " "), n += f);
+	return n;
+}
+function clsx() {
+	for (var e, t, f = 0, n = "", o = arguments.length; f < o; f++) (e = arguments[f]) && (t = r(e)) && (n && (n += " "), n += t);
+	return n;
+}
+//#endregion
 //#region node_modules/react/cjs/react-jsx-runtime.production.js
 /**
 * @license React
@@ -10507,4 +10522,4 @@ var require_jsx_runtime = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	module.exports = require_react_jsx_runtime_production();
 }));
 //#endregion
-export { produce as a, require_react as c, isDraftable as i, current as n, require_client as o, isDraft as r, require_react_dom as s, require_jsx_runtime as t };
+export { isDraftable as a, require_react_dom as c, isDraft as i, require_react as l, clsx as n, produce as o, current as r, require_client as s, require_jsx_runtime as t };

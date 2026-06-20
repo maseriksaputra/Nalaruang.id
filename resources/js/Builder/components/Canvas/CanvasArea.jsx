@@ -253,7 +253,8 @@ const CanvasArea = () => {
                     </section>
                 ))
             )
-        )}
+        )
+    )}
 
             {!hideEmptySections && activeCanvasMode !== 'desktop' && sections.length < 2 && (
                 <div className="flex justify-center p-6 relative z-50 pointer-events-auto">
