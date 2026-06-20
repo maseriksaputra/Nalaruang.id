@@ -70,11 +70,6 @@ class AdminPanelProvider extends PanelProvider
                     ->badge(fn () => \Illuminate\Support\Facades\Cache::remember('pending_orders_count', 60, fn () => \App\Models\Order::where('status', 'pending')->count()) ?: null, 'warning')
                     ->url(fn (): string => url('/admin/invitation-portal'))
                     ->openUrlInNewTab(),
-                NavigationItem::make('Studio Foto')
-                    ->icon('heroicon-o-camera')
-                    ->group('Nalaruang Studio')
-                    ->badge('Segera', 'success')
-                    ->url(fn (): string => '#')
             ])
             ->pages([
                 \App\Filament\Pages\Dashboard::class,
