@@ -26,6 +26,12 @@ const TimelinePanel = () => {
     const resizerRef = useRef(null);
     const isResizing = useRef(false);
     
+    useEffect(() => {
+        if (!isPlaying) {
+            window.dispatchEvent(new CustomEvent('builder:time_update', { detail: { time: playheadPos } }));
+        }
+    }, [playheadPos, isPlaying]);
+
     const playheadRef = useRef(null);
     const isDraggingPlayhead = useRef(false);
 

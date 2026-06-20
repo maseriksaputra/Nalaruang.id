@@ -260,7 +260,39 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 if (elementRef.current) gsap.default.set(elementRef.current, { clearProps: "all" });
             });
         };
-    }, [layer.animation, isActive]);
+    }, [layer.animation, isActive, isDragging, isResizing]);
+
+    // Sinkronisasi Visibilitas Elemen terhadap Playhead Timeline
+    useEffect(() => {
+        const handleTimeUpdate = (e) => {
+            if (!elementRef.current) return;
+            const time = e.detail.time;
+            const delay = layer.animation?.config?.delay || 0;
+            
+            if (isActive) {
+                // Selalu tampilkan elemen yang sedang aktif/dipilih untuk mempermudah edit
+                elementRef.current.style.opacity = layer.style?.opacity ?? 1;
+                elementRef.current.style.pointerEvents = 'auto';
+            } else if (time < delay) {
+                // Sembunyikan elemen jika playhead belum mencapai titik mulainya
+                elementRef.current.style.opacity = '0';
+                elementRef.current.style.pointerEvents = 'none';
+            } else {
+                // Tampilkan kembali jika playhead sudah melewatinya
+                elementRef.current.style.opacity = layer.style?.opacity ?? 1;
+                elementRef.current.style.pointerEvents = 'auto';
+            }
+        };
+
+        window.addEventListener('builder:time_update', handleTimeUpdate);
+        
+        // Panggil sekali saat mount untuk setup state awal (jika playhead di-0)
+        handleTimeUpdate({ detail: { time: 0 } });
+        
+        return () => window.removeEventListener('builder:time_update', handleTimeUpdate);
+    }, [layer.animation?.config?.delay, layer.style?.opacity, isActive]);
+
+    const hasMockupRef = useRef(false);
 
     // Mouse rotation logic
     const handleRotateStart = (e) => {

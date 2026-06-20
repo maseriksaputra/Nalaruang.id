@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-C4LuEZsv.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-CUuk6cQk.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-BxET_bdi.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-mhs4qLQO.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -19333,6 +19333,9 @@ var TimelinePanel = () => {
 	const [isPlaying, setIsPlaying] = (0, import_react.useState)(false);
 	const resizerRef = (0, import_react.useRef)(null);
 	const isResizing = (0, import_react.useRef)(false);
+	(0, import_react.useEffect)(() => {
+		if (!isPlaying) window.dispatchEvent(new CustomEvent("builder:time_update", { detail: { time: playheadPos } }));
+	}, [playheadPos, isPlaying]);
 	const playheadRef = (0, import_react.useRef)(null);
 	const isDraggingPlayhead = (0, import_react.useRef)(false);
 	const activeSection = activeCanvasMode === "desktop" ? {
