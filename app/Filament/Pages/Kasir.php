@@ -257,6 +257,8 @@ class Kasir extends Page
                 ->body('Semua data berhasil masuk ke Buku Kas.')
                 ->send();
                 
+            $this->dispatch('transaction-saved');
+                
         } catch (\Exception $e) {
             DB::rollBack();
             Notification::make()

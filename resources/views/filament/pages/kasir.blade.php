@@ -299,4 +299,43 @@ Contoh Output:
             margin: 0;
         }
     </style>
+
+    <script>
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('transaction-saved', () => {
+                try {
+                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    // Coin/Register "cha-ching" style sound effect
+                    const oscillator1 = audioCtx.createOscillator();
+                    const oscillator2 = audioCtx.createOscillator();
+                    const gainNode = audioCtx.createGain();
+                    
+                    oscillator1.type = 'sine';
+                    oscillator2.type = 'triangle';
+                    
+                    oscillator1.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
+                    oscillator1.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1); // A6
+                    
+                    oscillator2.frequency.setValueAtTime(1108.73, audioCtx.currentTime); // C#6
+                    oscillator2.frequency.exponentialRampToValueAtTime(2217.46, audioCtx.currentTime + 0.1); // C#7
+                    
+                    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                    
+                    oscillator1.connect(gainNode);
+                    oscillator2.connect(gainNode);
+                    gainNode.connect(audioCtx.destination);
+                    
+                    oscillator1.start();
+                    oscillator2.start();
+                    oscillator1.stop(audioCtx.currentTime + 0.4);
+                    oscillator2.stop(audioCtx.currentTime + 0.4);
+                } catch (e) {
+                    console.error('Audio playback failed:', e);
+                }
+            });
+        });
+    </script>
 </x-filament-panels::page>
