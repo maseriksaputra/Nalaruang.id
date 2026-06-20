@@ -90,14 +90,27 @@ class CashflowStats extends BaseWidget
         // $this->getPageTableQuery() returns the query builder instance with all active table filters applied!
         $query = $this->getPageTableQuery();
         
-        $totalIncome = (clone $query)->where('type', 'income')->sum('amount');
-        $totalExpense = (clone $query)->where('type', 'expense')->sum('amount');
+        // Optimize 7 queries into 1 raw aggregation query for performance
+        $stats = (clone $query)
+            ->selectRaw("
+                SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as total_income,
+                SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as total_expense,
+                SUM(CASE WHEN type = 'income' AND category = 'F&B' THEN amount ELSE 0 END) as income_fnb,
+                SUM(CASE WHEN type = 'income' AND category = 'ATK' THEN amount ELSE 0 END) as income_atk,
+                SUM(CASE WHEN type = 'income' AND category = 'Printing' THEN amount ELSE 0 END) as income_print,
+                SUM(CASE WHEN type = 'income' AND category = 'Digital' THEN amount ELSE 0 END) as income_digital,
+                COUNT(*) as total_count
+            ")->first();
+
+        $totalIncome = $stats->total_income ?? 0;
+        $totalExpense = $stats->total_expense ?? 0;
         $totalNet = $totalIncome + $totalExpense; // Add them because expense is already negative
 
-        $incomeFnB = (clone $query)->where('type', 'income')->where('category', 'F&B')->sum('amount');
-        $incomeAtk = (clone $query)->where('type', 'income')->where('category', 'ATK')->sum('amount');
-        $incomePrint = (clone $query)->where('type', 'income')->where('category', 'Printing')->sum('amount');
-        $incomeDigital = (clone $query)->where('type', 'income')->where('category', 'Digital')->sum('amount');
+        $incomeFnB = $stats->income_fnb ?? 0;
+        $incomeAtk = $stats->income_atk ?? 0;
+        $incomePrint = $stats->income_print ?? 0;
+        $incomeDigital = $stats->income_digital ?? 0;
+        $totalCount = $stats->total_count ?? 0;
 
         $formatValue = function ($amount) {
             $formattedTarget = 'Rp ' . number_format($amount, 0, ',', '.');
@@ -221,7 +234,7 @@ class CashflowStats extends BaseWidget
                 ->descriptionIcon('heroicon-m-device-phone-mobile', \Filament\Support\Enums\IconPosition::Before)
                 ->color('primary'),
 
-            Stat::make($boldTitle('Jumlah Transaksi'), $formatString((clone $query)->count(), 'Transaksi'))
+            Stat::make($boldTitle('Jumlah Transaksi'), $formatString($totalCount, 'Transaksi'))
                 ->description('Total aktivitas tercatat')
                 ->descriptionIcon('heroicon-m-document-text', \Filament\Support\Enums\IconPosition::Before)
                 ->color('gray'),

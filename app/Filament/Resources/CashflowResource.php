@@ -134,9 +134,23 @@ class CashflowResource extends Resource
                     ->collapsible(false) // Standard table layout
                     ->orderQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query, string $direction) => $query->orderBy('transaction_date', 'desc'))
                     ->getDescriptionFromRecordUsing(function (\App\Models\Cashflow $record) {
+                        static $dailyStats = [];
                         $date = \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d');
-                        $income = \App\Models\Cashflow::whereDate('transaction_date', $date)->where('type', 'income')->sum('amount') ?? 0;
-                        $expense = \App\Models\Cashflow::whereDate('transaction_date', $date)->where('type', 'expense')->sum('amount') ?? 0;
+                        
+                        if (!isset($dailyStats[$date])) {
+                            $stats = \App\Models\Cashflow::whereDate('transaction_date', $date)
+                                ->selectRaw("
+                                    SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
+                                    SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense
+                                ")->first();
+                            $dailyStats[$date] = [
+                                'income' => $stats->income ?? 0,
+                                'expense' => $stats->expense ?? 0
+                            ];
+                        }
+                        
+                        $income = $dailyStats[$date]['income'];
+                        $expense = $dailyStats[$date]['expense'];
                         
                         // Expense is saved as negative in database, so net is income + expense
                         $net = $income + $expense;
