@@ -232,14 +232,14 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             const tl = gsap.timeline({
                 repeat: (isLooping && !isBuilder) ? -1 : 0,
                 scrollTrigger: (!isBuilder && trigger === 'onScroll') ? {
-                    trigger: elementRef,
+                    trigger: elementRef.closest('.public-layer-element') || elementRef.closest('.layer-wrapper') || elementRef,
                     start: "top 85%",
                     toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
                 } : null
             });
             
-            const baseX = layerStyle?.x || 0;
-            const baseY = layerStyle?.y || 0;
+            const baseX = parseFloat(layerStyle?.x) || 0;
+            const baseY = parseFloat(layerStyle?.y) || 0;
             
             // GSAP already starts from current transform matrix applied by React.
             // We only need to reset opacity/scale/rotation if they were overridden, 
@@ -253,8 +253,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 const kf = layerAnimation.custom_keyframes[i];
                 if (i === 0) {
                     tl.set(elementRef, {
-                        x: kf.x - baseX,
-                        y: kf.y - baseY,
+                        x: (parseFloat(kf.x) || 0) - baseX,
+                        y: (parseFloat(kf.y) || 0) - baseY,
                         opacity: kf.opacity ?? 1,
                         scale: kf.scale ?? 1,
                         rotation: kf.rotation ?? 0,
@@ -263,8 +263,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                     });
                 } else {
                     tl.to(elementRef, {
-                        x: kf.x - baseX,
-                        y: kf.y - baseY,
+                        x: (parseFloat(kf.x) || 0) - baseX,
+                        y: (parseFloat(kf.y) || 0) - baseY,
                         opacity: kf.opacity ?? 1,
                         scale: kf.scale ?? 1,
                         rotation: kf.rotation ?? 0,
