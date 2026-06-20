@@ -3,7 +3,7 @@
 namespace App\Filament\Studio\Resources;
 
 use App\Filament\Studio\Resources\PhotoSessionResource\Pages;
-use App\Filament\Resources\PhotoSessionResource\RelationManagers;
+use App\Filament\Studio\Resources\PhotoSessionResource\RelationManagers;
 use App\Models\PhotoSession;
 use Filament\Forms;
 use Filament\Forms\Form;

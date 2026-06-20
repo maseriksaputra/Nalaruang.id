@@ -2,7 +2,7 @@
 
 namespace App\Filament\Studio\Resources\PhotoSessionResource\Pages;
 
-use App\Filament\Resources\PhotoSessionResource;
+use App\Filament\Studio\Resources\PhotoSessionResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
