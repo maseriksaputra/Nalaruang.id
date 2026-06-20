@@ -1092,9 +1092,9 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 bottomLeft: <React.Fragment />,
                 bottomRight: <React.Fragment />
             }}
-            className={`layer-wrapper ${layer.isLocked ? 'pointer-events-auto cursor-default' : 'pointer-events-auto hover:cursor-move'} ${isActive ? 'active-layer outline outline-1 outline-indigo-500 rounded' : ''}`}
+            className={`layer-wrapper ${layer.isLocked ? (isActive ? 'pointer-events-auto cursor-default' : 'pointer-events-none') : 'pointer-events-auto hover:cursor-move'} ${isActive ? 'active-layer outline outline-1 outline-indigo-500 rounded' : ''}`}
             onClick={(e) => {
-                if (layer.isLocked) return;
+                if (layer.isLocked && !isActive) return;
                 e.stopPropagation();
                 useCanvasStore.getState().setActiveSection(sectionId);
                 useCanvasStore.getState().setActiveLayer(layer.id, e.shiftKey || e.ctrlKey || e.metaKey);

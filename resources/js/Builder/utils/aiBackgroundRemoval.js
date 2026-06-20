@@ -12,13 +12,10 @@ export const processAIBackgroundRemoval = async (originalUrl) => {
         throw new Error("Gagal mengunduh gambar sumber. " + e.message);
     }
 
-    // 2. Konfigurasi imgly
     const config = {
         debug: true,
         device: 'cpu', // Menghindari kegagalan WebGPU tersembunyi
-        model: 'isnet_fp16', // Model default yang paling stabil
-        // Gunakan jsdelivr sebagai CDN cadangan jika unpkg/imgly diblokir ISP (sering terjadi di Indonesia)
-        publicPath: 'https://cdn.jsdelivr.net/npm/@imgly/background-removal-data@1.7.0/dist/'
+        model: 'isnet_fp16' // Model default yang paling stabil
     };
 
     // 3. Eksekusi AI

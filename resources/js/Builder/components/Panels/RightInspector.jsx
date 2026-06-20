@@ -324,8 +324,8 @@ const RightInspector = () => {
                             <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
                                 <input 
                                     type="checkbox" 
-                                    checked={activeLayer.style.isLocked || false}
-                                    onChange={(e) => updateLayerStyle(activeLayer.id, { isLocked: e.target.checked })}
+                                    checked={activeLayer.isLocked || false}
+                                    onChange={(e) => useCanvasStore.getState().toggleLayerLock(activeLayer.id)}
                                     className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                 />
                                 <span className="text-gray-700">Kunci Posisi</span>
