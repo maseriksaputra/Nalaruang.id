@@ -192,24 +192,29 @@ Contoh Output:
                             <button wire:click="removeItem('{{ $key }}')" class="absolute -top-2 -right-2 w-6 h-6 bg-red-100 text-red-600 hover:bg-red-500 hover:text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
                                 x
                             </button>
-                            <div class="flex justify-between items-start mb-2">
-                                <div class="pr-4">
-                                    <h4 class="font-bold text-gray-800 text-sm leading-tight">{{ $item['name'] }}</h4>
-                                    <span class="text-[10px] uppercase font-bold tracking-wider {{ ($item['type'] ?? $transactionType) === 'expense' ? 'text-red-500' : 'text-green-600' }}">
-                                        {{ ($item['type'] ?? $transactionType) === 'expense' ? '(-) PENGELUARAN' : '(+) PEMASUKAN' }} • {{ $item['category'] }}
-                                    </span>
+                            <div class="flex justify-between items-start mb-3">
+                                <div class="pr-4 space-y-1.5">
+                                    <h4 class="font-bold text-gray-800 text-base leading-tight">{{ $item['name'] }}</h4>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded border {{ ($item['type'] ?? $transactionType) === 'expense' ? 'bg-red-50 text-red-600 border-red-100' : 'bg-green-50 text-green-600 border-green-100' }}">
+                                            {{ ($item['type'] ?? $transactionType) === 'expense' ? 'Pengeluaran' : 'Pemasukan' }}
+                                        </span>
+                                        <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
+                                            • {{ $item['category'] }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <div class="flex items-center justify-between mt-auto">
+                            <div class="flex items-center justify-between mt-auto pt-1">
                                 <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-gray-50 h-8">
                                     <button wire:click="updateQty('{{ $key }}', -1)" class="w-8 h-full flex items-center justify-center hover:bg-gray-200 text-gray-600 font-bold transition-colors">-</button>
                                     <span class="w-8 text-center text-sm font-bold">{{ $item['qty'] }}</span>
                                     <button wire:click="updateQty('{{ $key }}', 1)" class="w-8 h-full flex items-center justify-center hover:bg-gray-200 text-gray-600 font-bold transition-colors">+</button>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-xs text-gray-400">{{ number_format($item['price'], 0, ',', '.') }} / item</div>
-                                    <div class="font-bold text-gray-900 text-sm">Rp {{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</div>
+                                    <div class="text-xs text-gray-400 font-medium">Rp {{ number_format($item['price'], 0, ',', '.') }} / item</div>
+                                    <div class="font-bold text-pink-600 text-base">Rp {{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</div>
                                 </div>
                             </div>
                         </div>
