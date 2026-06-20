@@ -511,6 +511,7 @@ const useCanvasStore = create(temporal((set, get) => ({
             const elementsToGroup = [];
             let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
             const remainingLayers = [];
+            let trackToInject = null;
 
             const findAndExtract = (layers) => {
                 for (const layer of layers) {
@@ -522,9 +523,17 @@ const useCanvasStore = create(temporal((set, get) => ({
                         maxY = Math.max(maxY, (layer.style?.y || 0) + (parseFloat(layer.style?.height) || 0));
                     } else if (layer.children) {
                         const originalLen = layer.children.length;
-                        layer.children = layer.children.filter(c => !state.activeLayerIds.includes(c.id));
-                        if (layer.children.length !== originalLen) {
-                            elementsToGroup.push(...layer.children.filter(c => state.activeLayerIds.includes(c.id)));
+                        const extracted = layer.children.filter(c => state.activeLayerIds.includes(c.id));
+                        if (extracted.length > 0) {
+                            if (!trackToInject) trackToInject = layer;
+                            extracted.forEach(c => {
+                                elementsToGroup.push(c);
+                                minX = Math.min(minX, c.style?.x || 0);
+                                minY = Math.min(minY, c.style?.y || 0);
+                                maxX = Math.max(maxX, (c.style?.x || 0) + (parseFloat(c.style?.width) || 0));
+                                maxY = Math.max(maxY, (c.style?.y || 0) + (parseFloat(c.style?.height) || 0));
+                            });
+                            layer.children = layer.children.filter(c => !state.activeLayerIds.includes(c.id));
                         }
                         remainingLayers.push(layer);
                     } else {
@@ -548,7 +557,15 @@ const useCanvasStore = create(temporal((set, get) => ({
             };
 
             targetLayers.splice(0, targetLayers.length, ...remainingLayers);
-            targetLayers.push(newGroup);
+            
+            if (trackToInject && trackToInject.children) {
+                trackToInject.children.push(newGroup);
+            } else if (targetLayers.length > 0 && targetLayers[targetLayers.length - 1].children) {
+                targetLayers[targetLayers.length - 1].children.push(newGroup);
+            } else {
+                targetLayers.push({ id: 'layer_' + Date.now(), type: 'group', name: 'Layer Utama', children: [newGroup], style: { zIndex: 1 } });
+            }
+            
             state.activeLayerId = newGroup.id;
             state.activeLayerIds = [newGroup.id];
         }));

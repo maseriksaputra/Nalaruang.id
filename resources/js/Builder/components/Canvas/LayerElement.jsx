@@ -954,6 +954,22 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                                 </div>
                             )}
 
+                            {layer.type === 'canvas_group' && (
+                                <div className="w-full h-full relative" style={{ pointerEvents: 'none' }}>
+                                    {layer.children?.map(child => (
+                                        <div key={child.id} style={{ 
+                                            position: 'absolute', 
+                                            left: `${child.style?.x || 0}px`, 
+                                            top: `${child.style?.y || 0}px`,
+                                            width: typeof child.style?.width === 'number' ? `${child.style.width}px` : child.style?.width,
+                                            height: typeof child.style?.height === 'number' ? `${child.style.height}px` : child.style?.height,
+                                            pointerEvents: 'auto'
+                                        }}>
+                                            <LayerElement layer={child} isChildOfGroup={true} sectionId={sectionId} />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
 
                         </div> {/* End Content Wrapper */}
                     </div> {/* End GSAP Animation Wrapper */}
