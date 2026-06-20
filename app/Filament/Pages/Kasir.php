@@ -42,6 +42,14 @@ class Kasir extends Page
 
     public function addToCart($productId, $name, $price, $category)
     {
+        // Cari apakah produk dengan nama, harga, dan tipe yang sama sudah ada di keranjang
+        foreach ($this->cart as $cartId => $item) {
+            if ($item['product_id'] == $productId && $item['price'] == $price && $item['type'] === $this->transactionType) {
+                $this->cart[$cartId]['qty'] += 1;
+                return;
+            }
+        }
+
         $cartId = uniqid();
         $newItem = [
             'id' => $cartId,
@@ -74,6 +82,23 @@ class Kasir extends Page
             'category' => $category,
             'default_price' => $price
         ]);
+
+        // Cari apakah produk manual ini sudah ada di keranjang
+        foreach ($this->cart as $cartId => $item) {
+            if ($item['product_id'] == $product->id && $item['price'] == $price && $item['type'] === $this->transactionType) {
+                $this->cart[$cartId]['qty'] += $this->manualQty;
+                $this->manualName = '';
+                $this->manualPrice = '';
+                $this->manualQty = 1;
+                
+                Notification::make()
+                    ->success()
+                    ->title('Berhasil')
+                    ->body('Kuantitas produk ditambahkan di keranjang.')
+                    ->send();
+                return;
+            }
+        }
 
         $cartId = uniqid();
         $newItem = [
