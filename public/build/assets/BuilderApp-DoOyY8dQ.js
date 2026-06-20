@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-DvJxCO6R.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-CdL7oEDm.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CRMX5dXz.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-Bq6lPNEI.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -15664,6 +15664,27 @@ var RightInspector = () => {
 																})
 															})]
 														})] }),
+														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+															className: "mt-3 pl-2 pt-3 border-t border-gray-100",
+															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+																className: "flex justify-between items-center mb-1",
+																children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+																	className: "text-[10px] font-semibold text-gray-600 block",
+																	children: "Jeda Tunggu (s)"
+																}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+																	className: "text-[10px] font-bold text-indigo-600",
+																	children: [kf.delay || 0, "s"]
+																})]
+															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+																type: "range",
+																min: "0",
+																max: "15",
+																step: "0.1",
+																value: kf.delay || 0,
+																onChange: (e) => handleUpdateKeyframe(index, "delay", parseFloat(e.target.value)),
+																className: "w-full accent-indigo-600 cursor-pointer"
+															})]
+														}),
 														index === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 															className: "mt-2 pl-2 pt-2 border-t border-gray-100",
 															children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {

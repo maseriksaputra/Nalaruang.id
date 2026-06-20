@@ -249,9 +249,11 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             };
             
             // Apply first keyframe immediately so it doesn't flicker in its original position
-            // before ScrollTrigger fires.
+            // before ScrollTrigger fires. ONLY IF there is no entry animation overriding it!
             const firstKf = layerAnimation.custom_keyframes[0];
-            if (firstKf) {
+            const hasEntryAnimation = !!layerAnimation.entry;
+
+            if (firstKf && !hasEntryAnimation) {
                 gsap.set(elementRef, {
                     x: getValidNum(firstKf.x, baseX) - baseX,
                     y: getValidNum(firstKf.y, baseY) - baseY,
@@ -261,7 +263,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                     ...(firstKf.width !== undefined && { width: firstKf.width }),
                     ...(firstKf.height !== undefined && { height: firstKf.height })
                 });
-            } else {
+            } else if (!hasEntryAnimation) {
                 gsap.set(elementRef, {
                     opacity: layerStyle?.opacity ?? 1,
                 });
@@ -270,6 +272,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             // Loop dari titik 1 ke seterusnya
             for (let i = 0; i < layerAnimation.custom_keyframes.length; i++) {
                 const kf = layerAnimation.custom_keyframes[i];
+                const kfDelay = kf.delay || 0;
+                
                 if (i === 0) {
                     tl.set(elementRef, {
                         x: getValidNum(kf.x, baseX) - baseX,
@@ -279,7 +283,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                         rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
                         ...(kf.width !== undefined && { width: kf.width }),
                         ...(kf.height !== undefined && { height: kf.height })
-                    });
+                    }, `+=${kfDelay}`);
                 } else {
                     tl.to(elementRef, {
                         x: getValidNum(kf.x, baseX) - baseX,
@@ -290,6 +294,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                         ...(kf.width !== undefined && { width: kf.width }),
                         ...(kf.height !== undefined && { height: kf.height }),
                         duration: kf.duration || 1,
+                        delay: kfDelay,
                         ease: kf.ease || "none",
                         force3D: true,
                         autoRound: false

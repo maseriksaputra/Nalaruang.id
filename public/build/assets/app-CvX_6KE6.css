@@ -1611,10 +1611,6 @@
     aspect-ratio: 1;
   }
 
-  .aspect-video {
-    aspect-ratio: var(--aspect-video);
-  }
-
   .size-2 {
     width: calc(var(--spacing) * 2);
     height: calc(var(--spacing) * 2);
@@ -2553,10 +2549,6 @@
 
   .cursor-text {
     cursor: text;
-  }
-
-  .cursor-wait {
-    cursor: wait;
   }
 
   .touch-none {

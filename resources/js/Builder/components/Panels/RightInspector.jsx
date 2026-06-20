@@ -1530,6 +1530,19 @@ const RightInspector = () => {
                                                         </div>
                                                     </>
                                                 )}
+                                                
+                                                <div className="mt-3 pl-2 pt-3 border-t border-gray-100">
+                                                    <div className="flex justify-between items-center mb-1">
+                                                        <span className="text-[10px] font-semibold text-gray-600 block">Jeda Tunggu (s)</span>
+                                                        <span className="text-[10px] font-bold text-indigo-600">{kf.delay || 0}s</span>
+                                                    </div>
+                                                    <input 
+                                                        type="range" min="0" max="15" step="0.1"
+                                                        value={kf.delay || 0}
+                                                        onChange={(e) => handleUpdateKeyframe(index, 'delay', parseFloat(e.target.value))}
+                                                        className="w-full accent-indigo-600 cursor-pointer"
+                                                    />
+                                                </div>
                                                 {index === 0 && (
                                                     <div className="mt-2 pl-2 pt-2 border-t border-gray-100">
                                                         <span className="text-[9px] text-gray-400 italic block">Titik 1 adalah titik awal, durasi & transisi diatur di titik selanjutnya.</span>
