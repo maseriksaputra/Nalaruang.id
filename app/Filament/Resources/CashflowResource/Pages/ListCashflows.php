@@ -18,8 +18,14 @@ class ListCashflows extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            CashflowResource\Widgets\CashflowStats::class,
-            CashflowResource\Widgets\CashflowLineChart::class,
+            CashflowResource\Widgets\CashflowStats::make([
+                'customFilters' => $this->customFilters,
+                'tableFilters' => $this->tableFilters,
+            ]),
+            CashflowResource\Widgets\CashflowLineChart::make([
+                'customFilters' => $this->customFilters,
+                'tableFilters' => $this->tableFilters,
+            ]),
         ];
     }
 

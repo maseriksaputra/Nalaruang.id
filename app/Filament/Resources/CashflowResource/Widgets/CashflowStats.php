@@ -4,16 +4,15 @@ namespace App\Filament\Resources\CashflowResource\Widgets;
 
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Filament\Widgets\Concerns\InteractsWithPageTable;
-use App\Filament\Resources\CashflowResource\Pages\ListCashflows;
+use App\Filament\Resources\CashflowResource\Widgets\Concerns\HasCashflowQuery;
 
 class CashflowStats extends BaseWidget
 {
-    use InteractsWithPageTable;
+    use HasCashflowQuery;
 
-    protected function getTablePage(): string
+    protected function getPageTableQuery()
     {
-        return ListCashflows::class;
+        return $this->getBaseCashflowQuery();
     }
 
     protected function getColumns(): int

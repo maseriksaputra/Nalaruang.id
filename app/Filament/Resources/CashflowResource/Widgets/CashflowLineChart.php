@@ -5,22 +5,21 @@ namespace App\Filament\Resources\CashflowResource\Widgets;
 use Filament\Widgets\ChartWidget;
 use Filament\Tables\Contracts\HasTable;
 use Livewire\Attributes\Reactive;
-use Filament\Widgets\Concerns\InteractsWithPageTable;
-use App\Filament\Resources\CashflowResource\Pages\ListCashflows;
+use App\Filament\Resources\CashflowResource\Widgets\Concerns\HasCashflowQuery;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class CashflowLineChart extends ChartWidget
 {
-    use InteractsWithPageTable;
+    use HasCashflowQuery;
 
     protected static ?string $heading = 'Tren Arus Kas';
     protected int | string | array $columnSpan = 'full';
     protected static ?string $maxHeight = '300px';
 
-    protected function getTablePage(): string
+    protected function getPageTableQuery()
     {
-        return ListCashflows::class;
+        return $this->getBaseCashflowQuery();
     }
 
     protected function getData(): array
