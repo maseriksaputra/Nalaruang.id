@@ -186,7 +186,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 ...repeatConfig,
                 force3D: true,
                 autoRound: false,
-                scrollTrigger: (!isBuilder || trigger === 'onScroll') && trigger !== 'onLoad' ? { 
+                scrollTrigger: (!isBuilder && trigger === 'onScroll') && trigger !== 'onLoad' ? { 
                     trigger: elementRef, 
                     start: "top 85%", 
                     toggleActions: toggleActionStr 
