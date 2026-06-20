@@ -61,7 +61,7 @@ class AdminPanelProvider extends PanelProvider
                      ->collapsible(false),
             ])
             ->navigationItems([
-                NavigationItem::make('SaaS Undangan Digital')
+                NavigationItem::make('Nalaruang Studio')
                     ->icon('heroicon-o-sparkles')
                     ->group('Konten Website')
                     ->badge(fn () => \Illuminate\Support\Facades\Cache::remember('pending_orders_count', 60, fn () => \App\Models\Order::where('status', 'pending')->count()) ?: null, 'warning')
