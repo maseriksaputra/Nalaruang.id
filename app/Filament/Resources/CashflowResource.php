@@ -147,7 +147,8 @@ class CashflowResource extends Resource
                             
                             $dailyStats = [];
                             foreach ($allStats as $stat) {
-                                $dailyStats[$stat->transaction_date] = [
+                                $statDate = \Carbon\Carbon::parse($stat->transaction_date)->format('Y-m-d');
+                                $dailyStats[$statDate] = [
                                     'income' => $stat->income ?? 0,
                                     'expense' => $stat->expense ?? 0
                                 ];
