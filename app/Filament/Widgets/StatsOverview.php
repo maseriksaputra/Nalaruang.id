@@ -42,27 +42,29 @@ class StatsOverview extends BaseWidget
         $formatValue = function ($amount) {
             return new \Illuminate\Support\HtmlString("
                 <span 
-                    x-data=\"{ count: 0, target: " . (float)$amount . " }\"
-                    x-init=\"
-                        let duration = 2000;
+                    x-data=\"{ target: " . (float)$amount . " }\"
+                    x-init=\"(() => {
                         let start = null;
-                        let step = (timestamp) => {
+                        const duration = 2000;
+                        const t = target;
+                        const el = \$el;
+                        const format = (val) => {
+                            let v = Math.round(val);
+                            return (v < 0 ? '-' : '') + 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.abs(v));
+                        };
+                        const step = (timestamp) => {
                             if (!start) start = timestamp;
                             let progress = Math.min((timestamp - start) / duration, 1);
                             let ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-                            count = target * ease;
-                            let val = Math.round(count);
-                            let formatted = (val < 0 ? '-' : '') + 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.abs(val));
-                            \$el.innerText = formatted;
+                            el.innerText = format(t * ease);
                             if (progress < 1) {
                                 window.requestAnimationFrame(step);
                             } else {
-                                let finalVal = Math.round(target);
-                                \$el.innerText = (finalVal < 0 ? '-' : '') + 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.abs(finalVal));
+                                el.innerText = format(t);
                             }
                         };
                         window.requestAnimationFrame(step);
-                    \"
+                    })()\"
                     class=\"text-2xl xl:text-3xl font-bold tracking-tighter whitespace-nowrap\"
                 >Rp 0</span>
             ");
