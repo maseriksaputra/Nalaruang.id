@@ -9,7 +9,7 @@ use App\Models\Order;
 class OrderStatsOverview extends BaseWidget
 {
     protected static bool $isLazy = true;
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 4;
     protected static ?string $pollingInterval = null;
 
     protected function getStats(): array
