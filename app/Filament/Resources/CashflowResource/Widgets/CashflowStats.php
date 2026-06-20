@@ -6,78 +6,15 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Filament\Tables\Contracts\HasTable;
 use Livewire\Attributes\Reactive;
-use App\Filament\Resources\CashflowResource\Pages\ListCashflows;
+use Filament\Widgets\Concerns\InteractsWithPageTable;
 
 class CashflowStats extends BaseWidget
 {
-    #[Reactive]
-    public ?array $paginators = [];
-
-    #[Reactive]
-    public ?array $tableColumnSearches = [];
-
-    #[Reactive]
-    public ?string $tableGrouping = null;
-
-    #[Reactive]
-    public ?string $tableGroupingDirection = null;
-
-    #[Reactive]
-    public ?array $tableFilters = null;
-
-    #[Reactive]
-    public int | string | null $tableRecordsPerPage = null;
-
-    #[Reactive]
-    public ?string $tableSearch = '';
-
-    #[Reactive]
-    public ?string $tableSortColumn = null;
-
-    #[Reactive]
-    public ?string $tableSortDirection = null;
-
-    #[Reactive]
-    public ?string $activeTab = null;
-
-    #[Reactive]
-    public ?array $customFilters = null;
-
-    protected HasTable $tablePage;
+    use InteractsWithPageTable;
 
     protected function getTablePage(): string
     {
         return ListCashflows::class;
-    }
-
-    protected function getTablePageInstance(): HasTable
-    {
-        if (isset($this->tablePage)) {
-            return $this->tablePage;
-        }
-
-        /** @var HasTable $tableComponent */
-        $page = app('livewire')->new($this->getTablePage());
-        \Livewire\trigger('mount', $page, [], null, null);
-
-        $page->activeTab = $this->activeTab;
-        $page->paginators = $this->paginators ?? [];
-        $page->tableColumnSearches = $this->tableColumnSearches ?? [];
-        $page->tableFilters = $this->tableFilters;
-        $page->tableGrouping = $this->tableGrouping;
-        $page->tableGroupingDirection = $this->tableGroupingDirection;
-        $page->tableRecordsPerPage = $this->tableRecordsPerPage;
-        $page->tableSearch = $this->tableSearch;
-        $page->tableSortColumn = $this->tableSortColumn;
-        $page->tableSortDirection = $this->tableSortDirection;
-        $page->customFilters = $this->customFilters;
-
-        return $this->tablePage = $page;
-    }
-
-    protected function getPageTableQuery(): \Illuminate\Database\Eloquent\Builder
-    {
-        return $this->getTablePageInstance()->getFilteredSortedTableQuery();
     }
 
     protected function getColumns(): int
