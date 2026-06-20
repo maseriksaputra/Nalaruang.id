@@ -144,28 +144,24 @@ class CashflowLineChart extends ChartWidget
                     'data' => $fnbIncome,
                     'borderColor' => '#f59e0b', // amber
                     'backgroundColor' => 'rgba(245, 158, 11, 0.1)',
-                    'hidden' => true, // default sembunyikan supaya tidak penuh
                 ],
                 [
                     'label' => 'ATK',
                     'data' => $atkIncome,
                     'borderColor' => '#0ea5e9', // sky blue
                     'backgroundColor' => 'rgba(14, 165, 233, 0.1)',
-                    'hidden' => true,
                 ],
                 [
                     'label' => 'Printing',
                     'data' => $printIncome,
                     'borderColor' => '#10b981', // emerald
                     'backgroundColor' => 'rgba(16, 185, 129, 0.1)',
-                    'hidden' => true,
                 ],
                 [
                     'label' => 'Digital',
                     'data' => $digitalIncome,
                     'borderColor' => '#6366f1', // indigo
                     'backgroundColor' => 'rgba(99, 102, 241, 0.1)',
-                    'hidden' => true,
                 ],
             ],
             'labels' => $labels,
