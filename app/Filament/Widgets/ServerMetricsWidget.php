@@ -8,7 +8,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class ServerMetricsWidget extends BaseWidget
 {
     protected static ?int $sort = -1; // Top of the dashboard
-    protected static ?string $pollingInterval = '5s'; // Auto refresh every 5 seconds
+    protected static ?string $pollingInterval = '2s'; // Auto refresh every 2 seconds for realtime feel
 
     protected function getStats(): array
     {
@@ -20,25 +20,27 @@ class ServerMetricsWidget extends BaseWidget
         return [
             Stat::make('CPU Usage', $cpuUsage . '%')
                 ->description('Load rata-rata server VPS')
-                ->descriptionIcon('heroicon-m-cpu-chip')
+                ->descriptionIcon('heroicon-o-cpu-chip')
                 ->color($cpuUsage > 80 ? 'danger' : 'success')
                 ->chart([$cpuUsage, $cpuUsage + rand(-5, 5), $cpuUsage + rand(-5, 5), $cpuUsage]),
 
             Stat::make('RAM Usage', $ramUsage['percentage'] . '%')
                 ->description($ramUsage['used'] . ' GB / ' . $ramUsage['total'] . ' GB Terpakai')
-                ->descriptionIcon('heroicon-m-server')
+                ->descriptionIcon('heroicon-o-server')
                 ->color($ramUsage['percentage'] > 80 ? 'danger' : 'primary')
                 ->chart([$ramUsage['percentage'], $ramUsage['percentage'] + rand(-2, 2), $ramUsage['percentage'] + rand(-2, 2), $ramUsage['percentage']]),
                 
             Stat::make('Local Storage', $diskUsage['percentage'] . '%')
                 ->description($diskUsage['used'] . ' GB / ' . $diskUsage['total'] . ' GB Terpakai')
-                ->descriptionIcon('heroicon-m-hard-drive')
-                ->color($diskUsage['percentage'] > 80 ? 'warning' : 'success'),
+                ->descriptionIcon('heroicon-o-circle-stack')
+                ->color($diskUsage['percentage'] > 80 ? 'warning' : 'success')
+                ->chart([$diskUsage['percentage'], $diskUsage['percentage'], $diskUsage['percentage']]),
                 
             Stat::make('Object Storage', $objectStorage['size_formatted'])
                 ->description($objectStorage['file_count'] . ' File Media Tersimpan')
-                ->descriptionIcon('heroicon-m-cloud')
-                ->color('info'),
+                ->descriptionIcon('heroicon-o-cloud')
+                ->color('info')
+                ->chart([$objectStorage['file_count'], $objectStorage['file_count'], $objectStorage['file_count']]),
         ];
     }
 
