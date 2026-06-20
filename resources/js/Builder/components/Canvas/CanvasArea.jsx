@@ -145,7 +145,7 @@ const CanvasArea = () => {
                                         flex: 1, // Stretch to fill grid if iframe is taller
                                         height: 'auto',
                                         background: global_settings?.custom_code ? 'transparent' : (section.layout?.background_value || '#ffffff'),
-                                        overflow: 'hidden',
+                                        overflow: 'visible',
                                         pointerEvents: global_settings?.custom_code ? 'none' : 'auto'
                                     }}
                                 >
