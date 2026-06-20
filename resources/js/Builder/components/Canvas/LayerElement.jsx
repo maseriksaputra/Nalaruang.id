@@ -222,6 +222,10 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
         }
         
         const handlePlayAll = () => {
+            if (visibilityRef.current) {
+                visibilityRef.current.style.opacity = '1';
+                visibilityRef.current.style.pointerEvents = 'auto';
+            }
             if (layer.animation && elementRef.current) {
                 import('gsap').then(gsap => {
                     gsap.default.set(elementRef.current, { clearProps: "all" });
