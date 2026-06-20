@@ -115,7 +115,6 @@ const BackgroundAudio = ({ settings }) => {
             ref={audioRef}
             loop={audioEnd <= 0} // Native loop if no custom end time
             autoPlay={audioTrigger === 'autoplay'}
-            crossOrigin="anonymous"
         >
             <source src={audioUrl} type="audio/mpeg" />
             <source src={audioUrl} type="audio/wav" />
