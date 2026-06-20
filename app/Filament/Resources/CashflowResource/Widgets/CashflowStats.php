@@ -10,6 +10,8 @@ class CashflowStats extends BaseWidget
 {
     use HasCashflowQuery;
 
+    protected static ?string $pollingInterval = null;
+
     protected function getPageTableQuery()
     {
         return $this->getBaseCashflowQuery();

@@ -16,6 +16,7 @@ class CashflowLineChart extends ChartWidget
     protected static ?string $heading = 'Tren Arus Kas';
     protected int | string | array $columnSpan = 'full';
     protected static ?string $maxHeight = '300px';
+    protected static ?string $pollingInterval = null;
 
     protected function getPageTableQuery()
     {
