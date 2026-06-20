@@ -206,8 +206,8 @@
         <div class="border-t border-brand-800/50 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-xs text-brand-500">
             <p>&copy; 2026 Nalaruang.id. Dibuat dengan sepenuh hati.</p>
             <div class="flex gap-4 mt-4 md:mt-0">
-                <a href="#" class="hover:text-white transition">Instagram</a>
-                <a href="#" class="hover:text-white transition">TikTok</a>
+                <a href="https://www.instagram.com/nalaruang.id?igsh=cXZpNHczdG5rc202" target="_blank" class="hover:text-white transition">Instagram</a>
+                <a href="https://www.tiktok.com/@nalaruang.id?_r=1&_t=ZS-97N9GajetqG" target="_blank" class="hover:text-white transition">TikTok</a>
                 <a href="https://wa.me/6285196811112?text=Halo%20Tim%20Nalaruang,%20saya%20ingin%20bertanya%20terkait%20layanan%20Anda." target="_blank" class="hover:text-white transition">WhatsApp</a>
             </div>
         </div>
