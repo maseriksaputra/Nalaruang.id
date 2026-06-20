@@ -209,6 +209,15 @@ export const IMAGE_FILTERS = [
     { 
         id: 'edge_detect', name: 'Find Edges', category: 'Distorsi & Artistik', 
         getCss: (i) => `invert(${lerp(0, 1, i)}) grayscale(${lerp(0, 1, i)}) contrast(${lerp(1, 2, i)})`
+    },
+    { 
+        id: 'engraving', name: 'Engraving (Toile de Jouy)', category: 'Distorsi & Artistik', 
+        getCss: (i) => `grayscale(1) contrast(${lerp(1.5, 3, i)}) brightness(${lerp(1, 1.2, i)})`,
+        getOverlay: (i) => `
+            <div class="absolute inset-0 pointer-events-none mix-blend-hard-light" style="opacity: ${lerp(0.3, 0.85, i)}; background-image: url('data:image/svg+xml,%3Csvg width=\\'6\\' height=\\'6\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cpath d=\\'M-1 7L7 -1M-1 1L1 -1M5 7L7 5\\' stroke=\\'%23666\\' stroke-width=\\'1\\'/%3E%3C/svg%3E'); background-size: 3px 3px;"></div>
+            <div class="absolute inset-0 pointer-events-none mix-blend-lighten" style="background-color: var(--engraving-line, #7b3131); opacity: ${lerp(0.5, 1, i)};"></div>
+            <div class="absolute inset-0 pointer-events-none mix-blend-multiply" style="background-color: var(--engraving-bg, #fdf5e6); opacity: ${lerp(0.5, 1, i)};"></div>
+        `
     }
 ];
 
