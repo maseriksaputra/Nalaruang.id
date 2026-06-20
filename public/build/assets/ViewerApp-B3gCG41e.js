@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BMW_R86d.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-B8teuNRI.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-By5QXJ6D.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-ChKnYQ5r.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -25895,23 +25895,6 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 									strokeDasharray: "4 4"
 								})
 							}),
-							layer.type === "canvas_group" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "w-full h-full relative pointer-events-none",
-								children: layer.children?.map((child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									style: {
-										position: "absolute",
-										left: child.style?.x || 0,
-										top: child.style?.y || 0,
-										width: child.style?.width || 100,
-										height: child.style?.height || 100,
-										zIndex: child.style?.zIndex || 1
-									},
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayerElement, {
-										layer: child,
-										isChildOfGroup: true
-									})
-								}, child.id))
-							}),
 							layer.type === "interactive_countdown" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CountdownDisplay$1, {
 								targetDate: layer.style?.countdownTarget,
 								textColor: layer.style?.countdownColor,
@@ -28068,7 +28051,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BMW_R86d.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-B8teuNRI.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);

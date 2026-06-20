@@ -654,27 +654,6 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                                     />
                                 </svg>
                             )}
-
-                            {layer.type === 'canvas_group' && (
-                                <div className="w-full h-full relative pointer-events-none">
-                                    {layer.children?.map(child => (
-                                        <div 
-                                            key={child.id} 
-                                            style={{ 
-                                                position: 'absolute', 
-                                                left: child.style?.x || 0, 
-                                                top: child.style?.y || 0, 
-                                                width: child.style?.width || 100, 
-                                                height: child.style?.height || 100,
-                                                zIndex: child.style?.zIndex || 1
-                                            }}
-                                        >
-                                            <LayerElement layer={child} isChildOfGroup={true} />
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
                             {layer.type === 'interactive_countdown' && (
                                 <CountdownDisplay 
                                     targetDate={layer.style?.countdownTarget}
