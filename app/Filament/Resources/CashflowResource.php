@@ -138,7 +138,7 @@ class CashflowResource extends Resource
                         $date = \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d');
                         
                         if (!isset($dailyStats[$date])) {
-                            $stats = \App\Models\Cashflow::whereDate('transaction_date', $date)
+                            $stats = \App\Models\Cashflow::where('transaction_date', $date)
                                 ->selectRaw("
                                     SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
                                     SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense
