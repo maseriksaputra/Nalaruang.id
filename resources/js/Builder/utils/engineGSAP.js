@@ -161,11 +161,13 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
     if (layerAnimation.custom) {
         try {
             const customObj = new Function(`return ${layerAnimation.custom}`)();
+            const triggerElement = !isBuilder ? (elementRef.closest('section') || elementRef) : elementRef;
+
             const tween = gsap.from(elementRef, {
                 ...customObj,
                 ...repeatConfig,
                 scrollTrigger: isBuilder ? null : { 
-                    trigger: elementRef, 
+                    trigger: triggerElement, 
                     start: "top 80%", 
                     scroller: scrollScroller,
                     toggleActions: "play none none reverse" 
@@ -190,13 +192,15 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 entryProps.scale = config.scale;
             }
             const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none reverse";
+            const triggerElement = !isBuilder ? (elementRef.closest('section') || elementRef) : elementRef;
+
             const tween = gsap.from(elementRef, {
                 ...entryProps,
                 ...repeatConfig,
                 force3D: true,
                 autoRound: false,
                 scrollTrigger: (!isBuilder && trigger === 'onScroll') && trigger !== 'onLoad' ? { 
-                    trigger: elementRef, 
+                    trigger: triggerElement, 
                     start: "top 85%", 
                     scroller: scrollScroller,
                     toggleActions: toggleActionStr 
@@ -239,11 +243,13 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 activeTweens.push(tween);
             }
         } else if (layerAnimation.idle === 'custom_timeline' && layerAnimation.custom_keyframes && layerAnimation.custom_keyframes.length > 0) {
+            const triggerElement = !isBuilder ? (elementRef.closest('section') || elementRef) : elementRef;
+
             const tl = gsap.timeline({
                 repeat: (isLooping && !isBuilder) ? -1 : 0,
                 delay: config.delay || 0,
                 scrollTrigger: (!isBuilder && trigger === 'onScroll') ? {
-                    trigger: elementRef.closest('.public-layer-element') || elementRef.closest('.layer-wrapper') || elementRef,
+                    trigger: triggerElement,
                     start: "top 85%",
                     scroller: scrollScroller,
                     toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
@@ -334,8 +340,9 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                     autoRound: false
                 });
                 if (!isBuilder && trigger === 'onScroll') {
+                    const triggerElement = elementRef.closest('section') || elementRef;
                     tween.scrollTrigger = ScrollTrigger.create({
-                        trigger: elementRef,
+                        trigger: triggerElement,
                         start: "top 85%",
                         scroller: scrollScroller,
                         animation: tween,
@@ -351,6 +358,9 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
     if (startAtTime > 0) {
         activeTweens.forEach(t => {
             if (t && typeof t.totalTime === 'function') {
+                // Force GSAP to evaluate starting properties BEFORE jumping to the middle
+                // This prevents issues where 'from' tweens get confused about their start/end values
+                t.totalTime(0); 
                 t.totalTime(startAtTime);
             }
         });
