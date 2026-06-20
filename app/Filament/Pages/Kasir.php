@@ -7,9 +7,16 @@ use App\Models\Cashflow;
 use Filament\Pages\Page;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\DB;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\EditAction;
 
-class Kasir extends Page
+class Kasir extends Page implements HasTable
 {
+    use InteractsWithTable;
     protected static ?string $navigationIcon = 'heroicon-o-calculator';
     protected static ?string $navigationGroup = 'Transaksi & Keuangan';
     protected static ?string $title = 'Mesin Kasir';

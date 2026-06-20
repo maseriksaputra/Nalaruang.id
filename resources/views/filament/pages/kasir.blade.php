@@ -248,6 +248,17 @@ Contoh Output:
 
     </div>
 
+    <!-- Recent Transactions Table -->
+    <div class="mt-8 bg-white p-6 rounded-xl border border-primary-200 shadow-sm">
+        <h3 class="font-bold text-lg text-gray-800 mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Riwayat Transaksi Terbaru
+        </h3>
+        <div>
+            {{ $this->table }}
+        </div>
+    </div>
+
     <style>
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
