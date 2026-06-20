@@ -253,7 +253,7 @@ const PublicCanvas = ({ config }) => {
                         {section.layers?.map((layer) => (
                             <div key={layer.id} style={{ zIndex: layer.style?.zIndex || 1, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
                                 {!layer.isHidden && layer.children?.map(child => (
-                                    <PublicLayer key={child.id} layer={child} />
+                                    <PublicLayer key={child.id} layer={child} isOpened={isOpened} isCoverPage={index === 0} />
                                 ))}
                             </div>
                         ))}

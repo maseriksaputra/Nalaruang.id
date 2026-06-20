@@ -125,7 +125,7 @@ const getShadowCss = (style) => {
     return `drop-shadow(${x}px ${y}px ${blur}px ${rgbaColor})`;
 };
 
-const PublicLayer = ({ layer }) => {
+const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
     if (layer.isHidden) return null;
     const elementRef = useRef(null);
     const [rsvpForm, setRsvpForm] = useState({ name: '', status: 'Hadir', message: '' });
@@ -179,11 +179,22 @@ const PublicLayer = ({ layer }) => {
     }, [layer.type]);
 
     useEffect(() => {
-        let animationInstance = null;
-        if (layer.animation && elementRef.current) {
-            animationInstance = applyAnimation(elementRef.current, layer.animation, false, layer.style);
+        if (!elementRef.current) return;
+        
+        // Wait until invitation is opened before applying animations for non-cover pages
+        if (!isCoverPage && !isOpened) return;
+
+        let animationCtx = null;
+        if (layer.animation) {
+            animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style);
         }
         
+        return () => {
+            if (animationCtx && animationCtx.kill) animationCtx.kill();
+        };
+    }, [layer, isOpened, isCoverPage]);
+
+    useEffect(() => {
         const handlePlayExit = () => {
             if (layer.animation?.exit && elementRef.current) {
                 applyExitAnimation(elementRef.current, layer.animation, layer.style);
@@ -193,12 +204,6 @@ const PublicLayer = ({ layer }) => {
 
         return () => {
             window.removeEventListener('builder:play_exit_animations', handlePlayExit);
-            if (animationInstance) {
-                animationInstance.kill();
-                if (animationInstance.scrollTrigger) {
-                    animationInstance.scrollTrigger.kill();
-                }
-            }
         };
     }, [layer.animation]);
 
@@ -810,7 +815,7 @@ const PublicLayer = ({ layer }) => {
             {layer.type === 'canvas_group' && (
                 <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                     {layer.children?.map(child => (
-                        <PublicLayer key={child.id} layer={child} />
+                        <PublicLayer key={child.id} layer={child} isOpened={isOpened} isCoverPage={isCoverPage} />
                     ))}
                 </div>
             )}
