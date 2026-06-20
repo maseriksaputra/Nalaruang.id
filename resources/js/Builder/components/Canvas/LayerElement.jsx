@@ -261,7 +261,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 if (elementRef.current) gsap.default.set(elementRef.current, { clearProps: "all" });
             });
         };
-    }, [layer.animation, isActive, isDragging, isResizing]);
+    }, [layer.animation, isActive, isDragging]);
 
     // Sinkronisasi Visibilitas Elemen terhadap Playhead Timeline
     useEffect(() => {
