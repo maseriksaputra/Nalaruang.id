@@ -225,15 +225,15 @@ const PublicCanvas = ({ config }) => {
                                 };
                                 
                                 if (isOpened) {
+                                    transStyle.position = 'absolute';
+                                    transStyle.top = '0';
+                                    transStyle.left = '0';
+                                    transStyle.width = '100%';
+                                    transStyle.zIndex = 50;
+                                    
                                     if (isSlideUp) {
-                                        transStyle.marginTop = `calc(-1 * max(100vh, ${maxY > 0 ? maxY : 0}px))`;
+                                        transStyle.transform = `translateY(calc(-1 * max(100vh, ${maxY > 0 ? maxY : 0}px)))`;
                                     } else {
-                                        transStyle.position = 'absolute';
-                                        transStyle.top = '0';
-                                        transStyle.left = '0';
-                                        transStyle.width = '100%';
-                                        transStyle.zIndex = 50;
-                                        
                                         switch(transitionType) {
                                             case 'slide_down': transStyle.transform = 'translateY(100vh)'; transStyle.opacity = 0; break;
                                             case 'slide_left': transStyle.transform = 'translateX(-100vw)'; transStyle.opacity = 0; break;
