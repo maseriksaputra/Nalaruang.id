@@ -194,11 +194,11 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             });
             activeTweens.push(tween);
         }
-    } else if (!isBuilder && config.delay && config.delay > 0) {
+    } else if (config.delay && config.delay > 0 && layerAnimation.idle !== 'custom_timeline') {
         // Fallback: If no entry animation but it has a timeline delay, hide it until delay
         const tween = gsap.fromTo(elementRef, 
             { opacity: 0 }, 
-            { opacity: 1, duration: 0.01, delay: config.delay, immediateRender: true }
+            { opacity: layerStyle?.opacity ?? 1, duration: 0.01, delay: config.delay, immediateRender: true }
         );
         activeTweens.push(tween);
     }
@@ -257,7 +257,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 gsap.set(elementRef, {
                     x: getValidNum(firstKf.x, baseX) - baseX,
                     y: getValidNum(firstKf.y, baseY) - baseY,
-                    opacity: getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1),
+                    opacity: (config.delay && config.delay > 0) ? 0 : getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1),
                     scale: getValidNum(firstKf.scale, layerStyle?.scale ?? 1),
                     rotation: getValidNum(firstKf.rotation, layerStyle?.rotation ?? 0),
                     ...(firstKf.width !== undefined && { width: firstKf.width }),
@@ -265,8 +265,13 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 });
             } else if (!hasEntryAnimation) {
                 gsap.set(elementRef, {
-                    opacity: layerStyle?.opacity ?? 1,
+                    opacity: (config.delay && config.delay > 0) ? 0 : (layerStyle?.opacity ?? 1),
                 });
+            }
+            
+            // IF it was hidden by delay, reveal it exactly when timeline starts (time 0)
+            if (config.delay && config.delay > 0 && !hasEntryAnimation) {
+                tl.set(elementRef, { opacity: getValidNum(firstKf?.opacity, layerStyle?.opacity ?? 1), immediateRender: false }, 0);
             }
             
             // Loop dari titik 1 ke seterusnya
