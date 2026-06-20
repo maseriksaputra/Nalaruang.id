@@ -194,11 +194,6 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
         
         setLocalPos({ x: newX, y: newY });
         setLocalSize({ width: newWidth, height: newHeight });
-        
-        if (rndRef.current) {
-            rndRef.current.updatePosition({ x: newX, y: newY });
-            rndRef.current.updateSize({ width: newWidth, height: newHeight });
-        }
     }, [layer.style?.x, layer.style?.y, layer.style?.width, layer.style?.height]);
 
     // Engine Animasi Eksekusi
@@ -978,7 +973,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
             key={`rnd-${layer.id}`}
             ref={rndRef}
             size={{ width: localSize.width, height: localSize.height }}
-            defaultPosition={{ x: layer.style?.x || 0, y: layer.style?.y || 0 }}
+            position={{ x: localPos.x, y: localPos.y }}
             onDrag={(e, d) => {
                 let newX = d.x;
                 let newY = d.y;
@@ -1015,9 +1010,6 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 
                 setLocalPos({ x: newX, y: newY });
                 localPosRef.current = { x: newX, y: newY };
-                if (rndRef.current && (newX !== d.x || newY !== d.y)) {
-                    rndRef.current.updatePosition({ x: newX, y: newY });
-                }
                 
                 const isDrawingPath = useUIStore.getState().isDrawingPath;
                 if (isDrawingPath) {
