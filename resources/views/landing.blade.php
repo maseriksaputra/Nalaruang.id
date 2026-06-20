@@ -119,7 +119,7 @@
             <div class="flex justify-between h-20 items-center">
                 <div class="flex-shrink-0 flex items-center">
                     <div class="flex items-center gap-2 group cursor-pointer" id="logo-container">
-                        <img src="{{ asset('logo.png') }}" alt="Nalaruang.id" class="h-20 w-auto object-contain transform scale-150 origin-left transition duration-300" id="logo-img">
+                        <img width="200" height="80" src="{{ asset('logo.png') }}" alt="Nalaruang.id" class="h-20 w-auto object-contain transform scale-150 origin-left transition duration-300" id="logo-img">
                     </div>
                 </div>
                 <div class="hidden lg:flex space-x-8 text-sm font-medium">
@@ -145,15 +145,15 @@
         <div class="absolute inset-0 w-full h-full z-0 overflow-hidden">
             <div id="hero-slider-track" class="flex h-full w-full">
                 <!-- Slide 1: Pernikahan / Wedding -->
-                <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=1920" alt="Pernikahan" class="flex-none w-full h-full object-cover object-center vintage-film bg-brand-800">
+                <img width="1920" height="1080" src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80&w=1920" alt="Pernikahan" class="flex-none w-full h-full object-cover object-center vintage-film bg-brand-800">
                 <!-- Slide 2: Cincin Kawin -->
-                <img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&q=80&w=1920" alt="Cincin Kawin" class="flex-none w-full h-full object-cover object-center vintage-film bg-brand-800">
+                <img width="1920" height="1080" src="https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&q=80&w=1920" alt="Cincin Kawin" class="flex-none w-full h-full object-cover object-center vintage-film bg-brand-800">
                 <!-- Slide 3: Digital Printing / Kertas Undangan (URL DIPERBARUI) -->
-                <img src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&q=80&w=1920" alt="Digital Printing" class="flex-none w-full h-full object-cover object-center vintage-film bg-brand-800">
+                <img width="1920" height="1080" src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&q=80&w=1920" alt="Digital Printing" class="flex-none w-full h-full object-cover object-center vintage-film bg-brand-800">
                 <!-- Slide 4: Web / Mobile App Dev (IT) -->
-                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1920" alt="Web Development IT" class="flex-none w-full h-full object-cover object-center vintage-film bg-brand-800">
+                <img width="1920" height="1080" src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1920" alt="Web Development IT" class="flex-none w-full h-full object-cover object-center vintage-film bg-brand-800">
                 <!-- Slide 5: Souvenir / Gift -->
-                <img src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=1920" alt="Souvenir Acara" class="flex-none w-full h-full object-cover object-center vintage-film bg-brand-800">
+                <img width="1920" height="1080" src="https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=1920" alt="Souvenir Acara" class="flex-none w-full h-full object-cover object-center vintage-film bg-brand-800">
             </div>
             
             <div class="absolute inset-0 hero-overlay z-10 pointer-events-none"></div>
@@ -430,12 +430,12 @@
                         class="relative group/slider">
                         
                         <!-- Arrow Kiri -->
-                        <button x-show="canScrollLeft" @click="scrollLeft()" class="absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white shadow-[0_5px_15px_rgba(0,0,0,0.1)] text-brand-900 flex items-center justify-center opacity-0 group-hover/slider:opacity-100 transition-all hover:bg-brand-50 hover:scale-110 disabled:opacity-0" style="display: none;">
+                        <button aria-label="Geser ke kiri" x-show="canScrollLeft" @click="scrollLeft()" class="absolute -left-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white shadow-[0_5px_15px_rgba(0,0,0,0.1)] text-brand-900 flex items-center justify-center opacity-0 group-hover/slider:opacity-100 transition-all hover:bg-brand-50 hover:scale-110 disabled:opacity-0" style="display: none;">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                         </button>
 
                         <!-- Arrow Kanan -->
-                        <button x-show="canScrollRight" @click="scrollRight()" class="absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white shadow-[0_5px_15px_rgba(0,0,0,0.1)] text-brand-900 flex items-center justify-center opacity-0 group-hover/slider:opacity-100 transition-all hover:bg-brand-50 hover:scale-110 disabled:opacity-0" style="display: none;">
+                        <button aria-label="Geser ke kanan" x-show="canScrollRight" @click="scrollRight()" class="absolute -right-5 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white shadow-[0_5px_15px_rgba(0,0,0,0.1)] text-brand-900 flex items-center justify-center opacity-0 group-hover/slider:opacity-100 transition-all hover:bg-brand-50 hover:scale-110 disabled:opacity-0" style="display: none;">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                         </button>
 
@@ -526,10 +526,10 @@
                                     
                                     <!-- Slider Controls untuk Gambar -->
                                     <div x-show="slides.length > 1" class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                                        <button @click.prevent="prev()" class="w-6 h-6 rounded-full bg-white/70 hover:bg-white text-gray-800 flex items-center justify-center shadow transition-colors">
+                                        <button aria-label="Gambar sebelumnya" @click.prevent="prev()" class="w-6 h-6 rounded-full bg-white/70 hover:bg-white text-gray-800 flex items-center justify-center shadow transition-colors">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                         </button>
-                                        <button @click.prevent="next()" class="w-6 h-6 rounded-full bg-white/70 hover:bg-white text-gray-800 flex items-center justify-center shadow transition-colors">
+                                        <button aria-label="Gambar selanjutnya" @click.prevent="next()" class="w-6 h-6 rounded-full bg-white/70 hover:bg-white text-gray-800 flex items-center justify-center shadow transition-colors">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                         </button>
                                     </div>
@@ -544,7 +544,7 @@
                                                 Lihat Demo
                                             </a>
                                             @else
-                                            <button @click.prevent.stop="$dispatch('open-lightbox', { images: slides })" 
+                                            <button aria-label="Buka ukuran penuh" @click.prevent.stop="$dispatch('open-lightbox', { images: slides })" 
                                                class="w-full py-1.5 md:py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-[10px] md:text-xs font-medium transition backdrop-blur-sm text-center">
                                                 Lihat Gambar
                                             </button>
@@ -563,7 +563,7 @@
                                     </div>
                                     <div class="mt-auto pt-2 flex flex-col">
                                         @if($template->discount_price && $template->discount_price < $template->price)
-                                            <div class="text-gray-400 text-[10px] md:text-xs line-through mb-0.5">
+                                            <div class="text-pink-100/80 text-[10px] md:text-xs line-through mb-0.5">
                                                 Rp {{ number_format($template->price, 0, ',', '.') }}
                                             </div>
                                             <div class="text-brand-600 font-bold text-sm md:text-base">
@@ -583,7 +583,7 @@
                     @else
                     <div class="bg-white/50 rounded-xl p-8 text-center border border-brand-200 border-dashed">
                         <p class="text-gray-500 font-serif italic text-lg">Katalog produk untuk layanan ini sedang dalam persiapan.</p>
-                        <p class="text-sm text-gray-400 mt-2">Silakan hubungi tim kami untuk informasi lebih lanjut.</p>
+                        <p class="text-sm text-pink-100/80 mt-2">Silakan hubungi tim kami untuk informasi lebih lanjut.</p>
                     </div>
                     @endif
                 </div>
@@ -614,7 +614,7 @@
                      style="aspect-ratio: 1/1;"
                      data-aos="zoom-in" data-aos-delay="{{ $loop->iteration * 100 }}">
                     
-                    <img src="{{ $portfolio->image ? Storage::url($portfolio->image) : 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000' }}" 
+                    <img width="600" height="400" loading="lazy" src="{{ $portfolio->image ? Storage::url($portfolio->image) : 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000' }}" 
                          class="portfolio-img absolute inset-0 w-full h-full object-cover" 
                          alt="{{ $portfolio->title }}">
                          
@@ -670,7 +670,7 @@
                     <p class="text-gray-600 mb-6 italic text-sm leading-relaxed">"Undangan website-nya sangat elegan dan cepat diakses! Tamu-tamu suka banget dengan fitur QR code buku tamunya, jadi gak ribet pas di resepsi. Sangat terbantu."</p>
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Client" class="w-full h-full object-cover">
+                            <img width="100" height="100" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Client" loading="lazy" class="w-full h-full object-cover">
                         </div>
                         <div>
                             <h4 class="font-serif text-brand-900 font-semibold">Anisa & Dimas</h4>
@@ -687,7 +687,7 @@
                     <p class="text-gray-600 mb-6 italic text-sm leading-relaxed">"Pesan buku Yasin custom beserta souvenir tasbih di sini. Kualitas cetaknya luar biasa rapi, bahannya premium, dan pelayanannya super ramah. Recommended!"</p>
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Client" class="w-full h-full object-cover">
+                            <img width="100" height="100" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Client" loading="lazy" class="w-full h-full object-cover">
                         </div>
                         <div>
                             <h4 class="font-serif text-brand-900 font-semibold">Keluarga Bpk. Haryono</h4>
@@ -704,7 +704,7 @@
                     <p class="text-gray-300 mb-6 italic text-sm leading-relaxed">"Tidak hanya jago bikin undangan, tim ini juga handle pembuatan aplikasi reservasi untuk bisnis F&B kami. UI/UX-nya sangat modern dan sistem berjalannya smooth."</p>
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 bg-brand-800 rounded-full overflow-hidden">
-                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=80" alt="Client" class="w-full h-full object-cover">
+                            <img width="100" height="100" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=100&q=80" alt="Client" loading="lazy" class="w-full h-full object-cover">
                         </div>
                         <div>
                             <h4 class="font-serif text-white font-semibold">Sarah Wijaya</h4>
@@ -721,19 +721,19 @@
         <div class="bg-brand-600 text-white text-xs px-4 py-2.5 rounded-lg shadow-lg shadow-brand-900/20 mb-1 hidden md:block animate-bounce">
             Punya pertanyaan ?<br><span class="font-bold">Cek Help Center</span>
         </div>
-        <a href="https://wa.me/6285196811112?text=Halo%20Tim%20Nalaruang,%20saya%20ingin%20bertanya%20terkait%20layanan%20Anda." target="_blank" class="bg-brand-600 hover:bg-brand-700 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition transform hover:scale-110">
+        <a aria-label="Hubungi kami via WhatsApp" href="https://wa.me/6285196811112?text=Halo%20Tim%20Nalaruang,%20saya%20ingin%20bertanya%20terkait%20layanan%20Anda." target="_blank" class="bg-brand-600 hover:bg-brand-700 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition transform hover:scale-110">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
         </a>
     </div>
 
     <!-- Footer -->
-    <footer id="kontak" class="bg-brand-900 text-gray-300 py-16 border-t-[6px] border-brand-800">
+    <footer id="kontak" class="bg-brand-900 text-pink-50 py-16 border-t-[6px] border-brand-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12">
             <div class="md:col-span-2">
                 <div class="flex items-center gap-2 mb-6">
-                    <img src="{{ asset('logo.png') }}" alt="Nalaruang.id" class="h-28 w-auto object-contain transform scale-125 origin-left">
+                    <img width="280" height="112" src="{{ asset('logo.png') }}" alt="Nalaruang.id" class="h-28 w-auto object-contain transform scale-125 origin-left">
                 </div>
-                <p class="text-sm text-gray-400 leading-relaxed max-w-sm">
+                <p class="text-sm text-pink-100/80 leading-relaxed max-w-sm">
                     Platform integrasi cetak fisik premium, souvenir, undangan digital website estetik, hingga pengembangan aplikasi bisnis terpercaya.
                 </p>
             </div>
@@ -747,7 +747,7 @@
             </div>
             <div>
                 <h4 class="text-white font-serif text-lg mb-6 tracking-wide">Hubungi Kami</h4>
-                <ul class="space-y-3 text-sm text-gray-400">
+                <ul class="space-y-3 text-sm text-pink-100/80">
                     <li class="flex items-center gap-3">
                         <svg class="w-4 h-4 text-brand-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                         <a href="https://wa.me/6285196811112?text=Halo%20Tim%20Nalaruang,%20saya%20ingin%20bertanya%20terkait%20layanan%20Anda." target="_blank" class="hover:text-white transition">+62 851-9681-1112</a>
