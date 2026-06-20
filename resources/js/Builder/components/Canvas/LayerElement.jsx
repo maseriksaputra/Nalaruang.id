@@ -298,6 +298,32 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
         loadFont('Caveat');
     }
 
+    const getClipPath = () => {
+        if (typeof document === 'undefined') return 'none';
+        const storeState = useCanvasStore.getState();
+        const workspaceView = storeState.workspaceView;
+        const canvasWidth = workspaceView === 'desktop' ? 1200 : 414;
+        const sectionEl = document.getElementById(sectionId);
+        const canvasHeight = sectionEl ? sectionEl.offsetHeight : 844;
+
+        const x = parseFloat(localPos.x) || 0;
+        const y = parseFloat(localPos.y) || 0;
+        const w = parseFloat(localSize.width) || 100;
+        const h = parseFloat(localSize.height) || 100;
+
+        const clipLeft = Math.max(0, -x);
+        const clipRight = Math.max(0, x + w - canvasWidth);
+        const clipTop = Math.max(0, -y);
+        const clipBottom = Math.max(0, y + h - canvasHeight);
+
+        if (clipLeft > 0 || clipRight > 0 || clipTop > 0 || clipBottom > 0) {
+            return `inset(${clipTop}px ${clipRight}px ${clipBottom}px ${clipLeft}px)`;
+        }
+        return 'none';
+    };
+
+    const clipPathStyle = getClipPath();
+
     const innerStructure = (
         <div className="w-full h-full relative" style={{ transform: `rotate(${layer.style?.rotation || 0}deg)`, opacity: layer.style?.opacity ?? 1, willChange: 'transform, opacity' }}>
                 
@@ -318,6 +344,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                     <div 
                         className={`w-full h-full`}
                         style={{
+                            clipPath: clipPathStyle,
                             transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
                             borderRadius: (() => {
                                 if (layer.style?.borderRadius === undefined) return '0px';
