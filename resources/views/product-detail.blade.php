@@ -1,46 +1,16 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $product->name }} - Nalaruang</title>
-    <link rel="icon" type="image/png" href="{{ asset('logo1.png') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
-        .prose img { max-width: 100%; border-radius: 0.5rem; }
-        .prose p { margin-bottom: 0.75rem; color: #475569; line-height: 1.6; }
-        .prose ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; color: #475569; }
-        .prose ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; color: #475569; }
-        .prose h2, .prose h3 { font-weight: 700; color: #1e293b; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-        
-        /* Hide scrollbar for slider thumbnails */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    </style>
-</head>
-<body class="pb-24 md:pb-0 bg-gray-50">
+@extends('layouts.main')
 
-    <!-- Header / Navbar -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center">
-                <a href="javascript:history.back()" class="mr-4 text-gray-500 hover:text-[#d81b60] transition flex items-center gap-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                    <span class="hidden md:inline font-medium">Kembali</span>
-                </a>
-                <h1 class="font-bold text-lg text-gray-900 truncate md:hidden">Detail Produk</h1>
-            </div>
-            <a href="/" class="hidden md:block">
-                <img src="{{ asset('logo1.png') }}" alt="Nalaruang Logo" class="h-8 w-auto">
-            </a>
-            <div class="w-10"></div> <!-- Spacer for mobile centering -->
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-0 md:px-4 sm:px-6 lg:px-8 py-0 md:py-8">
+@section('content')
+<style>
+    .prose img { max-width: 100%; border-radius: 0.5rem; }
+    .prose p { margin-bottom: 0.75rem; color: #475569; line-height: 1.6; }
+    .prose ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; color: #475569; }
+    .prose ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; color: #475569; }
+    .prose h2, .prose h3 { font-weight: 700; color: #1e293b; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+    <main class="max-w-7xl mx-auto px-0 md:px-4 sm:px-6 lg:px-8 py-24 md:py-32">
         
         <div class="bg-white md:rounded-2xl md:shadow-sm md:border md:border-gray-100 overflow-hidden">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-0 md:gap-8">
@@ -222,5 +192,4 @@
         </div>
     </div>
 
-</body>
-</html>
+@endsection
