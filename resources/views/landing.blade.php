@@ -463,6 +463,7 @@
                                                 track.style.transition = 'none';
                                                 this.currentSlide = 0;
                                                 track.style.transform = `translateX(0%)`;
+                                                void track.offsetWidth;
                                             }, 700);
                                         }
                                     },
@@ -473,6 +474,7 @@
                                             track.style.transition = 'none';
                                             this.currentSlide = this.slides.length;
                                             track.style.transform = `translateX(-${this.currentSlide * 100}%)`;
+                                            void track.offsetWidth;
                                             
                                             setTimeout(() => {
                                                 track.style.transition = 'transform 0.7s cubic-bezier(0.4, 0, 0.2, 1)';
@@ -843,6 +845,7 @@
                         track.appendChild(track.firstElementChild); // Pindah div gambar pertama ke akhir
                     }
                     track.style.transform = 'translateX(0)'; // Reset posisi ke awal
+                    void track.offsetWidth; // Force layout flush
                 }, 1000); 
             }
 
