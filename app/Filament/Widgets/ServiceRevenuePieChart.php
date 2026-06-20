@@ -17,19 +17,30 @@ class ServiceRevenuePieChart extends ChartWidget
 
     protected function getData(): array
     {
-        $data = Cashflow::with('service')
-            ->select('service_id', DB::raw('SUM(amount) as total_income'))
+        $data = Cashflow::select('category', DB::raw('SUM(amount) as total_income'))
             ->where('type', 'income')
-            ->groupBy('service_id')
+            ->groupBy('category')
             ->get();
 
         $labels = [];
         $values = [];
-        $colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+        
+        // Sesuaikan dengan warna badge di CashflowResource
+        $colorsMap = [
+            'F&B' => '#f59e0b',       // warning
+            'ATK' => '#0ea5e9',       // info
+            'Printing' => '#10b981',  // success
+            'Digital' => '#6366f1',   // primary
+            'Tabungan BEP' => '#8b5cf6', // indigo
+        ];
+        
+        $colors = [];
 
         foreach ($data as $index => $row) {
-            $labels[] = $row->service ? $row->service->title : 'Tanpa Bidang Usaha';
+            $cat = $row->category ?: 'Tanpa Kategori';
+            $labels[] = $cat;
             $values[] = $row->total_income;
+            $colors[] = $colorsMap[$row->category] ?? '#9ca3af'; // default gray untuk yang tidak cocok
         }
 
         return [
@@ -37,7 +48,7 @@ class ServiceRevenuePieChart extends ChartWidget
                 [
                     'label' => 'Total Pendapatan',
                     'data' => $values,
-                    'backgroundColor' => array_slice($colors, 0, count($values)),
+                    'backgroundColor' => $colors,
                 ],
             ],
             'labels' => $labels,
