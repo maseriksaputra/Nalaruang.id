@@ -196,8 +196,8 @@ Contoh Output:
                                 <div class="pr-4 space-y-1.5">
                                     <h4 class="font-bold text-gray-800 text-base leading-tight">{{ $item['name'] }}</h4>
                                     <div class="flex items-center gap-1.5">
-                                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded border {{ ($item['type'] ?? $transactionType) === 'expense' ? 'bg-red-50 text-red-600 border-red-100' : 'bg-green-50 text-green-600 border-green-100' }}">
-                                            {{ ($item['type'] ?? $transactionType) === 'expense' ? 'Pengeluaran' : 'Pemasukan' }}
+                                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded border" style="{{ ($item['type'] ?? $transactionType) === 'expense' ? 'background-color: #fef2f2; color: #dc2626; border-color: #fee2e2;' : 'background-color: #f0fdf4; color: #16a34a; border-color: #dcfce7;' }}">
+                                            {{ ($item['type'] ?? $transactionType) === 'expense' ? '(-) Pengeluaran' : '(+) Pemasukan' }}
                                         </span>
                                         <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
                                             • {{ $item['category'] }}
@@ -214,7 +214,7 @@ Contoh Output:
                                 </div>
                                 <div class="text-right">
                                     <div class="text-xs text-gray-400 font-medium">Rp {{ number_format($item['price'], 0, ',', '.') }} / item</div>
-                                    <div class="font-bold text-pink-600 text-base">Rp {{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</div>
+                                    <div class="font-bold text-base" style="color: #db2777;">Rp {{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</div>
                                 </div>
                             </div>
                         </div>
