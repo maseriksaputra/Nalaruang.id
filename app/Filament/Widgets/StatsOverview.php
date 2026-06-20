@@ -41,35 +41,39 @@ class StatsOverview extends BaseWidget
 
         $formatValue = function ($amount) {
             $val = 'Rp ' . number_format($amount, 0, ',', '.');
-            return new \Illuminate\Support\HtmlString('<span class="text-2xl xl:text-3xl tracking-tighter whitespace-nowrap">' . $val . '</span>');
+            return new \Illuminate\Support\HtmlString('<span class="text-2xl xl:text-3xl font-bold tracking-tighter whitespace-nowrap">' . $val . '</span>');
+        };
+
+        $boldTitle = function ($title) {
+            return new \Illuminate\Support\HtmlString('<span class="font-bold text-gray-800 dark:text-white">' . $title . '</span>');
         };
 
         return [
-            Stat::make('Total Pendapatan', $formatValue($income))
+            Stat::make($boldTitle('Total Pendapatan'), $formatValue($income))
                 ->description('Seluruh kas masuk')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success')
                 ->url(\App\Filament\Resources\CashflowResource::getUrl('index'))
                 ->extraAttributes(['style' => 'background-color: rgba(16, 185, 129, 0.05);']),
-            Stat::make('Total Pengeluaran', $formatValue($expense))
+            Stat::make($boldTitle('Total Pengeluaran'), $formatValue($expense))
                 ->description('Termasuk tabungan BEP')
                 ->descriptionIcon('heroicon-m-arrow-trending-down')
                 ->color('danger')
                 ->url(\App\Filament\Resources\CashflowResource::getUrl('index'))
                 ->extraAttributes(['style' => 'background-color: rgba(239, 68, 68, 0.05);']),
-            Stat::make('Laba Bersih Murni', $formatValue($labaBersih))
+            Stat::make($boldTitle('Laba Bersih Murni'), $formatValue($labaBersih))
                 ->description('Dari operasional (tanpa hitung BEP)')
                 ->color($labaBersih >= 0 ? 'success' : 'danger')
                 ->extraAttributes(['style' => $labaBersih >= 0 ? 'background-color: rgba(16, 185, 129, 0.05);' : 'background-color: rgba(239, 68, 68, 0.05);']),
-            Stat::make('Sisa Kas (Di Laci)', $formatValue($kasLaci))
+            Stat::make($boldTitle('Sisa Kas (Di Laci)'), $formatValue($kasLaci))
                 ->description('Uang operasional yang siap dipakai')
                 ->color($kasLaci >= 0 ? 'warning' : 'danger')
                 ->extraAttributes(['style' => 'background-color: rgba(245, 158, 11, 0.05);']),
-            Stat::make('Tabungan BEP', $formatValue($totalBep))
+            Stat::make($boldTitle('Tabungan BEP'), $formatValue($totalBep))
                 ->description('Tersimpan di kotak BEP')
                 ->color('success')
                 ->extraAttributes(['style' => 'background-color: rgba(16, 185, 129, 0.05);']),
-            Stat::make('Total Aset Keseluruhan', $formatValue($totalAset))
+            Stat::make($boldTitle('Total Aset Keseluruhan'), $formatValue($totalAset))
                 ->description('Laci Kasir + Tabungan BEP')
                 ->color('primary')
                 ->extraAttributes(['style' => 'background-color: rgba(59, 130, 246, 0.05);']),
