@@ -40,8 +40,32 @@ class StatsOverview extends BaseWidget
         $totalAset = $kasLaci + $totalBep;
 
         $formatValue = function ($amount) {
-            $val = 'Rp ' . number_format($amount, 0, ',', '.');
-            return new \Illuminate\Support\HtmlString('<span class="text-2xl xl:text-3xl font-bold tracking-tighter whitespace-nowrap">' . $val . '</span>');
+            return new \Illuminate\Support\HtmlString("
+                <span 
+                    x-data=\"{ count: 0, target: " . (float)$amount . " }\"
+                    x-init=\"
+                        let duration = 2000;
+                        let start = null;
+                        let step = (timestamp) => {
+                            if (!start) start = timestamp;
+                            let progress = Math.min((timestamp - start) / duration, 1);
+                            let ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                            count = target * ease;
+                            let val = Math.round(count);
+                            let formatted = (val < 0 ? '-' : '') + 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.abs(val));
+                            \$el.innerText = formatted;
+                            if (progress < 1) {
+                                window.requestAnimationFrame(step);
+                            } else {
+                                let finalVal = Math.round(target);
+                                \$el.innerText = (finalVal < 0 ? '-' : '') + 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.abs(finalVal));
+                            }
+                        };
+                        window.requestAnimationFrame(step);
+                    \"
+                    class=\"text-2xl xl:text-3xl font-bold tracking-tighter whitespace-nowrap\"
+                >Rp 0</span>
+            ");
         };
 
         $boldTitle = function ($title) {
