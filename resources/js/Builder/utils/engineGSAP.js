@@ -231,6 +231,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
         } else if (layerAnimation.idle === 'custom_timeline' && layerAnimation.custom_keyframes && layerAnimation.custom_keyframes.length > 0) {
             const tl = gsap.timeline({
                 repeat: (isLooping && !isBuilder) ? -1 : 0,
+                delay: config.delay || 0,
                 scrollTrigger: (!isBuilder && trigger === 'onScroll') ? {
                     trigger: elementRef.closest('.public-layer-element') || elementRef.closest('.layer-wrapper') || elementRef,
                     start: "top 85%",
