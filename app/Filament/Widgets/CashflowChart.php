@@ -50,8 +50,8 @@ class CashflowChart extends ChartWidget
         $expenseArray = [];
 
         foreach ($dates as $date) {
-            $incomeArray[] = $incomeData->has($date) ? $incomeData[$date]->total : 0;
-            $expenseArray[] = $expenseData->has($date) ? $expenseData[$date]->total : 0;
+            $incomeArray[] = $incomeData->has($date) ? (float) $incomeData[$date]->total : 0;
+            $expenseArray[] = $expenseData->has($date) ? abs((float) $expenseData[$date]->total) : 0;
         }
 
         return [
