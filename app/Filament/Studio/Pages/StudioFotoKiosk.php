@@ -50,13 +50,12 @@ class StudioFotoKiosk extends Page
         $image_base64 = base64_decode($image_parts[1]);
         
         $fileName = 'photobooth_' . time() . '.png';
-        $path = storage_path('app/public/photo_sessions/' . $fileName);
+        $disk = config('filesystems.default');
         
-        if (!file_exists(storage_path('app/public/photo_sessions'))) {
-            mkdir(storage_path('app/public/photo_sessions'), 0777, true);
-        }
-        
-        file_put_contents($path, $image_base64);
+        \Illuminate\Support\Facades\Storage::disk($disk)->put(
+            'photo_sessions/' . $fileName, 
+            $image_base64
+        );
         
         // Save to Database
         \App\Models\PhotoSession::create([
@@ -67,6 +66,6 @@ class StudioFotoKiosk extends Page
         ]);
         
         // Fire event to notify success
-        $this->dispatch('photo-saved', ['url' => asset('storage/photo_sessions/' . $fileName)]);
+        $this->dispatch('photo-saved', ['url' => \Illuminate\Support\Facades\Storage::disk($disk)->url('photo_sessions/' . $fileName)]);
     }
 }

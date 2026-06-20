@@ -69,6 +69,10 @@ class ServerMetricsWidget extends BaseWidget
     private function getObjectStorageSize(): array
     {
         try {
+            if (config('filesystems.default') === 's3') {
+                return ['size_formatted' => 'Aman di S3', 'file_count' => '-'];
+            }
+
             // Count size of storage/app/public directory
             $dir = storage_path('app/public');
             if (!is_dir($dir)) {
