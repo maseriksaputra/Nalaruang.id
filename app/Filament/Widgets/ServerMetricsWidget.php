@@ -8,7 +8,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class ServerMetricsWidget extends BaseWidget
 {
     protected static ?int $sort = -1; // Top of the dashboard
-    protected static ?string $pollingInterval = '2s'; // Auto refresh every 2 seconds for realtime feel
+    protected static ?string $pollingInterval = '10s'; // Diperlama agar admin tidak looping/berat
 
     protected function getStats(): array
     {
