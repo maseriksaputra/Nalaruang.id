@@ -89,6 +89,9 @@ class CashflowLineChart extends ChartWidget
     {
         $query = $this->getPageTableQuery();
         
+        // Bersihkan order by bawaan dari table sebelum di-group by
+        $query->reorder();
+        
         // Dapatkan data terfilter dan kelompokkan per tanggal
         $data = (clone $query)
             ->select(
