@@ -563,7 +563,7 @@
                                     </div>
                                     <div class="mt-auto pt-2 flex flex-col">
                                         @if($template->discount_price && $template->discount_price < $template->price)
-                                            <div class="text-pink-100/80 text-[10px] md:text-xs line-through mb-0.5">
+                                            <div class="text-gray-400 font-medium text-[10px] md:text-xs line-through mb-0.5">
                                                 Rp {{ number_format($template->price, 0, ',', '.') }}
                                             </div>
                                             <div class="text-brand-600 font-bold text-sm md:text-base">
@@ -583,7 +583,7 @@
                     @else
                     <div class="bg-white/50 rounded-xl p-8 text-center border border-brand-200 border-dashed">
                         <p class="text-gray-500 font-serif italic text-lg">Katalog produk untuk layanan ini sedang dalam persiapan.</p>
-                        <p class="text-sm text-pink-100/80 mt-2">Silakan hubungi tim kami untuk informasi lebih lanjut.</p>
+                        <p class="text-sm text-gray-400 mt-2">Silakan hubungi tim kami untuk informasi lebih lanjut.</p>
                     </div>
                     @endif
                 </div>
