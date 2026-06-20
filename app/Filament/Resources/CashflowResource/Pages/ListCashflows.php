@@ -79,19 +79,19 @@ class ListCashflows extends ListRecords
         if ($period && $period !== 'all' && $period !== 'custom') {
             $now = now();
             match ($period) {
-                'today' => $query->whereDate('transaction_date', clone $now),
-                'yesterday' => $query->whereDate('transaction_date', (clone $now)->subDay()),
-                'this_week' => $query->whereBetween('transaction_date', [(clone $now)->startOfWeek(), (clone $now)->endOfWeek()]),
-                'last_week' => $query->whereBetween('transaction_date', [(clone $now)->subWeek()->startOfWeek(), (clone $now)->subWeek()->endOfWeek()]),
+                'today' => $query->where('transaction_date', (clone $now)->format('Y-m-d')),
+                'yesterday' => $query->where('transaction_date', (clone $now)->subDay()->format('Y-m-d')),
+                'this_week' => $query->whereBetween('transaction_date', [(clone $now)->startOfWeek()->format('Y-m-d'), (clone $now)->endOfWeek()->format('Y-m-d')]),
+                'last_week' => $query->whereBetween('transaction_date', [(clone $now)->subWeek()->startOfWeek()->format('Y-m-d'), (clone $now)->subWeek()->endOfWeek()->format('Y-m-d')]),
                 'this_month' => $query->whereMonth('transaction_date', $now->month)->whereYear('transaction_date', $now->year),
                 'last_month' => $query->whereMonth('transaction_date', (clone $now)->subMonth()->month)->whereYear('transaction_date', (clone $now)->subMonth()->year),
-                '30_days' => $query->whereDate('transaction_date', '>=', (clone $now)->subDays(30)),
+                '30_days' => $query->where('transaction_date', '>=', (clone $now)->subDays(30)->format('Y-m-d')),
                 'this_year' => $query->whereYear('transaction_date', $now->year),
                 default => null,
             };
         } elseif ($period === 'custom') {
-            $query->when($data['startDate'] ?? null, fn ($q, $date) => $q->whereDate('transaction_date', '>=', $date))
-                  ->when($data['endDate'] ?? null, fn ($q, $date) => $q->whereDate('transaction_date', '<=', $date));
+            $query->when($data['startDate'] ?? null, fn ($q, $date) => $q->where('transaction_date', '>=', \Carbon\Carbon::parse($date)->format('Y-m-d')))
+                  ->when($data['endDate'] ?? null, fn ($q, $date) => $q->where('transaction_date', '<=', \Carbon\Carbon::parse($date)->format('Y-m-d')));
         }
 
         return $query;

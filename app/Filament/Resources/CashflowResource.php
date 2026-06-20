@@ -134,23 +134,30 @@ class CashflowResource extends Resource
                     ->collapsible(false) // Standard table layout
                     ->orderQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query, string $direction) => $query->orderBy('transaction_date', 'desc'))
                     ->getDescriptionFromRecordUsing(function (\App\Models\Cashflow $record) {
-                        static $dailyStats = [];
-                        $date = \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d');
+                        static $dailyStats = null;
                         
-                        if (!isset($dailyStats[$date])) {
-                            $stats = \App\Models\Cashflow::where('transaction_date', $date)
-                                ->selectRaw("
-                                    SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
-                                    SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense
-                                ")->first();
-                            $dailyStats[$date] = [
-                                'income' => $stats->income ?? 0,
-                                'expense' => $stats->expense ?? 0
-                            ];
+                        if ($dailyStats === null) {
+                            $allStats = \App\Models\Cashflow::selectRaw("
+                                transaction_date,
+                                SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
+                                SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense
+                            ")
+                            ->groupBy('transaction_date')
+                            ->get();
+                            
+                            $dailyStats = [];
+                            foreach ($allStats as $stat) {
+                                $dailyStats[$stat->transaction_date] = [
+                                    'income' => $stat->income ?? 0,
+                                    'expense' => $stat->expense ?? 0
+                                ];
+                            }
                         }
                         
-                        $income = $dailyStats[$date]['income'];
-                        $expense = $dailyStats[$date]['expense'];
+                        $date = \Carbon\Carbon::parse($record->transaction_date)->format('Y-m-d');
+                        
+                        $income = $dailyStats[$date]['income'] ?? 0;
+                        $expense = $dailyStats[$date]['expense'] ?? 0;
                         
                         // Expense is saved as negative in database, so net is income + expense
                         $net = $income + $expense;
