@@ -458,7 +458,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                         />
                         {/* Overlay effects for grain or vignette */}
                         {layer.style?.imageFilter && getFilterById(layer.style.imageFilter).getOverlay && (
-                            <div dangerouslySetInnerHTML={{ __html: getFilterById(layer.style.imageFilter).getOverlay(layer.style.imageFilterIntensity ?? 100) }} />
+                            <div dangerouslySetInnerHTML={{ __html: getFilterById(layer.style.imageFilter).getOverlay(layer.style.imageFilterIntensity ?? 100, layer) }} />
                         )}
                     </div>
                 )}
@@ -550,7 +550,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                                 }}
                             />
                             {layer.style?.polaroidData?.filterId && layer.style.polaroidData.filterId !== 'none' && (
-                                <div dangerouslySetInnerHTML={{ __html: getFilterById(layer.style.polaroidData.filterId)?.getOverlay(100) || '' }} />
+                                <div dangerouslySetInnerHTML={{ __html: getFilterById(layer.style.polaroidData.filterId)?.getOverlay(100, { type: 'polaroid', style: layer.style }) || '' }} />
                             )}
                         </>
                     ) : (
