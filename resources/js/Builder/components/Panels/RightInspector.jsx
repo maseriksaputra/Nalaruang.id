@@ -130,10 +130,11 @@ const RightInspector = () => {
     }
 
     let activeLayer = null;
-    sections.forEach(section => {
-        const group = section.layers.find(l => l.id === activeLayerId);
+    const allSectionsForSearch = [...sections, { layers: global_settings.desktop_layers || [] }];
+    allSectionsForSearch.forEach(section => {
+        const group = section.layers?.find(l => l.id === activeLayerId);
         if (group) activeLayer = group;
-        section.layers.forEach(g => {
+        section.layers?.forEach(g => {
             if (g.children) {
                 const child = g.children.find(c => c.id === activeLayerId);
                 if (child) activeLayer = child;

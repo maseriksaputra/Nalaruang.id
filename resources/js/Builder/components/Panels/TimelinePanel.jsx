@@ -13,6 +13,8 @@ const TimelinePanel = () => {
     const setActiveLayer = useCanvasStore(state => state.setActiveLayer);
     const updateLayerAnimation = useCanvasStore(state => state.updateLayerAnimation);
     const isRightSidebarOpen = useUIStore(state => state.isRightSidebarOpen);
+    const activeCanvasMode = useCanvasStore(state => state.activeCanvasMode);
+    const global_settings = useCanvasStore(state => state.global_settings);
     
     const [isOpen, setIsOpen] = useState(true);
     const [panelHeight, setPanelHeight] = useState(250);
@@ -27,7 +29,9 @@ const TimelinePanel = () => {
     const playheadRef = useRef(null);
     const isDraggingPlayhead = useRef(false);
 
-    const activeSection = sections.find(s => s.id === activeSectionId);
+    const activeSection = activeCanvasMode === 'desktop' 
+        ? { id: 'desktop', layers: global_settings?.desktop_layers || [] }
+        : sections.find(s => s.id === activeSectionId);
     const layers = activeSection ? activeSection.layers : [];
 
     const renderableLayers = useMemo(() => {

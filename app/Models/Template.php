@@ -22,6 +22,8 @@ class Template extends Model
         'discount_price',
         'category',
         'preview_url',
+        'demo_views',
+        'total_invitation_views',
         'is_active',
         'stok',
         'sort_order',

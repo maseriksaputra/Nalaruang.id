@@ -105,6 +105,7 @@ const BuilderApp = () => {
     const isPreviewMode = useCanvasStore(state => state.isPreviewMode);
     const setIsPreviewMode = useCanvasStore(state => state.setIsPreviewMode);
     const workspaceView = useCanvasStore(state => state.workspaceView);
+    const activeCanvasMode = useCanvasStore(state => state.activeCanvasMode);
     const showMockup = useCanvasStore(state => state.showMockup);
     const isTimelineOpen = useUIStore(state => state.isTimelineOpen);
     const timelineHeight = useUIStore(state => state.timelineHeight);
@@ -337,21 +338,22 @@ const BuilderApp = () => {
                                                         {/* Dimension Guide */}
                                                         <div className="text-gray-400/80 font-mono text-xs font-bold uppercase tracking-widest pointer-events-none flex items-center gap-3 select-none">
                                                             <div className="w-12 h-[1px] bg-gray-300"></div>
-                                                            {workspaceView === 'desktop' ? 'Lebar Maks: 100% (Fleksibel)' : 'Lebar Maks: 414px (Mobile)'}
+                                                            {activeCanvasMode === 'desktop' ? 'Resolusi Desktop (16:9)' : workspaceView === 'desktop' ? 'Lebar Maks: 100% (Fleksibel)' : 'Lebar Maks: 414px (Mobile)'}
                                                             <div className="w-12 h-[1px] bg-gray-300"></div>
                                                         </div>
 
                                                         <div 
                                                             style={{ 
                                                                 width: '100%',
-                                                                maxWidth: workspaceView === 'desktop' ? '1200px' : '414px',
+                                                                maxWidth: activeCanvasMode === 'desktop' ? '1280px' : (workspaceView === 'desktop' ? '1200px' : '414px'),
                                                                 minWidth: '320px',
-                                                                minHeight: '844px',
-                                                                height: showMockup ? '844px' : 'auto'
+                                                                minHeight: activeCanvasMode === 'desktop' ? '720px' : '844px',
+                                                                height: activeCanvasMode === 'desktop' ? '720px' : (showMockup ? '844px' : 'auto'),
+                                                                overflow: 'hidden'
                                                             }}
-                                                            className={`canvas-container bg-white relative pointer-events-auto shrink-0 mx-auto ${showMockup ? 'rounded-[2.5rem] border-[4px] border-gray-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] overflow-y-auto overflow-x-hidden ring-2 ring-gray-300' : 'shadow-[0_0_50px_rgba(0,0,0,0.1)]'}`}
+                                                            className={`canvas-container bg-white relative pointer-events-auto shrink-0 mx-auto ${(!activeCanvasMode || activeCanvasMode === 'mobile') && showMockup ? 'rounded-[2.5rem] border-[4px] border-gray-800 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] overflow-y-auto overflow-x-hidden ring-2 ring-gray-300' : 'shadow-[0_0_50px_rgba(0,0,0,0.1)] rounded-xl border border-gray-200'}`}
                                                         >
-                                                            {showMockup && (
+                                                            {(!activeCanvasMode || activeCanvasMode === 'mobile') && showMockup && (
                                                                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-800 rounded-b-xl z-[9999] pointer-events-none flex justify-center items-end pb-1.5">
                                                                     <div className="w-12 h-1 rounded-full bg-gray-700"></div>
                                                                 </div>

@@ -939,8 +939,9 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 const SNAP_THRESHOLD = 5;
 
                 const store = useCanvasStore.getState();
-                const section = store.sections.find(s => s.id === sectionId);
-                const sectionWidth = 375;
+                const isDesktop = sectionId === 'desktop';
+                const section = isDesktop ? { layout: { height: 720 } } : store.sections.find(s => s.id === sectionId);
+                const sectionWidth = isDesktop ? 1280 : 375;
                 const sectionHeight = parseInt(section?.layout?.height || 844);
 
                 const elWidth = typeof localSize.width === 'string' ? parseFloat(localSize.width) : localSize.width;
@@ -985,7 +986,9 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
             }}
             onDragStart={() => {
                 setIsDragging(true);
-                useCanvasStore.getState().setActiveSection(sectionId);
+                if (sectionId !== 'desktop') {
+                    useCanvasStore.getState().setActiveSection(sectionId);
+                }
 
                 if (useUIStore.getState().isDrawingPath) {
                     pathRecordingRef.current = [];
@@ -1001,15 +1004,22 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 
                 // Precalculate snap targets for better performance
                 const store = useCanvasStore.getState();
-                const otherLayers = store.sections.reduce((acc, s) => {
-                    if (s.id !== sectionId) return acc;
-                    let layers = [];
-                    s.layers.forEach(l => {
-                        if (l.id !== layer.id) layers.push(l);
-                        if (l.children) l.children.forEach(c => { if (c.id !== layer.id) layers.push(c); });
-                    });
-                    return acc.concat(layers);
-                }, []);
+                const isDesktop = sectionId === 'desktop';
+                
+                let otherLayers = [];
+                if (isDesktop) {
+                    otherLayers = (store.global_settings?.desktop_layers || []).filter(l => l.id !== layer.id);
+                } else {
+                    otherLayers = store.sections.reduce((acc, s) => {
+                        if (s.id !== sectionId) return acc;
+                        let layers = [];
+                        s.layers.forEach(l => {
+                            if (l.id !== layer.id) layers.push(l);
+                            if (l.children) l.children.forEach(c => { if (c.id !== layer.id) layers.push(c); });
+                        });
+                        return acc.concat(layers);
+                    }, []);
+                }
                 
                 snapTargetsRef.current = otherLayers.map(other => ({
                     ox: parseFloat(other.style?.x || 0),
@@ -1096,7 +1106,9 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
             onClick={(e) => {
                 if (layer.isLocked && !isActive) return;
                 e.stopPropagation();
-                useCanvasStore.getState().setActiveSection(sectionId);
+                if (sectionId !== 'desktop') {
+                    useCanvasStore.getState().setActiveSection(sectionId);
+                }
                 useCanvasStore.getState().setActiveLayer(layer.id, e.shiftKey || e.ctrlKey || e.metaKey);
             }}
             onMouseDown={(e) => {

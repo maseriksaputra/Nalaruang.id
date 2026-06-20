@@ -49,6 +49,7 @@ const CanvasArea = () => {
     const setActiveSection = useCanvasStore((state) => state.setActiveSection);
     const removeSection = useCanvasStore((state) => state.removeSection);
     const global_settings = useCanvasStore((state) => state.global_settings);
+    const activeCanvasMode = useCanvasStore((state) => state.activeCanvasMode);
     const [init, setInit] = useState(false);
 
     const handleDragOver = (e) => {
@@ -108,16 +109,43 @@ const CanvasArea = () => {
                 </div>
             )}
 
-            <div style={{ gridArea: '1 / 1', zIndex: 10, display: 'flex', flexDirection: 'column', pointerEvents: 'none' }}>
-                {!hideEmptySections && (
-                    sections.length === 0 ? (
-                        <div style={{ padding: '40px 20px', textAlign: 'center', color: '#888', fontFamily: 'sans-serif', zIndex: 1, position: 'relative', pointerEvents: 'auto' }}>
-                            {/* Placeholder jika belum ada data */}
-                            <h2>Kanvas Kosong</h2>
-                            <p>Tambahkan Section baru dari panel kontrol.</p>
+            <div style={{ gridArea: '1 / 1', zIndex: 10, display: 'flex', flexDirection: 'column', pointerEvents: 'none', width: '100%', height: '100%' }}>
+                {activeCanvasMode === 'desktop' ? (
+                    <section 
+                        className="relative group z-10 w-full h-full"
+                        style={{
+                            flex: 1,
+                            minHeight: '100%',
+                            background: global_settings?.desktop_thumbnail?.background_color || '#1a1a1a',
+                            overflow: 'hidden',
+                            pointerEvents: 'auto'
+                        }}
+                    >
+                        {/* Halaman Indicator */}
+                        <div className="absolute top-0 left-0 z-50 px-3 py-1.5 text-[10px] font-bold tracking-wider rounded-br-lg shadow-sm border-b border-r bg-indigo-600 text-white border-indigo-700">
+                            🖥️ KANVAS DESKTOP (16:9)
                         </div>
-                    ) : (
-                        sections.map((section, index) => (
+
+                        {global_settings?.desktop_layers?.map((layer) => (
+                            <div key={layer.id} style={{ zIndex: layer.style?.zIndex || 1, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+                                {!layer.isHidden && layer.children?.map(child => (
+                                    <div key={child.id} style={{ pointerEvents: 'auto' }}>
+                                        <LayerElement layer={child} sectionId="desktop" />
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </section>
+                ) : (
+                    !hideEmptySections && (
+                        sections.length === 0 ? (
+                            <div style={{ padding: '40px 20px', textAlign: 'center', color: '#888', fontFamily: 'sans-serif', zIndex: 1, position: 'relative', pointerEvents: 'auto' }}>
+                                {/* Placeholder jika belum ada data */}
+                                <h2>Kanvas Kosong</h2>
+                                <p>Tambahkan Section baru dari panel kontrol.</p>
+                            </div>
+                        ) : (
+                            sections.map((section, index) => (
                                         <section 
                                             key={section.id} 
                                             onMouseDown={() => {
@@ -227,7 +255,7 @@ const CanvasArea = () => {
             )
         )}
 
-            {!hideEmptySections && sections.length < 2 && (
+            {!hideEmptySections && activeCanvasMode !== 'desktop' && sections.length < 2 && (
                 <div className="flex justify-center p-6 relative z-50 pointer-events-auto">
                     <button 
                         onClick={(e) => {

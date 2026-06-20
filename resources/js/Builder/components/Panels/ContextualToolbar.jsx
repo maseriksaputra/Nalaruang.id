@@ -7,6 +7,7 @@ const ContextualToolbar = () => {
     const activeLayerId = useCanvasStore(state => state.activeLayerId);
     const activeLayerIds = useCanvasStore(state => state.activeLayerIds || []);
     const sections = useCanvasStore(state => state.sections);
+    const global_settings = useCanvasStore(state => state.global_settings);
     const activeSectionId = useCanvasStore(state => state.activeSectionId);
     const updateLayerStyle = useCanvasStore(state => state.updateLayerStyle);
     const updateLayerAnimation = useCanvasStore(state => state.updateLayerAnimation);
@@ -16,21 +17,24 @@ const ContextualToolbar = () => {
     const deleteElement = useCanvasStore(state => state.deleteElement);
     const setIsRightSidebarOpen = useUIStore(state => state.setIsRightSidebarOpen);
     
-    const findElement = (sections, id) => {
-        for (const section of sections) {
-            const group = section.layers.find(l => l.id === id);
+    const findElement = (sectionsToSearch, id) => {
+        for (const section of sectionsToSearch) {
+            const group = section.layers?.find(l => l.id === id);
             if (group) return group;
-            for (const g of section.layers) {
-                if (g.children) {
-                    const child = g.children.find(c => c.id === id);
-                    if (child) return child;
+            if (section.layers) {
+                for (const g of section.layers) {
+                    if (g.children) {
+                        const child = g.children.find(c => c.id === id);
+                        if (child) return child;
+                    }
                 }
             }
         }
         return null;
     };
 
-    const activeLayer = activeLayerId ? findElement(sections, activeLayerId) : null;
+    const allSections = [...sections, { layers: global_settings?.desktop_layers || [] }];
+    const activeLayer = activeLayerId ? findElement(allSections, activeLayerId) : null;
 
     if (activeLayerIds.length > 1) {
         return (
