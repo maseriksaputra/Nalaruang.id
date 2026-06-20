@@ -282,7 +282,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                         scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
                         rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
                         ...(kf.width !== undefined && { width: kf.width }),
-                        ...(kf.height !== undefined && { height: kf.height })
+                        ...(kf.height !== undefined && { height: kf.height }),
+                        immediateRender: false
                     }, `+=${kfDelay}`);
                 } else {
                     tl.to(elementRef, {
