@@ -8,7 +8,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class ServerMetricsWidget extends BaseWidget
 {
     protected static ?int $sort = -1; // Top of the dashboard
-    protected static ?string $pollingInterval = '10s'; // Diperlama agar admin tidak looping/berat
+    protected static ?string $pollingInterval = '1s'; // Realtime 1 detik
 
     protected function getStats(): array
     {
@@ -16,19 +16,31 @@ class ServerMetricsWidget extends BaseWidget
         $ramUsage = $this->getRamUsage();
         $diskUsage = $this->getDiskUsage();
         $objectStorage = $this->getObjectStorageSize();
+
+        // Sliding window history for CPU (15 data points)
+        $cpuHistory = \Illuminate\Support\Facades\Cache::get('widget_cpu_history', array_fill(0, 15, 0));
+        $cpuHistory[] = $cpuUsage;
+        if (count($cpuHistory) > 15) array_shift($cpuHistory);
+        \Illuminate\Support\Facades\Cache::put('widget_cpu_history', $cpuHistory, 60);
+
+        // Sliding window history for RAM (15 data points)
+        $ramHistory = \Illuminate\Support\Facades\Cache::get('widget_ram_history', array_fill(0, 15, 0));
+        $ramHistory[] = $ramUsage['percentage'];
+        if (count($ramHistory) > 15) array_shift($ramHistory);
+        \Illuminate\Support\Facades\Cache::put('widget_ram_history', $ramHistory, 60);
         
         return [
             Stat::make('CPU Usage', $cpuUsage . '%')
                 ->description('Load rata-rata server VPS')
                 ->descriptionIcon('heroicon-o-cpu-chip')
                 ->color($cpuUsage > 80 ? 'danger' : 'success')
-                ->chart([$cpuUsage, $cpuUsage + rand(-5, 5), $cpuUsage + rand(-5, 5), $cpuUsage]),
+                ->chart($cpuHistory),
 
             Stat::make('RAM Usage', $ramUsage['percentage'] . '%')
                 ->description($ramUsage['used'] . ' GB / ' . $ramUsage['total'] . ' GB Terpakai')
                 ->descriptionIcon('heroicon-o-server')
                 ->color($ramUsage['percentage'] > 80 ? 'danger' : 'primary')
-                ->chart([$ramUsage['percentage'], $ramUsage['percentage'] + rand(-2, 2), $ramUsage['percentage'] + rand(-2, 2), $ramUsage['percentage']]),
+                ->chart($ramHistory),
                 
             Stat::make('Local Storage', $diskUsage['percentage'] . '%')
                 ->description($diskUsage['used'] . ' GB / ' . $diskUsage['total'] . ' GB Terpakai')
