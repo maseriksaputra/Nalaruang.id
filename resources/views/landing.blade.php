@@ -491,9 +491,9 @@
                                         if (this.slides.length > 1) { 
                                             setInterval(() => { this.next() }, 4000) 
                                         } 
-                                    } 
+                                     } 
                                  }" 
-                                 class="portfolio-item snap-start shrink-0 w-[150px] sm:w-[220px] md:w-[260px] lg:w-[280px] group flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden" 
+                                 class="portfolio-item snap-start shrink-0 w-[165px] sm:w-[200px] md:w-[240px] group flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden" 
                                  data-aos="zoom-in" data-aos-delay="{{ $loop->iteration * 50 }}">
                                  
                                 <div class="relative w-full bg-sand group-hover:opacity-95 transition-opacity"
@@ -536,42 +536,42 @@
                                     </div>
 
                                     <!-- Overlay -->
-                                    <div class="absolute inset-0 bg-brand-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center gap-3 z-10 pointer-events-none">
-                                        <div class="pointer-events-auto flex flex-col gap-2 w-full px-6">
+                                    <div class="absolute inset-0 bg-brand-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center gap-2 z-10 pointer-events-none">
+                                        <div class="pointer-events-auto flex flex-col gap-2 w-full px-4 md:px-6">
                                             @if(isset($template->service) && $template->service->slug == 'event-digital')
                                             <a href="{{ $template->preview_url ?? '#' }}" 
                                                @if(empty($template->preview_url)) onclick="event.preventDefault(); alert('Demo belum tersedia untuk produk ini.');" @else target="_blank" @endif
-                                               class="w-full py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-xs font-medium transition backdrop-blur-sm text-center">
+                                               class="w-full py-1.5 md:py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-[10px] md:text-xs font-medium transition backdrop-blur-sm text-center">
                                                 Lihat Demo
                                             </a>
                                             @else
                                             <button @click.prevent.stop="$dispatch('open-lightbox', { images: slides })" 
-                                               class="w-full py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-xs font-medium transition backdrop-blur-sm text-center">
+                                               class="w-full py-1.5 md:py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-[10px] md:text-xs font-medium transition backdrop-blur-sm text-center">
                                                 Lihat Gambar
                                             </button>
                                             @endif
-                                            <a href="{{ route('order.create', ['template_id' => $template->id]) }}" class="w-full py-2 bg-brand-500 hover:bg-brand-400 text-white rounded-full text-xs font-bold transition shadow-lg text-center">
+                                            <a href="{{ route('order.create', ['template_id' => $template->id]) }}" class="w-full py-1.5 md:py-2 bg-brand-500 hover:bg-brand-400 text-white rounded-full text-[10px] md:text-xs font-bold transition shadow-lg text-center">
                                                 Detail Produk
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <div class="p-4 md:p-6 flex flex-col flex-grow">
-                                    <div class="flex flex-col md:flex-row justify-between items-start mb-2 gap-1 md:gap-2">
-                                        <h3 class="text-base md:text-xl font-serif text-brand-900 group-hover:text-brand-600 transition line-clamp-2 md:line-clamp-1 leading-snug">{{ $template->name }}</h3>
-                                        <span class="bg-brand-50 text-brand-600 text-[9px] md:text-[10px] font-bold uppercase px-2 py-1 rounded whitespace-nowrap self-start mt-1 md:mt-0">{{ $template->category ?? 'Produk Premium' }}</span>
+                                <div class="p-3 md:p-5 flex flex-col flex-grow">
+                                    <div class="flex flex-col justify-start mb-2 gap-1">
+                                        <h3 class="text-sm md:text-lg font-serif text-brand-900 group-hover:text-brand-600 transition line-clamp-2 md:line-clamp-1 leading-snug" title="{{ $template->name }}">{{ $template->name }}</h3>
+                                        <span class="bg-brand-50 text-brand-600 text-[8px] md:text-[10px] font-bold uppercase px-2 py-0.5 rounded whitespace-nowrap self-start">{{ $template->category ?? 'Produk Premium' }}</span>
                                     </div>
-                                    <div class="mt-auto pt-3 flex flex-col">
+                                    <div class="mt-auto pt-2 flex flex-col">
                                         @if($template->discount_price && $template->discount_price < $template->price)
-                                            <div class="text-gray-400 text-[11px] md:text-xs line-through mb-0.5">
+                                            <div class="text-gray-400 text-[10px] md:text-xs line-through mb-0.5">
                                                 Rp {{ number_format($template->price, 0, ',', '.') }}
                                             </div>
-                                            <div class="text-brand-600 font-bold text-base md:text-lg">
+                                            <div class="text-brand-600 font-bold text-sm md:text-base">
                                                 Rp {{ number_format($template->discount_price, 0, ',', '.') }}
                                             </div>
                                         @else
-                                            <div class="text-brand-600 font-bold text-base md:text-lg">
+                                            <div class="text-brand-600 font-bold text-sm md:text-base">
                                                 Rp {{ number_format($template->price, 0, ',', '.') }}
                                             </div>
                                         @endif
