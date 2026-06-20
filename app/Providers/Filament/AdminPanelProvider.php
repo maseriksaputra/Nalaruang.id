@@ -59,14 +59,22 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()
                      ->label('Konten Website')
                      ->collapsible(false),
+                NavigationGroup::make()
+                     ->label('Nalaruang Studio')
+                     ->collapsible(false),
             ])
             ->navigationItems([
-                NavigationItem::make('Nalaruang Studio')
+                NavigationItem::make('Studio Undangan')
                     ->icon('heroicon-o-sparkles')
-                    ->group('Konten Website')
+                    ->group('Nalaruang Studio')
                     ->badge(fn () => \Illuminate\Support\Facades\Cache::remember('pending_orders_count', 60, fn () => \App\Models\Order::where('status', 'pending')->count()) ?: null, 'warning')
                     ->url(fn (): string => url('/admin/invitation-portal'))
-                    ->openUrlInNewTab()
+                    ->openUrlInNewTab(),
+                NavigationItem::make('Studio Foto')
+                    ->icon('heroicon-o-camera')
+                    ->group('Nalaruang Studio')
+                    ->badge('Segera', 'success')
+                    ->url(fn (): string => '#')
             ])
             ->pages([
                 \App\Filament\Pages\Dashboard::class,
