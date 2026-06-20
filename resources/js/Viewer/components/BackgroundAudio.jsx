@@ -110,16 +110,39 @@ const BackgroundAudio = ({ settings }) => {
     if (!audioUrl) return null;
 
     return (
-        <audio 
-            id="background-audio" 
-            ref={audioRef}
-            loop={audioEnd <= 0} // Native loop if no custom end time
-            autoPlay={audioTrigger === 'autoplay'}
-        >
-            <source src={audioUrl} type="audio/mpeg" />
-            <source src={audioUrl} type="audio/wav" />
-            <source src={audioUrl} type="audio/ogg" />
-        </audio>
+        <>
+            <audio 
+                id="background-audio" 
+                ref={audioRef}
+                loop={audioEnd <= 0} // Native loop if no custom end time
+                autoPlay={audioTrigger === 'autoplay'}
+            >
+                <source src={audioUrl} type="audio/mpeg" />
+                <source src={audioUrl} type="audio/wav" />
+                <source src={audioUrl} type="audio/ogg" />
+            </audio>
+
+            {/* Floating Speaker Control */}
+            <button 
+                onClick={() => {
+                    if (audioRef.current) {
+                        if (isPlaying) {
+                            audioRef.current.pause();
+                        } else {
+                            audioRef.current.play().catch(e => console.log(e));
+                        }
+                    }
+                }}
+                className={`fixed bottom-6 right-6 z-[9999] w-11 h-11 bg-white/40 backdrop-blur-md border border-white/50 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:bg-white/60 hover:scale-110 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`}
+                title={isPlaying ? "Jeda Musik" : "Putar Musik"}
+            >
+                {isPlaying ? (
+                    <svg className="w-5 h-5 text-gray-800" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                ) : (
+                    <svg className="w-5 h-5 text-gray-800" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                )}
+            </button>
+        </>
     );
 };
 
