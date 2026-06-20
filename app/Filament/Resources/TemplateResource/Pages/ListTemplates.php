@@ -37,7 +37,7 @@ class ListTemplates extends ListRecords
         return [
             'semua' => \Filament\Resources\Components\Tab::make('Semua Produk'),
             'cetak_fisik' => \Filament\Resources\Components\Tab::make('Cetak Fisik Premium')
-                ->modifyQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) => $query->whereHas('service', fn ($q) => $q->where('slug', 'cetak-fisik'))),
+                ->modifyQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) => $query->whereHas('service', fn ($q) => $q->whereIn('slug', ['cetak-fisik', 'cetak-fisik-premium']))),
             'event_digital' => \Filament\Resources\Components\Tab::make('Event Digital')
                 ->modifyQueryUsing(fn (\Illuminate\Database\Eloquent\Builder $query) => $query->whereHas('service', fn ($q) => $q->where('slug', 'event-digital'))),
             'souvenir' => \Filament\Resources\Components\Tab::make('Souvenir & Merchandise')
