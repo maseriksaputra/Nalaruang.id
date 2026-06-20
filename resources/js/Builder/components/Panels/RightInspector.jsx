@@ -7,6 +7,7 @@ import { FONTS } from '../../utils/fonts';
 import apiClient from '../../utils/apiClient';
 
 import { ANIMATION_CATEGORIES, ANIMATION_STYLES } from '../../utils/animations';
+import { processAIBackgroundRemoval } from '../../utils/aiBackgroundRemoval';
 
 const AnimatedIcon = ({ anim, isText = false, isActive = false }) => {
     return (
@@ -92,102 +93,15 @@ const RightInspector = () => {
             // Save original URL before processing
             const originalUrl = layer.style?.url || layer.url;
 
-            const imgEl = document.getElementById(`layer-img-${layer.id}`);
-            if (!imgEl) throw new Error("Gambar asli tidak ditemukan di layar.");
-            
-            const removeSolidBackground = async (imgEl) => {
-                return new Promise(async (resolve, reject) => {
-                    try {
-                        let src = imgEl.src;
-                        
-                        // Paksa menjadi URL relatif jika berada di domain yang sama (mencegah error beda protokol HTTP/HTTPS)
-                        try {
-                            const url = new URL(src);
-                            if (url.hostname.includes('nalaruang') || url.hostname === window.location.hostname || url.hostname.includes('localhost') || url.hostname.includes('test')) {
-                                src = url.pathname + url.search;
-                            }
-                        } catch (e) {}
+            const newUrl = await processAIBackgroundRemoval(originalUrl);
 
-                        // Unduh gambar sebagai Blob terlebih dahulu untuk membersihkan jejak Cross-Origin
-                        const response = await fetch(src);
-                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                        const blob = await response.blob();
-                        const objectUrl = URL.createObjectURL(blob);
-
-                        const img = new Image();
-                        img.onload = () => {
-                            try {
-                                URL.revokeObjectURL(objectUrl);
-                                const canvas = document.createElement('canvas');
-                                const w = img.naturalWidth || img.width || 500;
-                                const h = img.naturalHeight || img.height || 500;
-                                canvas.width = w;
-                                canvas.height = h;
-                                const ctx = canvas.getContext('2d');
-                                
-                                ctx.drawImage(img, 0, 0, w, h);
-                                const imageData = ctx.getImageData(0, 0, w, h);
-                                const data = imageData.data;
-                                
-                                // Deteksi warna latar belakang (pojok kiri atas)
-                                const bgR = data[0];
-                                const bgG = data[1];
-                                const bgB = data[2];
-                                
-                                const tolerance = 60;
-                                const colorDist = (r1,g1,b1,r2,g2,b2) => Math.sqrt((r1-r2)**2 + (g1-g2)**2 + (b1-b2)**2);
-                                
-                                let hasRemoved = false;
-                                for (let i = 0; i < data.length; i += 4) {
-                                    if (data[i+3] > 0 && colorDist(data[i], data[i+1], data[i+2], bgR, bgG, bgB) <= tolerance) {
-                                        data[i+3] = 0;
-                                        hasRemoved = true;
-                                    }
-                                }
-                                
-                                if (!hasRemoved) {
-                                    reject(new Error("Tidak ada latar dominan yang bisa dihapus."));
-                                    return;
-                                }
-
-                                ctx.putImageData(imageData, 0, 0);
-                                canvas.toBlob((b) => {
-                                    if (b) resolve(b);
-                                    else reject(new Error("Gagal membuat gambar transparan"));
-                                }, 'image/png');
-                            } catch (e) {
-                                reject(new Error("Canvas Error: " + e.message));
-                            }
-                        };
-                        img.onerror = () => {
-                            URL.revokeObjectURL(objectUrl);
-                            reject(new Error("Gagal merender gambar murni."));
-                        };
-                        img.src = objectUrl;
-                    } catch (error) {
-                        reject(new Error("Gagal mengunduh gambar murni: " + error.message));
-                    }
-                });
-            };
-
-            const blob = await removeSolidBackground(imgEl);
-            const file = new File([blob], `transparent_${Date.now()}.png`, { type: 'image/png' });
-
-            const formData = new FormData();
-            formData.append('file', file);
-
-            // Upload the transparent image to server to make it permanent
-            const response = await apiClient.post('/admin/builder/user-assets', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-
-            if (response.data && response.data.url) {
+            if (newUrl) {
                 // Update the layer's main url property so everything (including inspector) updates
-                useCanvasStore.getState().updateLayer(layer.id, { url: response.data.url });
+                useCanvasStore.getState().updateLayer(layer.id, { url: newUrl });
                 updateLayerStyle(layer.id, { 
                     removeBg: true,
                     originalUrl: originalUrl,
-                    bgRemovedUrl: response.data.url,
+                    bgRemovedUrl: newUrl,
                     backgroundColor: 'transparent',
                     url: null
                 });

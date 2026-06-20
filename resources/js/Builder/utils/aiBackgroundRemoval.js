@@ -1,5 +1,5 @@
 import { removeBackground } from '@imgly/background-removal';
-import apiClient from '../../Viewer/utils/apiClient';
+import apiClient from './apiClient';
 
 export const processAIBackgroundRemoval = async (originalUrl) => {
     // 1. Ambil gambar sebagai blob terlebih dahulu untuk mencegah error CORS di dalam imgly
