@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DEZEpCf0.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-SZaf3aAZ.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-TQn0wPk_.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CtRJUsFQ.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -25515,20 +25515,28 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 		},
 		children: [
 			isActive && !layer.isLocked && !isChildOfGroup && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				onMouseDown: handleRotateStart,
-				className: "absolute -top-10 left-1/2 -translate-x-1/2 w-5 h-5 bg-white border-2 border-indigo-500 rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center z-10 shadow hover:bg-indigo-50 transition-colors pointer-events-auto",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-					className: "w-3 h-3 text-indigo-500",
-					fill: "none",
-					stroke: "currentColor",
-					viewBox: "0 0 24 24",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-						strokeLinecap: "round",
-						strokeLinejoin: "round",
-						strokeWidth: "2",
-						d: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+				className: "absolute left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-auto z-[9999]",
+				style: { top: `-${40 / Math.max(.1, zoom)}px` },
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					onMouseDown: handleRotateStart,
+					className: "w-5 h-5 bg-white border-2 border-indigo-500 rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center shadow hover:bg-indigo-50 transition-colors",
+					style: { transform: `scale(${1 / Math.max(.1, zoom)})` },
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+						className: "w-3 h-3 text-indigo-500",
+						fill: "none",
+						stroke: "currentColor",
+						viewBox: "0 0 24 24",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+							strokeLinecap: "round",
+							strokeLinejoin: "round",
+							strokeWidth: "2",
+							d: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+						})
 					})
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-[1.5px] h-5 bg-indigo-500 absolute top-5" })]
+				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "w-[1.5px] bg-indigo-500",
+					style: { height: `${20 / Math.max(.1, zoom)}px` }
+				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				ref: visibilityRef,
@@ -28013,7 +28021,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DEZEpCf0.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-SZaf3aAZ.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);

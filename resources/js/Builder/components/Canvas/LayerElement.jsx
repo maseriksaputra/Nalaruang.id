@@ -342,11 +342,17 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 {/* Rotator Handle - Only visible when active */}
                 {isActive && !(layer.isLocked) && !isChildOfGroup && (
                     <div 
-                        onMouseDown={handleRotateStart}
-                        className="absolute -top-10 left-1/2 -translate-x-1/2 w-5 h-5 bg-white border-2 border-indigo-500 rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center z-10 shadow hover:bg-indigo-50 transition-colors pointer-events-auto"
+                        className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-auto z-[9999]"
+                        style={{ top: `-${40 / Math.max(0.1, zoom)}px` }}
                     >
-                        <svg className="w-3 h-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                        <div className="w-[1.5px] h-5 bg-indigo-500 absolute top-5"></div>
+                        <div 
+                            onMouseDown={handleRotateStart}
+                            className="w-5 h-5 bg-white border-2 border-indigo-500 rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center shadow hover:bg-indigo-50 transition-colors"
+                            style={{ transform: `scale(${1 / Math.max(0.1, zoom)})` }}
+                        >
+                            <svg className="w-3 h-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        </div>
+                        <div className="w-[1.5px] bg-indigo-500" style={{ height: `${20 / Math.max(0.1, zoom)}px` }}></div>
                     </div>
                 )}
                 
