@@ -447,7 +447,41 @@
                                     $allImages = [''];
                                 }
                             @endphp
-                            <div x-data="{ currentSlide: 0, slides: {{ json_encode($allImages) }}, init() { if (this.slides.length > 1) { setInterval(() => { this.currentSlide = this.currentSlide === this.slides.length - 1 ? 0 : this.currentSlide + 1 }, 4000) } } }" 
+                            <div x-data="{ 
+                                    currentSlide: 0, 
+                                    slides: {{ json_encode($allImages) }}, 
+                                    isTransitioning: true,
+                                    get extendedSlides() { return this.slides.length > 1 ? [...this.slides, this.slides[0]] : this.slides; },
+                                    next() {
+                                        if (this.currentSlide >= this.slides.length) return;
+                                        this.isTransitioning = true;
+                                        this.currentSlide++;
+                                        if (this.currentSlide === this.slides.length) {
+                                            setTimeout(() => {
+                                                this.isTransitioning = false;
+                                                this.currentSlide = 0;
+                                            }, 700);
+                                        }
+                                    },
+                                    prev() {
+                                        if (this.currentSlide === 0) {
+                                            this.isTransitioning = false;
+                                            this.currentSlide = this.slides.length;
+                                            setTimeout(() => {
+                                                this.isTransitioning = true;
+                                                this.currentSlide--;
+                                            }, 50);
+                                        } else {
+                                            this.isTransitioning = true;
+                                            this.currentSlide--;
+                                        }
+                                    },
+                                    init() { 
+                                        if (this.slides.length > 1) { 
+                                            setInterval(() => { this.next() }, 4000) 
+                                        } 
+                                    } 
+                                 }" 
                                  class="portfolio-item snap-start shrink-0 w-[220px] sm:w-[240px] group flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden" 
                                  data-aos="zoom-in" data-aos-delay="{{ $loop->iteration * 50 }}">
                                  
@@ -470,9 +504,10 @@
                                             </div>
                                         </div>
                                     @else
-                                        <div class="absolute inset-0 w-full h-full flex transition-transform duration-700 ease-in-out"
+                                        <div class="absolute inset-0 w-full h-full flex ease-in-out"
+                                             :class="isTransitioning ? 'transition-transform duration-700' : 'transition-none'"
                                              x-bind:style="'transform: translateX(-' + (currentSlide * 100) + '%)'">
-                                            <template x-for="(slide, index) in slides" :key="index">
+                                            <template x-for="(slide, index) in extendedSlides" :key="index">
                                                 <img x-bind:src="slide ? (slide.startsWith('http') ? slide : window.ASSET_URL + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 
                                                      class="portfolio-img w-full h-full object-cover shrink-0" 
                                                      alt="{{ $template->name }}" 
@@ -483,10 +518,10 @@
                                     
                                     <!-- Slider Controls untuk Gambar -->
                                     <div x-show="slides.length > 1" class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                                        <button @click.prevent="currentSlide = currentSlide === 0 ? slides.length - 1 : currentSlide - 1" class="w-6 h-6 rounded-full bg-white/70 hover:bg-white text-gray-800 flex items-center justify-center shadow transition-colors">
+                                        <button @click.prevent="prev()" class="w-6 h-6 rounded-full bg-white/70 hover:bg-white text-gray-800 flex items-center justify-center shadow transition-colors">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                                         </button>
-                                        <button @click.prevent="currentSlide = currentSlide === slides.length - 1 ? 0 : currentSlide + 1" class="w-6 h-6 rounded-full bg-white/70 hover:bg-white text-gray-800 flex items-center justify-center shadow transition-colors">
+                                        <button @click.prevent="next()" class="w-6 h-6 rounded-full bg-white/70 hover:bg-white text-gray-800 flex items-center justify-center shadow transition-colors">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                                         </button>
                                     </div>
