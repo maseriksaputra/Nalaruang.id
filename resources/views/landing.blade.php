@@ -492,8 +492,7 @@
                                             setInterval(() => { this.next() }, 4000) 
                                         } 
                                     } 
-                                 }" 
-                                 class="portfolio-item snap-start shrink-0 w-[220px] sm:w-[240px] group flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden" 
+                                 class="portfolio-item snap-start shrink-0 w-[150px] sm:w-[240px] group flex flex-col bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden" 
                                  data-aos="zoom-in" data-aos-delay="{{ $loop->iteration * 50 }}">
                                  
                                 <div class="relative w-full bg-sand group-hover:opacity-95 transition-opacity"

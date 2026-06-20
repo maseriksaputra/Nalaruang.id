@@ -9,6 +9,8 @@ class OrderController extends Controller
     public function create($template_id)
     {
         $template = \App\Models\Template::with(['package', 'service'])->findOrFail($template_id);
+        $template->increment('demo_views');
+        
         return view('order-form', compact('template'));
     }
 
