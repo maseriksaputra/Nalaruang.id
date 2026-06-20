@@ -141,13 +141,17 @@ const getIdleProps = (type, config = {}) => {
     }
 };
 
-export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle = null) => {
+export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle = null, startAtTime = 0) => {
     if (!elementRef || !layerAnimation) return null;
 
     const isLooping = layerAnimation.isLooping || false;
     const repeatConfig = isLooping ? { repeat: -1, yoyo: true } : {};
-    
     const activeTweens = [];
+    
+    // Temukan scroll container untuk Preview Modal. Jika tidak ada, gunakan default window
+    const scrollScroller = !isBuilder && document.getElementById('viewer-scroll-container') 
+                            ? document.getElementById('viewer-scroll-container') 
+                            : undefined;
 
     // Get config without mutating state
     const config = layerAnimation.config || { mode: 'enter', speed: 1.5, direction: 'up', trigger: 'onScroll' };
@@ -160,7 +164,12 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             const tween = gsap.from(elementRef, {
                 ...customObj,
                 ...repeatConfig,
-                scrollTrigger: isBuilder ? null : { trigger: elementRef, start: "top 80%", toggleActions: "play none none reverse" }
+                scrollTrigger: isBuilder ? null : { 
+                    trigger: elementRef, 
+                    start: "top 80%", 
+                    scroller: scrollScroller,
+                    toggleActions: "play none none reverse" 
+                }
             });
             activeTweens.push(tween);
             return { kill: () => activeTweens.forEach(t => t.kill()) };
@@ -189,6 +198,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 scrollTrigger: (!isBuilder && trigger === 'onScroll') && trigger !== 'onLoad' ? { 
                     trigger: elementRef, 
                     start: "top 85%", 
+                    scroller: scrollScroller,
                     toggleActions: toggleActionStr 
                 } : null
             });
@@ -235,6 +245,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 scrollTrigger: (!isBuilder && trigger === 'onScroll') ? {
                     trigger: elementRef.closest('.public-layer-element') || elementRef.closest('.layer-wrapper') || elementRef,
                     start: "top 85%",
+                    scroller: scrollScroller,
                     toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
                 } : null
             });
@@ -326,6 +337,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                     tween.scrollTrigger = ScrollTrigger.create({
                         trigger: elementRef,
                         start: "top 85%",
+                        scroller: scrollScroller,
                         animation: tween,
                         toggleActions: "play pause resume pause"
                     });
@@ -335,6 +347,14 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
         }
     }
 
+    // Jika dipanggil dari Builder (isBuilder === true) dan ada playhead awal
+    if (startAtTime > 0) {
+        activeTweens.forEach(t => {
+            if (t && typeof t.totalTime === 'function') {
+                t.totalTime(startAtTime);
+            }
+        });
+    }
 
     return {
         kill: () => {

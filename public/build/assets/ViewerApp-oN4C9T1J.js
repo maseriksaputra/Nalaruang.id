@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DaX5zt4k.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-Bce03scq.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-DTmSNw93.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CQCdZe4f.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -20223,7 +20223,7 @@ var getIdleProps = (type, config = {}) => {
 		default: return null;
 	}
 };
-var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle = null) => {
+var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle = null, startAtTime = 0) => {
 	if (!elementRef || !layerAnimation) return null;
 	const isLooping = layerAnimation.isLooping || false;
 	const repeatConfig = isLooping ? {
@@ -20231,6 +20231,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 		yoyo: true
 	} : {};
 	const activeTweens = [];
+	const scrollScroller = !isBuilder && document.getElementById("viewer-scroll-container") ? document.getElementById("viewer-scroll-container") : void 0;
 	const config = layerAnimation.config || {
 		mode: "enter",
 		speed: 1.5,
@@ -20246,6 +20247,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 			scrollTrigger: isBuilder ? null : {
 				trigger: elementRef,
 				start: "top 80%",
+				scroller: scrollScroller,
 				toggleActions: "play none none reverse"
 			}
 		});
@@ -20269,6 +20271,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 				scrollTrigger: !isBuilder && trigger === "onScroll" && trigger !== "onLoad" ? {
 					trigger: elementRef,
 					start: "top 85%",
+					scroller: scrollScroller,
 					toggleActions: toggleActionStr
 				} : null
 			});
@@ -20307,6 +20310,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 			scrollTrigger: !isBuilder && trigger === "onScroll" ? {
 				trigger: elementRef.closest(".public-layer-element") || elementRef.closest(".layer-wrapper") || elementRef,
 				start: "top 85%",
+				scroller: scrollScroller,
 				toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
 			} : null
 		});
@@ -20379,12 +20383,16 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 			if (!isBuilder && trigger === "onScroll") tween.scrollTrigger = ScrollTrigger.create({
 				trigger: elementRef,
 				start: "top 85%",
+				scroller: scrollScroller,
 				animation: tween,
 				toggleActions: "play pause resume pause"
 			});
 			activeTweens.push(tween);
 		}
 	}
+	if (startAtTime > 0) activeTweens.forEach((t) => {
+		if (t && typeof t.totalTime === "function") t.totalTime(startAtTime);
+	});
 	return { kill: () => {
 		activeTweens.forEach((t) => {
 			if (t.scrollTrigger) t.scrollTrigger.kill();
@@ -25413,7 +25421,8 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 					animationInstance.kill();
 					if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
 				}
-				animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style);
+				const currentPlayheadTime = useCanvasStore.getState().playheadPos || 0;
+				animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, currentPlayheadTime);
 			}), void 0);
 		};
 		const handleStopAll = () => {
@@ -27996,7 +28005,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DaX5zt4k.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-Bce03scq.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);

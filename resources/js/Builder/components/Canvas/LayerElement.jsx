@@ -233,7 +233,8 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                         animationInstance.kill();
                         if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
                     }
-                    animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style);
+                    const currentPlayheadTime = useCanvasStore.getState().playheadPos || 0;
+                    animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, currentPlayheadTime);
                 });
             }
         };
