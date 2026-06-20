@@ -549,7 +549,7 @@
                                                 Lihat Gambar
                                             </button>
                                             @endif
-                                            <a href="{{ route('order.create', ['template_id' => $template->id]) }}" class="w-full py-1.5 md:py-2 bg-brand-500 hover:bg-brand-400 text-white rounded-full text-[10px] md:text-xs font-bold transition shadow-lg text-center">
+                                            <a href="{{ route('product.show', $template->id) }}" class="w-full py-1.5 md:py-2 bg-brand-500 hover:bg-brand-400 text-white rounded-full text-[10px] md:text-xs font-bold transition shadow-lg text-center">
                                                 Detail Produk
                                             </a>
                                         </div>

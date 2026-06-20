@@ -76,7 +76,7 @@
             <!-- Grid AlpineJS -->
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-6">
                 <template x-for="template in templates" :key="template.id">
-                    <div @click="window.location.href = '/order/' + template.id" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex flex-col h-full">
+                    <div @click="window.location.href = '/p/' + template.id" class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden group hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer flex flex-col h-full">
                         <div class="relative bg-gray-100 overflow-hidden"
                              x-bind:style="'aspect-ratio: ' + (template.image_aspect_ratio && template.image_aspect_ratio !== 'auto' ? (template.image_aspect_ratio.includes('/') ? template.image_aspect_ratio : '3/4') : 'auto')"
                              x-data="{ currentSlide: 0, slides: template.images ? [template.image, ...template.images].filter(Boolean) : (template.image ? [template.image] : ['']), init() { if (this.slides.length > 1) { setInterval(() => { this.currentSlide = this.currentSlide === this.slides.length - 1 ? 0 : this.currentSlide + 1 }, 4000) } } }">
@@ -117,7 +117,7 @@
                                            Lihat Gambar
                                         </button>
                                     </template>
-                                    <a x-bind:href="'/order/' + template.id" @click.stop class="px-6 py-2 bg-brand-500 hover:bg-brand-400 text-white rounded-full text-sm font-bold transition shadow-lg text-center">
+                                    <a :href="'/p/' + template.id" @click.stop class="px-6 py-2 bg-brand-500 hover:bg-brand-400 text-white rounded-full text-sm font-bold transition shadow-lg text-center">
                                         Detail Produk
                                     </a>
                                 </div>
