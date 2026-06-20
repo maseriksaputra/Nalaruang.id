@@ -40,33 +40,44 @@ class StatsOverview extends BaseWidget
         $totalAset = $kasLaci + $totalBep;
 
         $formatValue = function ($amount) {
+            $formattedTarget = 'Rp ' . number_format($amount, 0, ',', '.');
             return new \Illuminate\Support\HtmlString("
                 <span 
-                    x-data=\"{ target: " . (float)$amount . " }\"
-                    x-init=\"(() => {
-                        let start = null;
-                        const duration = 2000;
-                        const t = target;
-                        const el = \$el;
-                        const format = (val) => {
-                            let v = Math.round(val);
-                            return (v < 0 ? '-' : '') + 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.abs(v));
-                        };
-                        const step = (timestamp) => {
-                            if (!start) start = timestamp;
-                            let progress = Math.min((timestamp - start) / duration, 1);
-                            let ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-                            el.innerText = format(t * ease);
-                            if (progress < 1) {
-                                window.requestAnimationFrame(step);
-                            } else {
-                                el.innerText = format(t);
-                            }
-                        };
-                        window.requestAnimationFrame(step);
-                    })()\"
+                    x-data=\"{ 
+                        target: " . (float)$amount . ", 
+                        current: 0,
+                        formatted: 'Rp 0',
+                        animate() {
+                            let start = null;
+                            const duration = 2000;
+                            const t = this.target;
+                            const c = this.current;
+                            const step = (timestamp) => {
+                                if (!start) start = timestamp;
+                                let progress = Math.min((timestamp - start) / duration, 1);
+                                let ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                                let val = c + (t - c) * ease;
+                                this.current = val;
+                                let v = Math.round(val);
+                                this.formatted = (v < 0 ? '-' : '') + 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.abs(v));
+                                if (progress < 1) {
+                                    window.requestAnimationFrame(step);
+                                } else {
+                                    this.current = t;
+                                    let f = Math.round(t);
+                                    this.formatted = (f < 0 ? '-' : '') + 'Rp ' + new Intl.NumberFormat('id-ID').format(Math.abs(f));
+                                }
+                            };
+                            window.requestAnimationFrame(step);
+                        }
+                    }\"
+                    x-init=\"
+                        \$watch('target', () => animate()); 
+                        animate();
+                    \"
+                    x-text=\"formatted\"
                     class=\"text-2xl xl:text-3xl font-bold tracking-tighter whitespace-nowrap\"
-                >Rp 0</span>
+                >{$formattedTarget}</span>
             ");
         };
 
