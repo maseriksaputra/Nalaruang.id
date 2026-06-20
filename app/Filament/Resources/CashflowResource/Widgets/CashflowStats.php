@@ -4,9 +4,8 @@ namespace App\Filament\Resources\CashflowResource\Widgets;
 
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
-use Filament\Tables\Contracts\HasTable;
-use Livewire\Attributes\Reactive;
 use Filament\Widgets\Concerns\InteractsWithPageTable;
+use App\Filament\Resources\CashflowResource\Pages\ListCashflows;
 
 class CashflowStats extends BaseWidget
 {
