@@ -188,6 +188,7 @@ class CashflowResource extends Resource
     {
         return [
             CashflowResource\Widgets\CashflowStats::class,
+            CashflowResource\Widgets\CashflowLineChart::class,
         ];
     }
 

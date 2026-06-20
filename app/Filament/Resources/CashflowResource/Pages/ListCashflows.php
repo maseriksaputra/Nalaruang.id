@@ -19,6 +19,7 @@ class ListCashflows extends ListRecords
     {
         return [
             CashflowResource\Widgets\CashflowStats::class,
+            CashflowResource\Widgets\CashflowLineChart::class,
         ];
     }
 
