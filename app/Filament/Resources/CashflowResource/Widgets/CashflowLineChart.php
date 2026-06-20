@@ -172,4 +172,22 @@ class CashflowLineChart extends ChartWidget
     {
         return 'line';
     }
+
+    protected function getOptions(): array
+    {
+        return [
+            'scales' => [
+                'x' => [
+                    'grid' => [
+                        'display' => true,
+                    ],
+                ],
+                'y' => [
+                    'grid' => [
+                        'display' => true,
+                    ],
+                ],
+            ],
+        ];
+    }
 }
