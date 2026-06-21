@@ -438,6 +438,16 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 t.kill();
             });
             gsap.set(elementRef, { clearProps: "all" });
+        },
+        pause: () => {
+            activeTweens.forEach(t => {
+                if (t && typeof t.pause === 'function') t.pause();
+            });
+        },
+        play: () => {
+            activeTweens.forEach(t => {
+                if (t && typeof t.play === 'function') t.play();
+            });
         }
     };
 };

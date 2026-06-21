@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-Bdj6pbX1.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-CxdErMgV.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-Ccbcn0on.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-DrgIvBpi.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -71,6 +71,7 @@ var CanvasArea = () => {
 	const removeSection = useCanvasStore((state) => state.removeSection);
 	const global_settings = useCanvasStore((state) => state.global_settings);
 	const activeCanvasMode = useCanvasStore((state) => state.activeCanvasMode);
+	const showGridLines = useUIStore((state) => state.showGridLines);
 	const [init, setInit] = (0, import_react.useState)(false);
 	const handleDragOver = (e) => {
 		e.preventDefault();
@@ -237,7 +238,7 @@ var CanvasArea = () => {
 							className: `absolute top-0 left-0 z-50 px-3 py-1.5 text-[10px] font-bold tracking-wider rounded-br-lg shadow-sm border-b border-r bg-indigo-600 text-white border-indigo-700`,
 							children: index === 0 ? "📄 HALAMAN SAMPUL (COVER)" : "📄 HALAMAN ISI"
 						}),
-						index > 0 && activeCanvasMode !== "desktop" && useUIStore.getState().showGridLines && (() => {
+						index > 0 && activeCanvasMode !== "desktop" && showGridLines && (() => {
 							let maxY = 0;
 							const checkLayer = (layer) => {
 								const bottom = (parseFloat(layer.style?.y) || 0) + (parseFloat(layer.style?.height) || 0);
@@ -250,7 +251,7 @@ var CanvasArea = () => {
 							else if (maxY > 0) sectionH = maxY;
 							const grids = [];
 							for (let i = 844; i < sectionH; i += 844) grids.push(/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "absolute w-full z-50 flex items-center pointer-events-none",
+								className: "absolute w-full z-[9999] flex items-center pointer-events-none",
 								style: { top: `${i}px` },
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex-1 border-t border-dashed border-indigo-400/60" }),

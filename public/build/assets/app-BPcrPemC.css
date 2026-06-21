@@ -2770,16 +2770,6 @@
     border-color: var(--color-indigo-200);
   }
 
-  .border-indigo-200\/50 {
-    border-color: #c7d2ff80;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .border-indigo-200\/50 {
-      border-color: color-mix(in oklab, var(--color-indigo-200) 50%, transparent);
-    }
-  }
-
   .border-indigo-300 {
     border-color: var(--color-indigo-300);
   }
