@@ -160,14 +160,45 @@ const useCanvasStore = create(temporal((set, get) => ({
         const { invitationId, global_settings, sections } = get();
         if (!invitationId) return;
 
-        const payload = { canvas_config: { global_settings, sections } };
+        let cleanSections = JSON.parse(JSON.stringify(sections));
+        let wasCleaned = false;
+
+        // Auto-clean huge elements to prevent DB crash and unblock the user
+        cleanSections.forEach(section => {
+            if (section.layers) {
+                section.layers.forEach(layer => {
+                    // Check Lottie animationData
+                    if (layer.type === 'lottie' && layer.animationData) {
+                        const size = JSON.stringify(layer.animationData).length;
+                        if (size > 100000) { // > 100KB raw JSON
+                            delete layer.animationData;
+                            wasCleaned = true;
+                        }
+                    }
+                    // Check Base64 pasted images in content
+                    if (layer.content && typeof layer.content === 'string') {
+                        if (layer.content.length > 500000) { // > 500KB string
+                            layer.content = layer.content.replace(/<img[^>]+src="data:image\/[^">]+"[^>]*>/gi, '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[GAMBAR DIHAPUS KARENA TERLALU BESAR]</div>');
+                            wasCleaned = true;
+                        }
+                    }
+                });
+            }
+        });
+
+        const payload = { canvas_config: { global_settings, sections: cleanSections } };
         const payloadString = JSON.stringify(payload);
         
-        // Cek ukuran payload dalam bytes (1 karakter ~ 1 byte, jika ada base64 image bisa sangat besar)
         if (payloadString.length > 3 * 1024 * 1024) { // 3MB limit
             console.error('Payload terlalu besar!', payloadString.length);
             alert('Peringatan: Gagal Auto-Save! Ukuran desain terlalu besar (Lebih dari 3MB). Hal ini biasanya terjadi karena Anda melakukan "Copy-Paste" gambar secara langsung ke teks. Mohon gunakan fitur "Upload Gambar" untuk gambar.');
             return;
+        }
+
+        if (wasCleaned) {
+            // Update the state with the cleaned sections so the UI reflects the removal
+            set({ sections: cleanSections });
+            alert('Sistem otomatis membersihkan elemen animasi/gambar yang ukurannya terlampau raksasa agar desain Anda bisa tersimpan kembali. Silakan upload ulang animasi/gambar tersebut dengan benar menggunakan tombol "Upload".');
         }
 
         useUIStore.getState().setIsSaving(true);
