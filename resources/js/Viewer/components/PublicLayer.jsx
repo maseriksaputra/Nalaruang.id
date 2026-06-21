@@ -186,7 +186,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 
         let animationCtx = null;
         if (layer.animation) {
-            animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style);
+            animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style, 0, isCoverPage);
         }
         
         return () => {

@@ -141,7 +141,7 @@ const getIdleProps = (type, config = {}) => {
     }
 };
 
-export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle = null, startAtTime = 0) => {
+export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle = null, startAtTime = 0, isCoverPage = true) => {
     if (!elementRef) return { kill: () => {} };
 
     let activeTweens = [];
@@ -155,7 +155,10 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                             : undefined;
 
     const config = layerAnimation.config || { mode: 'enter', speed: 1.5, direction: 'up', trigger: 'onScroll' };
-    const trigger = config.trigger || 'onScroll';
+    
+    // FORCE onScroll for elements NOT on the cover page!
+    const trigger = (!isBuilder && !isCoverPage) ? 'onScroll' : (config.trigger || 'onScroll');
+    const isScrollTriggered = (!isBuilder && trigger === 'onScroll' && trigger !== 'onLoad');
     const hasEntryAnimation = !!layerAnimation.entry;
     const globalDelay = parseFloat(config.delay) || 0;
 
@@ -288,7 +291,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             const stTimer = setTimeout(() => {
                 ScrollTrigger.create({
                     trigger: triggerElement,
-                    start: "top 85%",
+                    start: "top 75%",
                     scroller: scrollScroller,
                     animation: tl,
                     toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
@@ -337,7 +340,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                     const stTimer = setTimeout(() => {
                         ScrollTrigger.create({
                             trigger: elementRef,
-                            start: "top 85%",
+                            start: "top 75%",
                             scroller: scrollScroller,
                             animation: tween,
                             toggleActions: "play pause resume pause"
@@ -382,7 +385,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 const stTimer = setTimeout(() => {
                     ScrollTrigger.create({
                         trigger: triggerElement,
-                        start: "top 85%",
+                        start: "top 75%",
                         scroller: scrollScroller,
                         animation: tween,
                         toggleActions: toggleActionStr
@@ -411,7 +414,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             const stTimer = setTimeout(() => {
                 ScrollTrigger.create({
                     trigger: elementRef,
-                    start: "top 85%",
+                    start: "top 75%",
                     scroller: scrollScroller,
                     animation: tween,
                     toggleActions: "play none none reverse"
