@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-B4zCjbFn.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-rFlO4jPg.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-KZhQc82P.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-ANpM3XBg.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -28184,7 +28184,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-B4zCjbFn.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-rFlO4jPg.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -30003,9 +30003,18 @@ var PublicCanvas = ({ config }) => {
 					section.layers?.forEach(checkLayer);
 					const sectionHeight = (() => {
 						if (section.layout?.height && section.layout.height !== "auto" && section.layout.height !== "100vh") return section.layout.height;
-						if (index === 0) return "844px";
-						if (section.layout?.minHeight && section.layout.minHeight !== "844px" && section.layout.minHeight !== "100vh") return section.layout.minHeight;
-						return maxY > 0 ? `${maxY}px` : section.layout?.height || "844px";
+						const screenWidth = typeof window !== "undefined" ? window.innerWidth : 414;
+						const hasDesktopThumbnail = global_settings?.desktop_thumbnail?.enabled;
+						const isPreview = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("preview") === "1" : false;
+						let expectedContainerHeight = typeof window !== "undefined" ? window.innerHeight : 844;
+						if (screenWidth >= 1024 && !hasDesktopThumbnail && !isPreview) expectedContainerHeight = 844;
+						const minScreenHeightUnscaled = expectedContainerHeight / (scale || 1);
+						if (index === 0) return `${Math.max(844, minScreenHeightUnscaled)}px`;
+						let baseH = 844;
+						if (section.layout?.minHeight && section.layout.minHeight !== "844px" && section.layout.minHeight !== "100vh") baseH = parseFloat(section.layout.minHeight);
+						else if (maxY > 0) baseH = maxY;
+						else if (section.layout?.height) baseH = parseFloat(section.layout.height);
+						return `${Math.max(baseH, minScreenHeightUnscaled)}px`;
 					})();
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 						id: section.id,

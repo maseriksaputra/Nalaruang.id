@@ -195,13 +195,32 @@ const PublicCanvas = ({ config }) => {
                         if (section.layout?.height && section.layout.height !== 'auto' && section.layout.height !== '100vh') {
                             return section.layout.height;
                         }
+                        
+                        const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 414;
+                        const hasDesktopThumbnail = global_settings?.desktop_thumbnail?.enabled;
+                        const isPreview = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('preview') === '1' : false;
+                        
+                        let expectedContainerHeight = typeof window !== 'undefined' ? window.innerHeight : 844;
+                        if (screenWidth >= 1024 && !hasDesktopThumbnail && !isPreview) {
+                            expectedContainerHeight = 844;
+                        }
+                        
+                        const minScreenHeightUnscaled = expectedContainerHeight / (scale || 1);
+                        
                         if (index === 0) {
-                            return '844px';
+                            return `${Math.max(844, minScreenHeightUnscaled)}px`;
                         }
+                        
+                        let baseH = 844;
                         if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
-                            return section.layout.minHeight;
+                            baseH = parseFloat(section.layout.minHeight);
+                        } else if (maxY > 0) {
+                            baseH = maxY;
+                        } else if (section.layout?.height) {
+                            baseH = parseFloat(section.layout.height);
                         }
-                        return maxY > 0 ? `${maxY}px` : (section.layout?.height || '844px');
+                        
+                        return `${Math.max(baseH, minScreenHeightUnscaled)}px`;
                     })();
 
                     return (
