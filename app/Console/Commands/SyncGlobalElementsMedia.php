@@ -74,12 +74,8 @@ class SyncGlobalElementsMedia extends Command
                 $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
                 $type = in_array($ext, ['mp4', 'mov', 'webm']) ? 'video' : 'image';
                 
-                // Get the first super admin to assign this to, or default to 1
-                $admin = \App\Models\User::first();
-                $userId = $admin ? $admin->id : 1;
-
                 GlobalElement::create([
-                    'user_id' => $userId,
+                    'user_id' => null,
                     'name' => 'Recovered ' . $filename,
                     'type' => $type,
                     'category' => 'Pulih dari Storage',

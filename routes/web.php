@@ -123,6 +123,15 @@ Route::get('/fix-services', function () {
     return 'Layanan berhasil dibuat di database! Silakan cek kembali halaman depan.';
 });
 
+Route::get('/fix-elemen', function () {
+    \Illuminate\Support\Facades\Artisan::call('builder:fix-db');
+    \Illuminate\Support\Facades\Artisan::call('builder:sync-global-media');
+    
+    $outputDb = \Illuminate\Support\Facades\Artisan::output();
+    
+    return "<h3>Perbaikan Selesai!</h3><pre>{$outputDb}</pre><p>Silakan kembali ke Editor Builder dan segarkan halaman.</p>";
+});
+
 Route::get('/fix-all', function () {
     // 1. Create Web & Mobile App Service
     $webSvc = \App\Models\Service::firstOrCreate(
