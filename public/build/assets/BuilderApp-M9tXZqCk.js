@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-0r2c01mZ.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-Dz_ODRqJ.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DnyNprcC.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-DlZQoTya.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -4885,6 +4885,7 @@ var AudioWaveformEditor = ({ audioUrl, audioStart, audioEnd, onSetStart, onSetEn
 	(0, import_react.useEffect)(() => {
 		if (!waveformRef.current || !audioUrl) return;
 		setIsReady(false);
+		const audioEl = new Audio(audioUrl);
 		wavesurfer.current = E.create({
 			container: waveformRef.current,
 			waveColor: "#a5b4fc",
@@ -4894,13 +4895,26 @@ var AudioWaveformEditor = ({ audioUrl, audioStart, audioEnd, onSetStart, onSetEn
 			barGap: 1,
 			barRadius: 2,
 			height: 60,
-			normalize: true
+			normalize: true,
+			sampleRate: 8e3,
+			media: audioEl
 		});
 		wavesurfer.current.load(audioUrl);
+		wavesurfer.current.on("error", (err) => {
+			console.error("WaveSurfer Error:", err);
+			setIsReady(true);
+			setDuration(audioEl.duration || 0);
+		});
 		wavesurfer.current.on("ready", () => {
 			setIsReady(true);
 			setDuration(wavesurfer.current.getDuration());
 			if (audioStart > 0 && audioStart < wavesurfer.current.getDuration()) wavesurfer.current.setTime(audioStart);
+		});
+		audioEl.addEventListener("loadedmetadata", () => {
+			if (!isReady) {
+				setIsReady(true);
+				setDuration(audioEl.duration);
+			}
 		});
 		wavesurfer.current.on("audioprocess", () => {
 			setCurrentTime(wavesurfer.current.getCurrentTime());
@@ -4969,7 +4983,7 @@ var AudioWaveformEditor = ({ audioUrl, audioStart, audioEnd, onSetStart, onSetEn
 					ref: waveformRef,
 					className: "w-full h-[60px] bg-gray-50 rounded-lg border border-gray-100 overflow-hidden cursor-pointer"
 				}), !isReady && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-10 text-[10px] text-indigo-500 font-bold animate-pulse",
+					className: "absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-10 text-[10px] text-indigo-500 font-bold animate-pulse pointer-events-none",
 					children: "Memuat Gelombang..."
 				})]
 			}),

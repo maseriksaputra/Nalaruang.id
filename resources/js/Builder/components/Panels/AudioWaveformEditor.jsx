@@ -20,7 +20,8 @@ const AudioWaveformEditor = ({
 
         setIsReady(false);
 
-        // Initialize WaveSurfer
+        // Initialize WaveSurfer with media element for faster playback
+        const audioEl = new Audio(audioUrl);
         wavesurfer.current = WaveSurfer.create({
             container: waveformRef.current,
             waveColor: '#a5b4fc', // indigo-300
@@ -31,10 +32,19 @@ const AudioWaveformEditor = ({
             barRadius: 2,
             height: 60,
             normalize: true,
+            sampleRate: 8000,
+            media: audioEl,
         });
 
-        // Load audio
+        // Load audio peaks (playback handles by media)
         wavesurfer.current.load(audioUrl);
+
+        wavesurfer.current.on('error', (err) => {
+            console.error("WaveSurfer Error:", err);
+            // Tetap set ready agar user bisa play meskipun gelombang gagal dimuat
+            setIsReady(true);
+            setDuration(audioEl.duration || 0);
+        });
 
         wavesurfer.current.on('ready', () => {
             setIsReady(true);
@@ -43,6 +53,14 @@ const AudioWaveformEditor = ({
             // If we have an audioStart, seek to it
             if (audioStart > 0 && audioStart < wavesurfer.current.getDuration()) {
                 wavesurfer.current.setTime(audioStart);
+            }
+        });
+
+        audioEl.addEventListener('loadedmetadata', () => {
+            if (!isReady) {
+                // Audio bisa di-play meskipun waveform belum selesai dirender
+                setIsReady(true);
+                setDuration(audioEl.duration);
             }
         });
 
@@ -112,7 +130,7 @@ const AudioWaveformEditor = ({
             <div className="relative">
                 <div ref={waveformRef} className="w-full h-[60px] bg-gray-50 rounded-lg border border-gray-100 overflow-hidden cursor-pointer" />
                 {!isReady && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-10 text-[10px] text-indigo-500 font-bold animate-pulse">
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-10 text-[10px] text-indigo-500 font-bold animate-pulse pointer-events-none">
                         Memuat Gelombang...
                     </div>
                 )}
