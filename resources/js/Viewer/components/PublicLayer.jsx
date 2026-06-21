@@ -186,7 +186,10 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 
         let animationCtx = null;
         if (layer.animation) {
-            animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style);
+            // Memberi ruang bernafas 1 frame agar React selesai merender DOM sebelum GSAP mengkalkulasi posisi
+            requestAnimationFrame(() => {
+                animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style);
+            });
         }
         
         return () => {
@@ -251,9 +254,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
         width: getPx(layer.style?.width ?? 100),
         height: getPx(layer.style?.height ?? 100),
         zIndex: layer.style?.zIndex || 1,
-        pointerEvents: layer.type === 'canvas_group' ? 'none' : 'auto',
-        willChange: 'transform, opacity',
-        backfaceVisibility: 'hidden'
+        pointerEvents: layer.type === 'canvas_group' ? 'none' : 'auto'
     };
 
     return (
@@ -347,7 +348,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
                     <img 
                         src={layer.url || layer.content} 
                         alt="" 
-                        loading="lazy"
+                        loading={isCoverPage ? "eager" : "lazy"}
                         decoding="async"
                         style={{ 
                             opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
@@ -417,6 +418,8 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
                                 <img 
                                     src={layer.style.polaroidData.image} 
                                     alt="Polaroid" 
+                                    loading={isCoverPage ? "eager" : "lazy"}
+                                    decoding="async"
                                     className="w-full h-full object-cover"
                                     style={{
                                         objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
@@ -535,6 +538,8 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
                                                 <img 
                                                     src={img.url} 
                                                     alt={img.caption || `Slide ${idx+1}`} 
+                                                    loading={isCoverPage ? "eager" : "lazy"}
+                                                    decoding="async"
                                                     style={{ 
                                                         width: '100%', height: '100%', objectFit: 'cover',
                                                         filter: `${img.filterId && img.filterId !== 'none' ? getFilterById(img.filterId).getCss(img.filterIntensity ?? 100) + ' ' : ''}brightness(${img.brightness ?? 1}) contrast(${img.contrast ?? 1}) saturate(${img.saturate ?? 1}) blur(${img.blur ?? 0}px)`.trim()
@@ -553,6 +558,8 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
                                             <img 
                                                 src={img.url} 
                                                 alt={img.caption || `Slide ${idx+1}`} 
+                                                loading={isCoverPage ? "eager" : "lazy"}
+                                                decoding="async"
                                                 style={{ 
                                                     width: '100%', height: '100%', objectFit: 'cover',
                                                     filter: `${img.filterId && img.filterId !== 'none' ? getFilterById(img.filterId).getCss(img.filterIntensity ?? 100) + ' ' : ''}brightness(${img.brightness ?? 1}) contrast(${img.contrast ?? 1}) saturate(${img.saturate ?? 1}) blur(${img.blur ?? 0}px)`.trim()
