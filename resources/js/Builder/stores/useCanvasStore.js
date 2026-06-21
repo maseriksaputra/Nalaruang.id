@@ -161,7 +161,19 @@ const useCanvasStore = create(temporal((set, get) => ({
         if (!invitationId) return;
 
         let cleanSections = JSON.parse(JSON.stringify(sections));
+        let cleanGlobalSettings = JSON.parse(JSON.stringify(global_settings));
         let wasCleaned = false;
+
+        // Auto-clean massive base64 in global_settings
+        if (cleanGlobalSettings) {
+            Object.keys(cleanGlobalSettings).forEach(key => {
+                const value = cleanGlobalSettings[key];
+                if (typeof value === 'string' && value.length > 300000) {
+                    cleanGlobalSettings[key] = ''; // Nuke massive base64 background images
+                    wasCleaned = true;
+                }
+            });
+        }
 
         // Auto-clean huge elements to prevent DB crash and unblock the user
         cleanSections.forEach(section => {
@@ -175,18 +187,24 @@ const useCanvasStore = create(temporal((set, get) => ({
                             wasCleaned = true;
                         }
                     }
-                    // Check Base64 pasted images in content
-                    if (layer.content && typeof layer.content === 'string') {
-                        if (layer.content.length > 500000) { // > 500KB string
-                            layer.content = layer.content.replace(/<img[^>]+src="data:image\/[^">]+"[^>]*>/gi, '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[GAMBAR DIHAPUS KARENA TERLALU BESAR]</div>');
+                    
+                    // Check ANY property for massive base64 strings
+                    Object.keys(layer).forEach(key => {
+                        const value = layer[key];
+                        if (typeof value === 'string' && value.length > 300000) { // > 300KB
+                            if (key === 'content') {
+                                layer[key] = value.replace(/<img[^>]+src="data:image\/[^">]+"[^>]*>/gi, '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[GAMBAR DIHAPUS KARENA TERLALU BESAR]</div>');
+                            } else {
+                                layer[key] = ''; // Nuke the massive base64 in url or other fields
+                            }
                             wasCleaned = true;
                         }
-                    }
+                    });
                 });
             }
         });
 
-        const payload = { canvas_config: { global_settings, sections: cleanSections } };
+        const payload = { canvas_config: { global_settings: cleanGlobalSettings, sections: cleanSections } };
         const payloadString = JSON.stringify(payload);
         
         if (payloadString.length > 3 * 1024 * 1024) { // 3MB limit
@@ -197,7 +215,7 @@ const useCanvasStore = create(temporal((set, get) => ({
 
         if (wasCleaned) {
             // Update the state with the cleaned sections so the UI reflects the removal
-            set({ sections: cleanSections });
+            set({ sections: cleanSections, global_settings: cleanGlobalSettings });
             alert('Sistem otomatis membersihkan elemen animasi/gambar yang ukurannya terlampau raksasa agar desain Anda bisa tersimpan kembali. Silakan upload ulang animasi/gambar tersebut dengan benar menggunakan tombol "Upload".');
         }
 

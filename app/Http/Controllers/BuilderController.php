@@ -42,6 +42,19 @@ class BuilderController extends Controller
             }
         }
 
+        // Clean global_settings
+        if (is_array($config) && isset($config['global_settings'])) {
+            foreach ($config['global_settings'] as $key => &$value) {
+                if (is_string($value) && strlen($value) > 300000) {
+                    $value = "[DIHAPUS KARENA UKURAN TERLALU BESAR]";
+                    $modified = true;
+                } elseif (is_array($value) && strlen(json_encode($value)) > 300000) {
+                    $value = null;
+                    $modified = true;
+                }
+            }
+        }
+
         if ($modified) {
             $invitation->canvas_config = $config;
             $invitation->save();
