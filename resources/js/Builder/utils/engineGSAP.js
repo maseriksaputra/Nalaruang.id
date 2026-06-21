@@ -162,7 +162,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
     if (layerAnimation.custom) {
         try {
             const customObj = new Function(`return ${layerAnimation.custom}`)();
-            const triggerElement = !isBuilder ? (elementRef.closest('section') || elementRef) : elementRef;
+            const triggerElement = elementRef;
 
             const tween = gsap.from(elementRef, {
                 ...customObj,
@@ -184,7 +184,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
     // -- 1. CUSTOM TIMELINE (Keyframes) LOGIC --
     // We handle this entirely separately to mimic CapCut/Canva absolute timelines
     if (layerAnimation.idle === 'custom_timeline' && layerAnimation.custom_keyframes && layerAnimation.custom_keyframes.length > 0) {
-        const triggerElement = !isBuilder ? (elementRef.closest('section') || elementRef) : elementRef;
+        const triggerElement = elementRef;
         const keyframes = layerAnimation.custom_keyframes;
         
         const baseX = parseFloat(layerStyle?.x) || 0;
@@ -305,7 +305,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                     autoRound: false
                 });
                 if (!isBuilder && trigger === 'onScroll') {
-                    const triggerElement = elementRef.closest('section') || elementRef;
+                    const triggerElement = elementRef;
                     tween.scrollTrigger = ScrollTrigger.create({
                         trigger: triggerElement,
                         start: "top 85%",
@@ -330,7 +330,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                 entryProps.scale = config.scale;
             }
             const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none reverse";
-            const triggerElement = !isBuilder ? (elementRef.closest('section') || elementRef) : elementRef;
+            const triggerElement = elementRef;
 
             // Pastikan delay diterapkan secara eksplisit
             entryProps.delay = globalDelay;
@@ -352,9 +352,20 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
     } else if (!hasEntryAnimation && layerAnimation.idle !== 'custom_timeline' && globalDelay > 0) {
         // Fallback: Elemen yang hanya punya delay tapi tidak punya Entry dan Timeline,
         // akan disembunyikan secara harfiah, lalu dimunculkan setelah delay.
+        const tweenProps = { opacity: layerStyle?.opacity ?? 1, duration: 0.01, delay: globalDelay, immediateRender: true };
+        
+        if (!isBuilder && trigger === 'onScroll') {
+            tweenProps.scrollTrigger = {
+                trigger: elementRef,
+                start: "top 85%",
+                scroller: scrollScroller,
+                toggleActions: "play none none reverse"
+            };
+        }
+
         const tween = gsap.fromTo(elementRef, 
             { opacity: 0 }, 
-            { opacity: layerStyle?.opacity ?? 1, duration: 0.01, delay: globalDelay, immediateRender: true }
+            tweenProps
         );
         activeTweens.push(tween);
     }
