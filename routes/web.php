@@ -125,18 +125,12 @@ Route::get('/fix-services', function () {
 
 Route::get('/fix-elemen', function () {
     try {
-        $elements = \App\Models\GlobalElement::where('user_id', auth()->id())
-            ->orWhereNull('user_id')
-            ->latest()
-            ->get();
-            
-        // Force serialization to trigger any potential hydration/cast errors
-        $array = $elements->toArray();
-        $json = json_encode($array, JSON_THROW_ON_ERROR);
+        $controller = app(\App\Http\Controllers\GlobalElementController::class);
+        $response = $controller->index();
         
-        return "<h3>Sukses!</h3><p>Berhasil meload " . count($array) . " elemen tanpa error.</p><pre>" . substr($json, 0, 500) . "...</pre>";
+        return "<h3>Test Controller Index:</h3><pre>" . json_encode($response->getData(true), JSON_PRETTY_PRINT) . "</pre>";
     } catch (\Exception $e) {
-        return "<h3>Error saat meload elemen:</h3><pre>" . $e->getMessage() . "\n" . $e->getTraceAsString() . "</pre>";
+        return "<h3>Controller Error:</h3><pre>" . $e->getMessage() . "\n" . $e->getTraceAsString() . "</pre>";
     }
 });
 
@@ -367,14 +361,16 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/admin/invitation-portal/{id}/slug', [\App\Http\Controllers\DashboardPortalController::class, 'updateSlug']);
     Route::delete('/admin/invitation-portal/{id}', [\App\Http\Controllers\DashboardPortalController::class, 'deleteInvitation']);
     Route::post('/admin/invitation-portal/create', [\App\Http\Controllers\DashboardPortalController::class, 'store']);
-    Route::get('/admin/builder/{id}', [\App\Http\Controllers\BuilderController::class, 'show']);
-    Route::post('/admin/builder/upload-media', [\App\Http\Controllers\BuilderController::class, 'uploadMedia']);
-    Route::post('/admin/builder/{id}/autosave', [\App\Http\Controllers\BuilderController::class, 'autoSave']);
-    Route::post('/admin/builder/{id}/publish', [\App\Http\Controllers\BuilderController::class, 'publish']);
     Route::get('/admin/builder/global-elements', [\App\Http\Controllers\GlobalElementController::class, 'index']);
     Route::post('/admin/builder/global-elements', [\App\Http\Controllers\GlobalElementController::class, 'store']);
     Route::post('/admin/builder/global-elements/upload', [\App\Http\Controllers\GlobalElementController::class, 'uploadMedia']);
     Route::delete('/admin/builder/global-elements/{id}', [\App\Http\Controllers\GlobalElementController::class, 'destroy']);
+    
+    Route::get('/admin/builder/{id}', [\App\Http\Controllers\BuilderController::class, 'show']);
+    Route::post('/admin/builder/upload-media', [\App\Http\Controllers\BuilderController::class, 'uploadMedia']);
+    Route::post('/admin/builder/{id}/autosave', [\App\Http\Controllers\BuilderController::class, 'autoSave']);
+    Route::post('/admin/builder/{id}/publish', [\App\Http\Controllers\BuilderController::class, 'publish']);
+
 
     // SaaS Portal Orders Routes
     Route::get('/admin/invitation-portal/orders', [\App\Http\Controllers\DashboardPortalController::class, 'getOrders']);
