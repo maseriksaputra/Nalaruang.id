@@ -10,6 +10,43 @@ class BuilderController extends Controller
     public function show($id)
     {
         $invitation = Invitation::findOrFail($id);
+
+        // Auto-clean massive payloads to prevent crashes and unblock users
+        $config = $invitation->canvas_config;
+        $modified = false;
+        
+        if (is_array($config) && isset($config['sections'])) {
+            foreach ($config['sections'] as &$section) {
+                if (isset($section['layers']) && is_array($section['layers'])) {
+                    foreach ($section['layers'] as &$layer) {
+                        foreach ($layer as $key => &$value) {
+                            if (is_string($value) && strlen($value) > 300000) {
+                                // Strip massive base64 images from rich text
+                                if ($key === 'content') {
+                                    $value = preg_replace('/<img[^>]+src="data:image\/[^">]+"[^>]*>/i', '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[GAMBAR DIHAPUS OTOMATIS OLEH SISTEM KARENA TERLALU BESAR]</div>', $value);
+                                }
+                                
+                                // If it's still massive (e.g. raw base64 string in url), nuke it
+                                if (strlen($value) > 300000) {
+                                    $value = "[DIHAPUS KARENA UKURAN TERLALU BESAR]";
+                                }
+                                $modified = true;
+                            } elseif (is_array($value) && strlen(json_encode($value)) > 300000) {
+                                // Huge Lottie JSON object
+                                $value = null;
+                                $modified = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($modified) {
+            $invitation->canvas_config = $config;
+            $invitation->save();
+        }
+
         return view('builder', compact('invitation'));
     }
 
