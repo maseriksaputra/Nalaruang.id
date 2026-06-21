@@ -292,11 +292,33 @@ const useCanvasStore = create(temporal((set, get) => ({
                     targetLayers.push(activeGroup);
                 }
                 
+                let smartY = 50;
+                try {
+                    const workspaceEl = document.getElementById('zoomable-main-area');
+                    const sectionEl = document.getElementById(state.activeSectionId);
+                    if (workspaceEl && sectionEl) {
+                        const workspaceRect = workspaceEl.getBoundingClientRect();
+                        const sectionRect = sectionEl.getBoundingClientRect();
+                        const centerY = workspaceRect.top + (workspaceRect.height / 2);
+                        const scale = sectionRect.width / sectionEl.offsetWidth;
+                        let relativeY = (centerY - sectionRect.top) / scale;
+                        
+                        // Default element height assumption is ~200px, so subtract 100 to truly center it
+                        relativeY -= 100;
+                        
+                        // Keep within bounds
+                        const sectionHeight = sectionEl.offsetHeight;
+                        smartY = Math.max(50, Math.min(relativeY, sectionHeight - 200));
+                    }
+                } catch (e) {
+                    console.error('Smart Y calculation failed:', e);
+                }
+
                 const newLayer = {
                     ...layerObj,
                     id: layerObj.id || 'elem_' + Date.now(),
                     style: { 
-                        x: 50, y: 50, width: 200, height: layerObj.type === 'text' ? 50 : 200, 
+                        x: 50, y: smartY, width: 200, height: layerObj.type === 'text' ? 50 : 200, 
                         zIndex: (activeGroup.children?.length || 0) + 1, color: '#000000', fontSize: '24px', 
                         ...layerObj.style 
                     },
