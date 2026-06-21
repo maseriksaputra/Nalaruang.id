@@ -199,6 +199,24 @@ const CanvasArea = () => {
                             {index === 0 ? '📄 HALAMAN SAMPUL (COVER)' : '📄 HALAMAN ISI'}
                         </div>
 
+                        {/* Visual Grid Lines for Long Content Pages */}
+                        {index > 0 && activeCanvasMode !== 'desktop' && (() => {
+                            const sectionH = parseFloat(sectionHeight);
+                            const grids = [];
+                            for (let i = 844; i < sectionH; i += 844) {
+                                grids.push(
+                                    <div key={`grid-${i}`} className="absolute w-full z-0 flex items-center pointer-events-none" style={{ top: `${i}px` }}>
+                                        <div className="flex-1 border-t border-dashed border-indigo-300/50"></div>
+                                        <div className="px-2 py-0.5 bg-indigo-50 text-indigo-400 text-[10px] font-bold rounded-full mx-2 border border-indigo-200/50 shadow-sm">
+                                            Batas Layar {Math.floor(i/844) + 1}
+                                        </div>
+                                        <div className="flex-1 border-t border-dashed border-indigo-300/50"></div>
+                                    </div>
+                                );
+                            }
+                            return grids;
+                        })()}
+
                         {section.layers?.map((layer) => (
                             <div key={layer.id} style={{ zIndex: layer.style?.zIndex || 1, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
                                 {!layer.isHidden && layer.children?.map(child => (

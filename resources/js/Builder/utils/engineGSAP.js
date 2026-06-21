@@ -142,11 +142,12 @@ const getIdleProps = (type, config = {}) => {
 };
 
 export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle = null, startAtTime = 0) => {
-    if (!elementRef || !layerAnimation) return null;
+    if (!elementRef) return { kill: () => {} };
 
+    let activeTweens = [];
+    let scrollTriggerTimeouts = [];
     const isLooping = layerAnimation.isLooping || false;
     const repeatConfig = isLooping ? { repeat: -1, yoyo: true } : {};
-    const activeTweens = [];
     
     // Temukan scroll container untuk Preview Modal. Jika tidak ada, gunakan default window
     const scrollScroller = !isBuilder && document.getElementById('viewer-scroll-container') 
@@ -163,19 +164,35 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
         try {
             const customObj = new Function(`return ${layerAnimation.custom}`)();
             const triggerElement = elementRef;
+            const isScrollTriggered = !isBuilder;
 
             const tween = gsap.from(elementRef, {
                 ...customObj,
                 ...repeatConfig,
-                scrollTrigger: isBuilder ? null : { 
-                    trigger: triggerElement, 
-                    start: "top 80%", 
-                    scroller: scrollScroller,
-                    toggleActions: "play none none reverse" 
-                }
+                paused: isScrollTriggered
             });
             activeTweens.push(tween);
-            return { kill: () => activeTweens.forEach(t => t.kill()) };
+
+            if (isScrollTriggered) {
+                const stTimer = setTimeout(() => {
+                    ScrollTrigger.create({
+                        trigger: triggerElement,
+                        start: "top 80%",
+                        scroller: scrollScroller,
+                        animation: tween,
+                        toggleActions: "play none none reverse"
+                    });
+                }, 1250);
+                scrollTriggerTimeouts.push(stTimer);
+            }
+            
+            return { kill: () => {
+                scrollTriggerTimeouts.forEach(t => clearTimeout(t));
+                activeTweens.forEach(t => {
+                    if (t.scrollTrigger) t.scrollTrigger.kill();
+                    t.kill();
+                });
+            }};
         } catch (e) {
             console.error('Invalid custom GSAP config', e);
         }
@@ -213,12 +230,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
         const tl = gsap.timeline({
             repeat: (isLooping && !isBuilder) ? -1 : 0,
             delay: globalDelay,
-            scrollTrigger: (!isBuilder && trigger === 'onScroll') ? {
-                trigger: triggerElement,
-                start: "top 85%",
-                scroller: scrollScroller,
-                toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
-            } : null
+            paused: (!isBuilder && trigger === 'onScroll')
         });
 
         // Waktu absolut timeline dimulai dari 0 (yang mana aslinya sudah ter-delay oleh globalDelay)
@@ -271,6 +283,19 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
         }
         
         activeTweens.push(tl);
+
+        if (!isBuilder && trigger === 'onScroll') {
+            const stTimer = setTimeout(() => {
+                ScrollTrigger.create({
+                    trigger: triggerElement,
+                    start: "top 85%",
+                    scroller: scrollScroller,
+                    animation: tl,
+                    toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
+                });
+            }, 1250);
+            scrollTriggerTimeouts.push(stTimer);
+        }
     } 
     // -- 2. STANDARD IDLE ANIMATIONS --
     else if (layerAnimation.idle) {
@@ -298,23 +323,28 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             if (idleProps) {
                 // Jika digabung dengan Entry Animation, delay-nya adalah GlobalDelay + EntryDuration
                 const finalDelay = hasEntryAnimation ? (config.speed || 1.5) + globalDelay : globalDelay;
+                const isScrollTriggered = (!isBuilder && trigger === 'onScroll');
                 const tween = gsap.to(elementRef, {
                     ...idleProps,
                     delay: finalDelay,
                     force3D: true,
-                    autoRound: false
+                    autoRound: false,
+                    paused: isScrollTriggered
                 });
-                if (!isBuilder && trigger === 'onScroll') {
-                    const triggerElement = elementRef;
-                    tween.scrollTrigger = ScrollTrigger.create({
-                        trigger: triggerElement,
-                        start: "top 85%",
-                        scroller: scrollScroller,
-                        animation: tween,
-                        toggleActions: "play pause resume pause"
-                    });
-                }
                 activeTweens.push(tween);
+                
+                if (isScrollTriggered) {
+                    const stTimer = setTimeout(() => {
+                        ScrollTrigger.create({
+                            trigger: elementRef,
+                            start: "top 85%",
+                            scroller: scrollScroller,
+                            animation: tween,
+                            toggleActions: "play pause resume pause"
+                        });
+                    }, 1250);
+                    scrollTriggerTimeouts.push(stTimer);
+                }
             }
         }
     }
@@ -335,32 +365,40 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             // Pastikan delay diterapkan secara eksplisit
             entryProps.delay = globalDelay;
 
+            const isScrollTriggered = (!isBuilder && trigger === 'onScroll' && trigger !== 'onLoad');
+            if (isScrollTriggered) {
+                entryProps.paused = true;
+            }
+
             const tween = gsap.from(elementRef, {
                 ...entryProps,
                 ...repeatConfig,
                 force3D: true,
-                autoRound: false,
-                scrollTrigger: (!isBuilder && trigger === 'onScroll') && trigger !== 'onLoad' ? { 
-                    trigger: triggerElement, 
-                    start: "top 85%", 
-                    scroller: scrollScroller,
-                    toggleActions: toggleActionStr 
-                } : null
+                autoRound: false
             });
             activeTweens.push(tween);
+
+            if (isScrollTriggered) {
+                const stTimer = setTimeout(() => {
+                    ScrollTrigger.create({
+                        trigger: triggerElement,
+                        start: "top 85%",
+                        scroller: scrollScroller,
+                        animation: tween,
+                        toggleActions: toggleActionStr
+                    });
+                }, 1250);
+                scrollTriggerTimeouts.push(stTimer);
+            }
         }
     } else if (!hasEntryAnimation && layerAnimation.idle !== 'custom_timeline' && globalDelay > 0) {
         // Fallback: Elemen yang hanya punya delay tapi tidak punya Entry dan Timeline,
         // akan disembunyikan secara harfiah, lalu dimunculkan setelah delay.
         const tweenProps = { opacity: layerStyle?.opacity ?? 1, duration: 0.01, delay: globalDelay, immediateRender: true };
         
-        if (!isBuilder && trigger === 'onScroll') {
-            tweenProps.scrollTrigger = {
-                trigger: elementRef,
-                start: "top 85%",
-                scroller: scrollScroller,
-                toggleActions: "play none none reverse"
-            };
+        const isScrollTriggered = (!isBuilder && trigger === 'onScroll');
+        if (isScrollTriggered) {
+            tweenProps.paused = true;
         }
 
         const tween = gsap.fromTo(elementRef, 
@@ -368,6 +406,19 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             tweenProps
         );
         activeTweens.push(tween);
+
+        if (isScrollTriggered) {
+            const stTimer = setTimeout(() => {
+                ScrollTrigger.create({
+                    trigger: elementRef,
+                    start: "top 85%",
+                    scroller: scrollScroller,
+                    animation: tween,
+                    toggleActions: "play none none reverse"
+                });
+            }, 1250);
+            scrollTriggerTimeouts.push(stTimer);
+        }
     }
 
     // Pastikan di Builder animasi sinkron sempurna dengan playhead
@@ -381,6 +432,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
 
     return {
         kill: () => {
+            scrollTriggerTimeouts.forEach(t => clearTimeout(t));
             activeTweens.forEach(t => {
                 if (t.scrollTrigger) t.scrollTrigger.kill();
                 t.kill();

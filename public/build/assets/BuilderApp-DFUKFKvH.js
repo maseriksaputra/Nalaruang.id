@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-9EKqjfdW.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp--i9sInb5.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CTRkp8CD.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-acP5Rgo_.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -237,6 +237,23 @@ var CanvasArea = () => {
 							className: `absolute top-0 left-0 z-50 px-3 py-1.5 text-[10px] font-bold tracking-wider rounded-br-lg shadow-sm border-b border-r bg-indigo-600 text-white border-indigo-700`,
 							children: index === 0 ? "📄 HALAMAN SAMPUL (COVER)" : "📄 HALAMAN ISI"
 						}),
+						index > 0 && activeCanvasMode !== "desktop" && (() => {
+							const sectionH = parseFloat(sectionHeight);
+							const grids = [];
+							for (let i = 844; i < sectionH; i += 844) grids.push(/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "absolute w-full z-0 flex items-center pointer-events-none",
+								style: { top: `${i}px` },
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex-1 border-t border-dashed border-indigo-300/50" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "px-2 py-0.5 bg-indigo-50 text-indigo-400 text-[10px] font-bold rounded-full mx-2 border border-indigo-200/50 shadow-sm",
+										children: ["Batas Layar ", Math.floor(i / 844) + 1]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex-1 border-t border-dashed border-indigo-300/50" })
+								]
+							}, `grid-${i}`));
+							return grids;
+						})(),
 						section.layers?.map((layer) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							style: {
 								zIndex: layer.style?.zIndex || 1,

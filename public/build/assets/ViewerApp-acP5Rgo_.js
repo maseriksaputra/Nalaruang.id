@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DjLi9fC8.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-CdzJNz7E.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-9EKqjfdW.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CTRkp8CD.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -20255,13 +20255,14 @@ var getIdleProps = (type, config = {}) => {
 	}
 };
 var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle = null, startAtTime = 0) => {
-	if (!elementRef || !layerAnimation) return null;
+	if (!elementRef) return { kill: () => {} };
+	let activeTweens = [];
+	let scrollTriggerTimeouts = [];
 	const isLooping = layerAnimation.isLooping || false;
 	const repeatConfig = isLooping ? {
 		repeat: -1,
 		yoyo: true
 	} : {};
-	const activeTweens = [];
 	const scrollScroller = !isBuilder && document.getElementById("viewer-scroll-container") ? document.getElementById("viewer-scroll-container") : void 0;
 	const config = layerAnimation.config || {
 		mode: "enter",
@@ -20275,18 +20276,32 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 	if (layerAnimation.custom) try {
 		const customObj = new Function(`return ${layerAnimation.custom}`)();
 		const triggerElement = elementRef;
+		const isScrollTriggered = !isBuilder;
 		const tween = gsapWithCSS.from(elementRef, {
 			...customObj,
 			...repeatConfig,
-			scrollTrigger: isBuilder ? null : {
-				trigger: triggerElement,
-				start: "top 80%",
-				scroller: scrollScroller,
-				toggleActions: "play none none reverse"
-			}
+			paused: isScrollTriggered
 		});
 		activeTweens.push(tween);
-		return { kill: () => activeTweens.forEach((t) => t.kill()) };
+		if (isScrollTriggered) {
+			const stTimer = setTimeout(() => {
+				ScrollTrigger.create({
+					trigger: triggerElement,
+					start: "top 80%",
+					scroller: scrollScroller,
+					animation: tween,
+					toggleActions: "play none none reverse"
+				});
+			}, 1250);
+			scrollTriggerTimeouts.push(stTimer);
+		}
+		return { kill: () => {
+			scrollTriggerTimeouts.forEach((t) => clearTimeout(t));
+			activeTweens.forEach((t) => {
+				if (t.scrollTrigger) t.scrollTrigger.kill();
+				t.kill();
+			});
+		} };
 	} catch (e) {
 		console.error("Invalid custom GSAP config", e);
 	}
@@ -20313,12 +20328,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 		const tl = gsapWithCSS.timeline({
 			repeat: isLooping && !isBuilder ? -1 : 0,
 			delay: globalDelay,
-			scrollTrigger: !isBuilder && trigger === "onScroll" ? {
-				trigger: triggerElement,
-				start: "top 85%",
-				scroller: scrollScroller,
-				toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
-			} : null
+			paused: !isBuilder && trigger === "onScroll"
 		});
 		if (!hasEntryAnimation && globalDelay > 0) tl.set(elementRef, {
 			opacity: getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1),
@@ -20361,6 +20371,18 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 			}
 		}
 		activeTweens.push(tl);
+		if (!isBuilder && trigger === "onScroll") {
+			const stTimer = setTimeout(() => {
+				ScrollTrigger.create({
+					trigger: triggerElement,
+					start: "top 85%",
+					scroller: scrollScroller,
+					animation: tl,
+					toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
+				});
+			}, 1250);
+			scrollTriggerTimeouts.push(stTimer);
+		}
 	} else if (layerAnimation.idle) if (layerAnimation.idle === "custom_path" && layerAnimation.custom_path_data) {
 		const { svgPath, ease = "power2.inOut", duration = 5, autoRotate = false } = layerAnimation.custom_path_data;
 		if (svgPath && svgPath.trim() !== "") {
@@ -20384,23 +20406,27 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 		const idleProps = getIdleProps(layerAnimation.idle, configIdle);
 		if (idleProps) {
 			const finalDelay = hasEntryAnimation ? (config.speed || 1.5) + globalDelay : globalDelay;
+			const isScrollTriggered = !isBuilder && trigger === "onScroll";
 			const tween = gsapWithCSS.to(elementRef, {
 				...idleProps,
 				delay: finalDelay,
 				force3D: true,
-				autoRound: false
+				autoRound: false,
+				paused: isScrollTriggered
 			});
-			if (!isBuilder && trigger === "onScroll") {
-				const triggerElement = elementRef;
-				tween.scrollTrigger = ScrollTrigger.create({
-					trigger: triggerElement,
-					start: "top 85%",
-					scroller: scrollScroller,
-					animation: tween,
-					toggleActions: "play pause resume pause"
-				});
-			}
 			activeTweens.push(tween);
+			if (isScrollTriggered) {
+				const stTimer = setTimeout(() => {
+					ScrollTrigger.create({
+						trigger: elementRef,
+						start: "top 85%",
+						scroller: scrollScroller,
+						animation: tween,
+						toggleActions: "play pause resume pause"
+					});
+				}, 1250);
+				scrollTriggerTimeouts.push(stTimer);
+			}
 		}
 	}
 	if (hasEntryAnimation) {
@@ -20412,19 +20438,27 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 			const toggleActionStr = hasExit || config.autoReverse ? "play reverse play reverse" : "play none none reverse";
 			const triggerElement = elementRef;
 			entryProps.delay = globalDelay;
+			const isScrollTriggered = !isBuilder && trigger === "onScroll" && trigger !== "onLoad";
+			if (isScrollTriggered) entryProps.paused = true;
 			const tween = gsapWithCSS.from(elementRef, {
 				...entryProps,
 				...repeatConfig,
 				force3D: true,
-				autoRound: false,
-				scrollTrigger: !isBuilder && trigger === "onScroll" && trigger !== "onLoad" ? {
-					trigger: triggerElement,
-					start: "top 85%",
-					scroller: scrollScroller,
-					toggleActions: toggleActionStr
-				} : null
+				autoRound: false
 			});
 			activeTweens.push(tween);
+			if (isScrollTriggered) {
+				const stTimer = setTimeout(() => {
+					ScrollTrigger.create({
+						trigger: triggerElement,
+						start: "top 85%",
+						scroller: scrollScroller,
+						animation: tween,
+						toggleActions: toggleActionStr
+					});
+				}, 1250);
+				scrollTriggerTimeouts.push(stTimer);
+			}
 		}
 	} else if (!hasEntryAnimation && layerAnimation.idle !== "custom_timeline" && globalDelay > 0) {
 		const tweenProps = {
@@ -20433,19 +20467,28 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 			delay: globalDelay,
 			immediateRender: true
 		};
-		if (!isBuilder && trigger === "onScroll") tweenProps.scrollTrigger = {
-			trigger: elementRef,
-			start: "top 85%",
-			scroller: scrollScroller,
-			toggleActions: "play none none reverse"
-		};
+		const isScrollTriggered = !isBuilder && trigger === "onScroll";
+		if (isScrollTriggered) tweenProps.paused = true;
 		const tween = gsapWithCSS.fromTo(elementRef, { opacity: 0 }, tweenProps);
 		activeTweens.push(tween);
+		if (isScrollTriggered) {
+			const stTimer = setTimeout(() => {
+				ScrollTrigger.create({
+					trigger: elementRef,
+					start: "top 85%",
+					scroller: scrollScroller,
+					animation: tween,
+					toggleActions: "play none none reverse"
+				});
+			}, 1250);
+			scrollTriggerTimeouts.push(stTimer);
+		}
 	}
 	if (isBuilder) activeTweens.forEach((t) => {
 		if (t && typeof t.totalTime === "function") t.totalTime(startAtTime || 0);
 	});
 	return { kill: () => {
+		scrollTriggerTimeouts.forEach((t) => clearTimeout(t));
 		activeTweens.forEach((t) => {
 			if (t.scrollTrigger) t.scrollTrigger.kill();
 			t.kill();
@@ -28057,7 +28100,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DjLi9fC8.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-CdzJNz7E.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
