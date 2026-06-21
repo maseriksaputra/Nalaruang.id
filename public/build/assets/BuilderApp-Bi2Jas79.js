@@ -6765,12 +6765,14 @@ var LeftDrawer = () => {
 		if (folderName === null) return;
 		if (!folderName.trim()) folderName = "Umum";
 		if (type === "lottie") {
-			const reader = new FileReader();
-			reader.onload = async (event) => {
-				try {
+			const formData = new FormData();
+			formData.append("file", file);
+			try {
+				const response = await apiClient.post("/admin/builder/global-elements/upload", formData, { headers: { "Content-Type": "multipart/form-data" } });
+				if (response.data.success) {
 					const payload = {
 						type: "lottie",
-						animationData: JSON.parse(event.target.result),
+						url: response.data.url,
 						style: {
 							x: 50,
 							y: 50,
@@ -6779,11 +6781,11 @@ var LeftDrawer = () => {
 						}
 					};
 					await saveGlobalElement(name, "lottie", payload, null, folderName);
-				} catch (err) {
-					alert("File JSON tidak valid!");
 				}
-			};
-			reader.readAsText(file);
+			} catch (err) {
+				console.error("Upload failed:", err);
+				alert("Gagal mengunggah file JSON Lottie.");
+			}
 		} else {
 			const compressedFile = await compressImageToWebp(file);
 			const formData = new FormData();

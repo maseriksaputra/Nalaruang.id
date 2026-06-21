@@ -16,7 +16,7 @@ class BuilderController extends Controller
     public function uploadMedia(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:jpeg,png,jpg,gif,svg,webp,mp4,mov,webm,ogg|max:51200', // Max 50MB
+            'file' => 'required|file|mimes:jpeg,png,jpg,gif,svg,webp,mp4,mov,webm,ogg,json,txt|max:51200', // Max 50MB
         ]);
 
         if ($request->file('file')) {

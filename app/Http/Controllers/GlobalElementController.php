@@ -49,7 +49,7 @@ class GlobalElementController extends Controller
     public function uploadMedia(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:jpeg,png,jpg,gif,svg,webp,mp4,mov,webm,ogg,mp3,wav|max:51200', // Max 50MB
+            'file' => 'required|file|mimes:jpeg,png,jpg,gif,svg,webp,mp4,mov,webm,ogg,mp3,wav,json,txt|max:51200', // Max 50MB
         ]);
 
         $file = $request->file('file');
