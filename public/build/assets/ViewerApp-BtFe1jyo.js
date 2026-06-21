@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-U4mOS9ru.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-CinMQ70m.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-hUY3-ony.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-BKSejAs2.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -2450,11 +2450,11 @@ var useCanvasStore = create(temporal((set, get) => ({
 		});
 		cleanSections.forEach((section) => {
 			if (section.layers) section.layers.forEach((layer, layerIndex) => {
-				if (JSON.stringify(layer).length > 25e4) {
+				if (JSON.stringify(layer).length > 5e6) {
 					section.layers[layerIndex] = {
 						id: layer.id,
 						type: "text",
-						content: "<div style=\"color:red; font-size:12px; border:1px dashed red; padding:5px;\">[ELEMEN DIHAPUS OTOMATIS OLEH SISTEM KARENA UKURAN TERLALU BESAR]</div>",
+						content: "<div style=\"color:red; font-size:12px; border:1px dashed red; padding:5px;\">[ELEMEN DIHAPUS OTOMATIS OLEH SISTEM KARENA UKURAN > 5MB]</div>",
 						style: layer.style || {
 							width: 200,
 							height: 100,
@@ -2463,18 +2463,12 @@ var useCanvasStore = create(temporal((set, get) => ({
 						}
 					};
 					wasCleaned = true;
-				} else if (typeof layer.url === "string" && layer.url.startsWith("data:image/")) {
-					layer.url = "";
-					wasCleaned = true;
-				} else if (typeof layer.content === "string" && layer.content.includes("data:image/")) {
-					layer.content = layer.content.replace(/<img[^>]+src="data:image\/[^">]+"[^>]*>/gi, "<div style=\"color:red; font-size:12px; border:1px dashed red; padding:5px;\">[GAMBAR DIHAPUS]</div>");
-					wasCleaned = true;
 				}
 			});
 		});
-		if (cleanGlobalSettings && JSON.stringify(cleanGlobalSettings).length > 25e4) Object.keys(cleanGlobalSettings).forEach((key) => {
+		if (cleanGlobalSettings && JSON.stringify(cleanGlobalSettings).length > 5e6) Object.keys(cleanGlobalSettings).forEach((key) => {
 			const value = cleanGlobalSettings[key];
-			if (typeof value === "string" && (value.length > 2e5 || value.startsWith("data:image/"))) {
+			if (typeof value === "string" && value.length > 5e6) {
 				cleanGlobalSettings[key] = "";
 				wasCleaned = true;
 			}
@@ -28367,7 +28361,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-U4mOS9ru.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-CinMQ70m.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);

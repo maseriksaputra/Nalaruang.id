@@ -183,19 +183,13 @@ const useCanvasStore = create(temporal((set, get) => ({
                 section.layers.forEach((layer, layerIndex) => {
                     // Cek total ukuran dari 1 layer ini
                     const layerString = JSON.stringify(layer);
-                    if (layerString.length > 250000) { // Jika 1 layer > 250KB, ini pasti biang keroknya (misal: data URI / Lottie besar)
+                    if (layerString.length > 5000000) { // Jika 1 layer > 5MB, ini baru anomali (misal: Lottie 50MB)
                         section.layers[layerIndex] = {
                             id: layer.id,
                             type: 'text',
-                            content: '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[ELEMEN DIHAPUS OTOMATIS OLEH SISTEM KARENA UKURAN TERLALU BESAR]</div>',
+                            content: '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[ELEMEN DIHAPUS OTOMATIS OLEH SISTEM KARENA UKURAN > 5MB]</div>',
                             style: layer.style || { width: 200, height: 100, x: 0, y: 0 }
                         };
-                        wasCleaned = true;
-                    } else if (typeof layer.url === 'string' && layer.url.startsWith('data:image/')) {
-                        layer.url = '';
-                        wasCleaned = true;
-                    } else if (typeof layer.content === 'string' && layer.content.includes('data:image/')) {
-                        layer.content = layer.content.replace(/<img[^>]+src="data:image\/[^">]+"[^>]*>/gi, '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[GAMBAR DIHAPUS]</div>');
                         wasCleaned = true;
                     }
                 });
@@ -203,10 +197,10 @@ const useCanvasStore = create(temporal((set, get) => ({
         });
 
         // Also check global_settings total size
-        if (cleanGlobalSettings && JSON.stringify(cleanGlobalSettings).length > 250000) {
+        if (cleanGlobalSettings && JSON.stringify(cleanGlobalSettings).length > 5000000) {
             Object.keys(cleanGlobalSettings).forEach(key => {
                 const value = cleanGlobalSettings[key];
-                if (typeof value === 'string' && (value.length > 200000 || value.startsWith('data:image/'))) {
+                if (typeof value === 'string' && value.length > 5000000) {
                     cleanGlobalSettings[key] = '';
                     wasCleaned = true;
                 }
