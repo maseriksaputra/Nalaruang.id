@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BUVHb4jW.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BCsfZowM.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-M0gUZCBj.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DDUUuZHU.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -25624,12 +25624,24 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 	};
 	if (layer.type === "text" || layer.type === "dynamic_guest_name") loadFont(layer.style?.fontFamily);
 	if (layer.type === "polaroid") loadFont("Caveat");
+	const computedBorderRadius = (() => {
+		if (layer.style?.borderRadius === void 0) return "0px";
+		const r = `${layer.style.borderRadius}px`;
+		switch (layer.style.borderRadiusType) {
+			case "top": return `${r} ${r} 0 0`;
+			case "bottom": return `0 0 ${r} ${r}`;
+			case "left": return `${r} 0 0 ${r}`;
+			case "right": return `0 ${r} ${r} 0`;
+			case "top-left": return `${r} 0 0 0`;
+			case "top-right": return `0 ${r} 0 0`;
+			case "bottom-right": return `0 0 ${r} 0`;
+			case "bottom-left": return `0 0 0 ${r}`;
+			default: return r;
+		}
+	})();
 	const innerStructure = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "w-full h-full relative",
-		style: {
-			transform: `rotate(${layer.style?.rotation || 0}deg)`,
-			opacity: layer.style?.opacity ?? 1
-		},
+		style: { transform: `rotate(${layer.style?.rotation || 0}deg)` },
 		children: [
 			isActive && !layer.isLocked && !isChildOfGroup && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "absolute left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-auto z-[9999]",
@@ -25660,237 +25672,102 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 				className: "w-full h-full transition-opacity duration-150",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					ref: elementRef,
-					className: "w-full h-full",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: `w-full h-full`,
-						style: {
-							transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
-							borderRadius: (() => {
-								if (layer.style?.borderRadius === void 0) return "0px";
-								const r = `${layer.style.borderRadius}px`;
-								switch (layer.style.borderRadiusType) {
-									case "top": return `${r} ${r} 0 0`;
-									case "bottom": return `0 0 ${r} ${r}`;
-									case "left": return `${r} 0 0 ${r}`;
-									case "right": return `0 ${r} ${r} 0`;
-									case "top-left": return `${r} 0 0 0`;
-									case "top-right": return `0 ${r} 0 0`;
-									case "bottom-right": return `0 0 ${r} 0`;
-									case "bottom-left": return `0 0 0 ${r}`;
-									default: return r;
-								}
-							})(),
-							overflow: layer.style?.borderRadius ? "hidden" : "visible",
-							filter: getShadowCss$1(layer.style),
-							background: layer.type === "image" || layer.type === "text" || layer.type === "dynamic_guest_name" ? "transparent" : getGradientCss$1(layer.style),
-							borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : void 0,
-							borderStyle: layer.style?.borderStyle || (layer.style?.borderWidth ? "solid" : void 0),
-							borderColor: layer.style?.borderColor,
-							boxSizing: "border-box"
-						},
-						children: [
-							(layer.type === "text" || layer.type === "dynamic_guest_name") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: `w-full h-full overflow-hidden flex outline-none border-none ${isEditing ? "no-drag !select-text !pointer-events-auto" : ""}`,
-								style: {
-									color: layer.style?.color || "#000000",
-									fontSize: layer.style?.fontSize ? String(layer.style.fontSize).includes("px") || String(layer.style.fontSize).includes("rem") || String(layer.style.fontSize).includes("em") ? layer.style.fontSize : `${layer.style.fontSize}px` : "16px",
-									fontFamily: layer.style?.fontFamily || "sans-serif",
-									fontWeight: layer.style?.fontWeight || "normal",
-									textAlign: layer.style?.textAlign || "left",
-									justifyContent: layer.style?.textAlign === "center" ? "center" : layer.style?.textAlign === "right" ? "flex-end" : "flex-start",
-									alignItems: "center",
-									textDecoration: layer.style?.textDecoration,
-									fontStyle: layer.style?.fontStyle,
-									letterSpacing: layer.style?.letterSpacing,
-									lineHeight: layer.style?.lineHeight,
-									textShadow: layer.style?.textShadow,
-									cursor: isEditing ? "text" : layer.isLocked ? "default" : "move",
-									userSelect: isEditing ? "text" : "none",
-									WebkitUserSelect: isEditing ? "text" : "none"
-								},
-								contentEditable: isEditing,
-								suppressContentEditableWarning: true,
-								onDoubleClick: (e) => {
-									e.stopPropagation();
-									setIsEditing(true);
-									const target = e.target;
-									setTimeout(() => {
-										target.focus();
-										const range = document.createRange();
-										range.selectNodeContents(target);
-										const sel = window.getSelection();
-										sel.removeAllRanges();
-										sel.addRange(range);
-									}, 50);
-								},
-								onBlur: (e) => {
-									setIsEditing(false);
-									useCanvasStore.getState().updateLayerContent(layer.id, e.target.innerText);
-								},
-								children: layer.content
-							}),
-							layer.type === "shape" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "w-full h-full relative pointer-events-none",
-								style: {
-									backgroundColor: layer.style?.backgroundColor || "#e0e7ff",
-									borderRadius: layer.style?.borderRadius || "0px"
-								}
-							}),
-							(() => {
-								if (layer.type === "lottie") {
-									let lottieData = layer.lottieJsonObj || layer.animationData;
-									if (typeof lottieData === "string") try {
-										lottieData = JSON.parse(lottieData);
-									} catch (e) {}
-									else if (lottieData && typeof lottieData === "object") lottieData = JSON.parse(JSON.stringify(lottieData));
-									if (lottieData) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "w-full h-full relative pointer-events-none",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Player, {
-											src: lottieData,
-											loop: layer.animation?.loop !== false,
-											autoplay: true,
-											style: {
-												width: "100%",
-												height: "100%"
-											}
-										})
-									});
-								}
-								return null;
-							})(),
-							layer.type === "image" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "w-full h-full relative pointer-events-none",
-								children: [
-									isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										onClick: () => {
-											useUIStore.getState().setAssetSelectionTarget({
-												layerId: layer.id,
-												layerType: "image",
-												multiple: false
-											});
-										},
-										className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
-										title: "Ubah Gambar",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-											className: "w-4 h-4",
-											fill: "none",
-											stroke: "currentColor",
-											viewBox: "0 0 24 24",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-												strokeLinecap: "round",
-												strokeLinejoin: "round",
-												strokeWidth: "2",
-												d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-											})
-										})
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-										id: `layer-img-${layer.id}`,
-										src: layer.style?.url || layer.url,
-										alt: "asset",
-										draggable: false,
-										onPointerDown: handleCropPointerDown,
-										onPointerMove: handleCropPointerMove,
-										onPointerUp: handleCropPointerUp,
-										className: `w-full h-full object-cover pointer-events-none ${isCropMode ? "cursor-move pointer-events-auto no-drag" : ""}`,
-										style: {
-											opacity: layer.style?.opacity !== void 0 ? layer.style.opacity : 1,
-											objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
-											filter: `${layer.style?.imageFilter && layer.style.imageFilter !== "none" ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + " " : ""}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
-										}
-									}),
-									layer.style?.imageFilter && getFilterById(layer.style.imageFilter).getOverlay && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { dangerouslySetInnerHTML: { __html: getFilterById(layer.style.imageFilter).getOverlay(layer.style.imageFilterIntensity ?? 100, layer) } })
-								]
-							}),
-							layer.type === "frame" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "w-full h-full relative pointer-events-none flex items-center justify-center overflow-hidden",
-								children: [isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									onClick: () => {
-										useUIStore.getState().setAssetSelectionTarget({
-											layerId: layer.id,
-											layerType: "frame",
-											multiple: true
-										});
+					className: "w-full h-full relative",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: `w-full h-full relative z-10`,
+							style: {
+								transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
+								borderRadius: computedBorderRadius,
+								overflow: layer.style?.borderRadius ? "hidden" : "visible",
+								filter: getShadowCss$1(layer.style),
+								background: layer.type === "image" || layer.type === "text" || layer.type === "dynamic_guest_name" ? "transparent" : getGradientCss$1(layer.style),
+								opacity: layer.style?.opacity ?? 1,
+								boxSizing: "border-box"
+							},
+							children: [
+								(layer.type === "text" || layer.type === "dynamic_guest_name") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: `w-full h-full overflow-hidden flex outline-none border-none ${isEditing ? "no-drag !select-text !pointer-events-auto" : ""}`,
+									style: {
+										color: layer.style?.color || "#000000",
+										fontSize: layer.style?.fontSize ? String(layer.style.fontSize).includes("px") || String(layer.style.fontSize).includes("rem") || String(layer.style.fontSize).includes("em") ? layer.style.fontSize : `${layer.style.fontSize}px` : "16px",
+										fontFamily: layer.style?.fontFamily || "sans-serif",
+										fontWeight: layer.style?.fontWeight || "normal",
+										textAlign: layer.style?.textAlign || "left",
+										justifyContent: layer.style?.textAlign === "center" ? "center" : layer.style?.textAlign === "right" ? "flex-end" : "flex-start",
+										alignItems: "center",
+										textDecoration: layer.style?.textDecoration,
+										fontStyle: layer.style?.fontStyle,
+										letterSpacing: layer.style?.letterSpacing,
+										lineHeight: layer.style?.lineHeight,
+										textShadow: layer.style?.textShadow,
+										cursor: isEditing ? "text" : layer.isLocked ? "default" : "move",
+										userSelect: isEditing ? "text" : "none",
+										WebkitUserSelect: isEditing ? "text" : "none"
 									},
-									className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
-									title: "Isi Wadah Bingkai",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-										className: "w-4 h-4",
-										fill: "none",
-										stroke: "currentColor",
-										viewBox: "0 0 24 24",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-											strokeLinecap: "round",
-											strokeLinejoin: "round",
-											strokeWidth: "2",
-											d: "M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-										})
-									})
-								}), layer.style?.mediaUrls && layer.style.mediaUrls.length > 0 ? layer.style.mediaUrls[0].startsWith("data:video") || layer.style.mediaUrls[0].endsWith(".mp4") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("video", {
-									src: layer.style.mediaUrls[0],
-									autoPlay: true,
-									muted: true,
-									loop: true,
-									playsInline: true,
-									className: "w-full h-full object-cover pointer-events-none"
-								}) : layer.style.mediaUrls.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "w-full h-full relative",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-										src: layer.style.mediaUrls[0],
-										className: "w-full h-full object-cover pointer-events-none",
-										alt: "Frame"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "absolute bottom-2 left-1/2 -translate-x-1/2 text-[9px] bg-black/60 text-white px-2 py-1 rounded-full whitespace-nowrap",
-										children: [
-											"Album (",
-											layer.style.mediaUrls.length,
-											" Foto)"
-										]
-									})]
-								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-									src: layer.style.mediaUrls[0],
-									alt: "Frame Media",
-									className: "w-full h-full object-cover pointer-events-none"
-								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "w-full h-full flex items-center justify-center bg-gray-100",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-										className: "w-10 h-10 text-gray-300",
-										fill: "none",
-										stroke: "currentColor",
-										viewBox: "0 0 24 24",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-											strokeLinecap: "round",
-											strokeLinejoin: "round",
-											strokeWidth: "1.5",
-											d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-										})
-									})
-								})]
-							}),
-							layer.type === "polaroid" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "w-full h-full relative pointer-events-none bg-white flex flex-col p-3",
-								style: {
-									paddingBottom: "3.5rem",
-									transform: layer.style?.polaroidData?.type === "tilted" ? "rotate(-3deg)" : "none",
-									boxShadow: layer.style?.isShadowActive ? "none" : "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
-								},
-								children: [
-									layer.style?.polaroidData?.type === "taped" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-8 bg-amber-100/60 rotate-2 z-10",
-										style: { backdropFilter: "blur(2px)" }
-									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "w-full flex-1 relative overflow-hidden bg-gray-100 border border-gray-200",
-										children: [isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									contentEditable: isEditing,
+									suppressContentEditableWarning: true,
+									onDoubleClick: (e) => {
+										e.stopPropagation();
+										setIsEditing(true);
+										const target = e.target;
+										setTimeout(() => {
+											target.focus();
+											const range = document.createRange();
+											range.selectNodeContents(target);
+											const sel = window.getSelection();
+											sel.removeAllRanges();
+											sel.addRange(range);
+										}, 50);
+									},
+									onBlur: (e) => {
+										setIsEditing(false);
+										useCanvasStore.getState().updateLayerContent(layer.id, e.target.innerText);
+									},
+									children: layer.content
+								}),
+								layer.type === "shape" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "w-full h-full relative pointer-events-none",
+									style: {
+										backgroundColor: layer.style?.backgroundColor || "#e0e7ff",
+										borderRadius: layer.style?.borderRadius || "0px"
+									}
+								}),
+								(() => {
+									if (layer.type === "lottie") {
+										let lottieData = layer.lottieJsonObj || layer.animationData;
+										if (typeof lottieData === "string") try {
+											lottieData = JSON.parse(lottieData);
+										} catch (e) {}
+										else if (lottieData && typeof lottieData === "object") lottieData = JSON.parse(JSON.stringify(lottieData));
+										if (lottieData) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "w-full h-full relative pointer-events-none",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Player, {
+												src: lottieData,
+												loop: layer.animation?.loop !== false,
+												autoplay: true,
+												style: {
+													width: "100%",
+													height: "100%"
+												}
+											})
+										});
+									}
+									return null;
+								})(),
+								layer.type === "image" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "w-full h-full relative pointer-events-none",
+									children: [
+										isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: () => {
 												useUIStore.getState().setAssetSelectionTarget({
 													layerId: layer.id,
-													layerType: "polaroid",
+													layerType: "image",
 													multiple: false
 												});
 											},
 											className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
-											title: "Ubah Foto Polaroid",
+											title: "Ubah Gambar",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-4 h-4",
 												fill: "none",
@@ -25903,395 +25780,37 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 													d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
 												})
 											})
-										}), layer.style?.polaroidData?.image ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-											src: layer.style.polaroidData.image,
-											alt: "Polaroid",
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+											id: `layer-img-${layer.id}`,
+											src: layer.style?.url || layer.url,
+											alt: "asset",
 											draggable: false,
 											onPointerDown: handleCropPointerDown,
 											onPointerMove: handleCropPointerMove,
 											onPointerUp: handleCropPointerUp,
-											className: `w-full h-full object-cover ${isCropMode ? "cursor-move pointer-events-auto no-drag" : ""}`,
+											className: `w-full h-full object-cover pointer-events-none ${isCropMode ? "cursor-move pointer-events-auto no-drag" : ""}`,
 											style: {
+												opacity: layer.style?.opacity !== void 0 ? layer.style.opacity : 1,
 												objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
-												filter: `${layer.style?.brightness ? `brightness(${layer.style.brightness}) ` : ""}${layer.style?.contrast ? `contrast(${layer.style.contrast}) ` : ""}${layer.style?.saturate ? `saturate(${layer.style.saturate}) ` : ""}${layer.style?.blur ? `blur(${layer.style.blur}px) ` : ""}`.trim() || "none"
+												filter: `${layer.style?.imageFilter && layer.style.imageFilter !== "none" ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + " " : ""}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
 											}
-										}), layer.style?.polaroidData?.filterId && layer.style.polaroidData.filterId !== "none" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { dangerouslySetInnerHTML: { __html: getFilterById(layer.style.polaroidData.filterId)?.getOverlay(100, {
-											type: "polaroid",
-											style: layer.style
-										}) || "" } })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "w-full h-full flex items-center justify-center text-gray-400",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-8 h-8",
-												fill: "none",
-												stroke: "currentColor",
-												viewBox: "0 0 24 24",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-													strokeLinecap: "round",
-													strokeLinejoin: "round",
-													strokeWidth: "2",
-													d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-												})
-											})
-										})]
-									}),
-									layer.style?.polaroidData?.caption && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "absolute bottom-3 left-0 w-full text-center text-gray-800 text-[18px] font-bold",
-										style: {
-											fontFamily: "'Caveat', cursive",
-											lineHeight: 1
+										}),
+										layer.style?.imageFilter && getFilterById(layer.style.imageFilter).getOverlay && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { dangerouslySetInnerHTML: { __html: getFilterById(layer.style.imageFilter).getOverlay(layer.style.imageFilterIntensity ?? 100, layer) } })
+									]
+								}),
+								layer.type === "frame" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "w-full h-full relative pointer-events-none flex items-center justify-center overflow-hidden",
+									children: [isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										onClick: () => {
+											useUIStore.getState().setAssetSelectionTarget({
+												layerId: layer.id,
+												layerType: "frame",
+												multiple: true
+											});
 										},
-										children: layer.style.polaroidData.caption
-									})
-								]
-							}),
-							layer.type === "video" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "w-full h-full relative pointer-events-none",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("video", {
-									src: layer.url,
-									autoPlay: true,
-									loop: true,
-									muted: true,
-									playsInline: true,
-									className: "w-full h-full object-cover pointer-events-none",
-									style: { filter: `brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})` }
-								})
-							}),
-							layer.type === "custom_code" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "w-full h-full relative",
-								style: { pointerEvents: layer.isLocked ? "none" : "auto" },
-								children: layer.content && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "w-full h-full",
-									dangerouslySetInnerHTML: { __html: layer.content }
-								})
-							}),
-							layer.type === "custom_path" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-								width: "100%",
-								height: "100%",
-								viewBox: "0 0 100 100",
-								preserveAspectRatio: "none",
-								className: "pointer-events-none",
-								style: { overflow: "visible" },
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-									id: layer.id + "_path",
-									d: "M 10 90 Q 30 10 70 50 T 90 10",
-									fill: "transparent",
-									stroke: isActive ? "#6366f1" : "rgba(99,102,241,0.2)",
-									strokeWidth: "2",
-									strokeDasharray: "4 4"
-								})
-							}),
-							layer.type === "interactive_countdown" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CountdownDisplay$1, {
-								targetDate: layer.style?.countdownTarget,
-								textColor: layer.style?.countdownColor,
-								bgColor: layer.style?.countdownBgColor,
-								bgImage: layer.style?.countdownBgImage,
-								fontFamily: layer.style?.fontFamily,
-								bgOpacity: layer.style?.countdownBgOpacity,
-								gap: layer.style?.countdownGap,
-								showSeconds: layer.style?.countdownShowSeconds,
-								bgStyle: layer.style?.countdownBgStyle
-							}),
-							layer.type === "photo_album" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "w-full h-full pointer-events-none relative flex items-center justify-center overflow-hidden",
-								children: [isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									onClick: () => {
-										useUIStore.getState().setAssetSelectionTarget({
-											layerId: layer.id,
-											layerType: "photo_album",
-											multiple: true
-										});
-									},
-									className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
-									title: "Isi Wadah Album",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-										className: "w-4 h-4",
-										fill: "none",
-										stroke: "currentColor",
-										viewBox: "0 0 24 24",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-											strokeLinecap: "round",
-											strokeLinejoin: "round",
-											strokeWidth: "2",
-											d: "M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-										})
-									})
-								}), !layer.style?.albumData?.images || layer.style.albumData.images.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "w-full h-full flex flex-col items-center justify-center bg-gray-100 rounded-xl border-2 border-dashed border-gray-300 overflow-hidden",
-									style: { borderRadius: layer.style?.albumData?.shape === "circle" ? "50%" : layer.style?.albumData?.shape === "rounded" ? "1rem" : layer.style?.albumData?.shape === "pill" ? "9999px" : layer.style?.albumData?.shape === "arch" ? "10rem 10rem 0 0" : "0" },
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-										className: "w-8 h-8 text-gray-400 mb-2",
-										fill: "none",
-										stroke: "currentColor",
-										viewBox: "0 0 24 24",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-											strokeLinecap: "round",
-											strokeLinejoin: "round",
-											strokeWidth: "2",
-											d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-										})
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-[10px] font-bold text-gray-400",
-										children: "Wadah Album Kosong"
-									})]
-								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Swiper, {
-									modules: [
-										Autoplay,
-										EffectCards,
-										EffectCoverflow,
-										EffectFade
-									],
-									effect: layer.style?.albumData?.animationStyle || "slide",
-									direction: layer.style?.albumData?.direction || "horizontal",
-									speed: layer.style?.albumData?.speed || 500,
-									observer: true,
-									observeParents: true,
-									grabCursor: false,
-									centeredSlides: true,
-									slidesPerView: 1,
-									loop: layer.style?.albumData?.animationStyle === "cards" ? false : (layer.style?.albumData?.images?.length || 0) > 2,
-									autoplay: {
-										delay: layer.style?.albumData?.autoplayDelay || 2500,
-										disableOnInteraction: false
-									},
-									coverflowEffect: layer.style?.albumData?.animationStyle === "coverflow" ? {
-										rotate: 50,
-										stretch: 0,
-										depth: 100,
-										modifier: 1,
-										slideShadows: false
-									} : void 0,
-									fadeEffect: layer.style?.albumData?.animationStyle === "fade" ? { crossFade: true } : void 0,
-									cardsEffect: layer.style?.albumData?.animationStyle === "cards" ? { slideShadows: false } : void 0,
-									style: {
-										width: "100%",
-										height: "100%"
-									},
-									children: (layer.style?.albumData?.images || []).map((img, idx) => {
-										const polaroidTheme = layer.style?.albumData?.polaroidTheme;
-										return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SwiperSlide, {
-											style: {
-												width: "100%",
-												height: "100%"
-											},
-											children: polaroidTheme && polaroidTheme !== "none" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: `polaroid-wrapper polaroid-${polaroidTheme}`,
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-													className: "polaroid-image-container",
-													style: { borderRadius: layer.style?.albumData?.shape === "circle" ? "50%" : layer.style?.albumData?.shape === "rounded" ? "1rem" : layer.style?.albumData?.shape === "pill" ? "9999px" : layer.style?.albumData?.shape === "arch" ? "10rem 10rem 0 0" : "0" },
-													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-														src: img.url,
-														alt: img.caption || `Slide ${idx + 1}`,
-														style: {
-															width: "100%",
-															height: "100%",
-															objectFit: "cover",
-															filter: `${img.filterId && img.filterId !== "none" ? getFilterById(img.filterId).getCss(img.filterIntensity ?? 100) + " " : ""}brightness(${img.brightness ?? 1}) contrast(${img.contrast ?? 1}) saturate(${img.saturate ?? 1}) blur(${img.blur ?? 0}px)`.trim()
-														}
-													})
-												}), img.caption && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-													className: "polaroid-caption",
-													children: img.caption
-												})]
-											}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												style: {
-													position: "relative",
-													width: "100%",
-													height: "100%",
-													overflow: "hidden",
-													borderRadius: layer.style?.albumData?.shape === "circle" ? "50%" : layer.style?.albumData?.shape === "rounded" ? "1rem" : layer.style?.albumData?.shape === "pill" ? "9999px" : layer.style?.albumData?.shape === "arch" ? "10rem 10rem 0 0" : "0"
-												},
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-													src: img.url,
-													alt: img.caption || `Slide ${idx + 1}`,
-													style: {
-														width: "100%",
-														height: "100%",
-														objectFit: "cover",
-														filter: getFilterById(img.filterId) || "none"
-													}
-												})
-											})
-										}, idx);
-									})
-								}, `${layer.style?.albumData?.animationStyle || "slide"}-${layer.style?.albumData?.direction || "horizontal"}-${layer.style?.albumData?.speed || 500}-${layer.style?.albumData?.autoplayDelay || 2500}`)]
-							}),
-							layer.type === "interactive_rsvp" && (() => {
-								const theme = layer.style?.rsvpTheme || "solid";
-								let containerStyle = {
-									backgroundColor: layer.style?.backgroundColor || "#ffffff",
-									backgroundImage: layer.style?.backgroundImageUrl ? `url(${layer.style.backgroundImageUrl})` : "none",
-									backgroundSize: "cover",
-									backgroundPosition: "center",
-									borderRadius: layer.style?.borderRadius || "0.75rem",
-									borderWidth: layer.style?.borderWidth,
-									borderColor: layer.style?.borderColor,
-									borderStyle: layer.style?.borderWidth ? "solid" : "none",
-									color: layer.style?.textColor || "#1f2937"
-								};
-								const hexToRgba = (hex, alpha) => {
-									if (!hex || !hex.startsWith("#")) return hex;
-									return `rgba(${parseInt(hex.slice(1, 3), 16) || 0}, ${parseInt(hex.slice(3, 5), 16) || 0}, ${parseInt(hex.slice(5, 7), 16) || 0}, ${alpha})`;
-								};
-								const finalInputBg = hexToRgba(layer.style?.inputBackgroundColor || "#f3f4f6", layer.style?.inputBackgroundOpacity ?? 1);
-								let inputStyle = {
-									backgroundColor: finalInputBg,
-									color: layer.style?.textColor || "#9ca3af",
-									border: "none",
-									borderRadius: "0.5rem"
-								};
-								let buttonStyle = {
-									backgroundColor: layer.style?.buttonColor || "#4f46e5",
-									color: layer.style?.buttonTextColor || "#ffffff",
-									borderRadius: "0.5rem"
-								};
-								let wrapperClass = "w-full h-full flex flex-col items-center justify-center pointer-events-none p-4 space-y-3 relative";
-								if (theme === "glass") {
-									containerStyle.backgroundColor = layer.style?.backgroundColor ? layer.style.backgroundColor : "rgba(255, 255, 255, 0.2)";
-									containerStyle.backdropFilter = "blur(10px)";
-									containerStyle.boxShadow = "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)";
-									inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : "rgba(255, 255, 255, 0.5)";
-									inputStyle.backdropFilter = "blur(4px)";
-								} else if (theme === "classic") {
-									containerStyle.borderStyle = "double";
-									containerStyle.borderWidth = layer.style?.borderWidth || "6px";
-									containerStyle.borderColor = layer.style?.borderColor || "#d97706";
-									containerStyle.borderRadius = "0";
-									inputStyle.border = "1px solid " + (layer.style?.borderColor || "#d97706");
-									inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : "transparent";
-									buttonStyle.borderRadius = "0";
-								} else if (theme === "romance") {
-									containerStyle.borderRadius = "2rem";
-									containerStyle.boxShadow = "0 10px 25px -5px rgba(225,29,72,0.1), 0 8px 10px -6px rgba(225,29,72,0.1)";
-									inputStyle.borderRadius = "1rem";
-									buttonStyle.borderRadius = "1rem";
-								} else if (theme === "adat") {
-									containerStyle.borderRadius = "3rem 3rem 0 0";
-									containerStyle.borderTop = `8px solid ${layer.style?.borderColor || "#8b5a2b"}`;
-									containerStyle.borderBottom = `8px solid ${layer.style?.borderColor || "#8b5a2b"}`;
-									inputStyle.borderBottom = "2px solid " + (layer.style?.borderColor || "#8b5a2b");
-									inputStyle.borderRadius = "0";
-									inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : "transparent";
-								} else if (theme === "minimalist") {
-									containerStyle.borderStyle = "dashed";
-									containerStyle.borderWidth = "1px";
-									containerStyle.borderColor = layer.style?.borderColor || "#9ca3af";
-									inputStyle.borderBottom = "1px solid #d1d5db";
-									inputStyle.borderRadius = "0";
-									inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : "transparent";
-								} else if (theme === "rustic") {
-									containerStyle.borderStyle = "solid";
-									containerStyle.borderWidth = "4px";
-									containerStyle.borderColor = layer.style?.borderColor || "#78716c";
-									containerStyle.outline = "2px dashed " + (layer.style?.borderColor || "#78716c");
-									containerStyle.outlineOffset = "-8px";
-								}
-								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: wrapperClass,
-									style: containerStyle,
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-										className: "font-serif text-center z-10",
-										style: {
-											fontSize: layer.style?.fontSize || "1.25rem",
-											color: layer.style?.textColor || "#1f2937",
-											marginBottom: "4px"
-										},
-										children: "Kehadiran Anda"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "w-full flex-1 flex flex-col gap-2 z-10",
-										children: [
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "h-10 w-full flex items-center px-3 text-sm shrink-0",
-												style: inputStyle,
-												children: "Nama Lengkap..."
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "h-10 w-full flex items-center px-3 text-sm shrink-0",
-												style: inputStyle,
-												children: "Pilih Kehadiran..."
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "flex-1 w-full flex items-start p-3 text-sm min-h-[3rem]",
-												style: inputStyle,
-												children: "Pesan/Doa..."
-											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "h-10 w-full flex items-center justify-center font-bold mt-1 shrink-0",
-												style: buttonStyle,
-												children: "Kirim RSVP"
-											})
-										]
-									})]
-								});
-							})(),
-							layer.type === "interactive_map" && (() => {
-								const mapOpacity = layer.style?.mapOpacity ?? 1;
-								const isButtonOnly = layer.style?.mapDisplayType === "button_only";
-								const buttonText = layer.style?.mapButtonText || "Buka Google Maps";
-								const buttonColor = layer.style?.mapButtonColor || "#ef4444";
-								const buttonTextColor = layer.style?.mapButtonTextColor || "#ffffff";
-								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "w-full h-full bg-gray-200 flex items-center justify-center rounded-xl border border-gray-300 pointer-events-none relative overflow-hidden",
-									style: {
-										opacity: mapOpacity,
-										background: isButtonOnly ? "transparent" : void 0,
-										borderColor: isButtonOnly ? "transparent" : void 0
-									},
-									children: [!isButtonOnly && (layer.content && layer.content.includes("<iframe") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "w-full h-full pointer-events-none [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0",
-										dangerouslySetInnerHTML: { __html: layer.content }
-									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "absolute inset-0 w-full h-full",
-										style: {
-											backgroundImage: "url(/map_placeholder.png)",
-											backgroundSize: "cover",
-											backgroundPosition: "center"
-										}
-									})), (!layer.content?.includes("<iframe") || isButtonOnly) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur px-5 py-2.5 rounded-full shadow-md flex items-center gap-2.5 text-sm font-bold z-10 pointer-events-none",
-										style: {
-											backgroundColor: isButtonOnly ? buttonColor : "rgba(255, 255, 255, 0.95)",
-											color: isButtonOnly ? buttonTextColor : "#1f2937"
-										},
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-											className: "w-5 h-5",
-											style: { color: isButtonOnly ? buttonTextColor : "#ef4444" },
-											fill: "currentColor",
-											viewBox: "0 0 24 24",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" })
-										}), buttonText]
-									})]
-								});
-							})(),
-							layer.type === "interactive_copy" && (() => {
-								const bgOpacity = layer.style?.bgOpacity ?? 1;
-								const textOpacity = layer.style?.textOpacity ?? 1;
-								const hexToRgba = (hex, opacity = 1) => {
-									hex = (hex || "#ffffff").replace("#", "");
-									if (hex.length === 3) hex = hex.split("").map((x) => x + x).join("");
-									return `rgba(${parseInt(hex.substring(0, 2), 16) || 0}, ${parseInt(hex.substring(2, 4), 16) || 0}, ${parseInt(hex.substring(4, 6), 16) || 0}, ${opacity})`;
-								};
-								const bgColor = layer.style?.backgroundColor || "#ffffff";
-								const textColor = layer.style?.textColor || "#1f2937";
-								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "w-full h-full flex items-center justify-between shadow-sm pointer-events-none px-4",
-									style: {
-										backgroundColor: hexToRgba(bgColor, bgOpacity),
-										borderRadius: layer.style?.borderRadius || "0.75rem",
-										borderWidth: layer.style?.borderWidth || "1px",
-										borderColor: layer.style?.borderColor || "#e5e7eb",
-										borderStyle: layer.style?.borderWidth ? "solid" : layer.style?.borderColor ? "solid" : "none",
-										boxShadow: layer.style?.isShadowActive ? `0px ${layer.style?.shadowY || 4}px 6px -1px rgba(0, 0, 0, 0.1)` : "none"
-									},
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-base font-mono font-bold w-full",
-										style: { color: hexToRgba(textColor, textOpacity) },
-										children: layer.content || ""
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ml-2",
-										style: {
-											backgroundColor: layer.style?.iconBgColor || "#e0e7ff",
-											color: layer.style?.iconColor || "#4f46e5"
-										},
+										className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
+										title: "Isi Wadah Bingkai",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 											className: "w-4 h-4",
 											fill: "none",
@@ -26301,56 +25820,546 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 												strokeLinecap: "round",
 												strokeLinejoin: "round",
 												strokeWidth: "2",
-												d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+												d: "M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+											})
+										})
+									}), layer.style?.mediaUrls && layer.style.mediaUrls.length > 0 ? layer.style.mediaUrls[0].startsWith("data:video") || layer.style.mediaUrls[0].endsWith(".mp4") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("video", {
+										src: layer.style.mediaUrls[0],
+										autoPlay: true,
+										muted: true,
+										loop: true,
+										playsInline: true,
+										className: "w-full h-full object-cover pointer-events-none"
+									}) : layer.style.mediaUrls.length > 1 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "w-full h-full relative",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+											src: layer.style.mediaUrls[0],
+											className: "w-full h-full object-cover pointer-events-none",
+											alt: "Frame"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "absolute bottom-2 left-1/2 -translate-x-1/2 text-[9px] bg-black/60 text-white px-2 py-1 rounded-full whitespace-nowrap",
+											children: [
+												"Album (",
+												layer.style.mediaUrls.length,
+												" Foto)"
+											]
+										})]
+									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+										src: layer.style.mediaUrls[0],
+										alt: "Frame Media",
+										className: "w-full h-full object-cover pointer-events-none"
+									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "w-full h-full flex items-center justify-center bg-gray-100",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+											className: "w-10 h-10 text-gray-300",
+											fill: "none",
+											stroke: "currentColor",
+											viewBox: "0 0 24 24",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+												strokeLinecap: "round",
+												strokeLinejoin: "round",
+												strokeWidth: "1.5",
+												d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
 											})
 										})
 									})]
-								});
-							})(),
-							layer.type === "interactive_comments" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "w-full h-full flex flex-col pointer-events-none overflow-hidden",
-								style: {
-									backgroundColor: layer.style?.backgroundColor || "#f8fafc",
-									borderRadius: layer.style?.borderRadius || "1rem",
-									padding: layer.style?.padding || "1rem",
-									color: layer.style?.color || "#333333",
-									borderWidth: layer.style?.borderWidth || 0,
-									borderColor: layer.style?.borderColor || "#e2e8f0",
-									borderStyle: layer.style?.borderWidth ? "solid" : "none"
-								},
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-									className: "text-sm font-bold mb-3 border-b border-gray-200 pb-2",
-									style: { color: layer.style?.color || "#333333" },
-									children: "Ucapan & Doa"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "flex-1 overflow-hidden opacity-50 flex flex-col items-center justify-center",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-[10px] text-gray-400",
-										children: "(Daftar komentar akan muncul di sini saat tamu mengisi form RSVP)"
-									})
-								})]
-							}),
-							layer.type === "canvas_group" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "w-full h-full relative",
-								style: { pointerEvents: "none" },
-								children: layer.children?.map((child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								}),
+								layer.type === "polaroid" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "w-full h-full relative pointer-events-none bg-white flex flex-col p-3",
 									style: {
-										position: "absolute",
-										left: `${child.style?.x || 0}px`,
-										top: `${child.style?.y || 0}px`,
-										width: typeof child.style?.width === "number" ? `${child.style.width}px` : child.style?.width,
-										height: typeof child.style?.height === "number" ? `${child.style.height}px` : child.style?.height,
-										pointerEvents: "auto"
+										paddingBottom: "3.5rem",
+										transform: layer.style?.polaroidData?.type === "tilted" ? "rotate(-3deg)" : "none",
+										boxShadow: layer.style?.isShadowActive ? "none" : "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
 									},
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayerElement, {
-										layer: child,
-										isChildOfGroup: true,
-										sectionId
+									children: [
+										layer.style?.polaroidData?.type === "taped" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-8 bg-amber-100/60 rotate-2 z-10",
+											style: { backdropFilter: "blur(2px)" }
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "w-full flex-1 relative overflow-hidden bg-gray-100 border border-gray-200",
+											children: [isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												onClick: () => {
+													useUIStore.getState().setAssetSelectionTarget({
+														layerId: layer.id,
+														layerType: "polaroid",
+														multiple: false
+													});
+												},
+												className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
+												title: "Ubah Foto Polaroid",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+													className: "w-4 h-4",
+													fill: "none",
+													stroke: "currentColor",
+													viewBox: "0 0 24 24",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+														strokeLinecap: "round",
+														strokeLinejoin: "round",
+														strokeWidth: "2",
+														d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+													})
+												})
+											}), layer.style?.polaroidData?.image ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+												src: layer.style.polaroidData.image,
+												alt: "Polaroid",
+												draggable: false,
+												onPointerDown: handleCropPointerDown,
+												onPointerMove: handleCropPointerMove,
+												onPointerUp: handleCropPointerUp,
+												className: `w-full h-full object-cover ${isCropMode ? "cursor-move pointer-events-auto no-drag" : ""}`,
+												style: {
+													objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
+													filter: `${layer.style?.brightness ? `brightness(${layer.style.brightness}) ` : ""}${layer.style?.contrast ? `contrast(${layer.style.contrast}) ` : ""}${layer.style?.saturate ? `saturate(${layer.style.saturate}) ` : ""}${layer.style?.blur ? `blur(${layer.style.blur}px) ` : ""}`.trim() || "none"
+												}
+											}), layer.style?.polaroidData?.filterId && layer.style.polaroidData.filterId !== "none" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { dangerouslySetInnerHTML: { __html: getFilterById(layer.style.polaroidData.filterId)?.getOverlay(100, {
+												type: "polaroid",
+												style: layer.style
+											}) || "" } })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+												className: "w-full h-full flex items-center justify-center text-gray-400",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+													className: "w-8 h-8",
+													fill: "none",
+													stroke: "currentColor",
+													viewBox: "0 0 24 24",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+														strokeLinecap: "round",
+														strokeLinejoin: "round",
+														strokeWidth: "2",
+														d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+													})
+												})
+											})]
+										}),
+										layer.style?.polaroidData?.caption && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "absolute bottom-3 left-0 w-full text-center text-gray-800 text-[18px] font-bold",
+											style: {
+												fontFamily: "'Caveat', cursive",
+												lineHeight: 1
+											},
+											children: layer.style.polaroidData.caption
+										})
+									]
+								}),
+								layer.type === "video" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "w-full h-full relative pointer-events-none",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("video", {
+										src: layer.url,
+										autoPlay: true,
+										loop: true,
+										muted: true,
+										playsInline: true,
+										className: "w-full h-full object-cover pointer-events-none",
+										style: { filter: `brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})` }
 									})
-								}, child.id))
-							})
-						]
-					}), " "]
+								}),
+								layer.type === "custom_code" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "w-full h-full relative",
+									style: { pointerEvents: layer.isLocked ? "none" : "auto" },
+									children: layer.content && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "w-full h-full",
+										dangerouslySetInnerHTML: { __html: layer.content }
+									})
+								}),
+								layer.type === "custom_path" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+									width: "100%",
+									height: "100%",
+									viewBox: "0 0 100 100",
+									preserveAspectRatio: "none",
+									className: "pointer-events-none",
+									style: { overflow: "visible" },
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+										id: layer.id + "_path",
+										d: "M 10 90 Q 30 10 70 50 T 90 10",
+										fill: "transparent",
+										stroke: isActive ? "#6366f1" : "rgba(99,102,241,0.2)",
+										strokeWidth: "2",
+										strokeDasharray: "4 4"
+									})
+								}),
+								layer.type === "interactive_countdown" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CountdownDisplay$1, {
+									targetDate: layer.style?.countdownTarget,
+									textColor: layer.style?.countdownColor,
+									bgColor: layer.style?.countdownBgColor,
+									bgImage: layer.style?.countdownBgImage,
+									fontFamily: layer.style?.fontFamily,
+									bgOpacity: layer.style?.countdownBgOpacity,
+									gap: layer.style?.countdownGap,
+									showSeconds: layer.style?.countdownShowSeconds,
+									bgStyle: layer.style?.countdownBgStyle
+								}),
+								layer.type === "photo_album" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "w-full h-full pointer-events-none relative flex items-center justify-center overflow-hidden",
+									children: [isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+										onClick: () => {
+											useUIStore.getState().setAssetSelectionTarget({
+												layerId: layer.id,
+												layerType: "photo_album",
+												multiple: true
+											});
+										},
+										className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
+										title: "Isi Wadah Album",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+											className: "w-4 h-4",
+											fill: "none",
+											stroke: "currentColor",
+											viewBox: "0 0 24 24",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+												strokeLinecap: "round",
+												strokeLinejoin: "round",
+												strokeWidth: "2",
+												d: "M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+											})
+										})
+									}), !layer.style?.albumData?.images || layer.style.albumData.images.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "w-full h-full flex flex-col items-center justify-center bg-gray-100 rounded-xl border-2 border-dashed border-gray-300 overflow-hidden",
+										style: { borderRadius: layer.style?.albumData?.shape === "circle" ? "50%" : layer.style?.albumData?.shape === "rounded" ? "1rem" : layer.style?.albumData?.shape === "pill" ? "9999px" : layer.style?.albumData?.shape === "arch" ? "10rem 10rem 0 0" : "0" },
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+											className: "w-8 h-8 text-gray-400 mb-2",
+											fill: "none",
+											stroke: "currentColor",
+											viewBox: "0 0 24 24",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+												strokeLinecap: "round",
+												strokeLinejoin: "round",
+												strokeWidth: "2",
+												d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+											})
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[10px] font-bold text-gray-400",
+											children: "Wadah Album Kosong"
+										})]
+									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Swiper, {
+										modules: [
+											Autoplay,
+											EffectCards,
+											EffectCoverflow,
+											EffectFade
+										],
+										effect: layer.style?.albumData?.animationStyle || "slide",
+										direction: layer.style?.albumData?.direction || "horizontal",
+										speed: layer.style?.albumData?.speed || 500,
+										observer: true,
+										observeParents: true,
+										grabCursor: false,
+										centeredSlides: true,
+										slidesPerView: 1,
+										loop: layer.style?.albumData?.animationStyle === "cards" ? false : (layer.style?.albumData?.images?.length || 0) > 2,
+										autoplay: {
+											delay: layer.style?.albumData?.autoplayDelay || 2500,
+											disableOnInteraction: false
+										},
+										coverflowEffect: layer.style?.albumData?.animationStyle === "coverflow" ? {
+											rotate: 50,
+											stretch: 0,
+											depth: 100,
+											modifier: 1,
+											slideShadows: false
+										} : void 0,
+										fadeEffect: layer.style?.albumData?.animationStyle === "fade" ? { crossFade: true } : void 0,
+										cardsEffect: layer.style?.albumData?.animationStyle === "cards" ? { slideShadows: false } : void 0,
+										style: {
+											width: "100%",
+											height: "100%"
+										},
+										children: (layer.style?.albumData?.images || []).map((img, idx) => {
+											const polaroidTheme = layer.style?.albumData?.polaroidTheme;
+											return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SwiperSlide, {
+												style: {
+													width: "100%",
+													height: "100%"
+												},
+												children: polaroidTheme && polaroidTheme !== "none" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: `polaroid-wrapper polaroid-${polaroidTheme}`,
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+														className: "polaroid-image-container",
+														style: { borderRadius: layer.style?.albumData?.shape === "circle" ? "50%" : layer.style?.albumData?.shape === "rounded" ? "1rem" : layer.style?.albumData?.shape === "pill" ? "9999px" : layer.style?.albumData?.shape === "arch" ? "10rem 10rem 0 0" : "0" },
+														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+															src: img.url,
+															alt: img.caption || `Slide ${idx + 1}`,
+															style: {
+																width: "100%",
+																height: "100%",
+																objectFit: "cover",
+																filter: `${img.filterId && img.filterId !== "none" ? getFilterById(img.filterId).getCss(img.filterIntensity ?? 100) + " " : ""}brightness(${img.brightness ?? 1}) contrast(${img.contrast ?? 1}) saturate(${img.saturate ?? 1}) blur(${img.blur ?? 0}px)`.trim()
+															}
+														})
+													}), img.caption && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+														className: "polaroid-caption",
+														children: img.caption
+													})]
+												}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													style: {
+														position: "relative",
+														width: "100%",
+														height: "100%",
+														overflow: "hidden",
+														borderRadius: layer.style?.albumData?.shape === "circle" ? "50%" : layer.style?.albumData?.shape === "rounded" ? "1rem" : layer.style?.albumData?.shape === "pill" ? "9999px" : layer.style?.albumData?.shape === "arch" ? "10rem 10rem 0 0" : "0"
+													},
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+														src: img.url,
+														alt: img.caption || `Slide ${idx + 1}`,
+														style: {
+															width: "100%",
+															height: "100%",
+															objectFit: "cover",
+															filter: getFilterById(img.filterId) || "none"
+														}
+													})
+												})
+											}, idx);
+										})
+									}, `${layer.style?.albumData?.animationStyle || "slide"}-${layer.style?.albumData?.direction || "horizontal"}-${layer.style?.albumData?.speed || 500}-${layer.style?.albumData?.autoplayDelay || 2500}`)]
+								}),
+								layer.type === "interactive_rsvp" && (() => {
+									const theme = layer.style?.rsvpTheme || "solid";
+									let containerStyle = {
+										backgroundColor: layer.style?.backgroundColor || "#ffffff",
+										backgroundImage: layer.style?.backgroundImageUrl ? `url(${layer.style.backgroundImageUrl})` : "none",
+										backgroundSize: "cover",
+										backgroundPosition: "center",
+										borderRadius: layer.style?.borderRadius || "0.75rem",
+										borderWidth: layer.style?.borderWidth,
+										borderColor: layer.style?.borderColor,
+										borderStyle: layer.style?.borderWidth ? "solid" : "none",
+										color: layer.style?.textColor || "#1f2937"
+									};
+									const hexToRgba = (hex, alpha) => {
+										if (!hex || !hex.startsWith("#")) return hex;
+										return `rgba(${parseInt(hex.slice(1, 3), 16) || 0}, ${parseInt(hex.slice(3, 5), 16) || 0}, ${parseInt(hex.slice(5, 7), 16) || 0}, ${alpha})`;
+									};
+									const finalInputBg = hexToRgba(layer.style?.inputBackgroundColor || "#f3f4f6", layer.style?.inputBackgroundOpacity ?? 1);
+									let inputStyle = {
+										backgroundColor: finalInputBg,
+										color: layer.style?.textColor || "#9ca3af",
+										border: "none",
+										borderRadius: "0.5rem"
+									};
+									let buttonStyle = {
+										backgroundColor: layer.style?.buttonColor || "#4f46e5",
+										color: layer.style?.buttonTextColor || "#ffffff",
+										borderRadius: "0.5rem"
+									};
+									let wrapperClass = "w-full h-full flex flex-col items-center justify-center pointer-events-none p-4 space-y-3 relative";
+									if (theme === "glass") {
+										containerStyle.backgroundColor = layer.style?.backgroundColor ? layer.style.backgroundColor : "rgba(255, 255, 255, 0.2)";
+										containerStyle.backdropFilter = "blur(10px)";
+										containerStyle.boxShadow = "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)";
+										inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : "rgba(255, 255, 255, 0.5)";
+										inputStyle.backdropFilter = "blur(4px)";
+									} else if (theme === "classic") {
+										containerStyle.borderStyle = "double";
+										containerStyle.borderWidth = layer.style?.borderWidth || "6px";
+										containerStyle.borderColor = layer.style?.borderColor || "#d97706";
+										containerStyle.borderRadius = "0";
+										inputStyle.border = "1px solid " + (layer.style?.borderColor || "#d97706");
+										inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : "transparent";
+										buttonStyle.borderRadius = "0";
+									} else if (theme === "romance") {
+										containerStyle.borderRadius = "2rem";
+										containerStyle.boxShadow = "0 10px 25px -5px rgba(225,29,72,0.1), 0 8px 10px -6px rgba(225,29,72,0.1)";
+										inputStyle.borderRadius = "1rem";
+										buttonStyle.borderRadius = "1rem";
+									} else if (theme === "adat") {
+										containerStyle.borderRadius = "3rem 3rem 0 0";
+										containerStyle.borderTop = `8px solid ${layer.style?.borderColor || "#8b5a2b"}`;
+										containerStyle.borderBottom = `8px solid ${layer.style?.borderColor || "#8b5a2b"}`;
+										inputStyle.borderBottom = "2px solid " + (layer.style?.borderColor || "#8b5a2b");
+										inputStyle.borderRadius = "0";
+										inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : "transparent";
+									} else if (theme === "minimalist") {
+										containerStyle.borderStyle = "dashed";
+										containerStyle.borderWidth = "1px";
+										containerStyle.borderColor = layer.style?.borderColor || "#9ca3af";
+										inputStyle.borderBottom = "1px solid #d1d5db";
+										inputStyle.borderRadius = "0";
+										inputStyle.backgroundColor = layer.style?.inputBackgroundColor ? finalInputBg : "transparent";
+									} else if (theme === "rustic") {
+										containerStyle.borderStyle = "solid";
+										containerStyle.borderWidth = "4px";
+										containerStyle.borderColor = layer.style?.borderColor || "#78716c";
+										containerStyle.outline = "2px dashed " + (layer.style?.borderColor || "#78716c");
+										containerStyle.outlineOffset = "-8px";
+									}
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: wrapperClass,
+										style: containerStyle,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "font-serif text-center z-10",
+											style: {
+												fontSize: layer.style?.fontSize || "1.25rem",
+												color: layer.style?.textColor || "#1f2937",
+												marginBottom: "4px"
+											},
+											children: "Kehadiran Anda"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "w-full flex-1 flex flex-col gap-2 z-10",
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "h-10 w-full flex items-center px-3 text-sm shrink-0",
+													style: inputStyle,
+													children: "Nama Lengkap..."
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "h-10 w-full flex items-center px-3 text-sm shrink-0",
+													style: inputStyle,
+													children: "Pilih Kehadiran..."
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "flex-1 w-full flex items-start p-3 text-sm min-h-[3rem]",
+													style: inputStyle,
+													children: "Pesan/Doa..."
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "h-10 w-full flex items-center justify-center font-bold mt-1 shrink-0",
+													style: buttonStyle,
+													children: "Kirim RSVP"
+												})
+											]
+										})]
+									});
+								})(),
+								layer.type === "interactive_map" && (() => {
+									const mapOpacity = layer.style?.mapOpacity ?? 1;
+									const isButtonOnly = layer.style?.mapDisplayType === "button_only";
+									const buttonText = layer.style?.mapButtonText || "Buka Google Maps";
+									const buttonColor = layer.style?.mapButtonColor || "#ef4444";
+									const buttonTextColor = layer.style?.mapButtonTextColor || "#ffffff";
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "w-full h-full bg-gray-200 flex items-center justify-center rounded-xl border border-gray-300 pointer-events-none relative overflow-hidden",
+										style: {
+											opacity: mapOpacity,
+											background: isButtonOnly ? "transparent" : void 0,
+											borderColor: isButtonOnly ? "transparent" : void 0
+										},
+										children: [!isButtonOnly && (layer.content && layer.content.includes("<iframe") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "w-full h-full pointer-events-none [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0",
+											dangerouslySetInnerHTML: { __html: layer.content }
+										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "absolute inset-0 w-full h-full",
+											style: {
+												backgroundImage: "url(/map_placeholder.png)",
+												backgroundSize: "cover",
+												backgroundPosition: "center"
+											}
+										})), (!layer.content?.includes("<iframe") || isButtonOnly) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur px-5 py-2.5 rounded-full shadow-md flex items-center gap-2.5 text-sm font-bold z-10 pointer-events-none",
+											style: {
+												backgroundColor: isButtonOnly ? buttonColor : "rgba(255, 255, 255, 0.95)",
+												color: isButtonOnly ? buttonTextColor : "#1f2937"
+											},
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+												className: "w-5 h-5",
+												style: { color: isButtonOnly ? buttonTextColor : "#ef4444" },
+												fill: "currentColor",
+												viewBox: "0 0 24 24",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" })
+											}), buttonText]
+										})]
+									});
+								})(),
+								layer.type === "interactive_copy" && (() => {
+									const bgOpacity = layer.style?.bgOpacity ?? 1;
+									const textOpacity = layer.style?.textOpacity ?? 1;
+									const hexToRgba = (hex, opacity = 1) => {
+										hex = (hex || "#ffffff").replace("#", "");
+										if (hex.length === 3) hex = hex.split("").map((x) => x + x).join("");
+										return `rgba(${parseInt(hex.substring(0, 2), 16) || 0}, ${parseInt(hex.substring(2, 4), 16) || 0}, ${parseInt(hex.substring(4, 6), 16) || 0}, ${opacity})`;
+									};
+									const bgColor = layer.style?.backgroundColor || "#ffffff";
+									const textColor = layer.style?.textColor || "#1f2937";
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "w-full h-full flex items-center justify-between shadow-sm pointer-events-none px-4",
+										style: {
+											backgroundColor: hexToRgba(bgColor, bgOpacity),
+											borderRadius: layer.style?.borderRadius || "0.75rem",
+											borderWidth: layer.style?.borderWidth || "1px",
+											borderColor: layer.style?.borderColor || "#e5e7eb",
+											borderStyle: layer.style?.borderWidth ? "solid" : layer.style?.borderColor ? "solid" : "none",
+											boxShadow: layer.style?.isShadowActive ? `0px ${layer.style?.shadowY || 4}px 6px -1px rgba(0, 0, 0, 0.1)` : "none"
+										},
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-base font-mono font-bold w-full",
+											style: { color: hexToRgba(textColor, textOpacity) },
+											children: layer.content || ""
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ml-2",
+											style: {
+												backgroundColor: layer.style?.iconBgColor || "#e0e7ff",
+												color: layer.style?.iconColor || "#4f46e5"
+											},
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+												className: "w-4 h-4",
+												fill: "none",
+												stroke: "currentColor",
+												viewBox: "0 0 24 24",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+												})
+											})
+										})]
+									});
+								})(),
+								layer.type === "interactive_comments" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "w-full h-full flex flex-col pointer-events-none overflow-hidden",
+									style: {
+										backgroundColor: layer.style?.backgroundColor || "#f8fafc",
+										borderRadius: layer.style?.borderRadius || "1rem",
+										padding: layer.style?.padding || "1rem",
+										color: layer.style?.color || "#333333",
+										borderWidth: layer.style?.borderWidth || 0,
+										borderColor: layer.style?.borderColor || "#e2e8f0",
+										borderStyle: layer.style?.borderWidth ? "solid" : "none"
+									},
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "text-sm font-bold mb-3 border-b border-gray-200 pb-2",
+										style: { color: layer.style?.color || "#333333" },
+										children: "Ucapan & Doa"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "flex-1 overflow-hidden opacity-50 flex flex-col items-center justify-center",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[10px] text-gray-400",
+											children: "(Daftar komentar akan muncul di sini saat tamu mengisi form RSVP)"
+										})
+									})]
+								}),
+								layer.type === "canvas_group" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "w-full h-full relative",
+									style: { pointerEvents: "none" },
+									children: layer.children?.map((child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										style: {
+											position: "absolute",
+											left: `${child.style?.x || 0}px`,
+											top: `${child.style?.y || 0}px`,
+											width: typeof child.style?.width === "number" ? `${child.style.width}px` : child.style?.width,
+											height: typeof child.style?.height === "number" ? `${child.style.height}px` : child.style?.height,
+											pointerEvents: "auto"
+										},
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayerElement, {
+											layer: child,
+											isChildOfGroup: true,
+											sectionId
+										})
+									}, child.id))
+								})
+							]
+						}),
+						" ",
+						layer.style?.borderWidth > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "absolute inset-0 pointer-events-none z-20",
+							style: {
+								borderRadius: computedBorderRadius,
+								borderWidth: `${layer.style.borderWidth}px`,
+								borderStyle: layer.style.borderStyle || "solid",
+								borderColor: hexToRgba$1(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100),
+								boxSizing: "border-box"
+							}
+						})
+					]
 				}), " "]
 			}),
 			" "
@@ -28206,7 +28215,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BUVHb4jW.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BCsfZowM.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);

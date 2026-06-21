@@ -338,8 +338,24 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
         loadFont('Caveat');
     }
 
+    const computedBorderRadius = (() => {
+        if (layer.style?.borderRadius === undefined) return '0px';
+        const r = `${layer.style.borderRadius}px`;
+        switch(layer.style.borderRadiusType) {
+            case 'top': return `${r} ${r} 0 0`;
+            case 'bottom': return `0 0 ${r} ${r}`;
+            case 'left': return `${r} 0 0 ${r}`;
+            case 'right': return `0 ${r} ${r} 0`;
+            case 'top-left': return `${r} 0 0 0`;
+            case 'top-right': return `0 ${r} 0 0`;
+            case 'bottom-right': return `0 0 ${r} 0`;
+            case 'bottom-left': return `0 0 0 ${r}`;
+            default: return r;
+        }
+    })();
+
     const innerStructure = (
-        <div className="w-full h-full relative" style={{ transform: `rotate(${layer.style?.rotation || 0}deg)`, opacity: layer.style?.opacity ?? 1 }}>
+        <div className="w-full h-full relative" style={{ transform: `rotate(${layer.style?.rotation || 0}deg)` }}>
                 
                 {/* Rotator Handle - Only visible when active */}
                 {isActive && !(layer.isLocked) && !isChildOfGroup && (
@@ -361,33 +377,17 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 {/* Visibility Wrapper to isolate from GSAP clearProps */}
                 <div ref={visibilityRef} className="w-full h-full transition-opacity duration-150">
                     {/* GSAP Animation Wrapper */}
-                    <div ref={elementRef} className="w-full h-full">
+                    <div ref={elementRef} className="w-full h-full relative">
                         {/* Content Wrapper */}
                         <div 
-                            className={`w-full h-full`}
+                            className={`w-full h-full relative z-10`}
                             style={{
                                 transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
-                                borderRadius: (() => {
-                                    if (layer.style?.borderRadius === undefined) return '0px';
-                                    const r = `${layer.style.borderRadius}px`;
-                                    switch(layer.style.borderRadiusType) {
-                                        case 'top': return `${r} ${r} 0 0`;
-                                        case 'bottom': return `0 0 ${r} ${r}`;
-                                        case 'left': return `${r} 0 0 ${r}`;
-                                        case 'right': return `0 ${r} ${r} 0`;
-                                        case 'top-left': return `${r} 0 0 0`;
-                                        case 'top-right': return `0 ${r} 0 0`;
-                                        case 'bottom-right': return `0 0 ${r} 0`;
-                                        case 'bottom-left': return `0 0 0 ${r}`;
-                                        default: return r;
-                                    }
-                                })(),
+                                borderRadius: computedBorderRadius,
                                 overflow: layer.style?.borderRadius ? 'hidden' : 'visible',
                                 filter: getShadowCss(layer.style),
                                 background: (layer.type === 'image' || layer.type === 'text' || layer.type === 'dynamic_guest_name') ? 'transparent' : getGradientCss(layer.style),
-                                borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : undefined,
-                                borderStyle: layer.style?.borderStyle || (layer.style?.borderWidth ? 'solid' : undefined),
-                                borderColor: layer.style?.borderColor,
+                                opacity: layer.style?.opacity ?? 1,
                                 boxSizing: 'border-box'
                             }}
                         >
@@ -958,6 +958,21 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                             )}
 
                         </div> {/* End Content Wrapper */}
+
+                        {/* Border Overlay (Independent of background opacity) */}
+                        {layer.style?.borderWidth > 0 && (
+                            <div 
+                                className="absolute inset-0 pointer-events-none z-20"
+                                style={{
+                                    borderRadius: computedBorderRadius,
+                                    borderWidth: `${layer.style.borderWidth}px`,
+                                    borderStyle: layer.style.borderStyle || 'solid',
+                                    borderColor: hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100),
+                                    boxSizing: 'border-box'
+                                }}
+                            ></div>
+                        )}
+
                     </div> {/* End GSAP Animation Wrapper */}
                 </div> {/* End Visibility Wrapper */}
         </div>

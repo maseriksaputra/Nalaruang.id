@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-M0gUZCBj.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-Bd_qd7mb.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DDUUuZHU.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-V44_DL0X.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -14629,36 +14629,57 @@ var RightInspector = () => {
 											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
 										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "grid grid-cols-2 gap-3",
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-[10px] text-gray-500 block mb-1",
-												children: "Gaya Garis"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
-												value: activeLayer.style.borderStyle || "solid",
-												onChange: (e) => updateLayerStyle(activeLayer.id, { borderStyle: e.target.value }),
-												className: "w-full h-8 text-xs border-gray-300 rounded px-1",
-												children: [
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-														value: "solid",
-														children: "Solid (Utuh)"
-													}),
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-														value: "dashed",
-														children: "Dashed (Putus)"
-													}),
-													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-														value: "dotted",
-														children: "Dotted (Titik)"
-													})
-												]
-											})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "text-[10px] text-gray-500 block mb-1",
-												children: "Warna Garis"
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-												type: "color",
-												value: activeLayer.style.borderColor || "#000000",
-												onChange: (e) => updateLayerStyle(activeLayer.id, { borderColor: e.target.value }),
-												className: "w-full h-8 rounded cursor-pointer border border-gray-300 p-0"
-											})] })]
+											children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-[10px] text-gray-500 block mb-1",
+													children: "Gaya Garis"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+													value: activeLayer.style.borderStyle || "solid",
+													onChange: (e) => updateLayerStyle(activeLayer.id, { borderStyle: e.target.value }),
+													className: "w-full h-8 text-xs border-gray-300 rounded px-1",
+													children: [
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+															value: "solid",
+															children: "Solid (Utuh)"
+														}),
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+															value: "dashed",
+															children: "Dashed (Putus)"
+														}),
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+															value: "dotted",
+															children: "Dotted (Titik)"
+														})
+													]
+												})] }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-[10px] text-gray-500 block mb-1",
+													children: "Warna Garis"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+													type: "color",
+													value: activeLayer.style.borderColor || "#000000",
+													onChange: (e) => updateLayerStyle(activeLayer.id, { borderColor: e.target.value }),
+													className: "w-full h-8 rounded cursor-pointer border border-gray-300 p-0"
+												})] }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-[10px] text-gray-500 block mb-1",
+													children: "Opasitas Garis"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex items-center gap-2",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+														type: "range",
+														min: "0",
+														max: "1",
+														step: "0.05",
+														value: activeLayer.style.borderOpacity ?? 1,
+														onChange: (e) => updateLayerStyle(activeLayer.id, { borderOpacity: parseFloat(e.target.value) }),
+														className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+														className: "text-[10px] text-gray-500 w-8",
+														children: [Math.round((activeLayer.style.borderOpacity ?? 1) * 100), "%"]
+													})]
+												})] })
+											]
 										})]
 									})]
 								}),

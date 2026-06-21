@@ -834,6 +834,18 @@ const RightInspector = () => {
                                             className="w-full h-8 rounded cursor-pointer border border-gray-300 p-0" 
                                         />
                                     </div>
+                                    <div>
+                                        <span className="text-[10px] text-gray-500 block mb-1">Opasitas Garis</span>
+                                        <div className="flex items-center gap-2">
+                                            <input 
+                                                type="range" min="0" max="1" step="0.05"
+                                                value={activeLayer.style.borderOpacity ?? 1}
+                                                onChange={(e) => updateLayerStyle(activeLayer.id, { borderOpacity: parseFloat(e.target.value) })}
+                                                className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                                            />
+                                            <span className="text-[10px] text-gray-500 w-8">{Math.round((activeLayer.style.borderOpacity ?? 1) * 100)}%</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         )}
