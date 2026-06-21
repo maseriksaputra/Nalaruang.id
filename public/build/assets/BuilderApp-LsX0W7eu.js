@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-agrBdljv.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-URxTLWq2.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DTbaMQ3P.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-Bxi30Z56.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -13608,9 +13608,9 @@ var RightInspector = () => {
 				className: "flex-1 overflow-y-auto p-4 space-y-6",
 				children: [
 					inspectorTab === "design" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex justify-between items-center mb-4 border-b border-gray-100 pb-4",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
 								className: "flex items-center gap-2 text-sm font-medium cursor-pointer",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 									type: "checkbox",
@@ -13621,7 +13621,18 @@ var RightInspector = () => {
 									className: "text-gray-700",
 									children: "Kunci Posisi"
 								})]
-							})
+							}), useCanvasStore.getState().activeCanvasMode !== "desktop" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
+								className: "border border-gray-200 rounded p-1.5 text-[11px] text-gray-700 font-medium focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none cursor-pointer max-w-[130px] bg-gray-50 hover:bg-white transition-colors",
+								value: activeSectionId,
+								title: "Pindahkan elemen ini ke layar lain",
+								onChange: (e) => {
+									if (e.target.value && e.target.value !== activeSectionId) useCanvasStore.getState().moveElementToSection(activeLayer.id, e.target.value);
+								},
+								children: sections.map((sec, idx) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("option", {
+									value: sec.id,
+									children: ["Pindah ke Layar ", idx + 1]
+								}, sec.id))
+							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "grid grid-cols-2 gap-3 mt-2",

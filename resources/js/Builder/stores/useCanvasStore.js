@@ -865,6 +865,56 @@ const useCanvasStore = create(temporal((set, get) => ({
             if (state.activeLayerId === elementId) state.activeLayerId = null;
             state.activeLayerIds = state.activeLayerIds.filter(id => id !== elementId);
         }));
+
+    },
+
+    moveElementToSection: (elementId, targetSectionId) => {
+        set(produce((state) => {
+            if (state.activeCanvasMode === 'desktop') return; // Desktop only has one section
+            
+            let elementToMove = null;
+            
+            // 1. Find and remove the element from its current section
+            for (let s of state.sections) {
+                if (!s.layers) continue;
+                
+                // Check top-level layers
+                const index = s.layers.findIndex(l => l.id === elementId);
+                if (index !== -1) {
+                    elementToMove = s.layers[index];
+                    s.layers.splice(index, 1);
+                    break;
+                }
+                
+                // Check inside groups
+                for (let g of s.layers) {
+                    if (g.children) {
+                        const childIndex = g.children.findIndex(c => c.id === elementId);
+                        if (childIndex !== -1) {
+                            elementToMove = g.children[childIndex];
+                            // Re-adjust relative coordinates to absolute for the new section
+                            if (elementToMove.style) {
+                                elementToMove.style.x = (elementToMove.style.x || 0) + (g.style.x || 0);
+                                elementToMove.style.y = (elementToMove.style.y || 0) + (g.style.y || 0);
+                            }
+                            g.children.splice(childIndex, 1);
+                            break;
+                        }
+                    }
+                }
+                if (elementToMove) break;
+            }
+            
+            // 2. Add element to target section
+            if (elementToMove) {
+                const targetSection = state.sections.find(s => s.id === targetSectionId);
+                if (targetSection) {
+                    if (!targetSection.layers) targetSection.layers = [];
+                    targetSection.layers.push(elementToMove);
+                    state.activeSectionId = targetSectionId;
+                }
+            }
+        }));
         get().triggerAutoSave();
     },
 

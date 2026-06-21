@@ -320,7 +320,7 @@ const RightInspector = () => {
                 
                 {inspectorTab === 'design' && (
                     <>
-                        {/* Control Panel: Lock & Rotasi */}
+                        {/* Control Panel: Lock & Pindah Layar */}
                         <div className="flex justify-between items-center mb-4 border-b border-gray-100 pb-4">
                             <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
                                 <input 
@@ -331,6 +331,23 @@ const RightInspector = () => {
                                 />
                                 <span className="text-gray-700">Kunci Posisi</span>
                             </label>
+                            
+                            {useCanvasStore.getState().activeCanvasMode !== 'desktop' && (
+                                <select 
+                                    className="border border-gray-200 rounded p-1.5 text-[11px] text-gray-700 font-medium focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none cursor-pointer max-w-[130px] bg-gray-50 hover:bg-white transition-colors"
+                                    value={activeSectionId}
+                                    title="Pindahkan elemen ini ke layar lain"
+                                    onChange={(e) => {
+                                        if (e.target.value && e.target.value !== activeSectionId) {
+                                            useCanvasStore.getState().moveElementToSection(activeLayer.id, e.target.value);
+                                        }
+                                    }}
+                                >
+                                    {sections.map((sec, idx) => (
+                                        <option key={sec.id} value={sec.id}>Pindah ke Layar {idx + 1}</option>
+                                    ))}
+                                </select>
+                            )}
                         </div>
                 
                 {/* Dimensi & Posisi Dasar */}
