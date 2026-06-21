@@ -957,10 +957,12 @@ const useCanvasStore = create(temporal((set, get) => ({
     },
 }), {
     partialize: (state) => ({ 
-        sections: JSON.parse(JSON.stringify(state.sections)), 
-        global_settings: JSON.parse(JSON.stringify(state.global_settings)) 
+        sections: state.sections, 
+        global_settings: state.global_settings 
     }),
     equality: (pastState, currentState) => {
+        // Karena kita menggunakan immer, state yang tidak berubah akan mempertahankan referensinya (===).
+        // Lodash isEqual sangat cepat jika referensinya sama.
         return isEqual(pastState.sections, currentState.sections) && 
                isEqual(pastState.global_settings, currentState.global_settings);
     },
