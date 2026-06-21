@@ -183,7 +183,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                         start: "top 80%",
                         scroller: scrollScroller,
                         animation: tween,
-                        toggleActions: "play none none reverse"
+                        toggleActions: "play none none none",
+                        once: true
                     });
                 }, 1250);
                 scrollTriggerTimeouts.push(stTimer);
@@ -294,7 +295,10 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                     start: "top 75%",
                     scroller: scrollScroller,
                     animation: tl,
-                    toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
+                    // If looping (pulse, swing, etc), pause when out of view and resume when in view.
+                    // If not looping (fade in, slide in), play ONCE and never reverse or reset.
+                    toggleActions: isLooping ? "play pause resume pause" : "play none none none",
+                    once: !isLooping
                 });
             }, 1250);
             scrollTriggerTimeouts.push(stTimer);
@@ -362,7 +366,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             if (config.scale !== undefined && config.scale !== 1) {
                 entryProps.scale = config.scale;
             }
-            const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none reverse";
+            const isOnce = !(hasExit || config.autoReverse);
+            const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none none";
             const triggerElement = elementRef;
 
             // Pastikan delay diterapkan secara eksplisit
@@ -388,7 +393,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                         start: "top 75%",
                         scroller: scrollScroller,
                         animation: tween,
-                        toggleActions: toggleActionStr
+                        toggleActions: toggleActionStr,
+                        once: isOnce
                     });
                 }, 1250);
                 scrollTriggerTimeouts.push(stTimer);
@@ -417,7 +423,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                     start: "top 75%",
                     scroller: scrollScroller,
                     animation: tween,
-                    toggleActions: "play none none reverse"
+                    toggleActions: "play none none none",
+                    once: true
                 });
             }, 1250);
             scrollTriggerTimeouts.push(stTimer);

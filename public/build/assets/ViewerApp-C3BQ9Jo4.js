@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DmJBzO2H.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-yDZe8yYq.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-Ba0ejZfS.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DSiAM1qo.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -20292,7 +20292,8 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 					start: "top 80%",
 					scroller: scrollScroller,
 					animation: tween,
-					toggleActions: "play none none reverse"
+					toggleActions: "play none none none",
+					once: true
 				});
 			}, 1250);
 			scrollTriggerTimeouts.push(stTimer);
@@ -20380,7 +20381,8 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 					start: "top 75%",
 					scroller: scrollScroller,
 					animation: tl,
-					toggleActions: isLooping ? "play pause resume pause" : "play none none reverse"
+					toggleActions: isLooping ? "play pause resume pause" : "play none none none",
+					once: !isLooping
 				});
 			}, 1250);
 			scrollTriggerTimeouts.push(stTimer);
@@ -20437,7 +20439,8 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 		const entryProps = getAnimationProps(layerAnimation.entry, false, config, layerStyle);
 		if (hasEntry) {
 			if (config.scale !== void 0 && config.scale !== 1) entryProps.scale = config.scale;
-			const toggleActionStr = hasExit || config.autoReverse ? "play reverse play reverse" : "play none none reverse";
+			const isOnce = !(hasExit || config.autoReverse);
+			const toggleActionStr = hasExit || config.autoReverse ? "play reverse play reverse" : "play none none none";
 			const triggerElement = elementRef;
 			entryProps.delay = globalDelay;
 			const isScrollTriggered = !isBuilder && trigger === "onScroll" && trigger !== "onLoad";
@@ -20456,7 +20459,8 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 						start: "top 75%",
 						scroller: scrollScroller,
 						animation: tween,
-						toggleActions: toggleActionStr
+						toggleActions: toggleActionStr,
+						once: isOnce
 					});
 				}, 1250);
 				scrollTriggerTimeouts.push(stTimer);
@@ -20480,7 +20484,8 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 					start: "top 75%",
 					scroller: scrollScroller,
 					animation: tween,
-					toggleActions: "play none none reverse"
+					toggleActions: "play none none none",
+					once: true
 				});
 			}, 1250);
 			scrollTriggerTimeouts.push(stTimer);
@@ -28184,7 +28189,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DmJBzO2H.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-yDZe8yYq.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
