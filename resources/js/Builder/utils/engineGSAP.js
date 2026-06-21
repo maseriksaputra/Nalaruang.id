@@ -210,10 +210,13 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             });
         }
 
+        const isCustomTimelineScroll = (!isBuilder && trigger === 'onScroll');
+        const timelineDelay = isCustomTimelineScroll ? 0 : globalDelay;
+
         const tl = gsap.timeline({
             repeat: (isLooping && !isBuilder) ? -1 : 0,
-            delay: globalDelay,
-            scrollTrigger: (!isBuilder && trigger === 'onScroll') ? {
+            delay: timelineDelay,
+            scrollTrigger: isCustomTimelineScroll ? {
                 trigger: triggerElement,
                 start: "top 85%",
                 scroller: scrollScroller,
@@ -223,7 +226,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
 
         // Waktu absolut timeline dimulai dari 0 (yang mana aslinya sudah ter-delay oleh globalDelay)
         if (!hasEntryAnimation && globalDelay > 0) {
-            tl.set(elementRef, { opacity: getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1), immediateRender: false }, 0);
+            tl.set(elementRef, { opacity: getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1), immediateRender: false, overwrite: false }, 0);
         }
 
         // Loop titik pergerakan keyframe (K1 ke K2 ke K3 dst)
@@ -246,7 +249,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                     rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
                     ...(kf.width !== undefined && { width: kf.width }),
                     ...(kf.height !== undefined && { height: kf.height }),
-                    immediateRender: false
+                    immediateRender: false,
+                    overwrite: false
                 }, absoluteTime);
             } else {
                 // Keyframe selanjutnya adalah TUJUAN PERGERAKAN (ANIMASI)
@@ -331,15 +335,16 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none reverse";
             const triggerElement = !isBuilder ? (elementRef.closest('section') || elementRef) : elementRef;
 
-            // Pastikan delay diterapkan secara eksplisit
-            entryProps.delay = globalDelay;
+            // Jika onScroll di Preview, abaikan delay agar langsung animasi saat di-scroll
+            const isEntryScroll = (!isBuilder && trigger === 'onScroll' && trigger !== 'onLoad');
+            entryProps.delay = isEntryScroll ? 0 : globalDelay;
 
             const tween = gsap.from(elementRef, {
                 ...entryProps,
                 ...repeatConfig,
                 force3D: true,
                 autoRound: false,
-                scrollTrigger: (!isBuilder && trigger === 'onScroll') && trigger !== 'onLoad' ? { 
+                scrollTrigger: isEntryScroll ? { 
                     trigger: triggerElement, 
                     start: "top 85%", 
                     scroller: scrollScroller,
@@ -358,12 +363,11 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
         activeTweens.push(tween);
     }
 
-    // Jika dipanggil dari Builder (isBuilder === true) dan ada playhead awal
-    if (startAtTime > 0) {
+    // Pastikan di Builder animasi sinkron sempurna dengan playhead
+    if (isBuilder) {
         activeTweens.forEach(t => {
             if (t && typeof t.totalTime === 'function') {
-                t.totalTime(0); 
-                t.totalTime(startAtTime);
+                t.totalTime(startAtTime || 0);
             }
         });
     }
