@@ -210,13 +210,10 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             });
         }
 
-        const isCustomTimelineScroll = (!isBuilder && trigger === 'onScroll');
-        const timelineDelay = isCustomTimelineScroll ? 0 : globalDelay;
-
         const tl = gsap.timeline({
             repeat: (isLooping && !isBuilder) ? -1 : 0,
-            delay: timelineDelay,
-            scrollTrigger: isCustomTimelineScroll ? {
+            delay: globalDelay,
+            scrollTrigger: (!isBuilder && trigger === 'onScroll') ? {
                 trigger: triggerElement,
                 start: "top 85%",
                 scroller: scrollScroller,
@@ -335,16 +332,15 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
             const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none reverse";
             const triggerElement = !isBuilder ? (elementRef.closest('section') || elementRef) : elementRef;
 
-            // Jika onScroll di Preview, abaikan delay agar langsung animasi saat di-scroll
-            const isEntryScroll = (!isBuilder && trigger === 'onScroll' && trigger !== 'onLoad');
-            entryProps.delay = isEntryScroll ? 0 : globalDelay;
+            // Pastikan delay diterapkan secara eksplisit
+            entryProps.delay = globalDelay;
 
             const tween = gsap.from(elementRef, {
                 ...entryProps,
                 ...repeatConfig,
                 force3D: true,
                 autoRound: false,
-                scrollTrigger: isEntryScroll ? { 
+                scrollTrigger: (!isBuilder && trigger === 'onScroll') && trigger !== 'onLoad' ? { 
                     trigger: triggerElement, 
                     start: "top 85%", 
                     scroller: scrollScroller,
