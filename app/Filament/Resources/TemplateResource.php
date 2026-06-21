@@ -222,7 +222,7 @@ class TemplateResource extends Resource
                                 Forms\Components\Section::make('Integrasi Portal')
                                     ->description('Tarik desain otomatis dari builder')
                                     ->schema([
-                                        Forms\Components\Select::make('portal_invitation_id')
+                                        Forms\Components\Select::make('invitation_id')
                                             ->label('Pilih Desain')
                                             ->options(function () {
                                                 return \App\Models\Invitation::where('is_template', true)->orderBy('created_at', 'desc')->get(['id', 'title'])->mapWithKeys(function ($inv) {
@@ -244,12 +244,11 @@ class TemplateResource extends Resource
                                                     }
                                                 }
                                             })
-                                            ->dehydrated(false)
                                             ->helperText('Otomatis mengisi Link Demo & Nama.'),
                                         Forms\Components\Placeholder::make('portal_preview')
                                             ->label('Live Preview')
                                             ->content(function (Get $get) {
-                                                $invitationId = $get('portal_invitation_id');
+                                                $invitationId = $get('invitation_id');
                                                 if (!$invitationId) return new \Illuminate\Support\HtmlString('<span class="text-sm text-gray-500">Pilih desain untuk melihat preview.</span>');
                                                 
                                                 $invitation = \App\Models\Invitation::find($invitationId);

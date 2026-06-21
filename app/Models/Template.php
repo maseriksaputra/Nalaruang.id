@@ -57,4 +57,17 @@ class Template extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    protected static function booted()
+    {
+        static::saved(function ($template) {
+            if ($template->invitation_id && $template->wasChanged('name')) {
+                $invitation = \App\Models\Invitation::find($template->invitation_id);
+                if ($invitation && $invitation->title !== $template->name) {
+                    $invitation->title = $template->name;
+                    $invitation->save();
+                }
+            }
+        });
+    }
 }
