@@ -127,6 +127,9 @@ Route::get('/fix-elemen', function () {
     \Illuminate\Support\Facades\Artisan::call('builder:fix-db');
     $out1 = \Illuminate\Support\Facades\Artisan::output();
     
+    // Force all existing elements to be global (visible to everyone)
+    $updatedRows = \Illuminate\Support\Facades\DB::table('global_elements')->update(['user_id' => null]);
+    
     \Illuminate\Support\Facades\Artisan::call('builder:sync-global-media');
     $out2 = \Illuminate\Support\Facades\Artisan::output();
     
@@ -136,6 +139,7 @@ Route::get('/fix-elemen', function () {
     
     return "<h3>Perbaikan Selesai!</h3>
     <pre>Fix DB: {$out1}</pre>
+    <pre>Globalized Rows: {$updatedRows}</pre>
     <pre>Sync: {$out2}</pre>
     <pre>Total di DB: {$countAll}</pre>
     <pre>Total yang harusnya tampil: {$countVisible}</pre>
