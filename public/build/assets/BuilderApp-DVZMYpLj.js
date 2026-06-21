@@ -6734,6 +6734,15 @@ var LeftDrawer = () => {
 			alert("Gagal menyimpan elemen ke pustaka.");
 		}
 	};
+	const deleteGlobalElement = async (id, e) => {
+		e.stopPropagation();
+		if (await window.confirmAsync("Yakin ingin menghapus elemen ini permanen dari pustaka?", "Hapus Elemen")) try {
+			if ((await apiClient.delete(`/admin/builder/global-elements/${id}`)).data.success) fetchGlobalElements();
+		} catch (error) {
+			console.error("Failed to delete element:", error);
+			alert("Gagal menghapus elemen. Mungkin Anda tidak memiliki izin untuk menghapusnya.");
+		}
+	};
 	const handleUploadGlobalElement = async (file, type) => {
 		let name = await window.promptAsync(`Masukkan nama untuk menyimpan elemen ${type} ini permanen di Pustaka:`, `Custom ${type}`);
 		if (name === null) return;
