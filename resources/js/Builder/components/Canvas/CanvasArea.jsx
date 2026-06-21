@@ -201,7 +201,21 @@ const CanvasArea = () => {
 
                         {/* Visual Grid Lines for Long Content Pages */}
                         {index > 0 && activeCanvasMode !== 'desktop' && (() => {
-                            const sectionH = parseFloat(sectionHeight);
+                            let maxY = 0;
+                            const checkLayer = (layer) => {
+                                const bottom = (parseFloat(layer.style?.y) || 0) + (parseFloat(layer.style?.height) || 0);
+                                if (bottom > maxY) maxY = bottom;
+                                if (layer.children) layer.children.forEach(checkLayer);
+                            };
+                            section.layers?.forEach(checkLayer);
+                            
+                            let sectionH = 844;
+                            if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
+                                sectionH = parseFloat(section.layout.minHeight);
+                            } else if (maxY > 0) {
+                                sectionH = maxY;
+                            }
+
                             const grids = [];
                             for (let i = 844; i < sectionH; i += 844) {
                                 grids.push(
