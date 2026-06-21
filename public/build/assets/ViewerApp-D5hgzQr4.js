@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-B8teuNRI.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BegTfXjT.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-ChKnYQ5r.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DWBcnwhp.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -20322,7 +20322,8 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 		});
 		if (!hasEntryAnimation && globalDelay > 0) tl.set(elementRef, {
 			opacity: getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1),
-			immediateRender: false
+			immediateRender: false,
+			overwrite: false
 		}, 0);
 		let absoluteTime = 0;
 		for (let i = 0; i < keyframes.length; i++) {
@@ -20338,7 +20339,8 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 				rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
 				...kf.width !== void 0 && { width: kf.width },
 				...kf.height !== void 0 && { height: kf.height },
-				immediateRender: false
+				immediateRender: false,
+				overwrite: false
 			}, absoluteTime);
 			else {
 				tl.to(elementRef, {
@@ -20433,11 +20435,8 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 		});
 		activeTweens.push(tween);
 	}
-	if (startAtTime > 0) activeTweens.forEach((t) => {
-		if (t && typeof t.totalTime === "function") {
-			t.totalTime(0);
-			t.totalTime(startAtTime);
-		}
+	if (isBuilder) activeTweens.forEach((t) => {
+		if (t && typeof t.totalTime === "function") t.totalTime(startAtTime || 0);
 	});
 	return { kill: () => {
 		activeTweens.forEach((t) => {
@@ -28051,7 +28050,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-B8teuNRI.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BegTfXjT.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -28902,7 +28901,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 			return () => window.removeEventListener("rsvp_submitted", handleRsvpSubmit);
 		}
 	}, [layer.type]);
-	(0, import_react.useEffect)(() => {
+	(0, import_react.useLayoutEffect)(() => {
 		if (!elementRef.current) return;
 		if (!isCoverPage && !isOpened) return;
 		let animationCtx = null;
@@ -28966,9 +28965,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 		width: getPx(layer.style?.width ?? 100),
 		height: getPx(layer.style?.height ?? 100),
 		zIndex: layer.style?.zIndex || 1,
-		pointerEvents: layer.type === "canvas_group" ? "none" : "auto",
-		willChange: "transform, opacity",
-		backfaceVisibility: "hidden"
+		pointerEvents: layer.type === "canvas_group" ? "none" : "auto"
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		id: layer.id,
@@ -29057,7 +29054,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 								src: layer.url || layer.content,
 								alt: "",
-								loading: "lazy",
+								loading: isCoverPage ? "eager" : "lazy",
 								decoding: "async",
 								style: {
 									opacity: layer.style?.opacity !== void 0 ? layer.style.opacity : 1,
@@ -29122,6 +29119,8 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 									children: layer.style?.polaroidData?.image ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 										src: layer.style.polaroidData.image,
 										alt: "Polaroid",
+										loading: isCoverPage ? "eager" : "lazy",
+										decoding: "async",
 										className: "w-full h-full object-cover",
 										style: {
 											objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
@@ -29273,6 +29272,8 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 													src: img.url,
 													alt: img.caption || `Slide ${idx + 1}`,
+													loading: isCoverPage ? "eager" : "lazy",
+													decoding: "async",
 													style: {
 														width: "100%",
 														height: "100%",
@@ -29295,6 +29296,8 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 												src: img.url,
 												alt: img.caption || `Slide ${idx + 1}`,
+												loading: isCoverPage ? "eager" : "lazy",
+												decoding: "async",
 												style: {
 													width: "100%",
 													height: "100%",

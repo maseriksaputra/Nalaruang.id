@@ -10,9 +10,21 @@ use App\Models\Rsvp;
 use App\Models\InvitationVisitor;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class DashboardPortalController extends Controller
 {
+    private function generateUniqueSlug($title)
+    {
+        $baseSlug = Str::slug($title);
+        $slug = $baseSlug;
+        $counter = 1;
+        while (Invitation::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter;
+            $counter++;
+        }
+        return $slug;
+    }
     public function index()
     {
         return view('invitation-portal');
@@ -125,7 +137,7 @@ class DashboardPortalController extends Controller
             $newInvitation = Invitation::create([
                 'user_id' => auth()->id() ?? 2,
                 'title' => $newTitle,
-                'slug' => Str::uuid()->toString(),
+                'slug' => $this->generateUniqueSlug($newTitle),
                 'status' => 'draft',
                 'canvas_config' => $template->canvas_config,
                 'is_template' => false
@@ -263,6 +275,25 @@ class DashboardPortalController extends Controller
         return response()->json(['success' => true, 'title' => $invitation->title]);
     }
 
+    public function updateSlug(Request $request, $id)
+    {
+        $request->validate([
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('invitations')->ignore($id),
+                'regex:/^[a-z0-9\-]+$/' // Only allow lowercase letters, numbers, and hyphens
+            ]
+        ]);
+
+        $invitation = Invitation::findOrFail($id);
+        $invitation->slug = $request->slug;
+        $invitation->save();
+
+        return response()->json(['success' => true, 'slug' => $invitation->slug]);
+    }
+
     public function deleteInvitation($id)
     {
         $invitation = Invitation::findOrFail($id);
@@ -280,7 +311,7 @@ class DashboardPortalController extends Controller
             $invitation = Invitation::create([
                 'user_id' => auth()->id() ?? 2,
                 'title' => $newTitle,
-                'slug' => Str::uuid()->toString(),
+                'slug' => $this->generateUniqueSlug($newTitle),
                 'status' => 'draft',
                 'canvas_config' => [
                     'global_settings' => [
@@ -393,7 +424,7 @@ class DashboardPortalController extends Controller
                 'user_id' => auth()->id() ?? 2,
                 'order_id' => $order->id,
                 'title' => $newTitle,
-                'slug' => Str::uuid()->toString(),
+                'slug' => $this->generateUniqueSlug($newTitle),
                 'status' => 'draft',
                 'canvas_config' => $templateProject->canvas_config,
                 'is_template' => false

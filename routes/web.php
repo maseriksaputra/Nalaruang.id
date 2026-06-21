@@ -326,6 +326,7 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/admin/invitation-portal/{id}/links/batch', [\App\Http\Controllers\DashboardPortalController::class, 'storeBatchGuestLinks']);
     Route::post('/admin/invitation-portal/{id}/greeting', [\App\Http\Controllers\DashboardPortalController::class, 'updateGreeting']);
     Route::post('/admin/invitation-portal/{id}/rename', [\App\Http\Controllers\DashboardPortalController::class, 'renameInvitation']);
+    Route::post('/admin/invitation-portal/{id}/slug', [\App\Http\Controllers\DashboardPortalController::class, 'updateSlug']);
     Route::delete('/admin/invitation-portal/{id}', [\App\Http\Controllers\DashboardPortalController::class, 'deleteInvitation']);
     Route::post('/admin/invitation-portal/create', [\App\Http\Controllers\DashboardPortalController::class, 'store']);
     Route::get('/admin/builder/{id}', [\App\Http\Controllers\BuilderController::class, 'show']);
