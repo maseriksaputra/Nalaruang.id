@@ -43,8 +43,6 @@ class BuilderController extends Controller
             'canvas_config' => 'required|array'
         ]);
 
-        \Log::info('Canvas config size: ' . strlen(json_encode($request->canvas_config)));
-
         $invitation->update([
             'canvas_config' => $request->canvas_config
         ]);

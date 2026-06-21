@@ -160,18 +160,26 @@ const useCanvasStore = create(temporal((set, get) => ({
         const { invitationId, global_settings, sections } = get();
         if (!invitationId) return;
 
+        const payload = { canvas_config: { global_settings, sections } };
+        const payloadString = JSON.stringify(payload);
+        
+        // Cek ukuran payload dalam bytes (1 karakter ~ 1 byte, jika ada base64 image bisa sangat besar)
+        if (payloadString.length > 3 * 1024 * 1024) { // 3MB limit
+            console.error('Payload terlalu besar!', payloadString.length);
+            alert('Peringatan: Gagal Auto-Save! Ukuran desain terlalu besar (Lebih dari 3MB). Hal ini biasanya terjadi karena Anda melakukan "Copy-Paste" gambar secara langsung ke teks. Mohon gunakan fitur "Upload Gambar" untuk gambar.');
+            return;
+        }
+
         useUIStore.getState().setIsSaving(true);
         try {
-            await apiClient.put(`/api/builder/invitations/${invitationId}/auto-save`, {
-                canvas_config: { global_settings, sections }
-            });
+            await apiClient.put(`/api/builder/invitations/${invitationId}/auto-save`, payload);
             console.log('Auto-saved at', new Date().toLocaleTimeString());
         } catch (error) {
             console.error('Auto-save failed:', error);
         } finally {
             setTimeout(() => useUIStore.getState().setIsSaving(false), 500);
         }
-    }, 1000),
+    }, 3000),
 
     setCanvasData: (id, data) => {
         const sections = data?.sections?.length > 0 ? data.sections : [
@@ -966,7 +974,7 @@ const useCanvasStore = create(temporal((set, get) => ({
         return isEqual(pastState.sections, currentState.sections) && 
                isEqual(pastState.global_settings, currentState.global_settings);
     },
-    limit: 50
+    limit: 25
 }));
 
 export default useCanvasStore;

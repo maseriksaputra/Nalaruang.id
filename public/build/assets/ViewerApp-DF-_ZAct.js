@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-CBDTXxSu.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-CGIBq0IB.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-DnyNprcC.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-Cyf5Lo9v.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -2436,19 +2436,26 @@ var useCanvasStore = create(temporal((set, get) => ({
 	triggerAutoSave: (0, import_debounce.default)(async () => {
 		const { invitationId, global_settings, sections } = get();
 		if (!invitationId) return;
+		const payload = { canvas_config: {
+			global_settings,
+			sections
+		} };
+		const payloadString = JSON.stringify(payload);
+		if (payloadString.length > 3 * 1024 * 1024) {
+			console.error("Payload terlalu besar!", payloadString.length);
+			alert("Peringatan: Gagal Auto-Save! Ukuran desain terlalu besar (Lebih dari 3MB). Hal ini biasanya terjadi karena Anda melakukan \"Copy-Paste\" gambar secara langsung ke teks. Mohon gunakan fitur \"Upload Gambar\" untuk gambar.");
+			return;
+		}
 		useUIStore.getState().setIsSaving(true);
 		try {
-			await apiClient.put(`/api/builder/invitations/${invitationId}/auto-save`, { canvas_config: {
-				global_settings,
-				sections
-			} });
+			await apiClient.put(`/api/builder/invitations/${invitationId}/auto-save`, payload);
 			console.log("Auto-saved at", (/* @__PURE__ */ new Date()).toLocaleTimeString());
 		} catch (error) {
 			console.error("Auto-save failed:", error);
 		} finally {
 			setTimeout(() => useUIStore.getState().setIsSaving(false), 500);
 		}
-	}, 1e3),
+	}, 3e3),
 	setCanvasData: (id, data) => {
 		const sections = data?.sections?.length > 0 ? data.sections : [{
 			id: "sec_initial",
@@ -3158,7 +3165,7 @@ var useCanvasStore = create(temporal((set, get) => ({
 	equality: (pastState, currentState) => {
 		return (0, import_isEqual.default)(pastState.sections, currentState.sections) && (0, import_isEqual.default)(pastState.global_settings, currentState.global_settings);
 	},
-	limit: 50
+	limit: 25
 }));
 //#endregion
 //#region node_modules/prop-types/lib/ReactPropTypesSecret.js
@@ -28309,7 +28316,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-CBDTXxSu.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-CGIBq0IB.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
