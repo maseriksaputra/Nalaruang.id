@@ -1002,8 +1002,17 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 const sectionWidth = isDesktop ? 1280 : 375;
                 const sectionHeight = parseInt(section?.layout?.height || 844);
 
-                const elWidth = typeof localSize.width === 'string' ? parseFloat(localSize.width) : localSize.width;
-                const elHeight = typeof localSize.height === 'string' ? parseFloat(localSize.height) : localSize.height;
+                let elWidth = typeof localSize.width === 'string' ? parseFloat(localSize.width) : localSize.width;
+                let elHeight = typeof localSize.height === 'string' ? parseFloat(localSize.height) : localSize.height;
+                
+                // Fallback if width/height is 'auto' or NaN
+                if (isNaN(elWidth) || isNaN(elHeight)) {
+                    if (d.node) {
+                        if (isNaN(elWidth)) elWidth = d.node.offsetWidth;
+                        if (isNaN(elHeight)) elHeight = d.node.offsetHeight;
+                    }
+                }
+
                 const elCenterX = newX + elWidth / 2;
                 const elCenterY = newY + elHeight / 2;
 
@@ -1029,20 +1038,14 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                     if (!snappedX || !snappedY) {
                         for (const { ox, oy, ow, oh } of snapTargetsRef.current) {
                             if (!snappedX) {
-                                const otherCX = ox + ow / 2;
-                                if (Math.abs((newX + elWidth / 2) - otherCX) < SNAP_THRESHOLD) { 
-                                    newX = otherCX - elWidth / 2; activeLines.push({ axis: 'x', position: otherCX }); snappedX = true; 
-                                } else if (Math.abs(newX - ox) < SNAP_THRESHOLD) { 
+                                if (Math.abs(newX - ox) < SNAP_THRESHOLD) { 
                                     newX = ox; activeLines.push({ axis: 'x', position: ox }); snappedX = true; 
                                 } else if (Math.abs((newX + elWidth) - (ox + ow)) < SNAP_THRESHOLD) { 
                                     newX = (ox + ow) - elWidth; activeLines.push({ axis: 'x', position: ox + ow }); snappedX = true; 
                                 }
                             }
                             if (!snappedY) {
-                                const otherCY = oy + oh / 2;
-                                if (Math.abs((newY + elHeight / 2) - otherCY) < SNAP_THRESHOLD) { 
-                                    newY = otherCY - elHeight / 2; activeLines.push({ axis: 'y', position: otherCY }); snappedY = true; 
-                                } else if (Math.abs(newY - oy) < SNAP_THRESHOLD) { 
+                                if (Math.abs(newY - oy) < SNAP_THRESHOLD) { 
                                     newY = oy; activeLines.push({ axis: 'y', position: oy }); snappedY = true; 
                                 } else if (Math.abs((newY + elHeight) - (oy + oh)) < SNAP_THRESHOLD) { 
                                     newY = (oy + oh) - elHeight; activeLines.push({ axis: 'y', position: oy + oh }); snappedY = true; 

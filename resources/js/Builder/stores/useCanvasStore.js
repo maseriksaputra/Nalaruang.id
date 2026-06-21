@@ -667,7 +667,7 @@ const useCanvasStore = create(temporal((set, get) => ({
             const targetLayers = state.activeCanvasMode === 'desktop' ? state.global_settings.desktop_layers : (state.sections.find(s => s.id === state.activeSectionId)?.layers || []);
             const layer = findLayer(targetLayers, layerId);
             if (layer) {
-                const canvasW = 390, canvasH = 844;
+                const canvasW = 375, canvasH = 844;
                 const w = parseFloat(layer.style.width) || 0, h = parseFloat(layer.style.height) || 0;
                 if (alignment === 'left') layer.style.x = 0;
                 if (alignment === 'right') layer.style.x = canvasW - w;

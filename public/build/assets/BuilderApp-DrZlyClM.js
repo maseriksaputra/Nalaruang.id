@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-DTbaMQ3P.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-Bxi30Z56.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DSHMsIyz.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-CdF2o8rv.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -13765,9 +13765,9 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => alignLayer(activeLayer.id, "center"),
-											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs((activeLayer.style?.x || 0) - (414 - (parseInt(activeLayer.style?.width) || 100)) / 2) < 2 ? "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
+											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs((activeLayer.style?.x || 0) - (375 - (parseInt(activeLayer.style?.width) || 100)) / 2) < 2 ? "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-												className: `w-5 h-5 ${Math.abs((activeLayer.style?.x || 0) - (414 - (parseInt(activeLayer.style?.width) || 100)) / 2) < 2 ? "text-indigo-600" : "text-gray-500"}`,
+												className: `w-5 h-5 ${Math.abs((activeLayer.style?.x || 0) - (375 - (parseInt(activeLayer.style?.width) || 100)) / 2) < 2 ? "text-indigo-600" : "text-gray-500"}`,
 												viewBox: "0 0 24 24",
 												fill: "none",
 												stroke: "currentColor",
@@ -13800,9 +13800,9 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => alignLayer(activeLayer.id, "right"),
-											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs((activeLayer.style?.x || 0) - (414 - (parseInt(activeLayer.style?.width) || 100))) < 2 ? "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
+											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs((activeLayer.style?.x || 0) - (375 - (parseInt(activeLayer.style?.width) || 100))) < 2 ? "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-												className: `w-5 h-5 ${Math.abs((activeLayer.style?.x || 0) - (414 - (parseInt(activeLayer.style?.width) || 100))) < 2 ? "text-indigo-600" : "text-gray-500"}`,
+												className: `w-5 h-5 ${Math.abs((activeLayer.style?.x || 0) - (375 - (parseInt(activeLayer.style?.width) || 100))) < 2 ? "text-indigo-600" : "text-gray-500"}`,
 												viewBox: "0 0 24 24",
 												fill: "none",
 												stroke: "currentColor",

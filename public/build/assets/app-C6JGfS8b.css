@@ -1808,10 +1808,6 @@
     max-width: var(--container-7xl);
   }
 
-  .max-w-\[130px\] {
-    max-width: 130px;
-  }
-
   .max-w-\[140px\] {
     max-width: 140px;
   }
