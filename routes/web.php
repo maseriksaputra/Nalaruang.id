@@ -143,6 +143,27 @@ Route::get('/fix-elemen', function () {
     <p>Silakan kembali ke Editor Builder dan segarkan halaman.</p>";
 });
 
+Route::get('/debug-elements', function () {
+    try {
+        $elements = \App\Models\GlobalElement::where('user_id', auth()->id())
+            ->orWhereNull('user_id')
+            ->latest()
+            ->get();
+            
+        return response()->json([
+            'success' => true,
+            'count' => $elements->count(),
+            'data' => $elements
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+    }
+});
+
 Route::get('/fix-all', function () {
     // 1. Create Web & Mobile App Service
     $webSvc = \App\Models\Service::firstOrCreate(
