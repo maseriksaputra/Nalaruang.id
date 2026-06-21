@@ -77,17 +77,23 @@ var CanvasArea = () => {
 		e.preventDefault();
 		e.dataTransfer.dropEffect = "copy";
 	};
-	const handleDrop = (e) => {
+	const handleDrop = async (e) => {
 		e.preventDefault();
 		if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
 			const file = e.dataTransfer.files[0];
 			if (file.type.startsWith("image/")) {
-				const reader = new FileReader();
-				reader.onload = (re) => {
-					if (activeSectionId) useCanvasStore.getState().addLayer(activeSectionId, "image", { url: re.target.result });
-					else if (sections.length > 0) useCanvasStore.getState().addLayer(sections[0].id, "image", { url: re.target.result });
-				};
-				reader.readAsDataURL(file);
+				const formData = new FormData();
+				formData.append("file", file);
+				try {
+					const response = await apiClient.post("/admin/builder/upload", formData, { headers: { "Content-Type": "multipart/form-data" } });
+					if (response.data.success) {
+						if (activeSectionId) useCanvasStore.getState().addLayer(activeSectionId, "image", { url: response.data.url });
+						else if (sections.length > 0) useCanvasStore.getState().addLayer(sections[0].id, "image", { url: response.data.url });
+					}
+				} catch (error) {
+					console.error("Error uploading dragged image:", error);
+					alert("Gagal mengupload gambar yang di-drag. Silakan coba lagi.");
+				}
 			}
 		}
 	};

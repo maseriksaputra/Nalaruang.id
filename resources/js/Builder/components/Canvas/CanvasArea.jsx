@@ -8,6 +8,7 @@ import Particles from "@tsparticles/react";
 import { tsParticles } from "@tsparticles/engine";
 import { loadFireflyPreset } from "@tsparticles/preset-firefly";
 import { loadSnowPreset } from "@tsparticles/preset-snow";
+import apiClient from '../../utils/apiClient';
 
 const SnapLinesOverlay = ({ sectionId }) => {
     const snapLines = useUIStore((state) => state.snapLines);
@@ -58,20 +59,31 @@ const CanvasArea = () => {
         e.dataTransfer.dropEffect = "copy";
     };
 
-    const handleDrop = (e) => {
+    const handleDrop = async (e) => {
         e.preventDefault();
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             const file = e.dataTransfer.files[0];
             if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (re) => {
-                    if (activeSectionId) {
-                        useCanvasStore.getState().addLayer(activeSectionId, 'image', { url: re.target.result });
-                    } else if (sections.length > 0) {
-                        useCanvasStore.getState().addLayer(sections[0].id, 'image', { url: re.target.result });
+                const formData = new FormData();
+                formData.append('file', file);
+                try {
+                    const response = await apiClient.post('/admin/builder/upload', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    });
+                    
+                    if (response.data.success) {
+                        if (activeSectionId) {
+                            useCanvasStore.getState().addLayer(activeSectionId, 'image', { url: response.data.url });
+                        } else if (sections.length > 0) {
+                            useCanvasStore.getState().addLayer(sections[0].id, 'image', { url: response.data.url });
+                        }
                     }
-                };
-                reader.readAsDataURL(file);
+                } catch (error) {
+                    console.error('Error uploading dragged image:', error);
+                    alert('Gagal mengupload gambar yang di-drag. Silakan coba lagi.');
+                }
             }
         }
     };
