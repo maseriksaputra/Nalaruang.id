@@ -499,7 +499,6 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                                         onPointerUp={handleCropPointerUp}
                                         className={`w-full h-full object-cover pointer-events-none ${isCropMode ? 'cursor-move pointer-events-auto no-drag' : ''}`}
                                         style={{
-                                            opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
                                             objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
                                             filter: `${layer.style?.imageFilter && layer.style.imageFilter !== 'none' ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + ' ' : ''}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
                                         }}
@@ -1184,7 +1183,6 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
             scale={zoom}
             style={{
                 zIndex: layer.style?.zIndex || 1,
-                opacity: layer.style?.opacity ?? 1,
             }}
             resizeHandleComponent={(isActive && !layer.isLocked) ? {
                 topLeft: <ResizeHandle />,
