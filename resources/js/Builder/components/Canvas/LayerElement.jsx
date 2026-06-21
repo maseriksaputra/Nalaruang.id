@@ -998,6 +998,45 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                     if (Math.abs(elCenterX - centerX) < SNAP_THRESHOLD) { newX = centerX - elWidth / 2; activeLines.push({ axis: 'x', position: centerX, type: 'center' }); }
                     const centerY = sectionHeight / 2;
                     if (Math.abs(elCenterY - centerY) < SNAP_THRESHOLD) { newY = centerY - elHeight / 2; activeLines.push({ axis: 'y', position: centerY, type: 'center' }); }
+
+                    // Snap Top Edge
+                    if (Math.abs(newY) < SNAP_THRESHOLD) { newY = 0; activeLines.push({ axis: 'y', position: 0, type: 'edge' }); }
+                    // Snap Bottom Edge
+                    if (Math.abs((newY + elHeight) - sectionHeight) < SNAP_THRESHOLD) { newY = sectionHeight - elHeight; activeLines.push({ axis: 'y', position: sectionHeight, type: 'edge' }); }
+                    // Snap Left Edge
+                    if (Math.abs(newX) < SNAP_THRESHOLD) { newX = 0; activeLines.push({ axis: 'x', position: 0, type: 'edge' }); }
+                    // Snap Right Edge
+                    if (Math.abs((newX + elWidth) - sectionWidth) < SNAP_THRESHOLD) { newX = sectionWidth - elWidth; activeLines.push({ axis: 'x', position: sectionWidth, type: 'edge' }); }
+
+                    // Snap to Screen Boundaries (Grid Lines) every 844px for long sections
+                    const isGridSnapEnabled = useUIStore.getState().showGridLines ?? true;
+                    if (isGridSnapEnabled && sectionId !== 'desktop') {
+                        let maxY = 0;
+                        const checkLayer = (layer) => {
+                            const bottom = (parseFloat(layer.style?.y) || 0) + (parseFloat(layer.style?.height) || 0);
+                            if (bottom > maxY) maxY = bottom;
+                            if (layer.children) layer.children.forEach(checkLayer);
+                        };
+                        section?.layers?.forEach(checkLayer);
+                        
+                        let sectionH = 844;
+                        if (section?.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
+                            sectionH = parseFloat(section.layout.minHeight);
+                        } else if (maxY > 0) {
+                            sectionH = maxY;
+                        }
+
+                        if (sectionH > 844) {
+                            for (let i = 844; i < sectionH; i += 844) {
+                                // Snap Top to Grid
+                                if (Math.abs(newY - i) < SNAP_THRESHOLD) { newY = i; activeLines.push({ axis: 'y', position: i, type: 'edge' }); }
+                                // Snap Bottom to Grid
+                                if (Math.abs((newY + elHeight) - i) < SNAP_THRESHOLD) { newY = i - elHeight; activeLines.push({ axis: 'y', position: i, type: 'edge' }); }
+                                // Snap Center to Grid
+                                if (Math.abs(elCenterY - i) < SNAP_THRESHOLD) { newY = i - elHeight / 2; activeLines.push({ axis: 'y', position: i, type: 'center' }); }
+                            }
+                        }
+                    }
                     
                     snapTargetsRef.current.forEach(({ ox, oy, ow, oh }) => {
                         if (Math.abs(newX - ox) < SNAP_THRESHOLD) { newX = ox; activeLines.push({ axis: 'x', position: ox }); }

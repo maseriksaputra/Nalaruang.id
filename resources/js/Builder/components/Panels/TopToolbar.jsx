@@ -17,6 +17,8 @@ const TopToolbar = () => {
     const showMockup = useCanvasStore(state => state.showMockup);
     const setShowMockup = useCanvasStore(state => state.setShowMockup);
     const isSaving = useUIStore(state => state.isSaving);
+    const showGridLines = useUIStore(state => state.showGridLines);
+    const setShowGridLines = useUIStore(state => state.setShowGridLines);
 
     const handlePublishSubmit = () => {
         window.open(`/admin/invitation-portal?tab=distribusi&id=${window.__INVITATION_ID__}`, '_blank');
@@ -163,6 +165,14 @@ const TopToolbar = () => {
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                     <span className="text-sm font-semibold hidden lg:inline">Mockup</span>
+                </button>
+                <button 
+                    onClick={() => setShowGridLines(!showGridLines)}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition border shadow-sm ${showGridLines ? 'bg-white text-indigo-600 border-white' : 'text-white bg-white/10 hover:bg-white/20 border-transparent hover:border-white/20'}`}
+                    title="Tampilkan Kisi-kisi Batas Layar"
+                >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    <span className="text-sm font-semibold hidden lg:inline">Grid</span>
                 </button>
                 <button 
                     onClick={() => setIsPreviewMode(true)}

@@ -2794,6 +2794,16 @@
     }
   }
 
+  .border-indigo-400\/60 {
+    border-color: #7d87ff99;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .border-indigo-400\/60 {
+      border-color: color-mix(in oklab, var(--color-indigo-400) 60%, transparent);
+    }
+  }
+
   .border-indigo-500 {
     border-color: var(--color-indigo-500);
   }

@@ -200,7 +200,7 @@ const CanvasArea = () => {
                         </div>
 
                         {/* Visual Grid Lines for Long Content Pages */}
-                        {index > 0 && activeCanvasMode !== 'desktop' && (() => {
+                        {index > 0 && activeCanvasMode !== 'desktop' && useUIStore.getState().showGridLines && (() => {
                             let maxY = 0;
                             const checkLayer = (layer) => {
                                 const bottom = (parseFloat(layer.style?.y) || 0) + (parseFloat(layer.style?.height) || 0);
@@ -219,12 +219,12 @@ const CanvasArea = () => {
                             const grids = [];
                             for (let i = 844; i < sectionH; i += 844) {
                                 grids.push(
-                                    <div key={`grid-${i}`} className="absolute w-full z-0 flex items-center pointer-events-none" style={{ top: `${i}px` }}>
-                                        <div className="flex-1 border-t border-dashed border-indigo-300/50"></div>
-                                        <div className="px-2 py-0.5 bg-indigo-50 text-indigo-400 text-[10px] font-bold rounded-full mx-2 border border-indigo-200/50 shadow-sm">
+                                    <div key={`grid-${i}`} className="absolute w-full z-50 flex items-center pointer-events-none" style={{ top: `${i}px` }}>
+                                        <div className="flex-1 border-t border-dashed border-indigo-400/60"></div>
+                                        <div className="px-2 py-0.5 bg-indigo-50 text-indigo-500 text-[10px] font-bold rounded-full mx-2 border border-indigo-300/50 shadow-sm">
                                             Batas Layar {Math.floor(i/844) + 1}
                                         </div>
-                                        <div className="flex-1 border-t border-dashed border-indigo-300/50"></div>
+                                        <div className="flex-1 border-t border-dashed border-indigo-400/60"></div>
                                     </div>
                                 );
                             }

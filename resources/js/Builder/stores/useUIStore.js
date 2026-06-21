@@ -18,7 +18,9 @@ const useUIStore = create((set) => ({
     timelineHeight: 250,
     setTimelineHeight: (height) => set({ timelineHeight: height }),
     isTimelineOpen: true,
-    setIsTimelineOpen: (isOpen) => set({ isTimelineOpen: isOpen })
+    setIsTimelineOpen: (isOpen) => set({ isTimelineOpen: isOpen }),
+    showGridLines: true,
+    setShowGridLines: (val) => set({ showGridLines: val })
 }));
 
 export default useUIStore;

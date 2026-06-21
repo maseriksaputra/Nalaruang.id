@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-CTRkp8CD.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-acP5Rgo_.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-Bdj6pbX1.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-CxdErMgV.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -237,7 +237,7 @@ var CanvasArea = () => {
 							className: `absolute top-0 left-0 z-50 px-3 py-1.5 text-[10px] font-bold tracking-wider rounded-br-lg shadow-sm border-b border-r bg-indigo-600 text-white border-indigo-700`,
 							children: index === 0 ? "📄 HALAMAN SAMPUL (COVER)" : "📄 HALAMAN ISI"
 						}),
-						index > 0 && activeCanvasMode !== "desktop" && (() => {
+						index > 0 && activeCanvasMode !== "desktop" && useUIStore.getState().showGridLines && (() => {
 							let maxY = 0;
 							const checkLayer = (layer) => {
 								const bottom = (parseFloat(layer.style?.y) || 0) + (parseFloat(layer.style?.height) || 0);
@@ -250,15 +250,15 @@ var CanvasArea = () => {
 							else if (maxY > 0) sectionH = maxY;
 							const grids = [];
 							for (let i = 844; i < sectionH; i += 844) grids.push(/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "absolute w-full z-0 flex items-center pointer-events-none",
+								className: "absolute w-full z-50 flex items-center pointer-events-none",
 								style: { top: `${i}px` },
 								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex-1 border-t border-dashed border-indigo-300/50" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex-1 border-t border-dashed border-indigo-400/60" }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "px-2 py-0.5 bg-indigo-50 text-indigo-400 text-[10px] font-bold rounded-full mx-2 border border-indigo-200/50 shadow-sm",
+										className: "px-2 py-0.5 bg-indigo-50 text-indigo-500 text-[10px] font-bold rounded-full mx-2 border border-indigo-300/50 shadow-sm",
 										children: ["Batas Layar ", Math.floor(i / 844) + 1]
 									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex-1 border-t border-dashed border-indigo-300/50" })
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex-1 border-t border-dashed border-indigo-400/60" })
 								]
 							}, `grid-${i}`));
 							return grids;
@@ -18134,6 +18134,8 @@ var TopToolbar = () => {
 	const showMockup = useCanvasStore((state) => state.showMockup);
 	const setShowMockup = useCanvasStore((state) => state.setShowMockup);
 	const isSaving = useUIStore((state) => state.isSaving);
+	const showGridLines = useUIStore((state) => state.showGridLines);
+	const setShowGridLines = useUIStore((state) => state.setShowGridLines);
 	const handlePublishSubmit = () => {
 		window.open(`/admin/invitation-portal?tab=distribusi&id=${window.__INVITATION_ID__}`, "_blank");
 	};
@@ -18358,6 +18360,26 @@ var TopToolbar = () => {
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "text-sm font-semibold hidden lg:inline",
 								children: "Mockup"
+							})]
+						}),
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							onClick: () => setShowGridLines(!showGridLines),
+							className: `flex items-center gap-2 px-3 py-1.5 rounded-md transition border shadow-sm ${showGridLines ? "bg-white text-indigo-600 border-white" : "text-white bg-white/10 hover:bg-white/20 border-transparent hover:border-white/20"}`,
+							title: "Tampilkan Kisi-kisi Batas Layar",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+								className: "w-4 h-4",
+								fill: "none",
+								stroke: "currentColor",
+								viewBox: "0 0 24 24",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+									strokeLinecap: "round",
+									strokeLinejoin: "round",
+									strokeWidth: "2",
+									d: "M4 6h16M4 12h16M4 18h16"
+								})
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "text-sm font-semibold hidden lg:inline",
+								children: "Grid"
 							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
