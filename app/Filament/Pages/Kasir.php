@@ -300,4 +300,53 @@ class Kasir extends Page implements HasTable
                 ->send();
         }
     }
+
+    public function table(Table $table): Table
+    {
+        return $table
+            ->query(Cashflow::query()->where('reference_type', 'Kasir')->latest('id'))
+            ->columns([
+                TextColumn::make('transaction_date')
+                    ->label('Tanggal')
+                    ->date('d M Y')
+                    ->sortable(),
+                TextColumn::make('category')
+                    ->label('Kategori')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'F&B' => 'warning',
+                        'ATK' => 'gray',
+                        'Printing' => 'info',
+                        'Digital' => 'success',
+                        default => 'primary',
+                    }),
+                TextColumn::make('description')
+                    ->label('Keterangan')
+                    ->searchable(),
+                TextColumn::make('type')
+                    ->label('Tipe')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'income' => 'success',
+                        'expense' => 'danger',
+                        default => 'gray',
+                    })
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'income' => 'Pemasukan',
+                        'expense' => 'Pengeluaran',
+                        default => $state,
+                    }),
+                TextColumn::make('amount')
+                    ->label('Total')
+                    ->money('IDR')
+                    ->sortable()
+                    ->color(fn ($record) => $record->type === 'income' ? 'success' : 'danger'),
+            ])
+            ->actions([
+                DeleteAction::make()
+                    ->successNotificationTitle('Transaksi dihapus'),
+            ])
+            ->paginated([5, 10, 25])
+            ->defaultPaginationPageOption(5);
+    }
 }
