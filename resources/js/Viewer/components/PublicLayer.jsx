@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { applyAnimation, applyExitAnimation } from '../../Builder/utils/engineGSAP';
 import axios from 'axios';
@@ -178,7 +178,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
         }
     }, [layer.type]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!elementRef.current) return;
         
         // Wait until invitation is opened before applying animations for non-cover pages
@@ -186,10 +186,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 
         let animationCtx = null;
         if (layer.animation) {
-            // Memberi ruang bernafas 1 frame agar React selesai merender DOM sebelum GSAP mengkalkulasi posisi
-            requestAnimationFrame(() => {
-                animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style);
-            });
+            animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style);
         }
         
         return () => {
