@@ -20,18 +20,16 @@ class BuilderController extends Controller
                 if (isset($section['layers']) && is_array($section['layers'])) {
                     foreach ($section['layers'] as &$layer) {
                         foreach ($layer as $key => &$value) {
-                            if (is_string($value) && strlen($value) > 300000) {
-                                // Strip massive base64 images from rich text
-                                if ($key === 'content') {
-                                    $value = preg_replace('/<img[^>]+src="data:image\/[^">]+"[^>]*>/i', '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[GAMBAR DIHAPUS OTOMATIS OLEH SISTEM KARENA TERLALU BESAR]</div>', $value);
+                            if (is_string($value)) {
+                                if (strlen($value) > 200000 || str_starts_with($value, 'data:image/')) {
+                                    $value = "[DIHAPUS KARENA HARUS DIUPLOAD]";
+                                    $modified = true;
                                 }
-                                
-                                // If it's still massive (e.g. raw base64 string in url), nuke it
-                                if (strlen($value) > 300000) {
-                                    $value = "[DIHAPUS KARENA UKURAN TERLALU BESAR]";
+                                if (str_contains($value, 'data:image/')) {
+                                    $value = preg_replace('/<img[^>]+src="data:image\/[^">]+"[^>]*>/i', '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[GAMBAR DIHAPUS OTOMATIS OLEH SISTEM KARENA HARUS DIUPLOAD]</div>', $value);
+                                    $modified = true;
                                 }
-                                $modified = true;
-                            } elseif (is_array($value) && strlen(json_encode($value)) > 300000) {
+                            } elseif (is_array($value) && strlen(json_encode($value)) > 200000) {
                                 // Huge Lottie JSON object
                                 $value = null;
                                 $modified = true;
@@ -45,10 +43,12 @@ class BuilderController extends Controller
         // Clean global_settings
         if (is_array($config) && isset($config['global_settings'])) {
             foreach ($config['global_settings'] as $key => &$value) {
-                if (is_string($value) && strlen($value) > 300000) {
-                    $value = "[DIHAPUS KARENA UKURAN TERLALU BESAR]";
-                    $modified = true;
-                } elseif (is_array($value) && strlen(json_encode($value)) > 300000) {
+                if (is_string($value)) {
+                    if (strlen($value) > 200000 || str_starts_with($value, 'data:image/')) {
+                        $value = "[DIHAPUS KARENA HARUS DIUPLOAD]";
+                        $modified = true;
+                    }
+                } elseif (is_array($value) && strlen(json_encode($value)) > 200000) {
                     $value = null;
                     $modified = true;
                 }
