@@ -148,6 +148,7 @@ const CanvasArea = () => {
                         ) : (
                             sections.map((section, index) => (
                                         <section 
+                                            id={section.id}
                                             key={section.id} 
                                             onMouseDown={() => {
                                                 if (global_settings?.custom_code) return; // Prevent selecting section if it's acting as a transparent overlay

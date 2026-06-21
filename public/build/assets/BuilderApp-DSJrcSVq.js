@@ -186,6 +186,7 @@ var CanvasArea = () => {
 					},
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { children: "Kanvas Kosong" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Tambahkan Section baru dari panel kontrol." })]
 				}) : sections.map((section, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+					id: section.id,
 					onMouseDown: () => {
 						if (global_settings?.custom_code) return;
 						setActiveSection(section.id);
