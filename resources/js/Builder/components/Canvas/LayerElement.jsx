@@ -917,6 +917,43 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                                 );
                             })()}
 
+                            {layer.type === 'interactive_calendar' && (() => {
+                                const bgOpacity = layer.style?.opacity ?? 1;
+                                
+                                const hexToRgba = (hex, opacity = 1) => {
+                                    hex = (hex || '#ffffff').replace('#', '');
+                                    if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+                                    const r = parseInt(hex.substring(0, 2), 16) || 0;
+                                    const g = parseInt(hex.substring(2, 4), 16) || 0;
+                                    const b = parseInt(hex.substring(4, 6), 16) || 0;
+                                    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+                                };
+
+                                const bgColor = layer.style?.backgroundColor || '#4f46e5';
+                                const textColor = layer.style?.textColor || '#ffffff';
+
+                                return (
+                                    <div 
+                                        className="w-full h-full flex items-center justify-center gap-2 shadow-sm pointer-events-none px-4"
+                                        style={{
+                                            backgroundColor: hexToRgba(bgColor, bgOpacity),
+                                            color: textColor,
+                                            borderRadius: layer.style?.borderRadius || 8,
+                                            borderWidth: layer.style?.borderWidth || 0,
+                                            borderColor: layer.style?.borderColor || 'transparent',
+                                            borderStyle: layer.style?.borderWidth ? 'solid' : 'none',
+                                        }}
+                                    >
+                                        {layer.style?.showIcon !== false && (
+                                            <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        )}
+                                        <span className="font-semibold text-sm">
+                                            {layer.content || 'Simpan Tanggal'}
+                                        </span>
+                                    </div>
+                                );
+                            })()}
+
                             {layer.type === 'interactive_comments' && (
                                 <div 
                                     className="w-full h-full flex flex-col pointer-events-none overflow-hidden"

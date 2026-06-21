@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BLlwV_uo.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-Bg85xz7Y.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-Bb0jFvqu.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-0r2c01mZ.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -26339,6 +26339,42 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 										})]
 									});
 								})(),
+								layer.type === "interactive_calendar" && (() => {
+									const bgOpacity = layer.style?.opacity ?? 1;
+									const hexToRgba = (hex, opacity = 1) => {
+										hex = (hex || "#ffffff").replace("#", "");
+										if (hex.length === 3) hex = hex.split("").map((x) => x + x).join("");
+										return `rgba(${parseInt(hex.substring(0, 2), 16) || 0}, ${parseInt(hex.substring(2, 4), 16) || 0}, ${parseInt(hex.substring(4, 6), 16) || 0}, ${opacity})`;
+									};
+									const bgColor = layer.style?.backgroundColor || "#4f46e5";
+									const textColor = layer.style?.textColor || "#ffffff";
+									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "w-full h-full flex items-center justify-center gap-2 shadow-sm pointer-events-none px-4",
+										style: {
+											backgroundColor: hexToRgba(bgColor, bgOpacity),
+											color: textColor,
+											borderRadius: layer.style?.borderRadius || 8,
+											borderWidth: layer.style?.borderWidth || 0,
+											borderColor: layer.style?.borderColor || "transparent",
+											borderStyle: layer.style?.borderWidth ? "solid" : "none"
+										},
+										children: [layer.style?.showIcon !== false && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+											className: "w-5 h-5 shrink-0",
+											fill: "none",
+											stroke: "currentColor",
+											viewBox: "0 0 24 24",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+												strokeLinecap: "round",
+												strokeLinejoin: "round",
+												strokeWidth: "2",
+												d: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+											})
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "font-semibold text-sm",
+											children: layer.content || "Simpan Tanggal"
+										})]
+									});
+								})(),
 								layer.type === "interactive_comments" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "w-full h-full flex flex-col pointer-events-none overflow-hidden",
 									style: {
@@ -28272,7 +28308,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BLlwV_uo.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-Bg85xz7Y.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -29811,6 +29847,63 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 											d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
 										})
 									})
+								})]
+							});
+						})(),
+						layer.type === "interactive_calendar" && (() => {
+							const bgOpacity = layer.style?.opacity ?? 1;
+							const hexToRgba = (hex, opacity = 1) => {
+								hex = (hex || "#ffffff").replace("#", "");
+								if (hex.length === 3) hex = hex.split("").map((x) => x + x).join("");
+								return `rgba(${parseInt(hex.substring(0, 2), 16) || 0}, ${parseInt(hex.substring(2, 4), 16) || 0}, ${parseInt(hex.substring(4, 6), 16) || 0}, ${opacity})`;
+							};
+							const bgColor = layer.style?.backgroundColor || "#4f46e5";
+							const textColor = layer.style?.textColor || "#ffffff";
+							const handleCalendarClick = (e) => {
+								e.preventDefault();
+								e.stopPropagation();
+								const data = layer.calendarData || {};
+								const title = encodeURIComponent(data.title || "Acara");
+								const location = encodeURIComponent(data.location || "");
+								const description = encodeURIComponent(data.description || "");
+								const formatGoogleDate = (dateStr) => {
+									if (!dateStr) return "";
+									try {
+										return new Date(dateStr).toISOString().replace(/-|:|\.\d\d\d/g, "");
+									} catch (e) {
+										return "";
+									}
+								};
+								const start = formatGoogleDate(data.startDate);
+								const end = formatGoogleDate(data.endDate) || start;
+								const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start && end ? `${start}/${end}` : ""}&details=${description}&location=${location}`;
+								window.open(url, "_blank");
+							};
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "w-full h-full flex items-center justify-center gap-2 shadow-sm px-4 group hover:shadow-md transition-shadow cursor-pointer",
+								style: {
+									backgroundColor: hexToRgba(bgColor, bgOpacity),
+									color: textColor,
+									borderRadius: layer.style?.borderRadius || 8,
+									borderWidth: layer.style?.borderWidth || 0,
+									borderColor: layer.style?.borderColor || "transparent",
+									borderStyle: layer.style?.borderWidth ? "solid" : "none"
+								},
+								onClick: handleCalendarClick,
+								children: [layer.style?.showIcon !== false && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+									className: "w-5 h-5 shrink-0 transition-transform group-hover:scale-110",
+									fill: "none",
+									stroke: "currentColor",
+									viewBox: "0 0 24 24",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+										strokeLinecap: "round",
+										strokeLinejoin: "round",
+										strokeWidth: "2",
+										d: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+									})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "font-semibold text-sm",
+									children: layer.content || "Simpan Tanggal"
 								})]
 							});
 						})(),

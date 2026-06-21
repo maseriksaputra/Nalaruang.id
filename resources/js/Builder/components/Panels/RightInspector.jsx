@@ -337,6 +337,14 @@ const RightInspector = () => {
                         Salin
                     </button>
                 )}
+                {activeLayer.type === 'interactive_calendar' && (
+                    <button 
+                        onClick={() => setInspectorTab('calendar')}
+                        className={`flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === 'calendar' ? 'bg-white shadow-sm text-indigo-600' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100'}`}
+                    >
+                        Kalender
+                    </button>
+                )}
             </div>
             
             <div className="flex-1 overflow-y-auto p-4 space-y-6">
@@ -2957,6 +2965,167 @@ const RightInspector = () => {
                                         </button>
                                     </div>
                                 )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {inspectorTab === 'calendar' && activeLayer.type === 'interactive_calendar' && (
+                    <div className="space-y-6 pb-20">
+                        <div className="space-y-4">
+                            <h3 className="font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded">Detail Acara (Kalender)</h3>
+                            
+                            <div>
+                                <label className="text-[11px] font-bold text-gray-800 block mb-2">Teks Tombol</label>
+                                <input 
+                                    type="text" 
+                                    value={activeLayer.content || ''}
+                                    placeholder="Cth: Simpan Tanggal"
+                                    onChange={(e) => updateLayerContent(activeLayer.id, e.target.value)}
+                                    className="w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="text-[11px] font-bold text-gray-800 block mb-2">Nama Acara</label>
+                                <input 
+                                    type="text" 
+                                    value={activeLayer.calendarData?.title || ''}
+                                    placeholder="Cth: Pernikahan Budi & Ani"
+                                    onChange={(e) => {
+                                        useCanvasStore.getState().updateLayer(activeLayer.id, { 
+                                            calendarData: { ...(activeLayer.calendarData || {}), title: e.target.value } 
+                                        });
+                                    }}
+                                    className="w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-2">
+                                <div>
+                                    <label className="text-[11px] font-bold text-gray-800 block mb-2">Mulai</label>
+                                    <input 
+                                        type="datetime-local" 
+                                        value={activeLayer.calendarData?.startDate || ''}
+                                        onChange={(e) => {
+                                            useCanvasStore.getState().updateLayer(activeLayer.id, { 
+                                                calendarData: { ...(activeLayer.calendarData || {}), startDate: e.target.value } 
+                                            });
+                                        }}
+                                        className="w-full text-xs border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[11px] font-bold text-gray-800 block mb-2">Selesai</label>
+                                    <input 
+                                        type="datetime-local" 
+                                        value={activeLayer.calendarData?.endDate || ''}
+                                        onChange={(e) => {
+                                            useCanvasStore.getState().updateLayer(activeLayer.id, { 
+                                                calendarData: { ...(activeLayer.calendarData || {}), endDate: e.target.value } 
+                                            });
+                                        }}
+                                        className="w-full text-xs border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="text-[11px] font-bold text-gray-800 block mb-2">Lokasi (Opsional)</label>
+                                <input 
+                                    type="text" 
+                                    value={activeLayer.calendarData?.location || ''}
+                                    placeholder="Cth: Gedung Serbaguna"
+                                    onChange={(e) => {
+                                        useCanvasStore.getState().updateLayer(activeLayer.id, { 
+                                            calendarData: { ...(activeLayer.calendarData || {}), location: e.target.value } 
+                                        });
+                                    }}
+                                    className="w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="text-[11px] font-bold text-gray-800 block mb-2">Deskripsi (Opsional)</label>
+                                <textarea 
+                                    value={activeLayer.calendarData?.description || ''}
+                                    placeholder="Cth: Kehadiran Anda adalah hadiah terindah bagi kami."
+                                    onChange={(e) => {
+                                        useCanvasStore.getState().updateLayer(activeLayer.id, { 
+                                            calendarData: { ...(activeLayer.calendarData || {}), description: e.target.value } 
+                                        });
+                                    }}
+                                    className="w-full text-sm border border-gray-300 rounded p-2 h-20 focus:ring-1 focus:ring-indigo-500 outline-none resize-none"
+                                />
+                            </div>
+
+                            <h3 className="font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded mt-6">Tampilan Tombol</h3>
+                            
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="text-[11px] font-bold text-gray-800 block mb-2">Warna Teks</label>
+                                    <div className="flex items-center gap-2">
+                                        <input 
+                                            type="color" 
+                                            value={activeLayer.style?.textColor || '#ffffff'}
+                                            onChange={(e) => updateLayerStyle(activeLayer.id, { textColor: e.target.value })}
+                                            className="w-8 h-8 rounded cursor-pointer border-0 p-0"
+                                        />
+                                        <span className="text-[10px] font-mono text-gray-500">{activeLayer.style?.textColor || '#ffffff'}</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="text-[11px] font-bold text-gray-800 block mb-2">Warna Latar</label>
+                                    <div className="flex items-center gap-2">
+                                        <input 
+                                            type="color" 
+                                            value={activeLayer.style?.backgroundColor || '#4f46e5'}
+                                            onChange={(e) => updateLayerStyle(activeLayer.id, { backgroundColor: e.target.value })}
+                                            className="w-8 h-8 rounded cursor-pointer border-0 p-0"
+                                        />
+                                        <span className="text-[10px] font-mono text-gray-500">{activeLayer.style?.backgroundColor || '#4f46e5'}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 mt-2">
+                                <div>
+                                    <div className="flex justify-between items-center mb-1">
+                                        <label className="text-[11px] font-bold text-gray-800">Opasitas</label>
+                                        <span className="text-[10px] font-mono text-gray-500">{Math.round((activeLayer.style?.opacity ?? 1) * 100)}%</span>
+                                    </div>
+                                    <input 
+                                        type="range" min="0" max="1" step="0.05"
+                                        value={activeLayer.style?.opacity ?? 1}
+                                        onChange={(e) => updateLayerStyle(activeLayer.id, { opacity: parseFloat(e.target.value) })}
+                                        className="w-full accent-indigo-600 cursor-pointer"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[11px] font-bold text-gray-800 block mb-2">Tampilkan Ikon</label>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input 
+                                            type="checkbox" 
+                                            className="sr-only peer" 
+                                            checked={activeLayer.style?.showIcon !== false}
+                                            onChange={(e) => updateLayerStyle(activeLayer.id, { showIcon: e.target.checked })}
+                                        />
+                                        <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label className="text-[11px] font-bold text-gray-800 block mb-2">Radius Sudut (Border Radius)</label>
+                                <div className="flex items-center gap-3">
+                                    <input 
+                                        type="range" min="0" max="100" step="1"
+                                        value={activeLayer.style?.borderRadius ?? 8}
+                                        onChange={(e) => updateLayerStyle(activeLayer.id, { borderRadius: parseInt(e.target.value) })}
+                                        className="flex-1 accent-indigo-600 cursor-pointer"
+                                    />
+                                    <span className="text-xs font-mono text-gray-500 w-8 text-right">{activeLayer.style?.borderRadius ?? 8}px</span>
+                                </div>
                             </div>
                         </div>
                     </div>

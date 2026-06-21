@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-Bb0jFvqu.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-C7pLnGB4.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-0r2c01mZ.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-Dz_ODRqJ.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -8415,6 +8415,54 @@ var LeftDrawer = () => {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 					onClick: () => addLayer({
 						id: "layer_" + Date.now(),
+						type: "interactive_calendar",
+						content: "Simpan Tanggal",
+						calendarData: {
+							title: "Acara Pernikahan",
+							startDate: "",
+							endDate: "",
+							location: "",
+							description: ""
+						},
+						style: {
+							x: 50,
+							y: 50,
+							width: 250,
+							height: 50,
+							backgroundColor: "#4f46e5",
+							textColor: "#ffffff",
+							borderRadius: 8,
+							opacity: 1,
+							showIcon: true
+						}
+					}),
+					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 shrink-0",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+							className: "w-5 h-5",
+							fill: "none",
+							stroke: "currentColor",
+							viewBox: "0 0 24 24",
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+								strokeLinecap: "round",
+								strokeLinejoin: "round",
+								strokeWidth: "2",
+								d: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+							})
+						})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+						className: "text-xs font-semibold text-gray-700 leading-tight",
+						children: [
+							"Simpan",
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("br", {}),
+							"Tanggal"
+						]
+					})]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					onClick: () => addLayer({
+						id: "layer_" + Date.now(),
 						type: "photo_album",
 						content: "Wadah Album",
 						style: {
@@ -13616,6 +13664,11 @@ var RightInspector = () => {
 						onClick: () => setInspectorTab("copy"),
 						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "copy" ? "bg-white shadow-sm text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
 						children: "Salin"
+					}),
+					activeLayer.type === "interactive_calendar" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+						onClick: () => setInspectorTab("calendar"),
+						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "calendar" ? "bg-white shadow-sm text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
+						children: "Kalender"
 					})
 				]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -18034,6 +18087,188 @@ var RightInspector = () => {
 										})]
 									})
 								] })
+							]
+						})
+					}),
+					inspectorTab === "calendar" && activeLayer.type === "interactive_calendar" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "space-y-6 pb-20",
+						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "space-y-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+									className: "font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded",
+									children: "Detail Acara (Kalender)"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									className: "text-[11px] font-bold text-gray-800 block mb-2",
+									children: "Teks Tombol"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									type: "text",
+									value: activeLayer.content || "",
+									placeholder: "Cth: Simpan Tanggal",
+									onChange: (e) => updateLayerContent(activeLayer.id, e.target.value),
+									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+								})] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									className: "text-[11px] font-bold text-gray-800 block mb-2",
+									children: "Nama Acara"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									type: "text",
+									value: activeLayer.calendarData?.title || "",
+									placeholder: "Cth: Pernikahan Budi & Ani",
+									onChange: (e) => {
+										useCanvasStore.getState().updateLayer(activeLayer.id, { calendarData: {
+											...activeLayer.calendarData || {},
+											title: e.target.value
+										} });
+									},
+									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+								})] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-2 gap-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "text-[11px] font-bold text-gray-800 block mb-2",
+										children: "Mulai"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "datetime-local",
+										value: activeLayer.calendarData?.startDate || "",
+										onChange: (e) => {
+											useCanvasStore.getState().updateLayer(activeLayer.id, { calendarData: {
+												...activeLayer.calendarData || {},
+												startDate: e.target.value
+											} });
+										},
+										className: "w-full text-xs border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+									})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "text-[11px] font-bold text-gray-800 block mb-2",
+										children: "Selesai"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "datetime-local",
+										value: activeLayer.calendarData?.endDate || "",
+										onChange: (e) => {
+											useCanvasStore.getState().updateLayer(activeLayer.id, { calendarData: {
+												...activeLayer.calendarData || {},
+												endDate: e.target.value
+											} });
+										},
+										className: "w-full text-xs border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+									})] })]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									className: "text-[11px] font-bold text-gray-800 block mb-2",
+									children: "Lokasi (Opsional)"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+									type: "text",
+									value: activeLayer.calendarData?.location || "",
+									placeholder: "Cth: Gedung Serbaguna",
+									onChange: (e) => {
+										useCanvasStore.getState().updateLayer(activeLayer.id, { calendarData: {
+											...activeLayer.calendarData || {},
+											location: e.target.value
+										} });
+									},
+									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+								})] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									className: "text-[11px] font-bold text-gray-800 block mb-2",
+									children: "Deskripsi (Opsional)"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+									value: activeLayer.calendarData?.description || "",
+									placeholder: "Cth: Kehadiran Anda adalah hadiah terindah bagi kami.",
+									onChange: (e) => {
+										useCanvasStore.getState().updateLayer(activeLayer.id, { calendarData: {
+											...activeLayer.calendarData || {},
+											description: e.target.value
+										} });
+									},
+									className: "w-full text-sm border border-gray-300 rounded p-2 h-20 focus:ring-1 focus:ring-indigo-500 outline-none resize-none"
+								})] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+									className: "font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded mt-6",
+									children: "Tampilan Tombol"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-2 gap-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "text-[11px] font-bold text-gray-800 block mb-2",
+										children: "Warna Teks"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+											type: "color",
+											value: activeLayer.style?.textColor || "#ffffff",
+											onChange: (e) => updateLayerStyle(activeLayer.id, { textColor: e.target.value }),
+											className: "w-8 h-8 rounded cursor-pointer border-0 p-0"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[10px] font-mono text-gray-500",
+											children: activeLayer.style?.textColor || "#ffffff"
+										})]
+									})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "text-[11px] font-bold text-gray-800 block mb-2",
+										children: "Warna Latar"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center gap-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+											type: "color",
+											value: activeLayer.style?.backgroundColor || "#4f46e5",
+											onChange: (e) => updateLayerStyle(activeLayer.id, { backgroundColor: e.target.value }),
+											className: "w-8 h-8 rounded cursor-pointer border-0 p-0"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+											className: "text-[10px] font-mono text-gray-500",
+											children: activeLayer.style?.backgroundColor || "#4f46e5"
+										})]
+									})] })]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-2 gap-4 mt-2",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex justify-between items-center mb-1",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+											className: "text-[11px] font-bold text-gray-800",
+											children: "Opasitas"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+											className: "text-[10px] font-mono text-gray-500",
+											children: [Math.round((activeLayer.style?.opacity ?? 1) * 100), "%"]
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "range",
+										min: "0",
+										max: "1",
+										step: "0.05",
+										value: activeLayer.style?.opacity ?? 1,
+										onChange: (e) => updateLayerStyle(activeLayer.id, { opacity: parseFloat(e.target.value) }),
+										className: "w-full accent-indigo-600 cursor-pointer"
+									})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "text-[11px] font-bold text-gray-800 block mb-2",
+										children: "Tampilkan Ikon"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+										className: "relative inline-flex items-center cursor-pointer",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+											type: "checkbox",
+											className: "sr-only peer",
+											checked: activeLayer.style?.showIcon !== false,
+											onChange: (e) => updateLayerStyle(activeLayer.id, { showIcon: e.target.checked })
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600" })]
+									})] })]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+									className: "text-[11px] font-bold text-gray-800 block mb-2",
+									children: "Radius Sudut (Border Radius)"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "flex items-center gap-3",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "range",
+										min: "0",
+										max: "100",
+										step: "1",
+										value: activeLayer.style?.borderRadius ?? 8,
+										onChange: (e) => updateLayerStyle(activeLayer.id, { borderRadius: parseInt(e.target.value) }),
+										className: "flex-1 accent-indigo-600 cursor-pointer"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+										className: "text-xs font-mono text-gray-500 w-8 text-right",
+										children: [activeLayer.style?.borderRadius ?? 8, "px"]
+									})]
+								})] })
 							]
 						})
 					}),
