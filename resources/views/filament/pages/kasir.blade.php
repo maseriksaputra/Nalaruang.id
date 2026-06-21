@@ -1,5 +1,74 @@
 <x-filament-panels::page>
-    <div class="kasir-grid" x-data="{ tab: 'F&B', type: @entangle('transactionType') }">
+    <div class="kasir-grid" x-data="{ 
+        tab: 'F&B', 
+        type: @entangle('transactionType'),
+        cart: @entangle('cart'),
+        
+        addToCartLocal(productId, name, price, category) {
+            let found = false;
+            for (let cartId in this.cart) {
+                let item = this.cart[cartId];
+                if (item.product_id == productId && item.price == price && item.type === this.type) {
+                    this.cart[cartId].qty += 1;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                let cartId = 'local_' + Date.now() + Math.random().toString(36).substr(2, 9);
+                let newItem = {
+                    id: cartId,
+                    product_id: productId,
+                    name: name,
+                    price: parseFloat(price),
+                    qty: 1,
+                    category: category,
+                    type: this.type
+                };
+                this.cart = { [cartId]: newItem, ...this.cart };
+            }
+        },
+        
+        updateQtyLocal(cartId, amount) {
+            if (this.cart[cartId]) {
+                this.cart[cartId].qty += amount;
+                if (this.cart[cartId].qty <= 0) {
+                    let newCart = { ...this.cart };
+                    delete newCart[cartId];
+                    this.cart = newCart;
+                } else {
+                    this.cart = { ...this.cart };
+                }
+            }
+        },
+        
+        removeItemLocal(cartId) {
+            if (this.cart[cartId]) {
+                let newCart = { ...this.cart };
+                delete newCart[cartId];
+                this.cart = newCart;
+            }
+        },
+        
+        clearCartLocal() {
+            this.cart = {};
+        },
+        
+        cartTotal() {
+            let total = 0;
+            for (let key in this.cart) {
+                let item = this.cart[key];
+                let itemType = item.type || this.type;
+                let amount = item.price * item.qty;
+                if (itemType === 'expense') {
+                    total -= amount;
+                } else {
+                    total += amount;
+                }
+            }
+            return total;
+        }
+    }">
         
         <!-- Left Column: Products & Entry -->
         <div class="lg:col-span-2 space-y-6 min-w-0">
@@ -53,7 +122,7 @@
             <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-bottom: 1.5rem;">
                 @forelse($this->products as $product)
                     <button x-show="tab === '{{ $product->category }}'"
-                            wire:click="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->default_price }}, '{{ $product->category }}')" 
+                            @click="addToCartLocal({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->default_price }}, '{{ $product->category }}')" 
                             style="background-color: white; border: 1px solid #fbcfe8; border-radius: 8px; padding: 8px; text-align: left; min-height: 70px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.1s, background-color 0.2s;"
                             onmouseover="this.style.backgroundColor='#fdf2f8'" onmouseout="this.style.backgroundColor='white'" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
                         <span style="font-weight: 600; color: #1f2937; font-size: 12px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $product->name }}</span>
@@ -182,25 +251,28 @@ Contoh Output:
                 <!-- Cart Header -->
                 <div class="p-4 border-b border-gray-100 bg-primary-50/50 rounded-t-xl flex justify-between items-center">
                     <h3 class="font-bold text-primary-800">Keranjang Kasir</h3>
-                    <span class="bg-primary-200 text-primary-800 text-xs font-bold px-2 py-1 rounded-full">{{ count($cart) }} Item</span>
+                    <div class="flex items-center gap-2">
+                        <button @click="clearCartLocal()" x-show="Object.keys(cart).length > 0" class="text-xs text-red-600 hover:text-red-800 font-bold px-2 py-1 bg-red-50 rounded transition-colors" style="display: none;">Bersihkan</button>
+                        <span class="bg-primary-200 text-primary-800 text-xs font-bold px-2 py-1 rounded-full" x-text="Object.keys(cart).length + ' Item'"></span>
+                    </div>
                 </div>
 
                 <!-- Cart Items -->
                 <div class="flex-1 overflow-y-auto p-4 space-y-3">
-                    @forelse($cart as $key => $item)
+                    <template x-for="[key, item] in Object.entries(cart)" :key="key">
                         <div class="flex flex-col p-3 border border-primary-100 rounded-lg bg-white relative group">
-                            <button wire:click="removeItem('{{ $key }}')" class="absolute -top-2 -right-2 w-6 h-6 bg-red-100 text-red-600 hover:bg-red-500 hover:text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
+                            <button @click="removeItemLocal(key)" class="absolute -top-2 -right-2 w-6 h-6 bg-red-100 text-red-600 hover:bg-red-500 hover:text-white rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity shadow-sm">
                                 x
                             </button>
                             <div class="flex justify-between items-start mb-3">
                                 <div class="pr-4 space-y-1.5">
-                                    <h4 class="font-bold text-gray-800 text-base leading-tight">{{ $item['name'] }}</h4>
+                                    <h4 class="font-bold text-gray-800 text-base leading-tight" x-text="item.name"></h4>
                                     <div class="flex items-center gap-1.5">
-                                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded border" style="{{ ($item['type'] ?? $transactionType) === 'expense' ? 'background-color: #fef2f2; color: #dc2626; border-color: #fee2e2;' : 'background-color: #f0fdf4; color: #16a34a; border-color: #dcfce7;' }}">
-                                            {{ ($item['type'] ?? $transactionType) === 'expense' ? '(-) Pengeluaran' : '(+) Pemasukan' }}
+                                        <span class="text-[10px] font-bold px-1.5 py-0.5 rounded border" 
+                                              :style="(item.type || type) === 'expense' ? 'background-color: #fef2f2; color: #dc2626; border-color: #fee2e2;' : 'background-color: #f0fdf4; color: #16a34a; border-color: #dcfce7;'"
+                                              x-text="(item.type || type) === 'expense' ? '(-) Pengeluaran' : '(+) Pemasukan'">
                                         </span>
-                                        <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
-                                            • {{ $item['category'] }}
+                                        <span class="text-[10px] uppercase font-bold text-gray-400 tracking-wider" x-text="'• ' + item.category">
                                         </span>
                                     </div>
                                 </div>
@@ -208,37 +280,37 @@ Contoh Output:
                             
                             <div class="flex items-center justify-between mt-auto pt-1">
                                 <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-gray-50 h-8">
-                                    <button wire:click="updateQty('{{ $key }}', -1)" class="w-8 h-full flex items-center justify-center hover:bg-gray-200 text-gray-600 font-bold transition-colors">-</button>
-                                    <span class="w-8 text-center text-sm font-bold">{{ $item['qty'] }}</span>
-                                    <button wire:click="updateQty('{{ $key }}', 1)" class="w-8 h-full flex items-center justify-center hover:bg-gray-200 text-gray-600 font-bold transition-colors">+</button>
+                                    <button @click="updateQtyLocal(key, -1)" class="w-8 h-full flex items-center justify-center hover:bg-gray-200 text-gray-600 font-bold transition-colors">-</button>
+                                    <span class="w-8 text-center text-sm font-bold" x-text="item.qty"></span>
+                                    <button @click="updateQtyLocal(key, 1)" class="w-8 h-full flex items-center justify-center hover:bg-gray-200 text-gray-600 font-bold transition-colors">+</button>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-xs text-gray-400 font-medium">Rp {{ number_format($item['price'], 0, ',', '.') }} / item</div>
-                                    <div class="font-bold text-base" style="color: #db2777;">Rp {{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}</div>
+                                    <div class="text-xs text-gray-400 font-medium">Rp <span x-text="new Intl.NumberFormat('id-ID').format(item.price)"></span> / item</div>
+                                    <div class="font-bold text-base" style="color: #db2777;">Rp <span x-text="new Intl.NumberFormat('id-ID').format(item.price * item.qty)"></span></div>
                                 </div>
                             </div>
                         </div>
-                    @empty
-                        <div class="h-full flex flex-col items-center justify-center text-center p-6 text-gray-400">
-                            <svg width="48" height="48" style="width: 3rem; height: 3rem;" class="mb-3 text-primary-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                            <p class="text-sm">Belum ada item di keranjang.</p>
-                        </div>
-                    @endforelse
+                    </template>
+                    
+                    <div x-show="Object.keys(cart).length === 0" class="h-full flex flex-col items-center justify-center text-center p-6 text-gray-400">
+                        <svg width="48" height="48" style="width: 3rem; height: 3rem;" class="mb-3 text-primary-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        <p class="text-sm">Belum ada item di keranjang.</p>
+                    </div>
                 </div>
 
                 <!-- Cart Footer -->
                 <div class="p-4 border-t border-gray-100 bg-gray-50 rounded-b-xl">
                     <div class="flex justify-between items-end mb-4">
                         <span class="text-sm font-medium text-gray-500">Total Keranjang</span>
-                        <span class="text-2xl font-black {{ $this->cartTotal < 0 ? 'text-red-600' : 'text-green-600' }}">
-                            {{ $this->cartTotal < 0 ? '-' : '' }}Rp {{ number_format(abs($this->cartTotal), 0, ',', '.') }}
+                        <span class="text-2xl font-black" :class="cartTotal() < 0 ? 'text-red-600' : 'text-green-600'">
+                            <span x-text="cartTotal() < 0 ? '-' : ''"></span>Rp <span x-text="new Intl.NumberFormat('id-ID').format(Math.abs(cartTotal()))"></span>
                         </span>
                     </div>
                     
                     <button wire:click="processTransaction" 
                             class="w-full py-3 text-white font-bold rounded-xl shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2"
-                            x-bind:style="(type === 'income' ? 'background-color: #16a34a;' : 'background-color: #dc2626;') + ' ' + ({{ empty($cart) ? '1' : '0' }} ? 'opacity: 0.5; cursor: not-allowed;' : '')"
-                            @if(empty($cart)) disabled @endif>
+                            :style="(type === 'income' ? 'background-color: #16a34a;' : 'background-color: #dc2626;') + ' ' + (Object.keys(cart).length === 0 ? 'opacity: 0.5; cursor: not-allowed;' : '')"
+                            :disabled="Object.keys(cart).length === 0">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
                         Simpan Transaksi
                     </button>
@@ -321,35 +393,41 @@ Contoh Output:
             Livewire.on('transaction-saved', () => {
                 try {
                     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    
-                    // Coin/Register "cha-ching" style sound effect
-                    const oscillator1 = audioCtx.createOscillator();
-                    const oscillator2 = audioCtx.createOscillator();
-                    const gainNode = audioCtx.createGain();
-                    
-                    oscillator1.type = 'sine';
-                    oscillator2.type = 'triangle';
-                    
-                    oscillator1.frequency.setValueAtTime(880, audioCtx.currentTime); // A5
-                    oscillator1.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1); // A6
-                    
-                    oscillator2.frequency.setValueAtTime(1108.73, audioCtx.currentTime); // C#6
-                    oscillator2.frequency.exponentialRampToValueAtTime(2217.46, audioCtx.currentTime + 0.1); // C#7
-                    
-                    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-                    gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-                    
-                    oscillator1.connect(gainNode);
-                    oscillator2.connect(gainNode);
-                    gainNode.connect(audioCtx.destination);
-                    
-                    oscillator1.start();
-                    oscillator2.start();
-                    oscillator1.stop(audioCtx.currentTime + 0.4);
-                    oscillator2.stop(audioCtx.currentTime + 0.4);
+                    const t = audioCtx.currentTime;
+
+                    // 1. Bunyi mekanik mesin (Clack)
+                    const clack = audioCtx.createOscillator();
+                    const clackGain = audioCtx.createGain();
+                    clack.type = 'square';
+                    clack.frequency.setValueAtTime(150, t);
+                    clack.frequency.exponentialRampToValueAtTime(40, t + 0.1);
+                    clackGain.gain.setValueAtTime(0.5, t);
+                    clackGain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+                    clack.connect(clackGain);
+                    clackGain.connect(audioCtx.destination);
+                    clack.start(t);
+                    clack.stop(t + 0.1);
+
+                    // 2. Bunyi koin / laci terbuka (Cekring!)
+                    const freqs = [3500, 4200, 5600, 6800, 8100];
+                    freqs.forEach((freq, i) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, t + 0.05); // Delay sedikit setelah mekanik
+                        
+                        gain.gain.setValueAtTime(0, t + 0.05);
+                        gain.gain.linearRampToValueAtTime(0.15 - (i * 0.02), t + 0.07);
+                        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5 + Math.random() * 0.3);
+                        
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        
+                        osc.start(t + 0.05);
+                        osc.stop(t + 1);
+                    });
                 } catch (e) {
-                    console.error('Audio playback failed:', e);
+                    console.error('Audio creation failed:', e);
                 }
             });
         });
