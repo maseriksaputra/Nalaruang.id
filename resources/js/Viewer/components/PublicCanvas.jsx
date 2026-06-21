@@ -105,12 +105,11 @@ const PublicCanvas = ({ config }) => {
 
             if (isPreview) {
                 newScale = screenWidth / baseWidth;
-            } else if (screenWidth < baseWidth) {
-                // Mobile
-                newScale = screenWidth / baseWidth;
-            } else if (screenWidth < 1024) {
-                // Tablet
-                newScale = screenWidth / baseWidth;
+            } else if (screenWidth < baseWidth || screenWidth < 1024) {
+                // Mobile and Tablet: fit the screen to prevent white space
+                const widthRatio = screenWidth / baseWidth;
+                const heightRatio = screenHeight / 844;
+                newScale = Math.max(widthRatio, heightRatio);
             } else {
                 // Desktop (>= 1024px)
                 if (hasDesktopThumbnail) {
@@ -144,15 +143,15 @@ const PublicCanvas = ({ config }) => {
     const hideEmptySections = global_settings?.custom_code && !hasAnyLayers;
 
     return (
-        <div ref={containerRef} style={{ width: '100%', height: scaledHeight === 'auto' ? 'auto' : `${scaledHeight}px`, overflow: 'hidden' }}>
+        <div ref={containerRef} style={{ width: '100%', height: scaledHeight === 'auto' ? 'auto' : `${scaledHeight}px`, overflow: 'hidden', position: 'relative' }}>
             <div ref={innerRef} style={{ 
                 width: '414px', 
                 maxWidth: '414px', 
-                margin: '0', 
+                position: 'absolute',
+                left: '50%',
                 overflowX: 'hidden', 
-                position: 'relative',
-                transform: `scale(${scale})`,
-                transformOrigin: 'top left',
+                transform: `translateX(-50%) scale(${scale})`,
+                transformOrigin: 'top center',
                 backgroundColor: 'transparent'
             }}>
                 {global_settings?.custom_code && (
@@ -195,32 +194,13 @@ const PublicCanvas = ({ config }) => {
                         if (section.layout?.height && section.layout.height !== 'auto' && section.layout.height !== '100vh') {
                             return section.layout.height;
                         }
-                        
-                        const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 414;
-                        const hasDesktopThumbnail = global_settings?.desktop_thumbnail?.enabled;
-                        const isPreview = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('preview') === '1' : false;
-                        
-                        let expectedContainerHeight = typeof window !== 'undefined' ? window.innerHeight : 844;
-                        if (screenWidth >= 1024 && !hasDesktopThumbnail && !isPreview) {
-                            expectedContainerHeight = 844;
-                        }
-                        
-                        const minScreenHeightUnscaled = expectedContainerHeight / (scale || 1);
-                        
                         if (index === 0) {
-                            return `${Math.max(844, minScreenHeightUnscaled)}px`;
+                            return '844px';
                         }
-                        
-                        let baseH = 844;
                         if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
-                            baseH = parseFloat(section.layout.minHeight);
-                        } else if (maxY > 0) {
-                            baseH = maxY;
-                        } else if (section.layout?.height) {
-                            baseH = parseFloat(section.layout.height);
+                            return section.layout.minHeight;
                         }
-                        
-                        return `${Math.max(baseH, minScreenHeightUnscaled)}px`;
+                        return maxY > 0 ? `${maxY}px` : (section.layout?.height || '844px');
                     })();
 
                     return (
