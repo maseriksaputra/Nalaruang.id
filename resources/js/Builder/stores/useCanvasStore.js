@@ -180,40 +180,46 @@ const useCanvasStore = create(temporal((set, get) => ({
         // Auto-clean huge elements to prevent DB crash and unblock the user
         cleanSections.forEach(section => {
             if (section.layers) {
-                section.layers.forEach(layer => {
-                    // Check Lottie animationData
-                    if (layer.type === 'lottie' && layer.animationData) {
-                        const size = JSON.stringify(layer.animationData).length;
-                        if (size > 100000) { // > 100KB raw JSON
-                            delete layer.animationData;
-                            wasCleaned = true;
-                        }
+                section.layers.forEach((layer, layerIndex) => {
+                    // Cek total ukuran dari 1 layer ini
+                    const layerString = JSON.stringify(layer);
+                    if (layerString.length > 250000) { // Jika 1 layer > 250KB, ini pasti biang keroknya (misal: data URI / Lottie besar)
+                        section.layers[layerIndex] = {
+                            id: layer.id,
+                            type: 'text',
+                            content: '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[ELEMEN DIHAPUS OTOMATIS OLEH SISTEM KARENA UKURAN TERLALU BESAR]</div>',
+                            style: layer.style || { width: 200, height: 100, x: 0, y: 0 }
+                        };
+                        wasCleaned = true;
+                    } else if (typeof layer.url === 'string' && layer.url.startsWith('data:image/')) {
+                        layer.url = '';
+                        wasCleaned = true;
+                    } else if (typeof layer.content === 'string' && layer.content.includes('data:image/')) {
+                        layer.content = layer.content.replace(/<img[^>]+src="data:image\/[^">]+"[^>]*>/gi, '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[GAMBAR DIHAPUS]</div>');
+                        wasCleaned = true;
                     }
-                    
-                    // Check ANY property for massive base64 strings
-                    Object.keys(layer).forEach(key => {
-                        const value = layer[key];
-                        if (typeof value === 'string') {
-                            if (value.length > 200000 || value.startsWith('data:image/')) {
-                                layer[key] = ''; // Nuke the base64 in url or other fields
-                                wasCleaned = true;
-                            }
-                            if (value.includes('data:image/')) {
-                                layer[key] = value.replace(/<img[^>]+src="data:image\/[^">]+"[^>]*>/gi, '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[GAMBAR DIHAPUS KARENA HARUS DIUPLOAD]</div>');
-                                if (layer[key] !== value) wasCleaned = true;
-                            }
-                        }
-                    });
                 });
             }
         });
+
+        // Also check global_settings total size
+        if (cleanGlobalSettings && JSON.stringify(cleanGlobalSettings).length > 250000) {
+            Object.keys(cleanGlobalSettings).forEach(key => {
+                const value = cleanGlobalSettings[key];
+                if (typeof value === 'string' && (value.length > 200000 || value.startsWith('data:image/'))) {
+                    cleanGlobalSettings[key] = '';
+                    wasCleaned = true;
+                }
+            });
+        }
 
         const payload = { canvas_config: { global_settings: cleanGlobalSettings, sections: cleanSections } };
         const payloadString = JSON.stringify(payload);
         
         if (payloadString.length > 3 * 1024 * 1024) { // 3MB limit
+            const sizeMB = (payloadString.length / 1024 / 1024).toFixed(2);
             console.error('Payload terlalu besar!', payloadString.length);
-            alert('Peringatan: Gagal Auto-Save! Ukuran desain terlalu besar (Lebih dari 3MB). Hal ini biasanya terjadi karena Anda melakukan "Copy-Paste" gambar secara langsung ke teks. Mohon gunakan fitur "Upload Gambar" untuk gambar.');
+            alert(`Peringatan: Gagal Auto-Save! Ukuran desain Anda mencapai ${sizeMB} MB (Batas maksimal 3 MB). Silakan beritahu ini ke sistem AI agar bisa diinvestigasi elemen mana yang membengkak.`);
             return;
         }
 

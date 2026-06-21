@@ -18,21 +18,28 @@ class BuilderController extends Controller
         if (is_array($config) && isset($config['sections'])) {
             foreach ($config['sections'] as &$section) {
                 if (isset($section['layers']) && is_array($section['layers'])) {
-                    foreach ($section['layers'] as &$layer) {
-                        foreach ($layer as $key => &$value) {
-                            if (is_string($value)) {
-                                if (strlen($value) > 200000 || str_starts_with($value, 'data:image/')) {
-                                    $value = "[DIHAPUS KARENA HARUS DIUPLOAD]";
-                                    $modified = true;
+                    foreach ($section['layers'] as $layerIndex => &$layer) {
+                        $layerSize = strlen(json_encode($layer));
+                        if ($layerSize > 250000) {
+                            $section['layers'][$layerIndex] = [
+                                'id' => $layer['id'] ?? 'layer_' . uniqid(),
+                                'type' => 'text',
+                                'content' => '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[ELEMEN DIHAPUS OTOMATIS OLEH SISTEM KARENA UKURAN TERLALU BESAR]</div>',
+                                'style' => $layer['style'] ?? ['width' => 200, 'height' => 100, 'x' => 0, 'y' => 0]
+                            ];
+                            $modified = true;
+                        } else {
+                            foreach ($layer as $key => &$value) {
+                                if (is_string($value)) {
+                                    if (strlen($value) > 200000 || str_starts_with($value, 'data:image/')) {
+                                        $value = "[DIHAPUS KARENA HARUS DIUPLOAD]";
+                                        $modified = true;
+                                    }
+                                    if (str_contains($value, 'data:image/')) {
+                                        $value = preg_replace('/<img[^>]+src="data:image\/[^">]+"[^>]*>/i', '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[GAMBAR DIHAPUS OTOMATIS OLEH SISTEM KARENA HARUS DIUPLOAD]</div>', $value);
+                                        $modified = true;
+                                    }
                                 }
-                                if (str_contains($value, 'data:image/')) {
-                                    $value = preg_replace('/<img[^>]+src="data:image\/[^">]+"[^>]*>/i', '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[GAMBAR DIHAPUS OTOMATIS OLEH SISTEM KARENA HARUS DIUPLOAD]</div>', $value);
-                                    $modified = true;
-                                }
-                            } elseif (is_array($value) && strlen(json_encode($value)) > 200000) {
-                                // Huge Lottie JSON object
-                                $value = null;
-                                $modified = true;
                             }
                         }
                     }
@@ -42,15 +49,18 @@ class BuilderController extends Controller
 
         // Clean global_settings
         if (is_array($config) && isset($config['global_settings'])) {
-            foreach ($config['global_settings'] as $key => &$value) {
-                if (is_string($value)) {
-                    if (strlen($value) > 200000 || str_starts_with($value, 'data:image/')) {
-                        $value = "[DIHAPUS KARENA HARUS DIUPLOAD]";
+            $globalSize = strlen(json_encode($config['global_settings']));
+            if ($globalSize > 250000) {
+                foreach ($config['global_settings'] as $key => &$value) {
+                    if (is_string($value)) {
+                        if (strlen($value) > 200000 || str_starts_with($value, 'data:image/')) {
+                            $value = "[DIHAPUS KARENA HARUS DIUPLOAD]";
+                            $modified = true;
+                        }
+                    } elseif (is_array($value) && strlen(json_encode($value)) > 200000) {
+                        $value = null;
                         $modified = true;
                     }
-                } elseif (is_array($value) && strlen(json_encode($value)) > 200000) {
-                    $value = null;
-                    $modified = true;
                 }
             }
         }
