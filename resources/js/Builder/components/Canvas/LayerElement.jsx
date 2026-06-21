@@ -1008,23 +1008,63 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                 const elCenterY = newY + elHeight / 2;
 
                 if (!e.shiftKey) {
+                    let snappedX = false;
+                    let snappedY = false;
+
+                    // 1. CANVAS CENTER
                     const centerX = sectionWidth / 2;
-                    if (Math.abs(elCenterX - centerX) < SNAP_THRESHOLD) { newX = centerX - elWidth / 2; activeLines.push({ axis: 'x', position: centerX, type: 'center' }); }
+                    if (Math.abs(elCenterX - centerX) < SNAP_THRESHOLD) { 
+                        newX = centerX - elWidth / 2; 
+                        activeLines.push({ axis: 'x', position: centerX, type: 'center' }); 
+                        snappedX = true;
+                    }
                     const centerY = sectionHeight / 2;
-                    if (Math.abs(elCenterY - centerY) < SNAP_THRESHOLD) { newY = centerY - elHeight / 2; activeLines.push({ axis: 'y', position: centerY, type: 'center' }); }
+                    if (Math.abs(elCenterY - centerY) < SNAP_THRESHOLD) { 
+                        newY = centerY - elHeight / 2; 
+                        activeLines.push({ axis: 'y', position: centerY, type: 'center' }); 
+                        snappedY = true;
+                    }
 
-                    // Snap Top Edge
-                    if (Math.abs(newY) < SNAP_THRESHOLD) { newY = 0; activeLines.push({ axis: 'y', position: 0, type: 'edge' }); }
-                    // Snap Bottom Edge
-                    if (Math.abs((newY + elHeight) - sectionHeight) < SNAP_THRESHOLD) { newY = sectionHeight - elHeight; activeLines.push({ axis: 'y', position: sectionHeight, type: 'edge' }); }
-                    // Snap Left Edge
-                    if (Math.abs(newX) < SNAP_THRESHOLD) { newX = 0; activeLines.push({ axis: 'x', position: 0, type: 'edge' }); }
-                    // Snap Right Edge
-                    if (Math.abs((newX + elWidth) - sectionWidth) < SNAP_THRESHOLD) { newX = sectionWidth - elWidth; activeLines.push({ axis: 'x', position: sectionWidth, type: 'edge' }); }
+                    // 2. OTHER LAYERS
+                    if (!snappedX || !snappedY) {
+                        for (const { ox, oy, ow, oh } of snapTargetsRef.current) {
+                            if (!snappedX) {
+                                const otherCX = ox + ow / 2;
+                                if (Math.abs((newX + elWidth / 2) - otherCX) < SNAP_THRESHOLD) { 
+                                    newX = otherCX - elWidth / 2; activeLines.push({ axis: 'x', position: otherCX }); snappedX = true; 
+                                } else if (Math.abs(newX - ox) < SNAP_THRESHOLD) { 
+                                    newX = ox; activeLines.push({ axis: 'x', position: ox }); snappedX = true; 
+                                } else if (Math.abs((newX + elWidth) - (ox + ow)) < SNAP_THRESHOLD) { 
+                                    newX = (ox + ow) - elWidth; activeLines.push({ axis: 'x', position: ox + ow }); snappedX = true; 
+                                }
+                            }
+                            if (!snappedY) {
+                                const otherCY = oy + oh / 2;
+                                if (Math.abs((newY + elHeight / 2) - otherCY) < SNAP_THRESHOLD) { 
+                                    newY = otherCY - elHeight / 2; activeLines.push({ axis: 'y', position: otherCY }); snappedY = true; 
+                                } else if (Math.abs(newY - oy) < SNAP_THRESHOLD) { 
+                                    newY = oy; activeLines.push({ axis: 'y', position: oy }); snappedY = true; 
+                                } else if (Math.abs((newY + elHeight) - (oy + oh)) < SNAP_THRESHOLD) { 
+                                    newY = (oy + oh) - elHeight; activeLines.push({ axis: 'y', position: oy + oh }); snappedY = true; 
+                                }
+                            }
+                            if (snappedX && snappedY) break;
+                        }
+                    }
 
-                    // Snap to Screen Boundaries (Grid Lines) every 844px for long sections
+                    // 3. CANVAS EDGES
+                    if (!snappedY) {
+                        if (Math.abs(newY) < SNAP_THRESHOLD) { newY = 0; activeLines.push({ axis: 'y', position: 0, type: 'edge' }); snappedY = true; }
+                        else if (Math.abs((newY + elHeight) - sectionHeight) < SNAP_THRESHOLD) { newY = sectionHeight - elHeight; activeLines.push({ axis: 'y', position: sectionHeight, type: 'edge' }); snappedY = true; }
+                    }
+                    if (!snappedX) {
+                        if (Math.abs(newX) < SNAP_THRESHOLD) { newX = 0; activeLines.push({ axis: 'x', position: 0, type: 'edge' }); snappedX = true; }
+                        else if (Math.abs((newX + elWidth) - sectionWidth) < SNAP_THRESHOLD) { newX = sectionWidth - elWidth; activeLines.push({ axis: 'x', position: sectionWidth, type: 'edge' }); snappedX = true; }
+                    }
+
+                    // 4. GRID LINES (Long sections)
                     const isGridSnapEnabled = useUIStore.getState().showGridLines ?? true;
-                    if (isGridSnapEnabled && sectionId !== 'desktop') {
+                    if (!snappedY && isGridSnapEnabled && sectionId !== 'desktop') {
                         let maxY = 0;
                         const checkLayer = (layer) => {
                             const bottom = (parseFloat(layer.style?.y) || 0) + (parseFloat(layer.style?.height) || 0);
@@ -1042,25 +1082,14 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 
                         if (sectionH > 844) {
                             for (let i = 844; i < sectionH; i += 844) {
-                                // Snap Top to Grid
-                                if (Math.abs(newY - i) < SNAP_THRESHOLD) { newY = i; activeLines.push({ axis: 'y', position: i, type: 'edge' }); }
-                                // Snap Bottom to Grid
-                                if (Math.abs((newY + elHeight) - i) < SNAP_THRESHOLD) { newY = i - elHeight; activeLines.push({ axis: 'y', position: i, type: 'edge' }); }
-                                // Snap Center to Grid
-                                if (Math.abs(elCenterY - i) < SNAP_THRESHOLD) { newY = i - elHeight / 2; activeLines.push({ axis: 'y', position: i, type: 'center' }); }
+                                if (!snappedY) {
+                                    if (Math.abs(newY - i) < SNAP_THRESHOLD) { newY = i; activeLines.push({ axis: 'y', position: i, type: 'edge' }); snappedY = true; }
+                                    else if (Math.abs((newY + elHeight) - i) < SNAP_THRESHOLD) { newY = i - elHeight; activeLines.push({ axis: 'y', position: i, type: 'edge' }); snappedY = true; }
+                                    else if (Math.abs(elCenterY - i) < SNAP_THRESHOLD) { newY = i - elHeight / 2; activeLines.push({ axis: 'y', position: i, type: 'center' }); snappedY = true; }
+                                }
                             }
                         }
                     }
-                    
-                    snapTargetsRef.current.forEach(({ ox, oy, ow, oh }) => {
-                        if (Math.abs(newX - ox) < SNAP_THRESHOLD) { newX = ox; activeLines.push({ axis: 'x', position: ox }); }
-                        if (Math.abs(newY - oy) < SNAP_THRESHOLD) { newY = oy; activeLines.push({ axis: 'y', position: oy }); }
-                        
-                        const otherCX = ox + ow / 2;
-                        if (Math.abs((newX + elWidth / 2) - otherCX) < SNAP_THRESHOLD) { newX = otherCX - elWidth / 2; activeLines.push({ axis: 'x', position: otherCX }); }
-                        const otherCY = oy + oh / 2;
-                        if (Math.abs((newY + elHeight / 2) - otherCY) < SNAP_THRESHOLD) { newY = otherCY - elHeight / 2; activeLines.push({ axis: 'y', position: otherCY }); }
-                    });
                 }
 
                 setLocalPos({ x: newX, y: newY });

@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-Thc2m2SX.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DLesLjzR.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BwI1Ncaq.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-agrBdljv.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -26392,6 +26392,8 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 			const elCenterX = newX + elWidth / 2;
 			const elCenterY = newY + elHeight / 2;
 			if (!e.shiftKey) {
+				let snappedX = false;
+				let snappedY = false;
 				const centerX = sectionWidth / 2;
 				if (Math.abs(elCenterX - centerX) < SNAP_THRESHOLD) {
 					newX = centerX - elWidth / 2;
@@ -26400,6 +26402,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 						position: centerX,
 						type: "center"
 					});
+					snappedX = true;
 				}
 				const centerY = sectionHeight / 2;
 				if (Math.abs(elCenterY - centerY) < SNAP_THRESHOLD) {
@@ -26409,40 +26412,101 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 						position: centerY,
 						type: "center"
 					});
+					snappedY = true;
 				}
-				if (Math.abs(newY) < SNAP_THRESHOLD) {
-					newY = 0;
-					activeLines.push({
-						axis: "y",
-						position: 0,
-						type: "edge"
-					});
+				if (!snappedX || !snappedY) for (const { ox, oy, ow, oh } of snapTargetsRef.current) {
+					if (!snappedX) {
+						const otherCX = ox + ow / 2;
+						if (Math.abs(newX + elWidth / 2 - otherCX) < SNAP_THRESHOLD) {
+							newX = otherCX - elWidth / 2;
+							activeLines.push({
+								axis: "x",
+								position: otherCX
+							});
+							snappedX = true;
+						} else if (Math.abs(newX - ox) < SNAP_THRESHOLD) {
+							newX = ox;
+							activeLines.push({
+								axis: "x",
+								position: ox
+							});
+							snappedX = true;
+						} else if (Math.abs(newX + elWidth - (ox + ow)) < SNAP_THRESHOLD) {
+							newX = ox + ow - elWidth;
+							activeLines.push({
+								axis: "x",
+								position: ox + ow
+							});
+							snappedX = true;
+						}
+					}
+					if (!snappedY) {
+						const otherCY = oy + oh / 2;
+						if (Math.abs(newY + elHeight / 2 - otherCY) < SNAP_THRESHOLD) {
+							newY = otherCY - elHeight / 2;
+							activeLines.push({
+								axis: "y",
+								position: otherCY
+							});
+							snappedY = true;
+						} else if (Math.abs(newY - oy) < SNAP_THRESHOLD) {
+							newY = oy;
+							activeLines.push({
+								axis: "y",
+								position: oy
+							});
+							snappedY = true;
+						} else if (Math.abs(newY + elHeight - (oy + oh)) < SNAP_THRESHOLD) {
+							newY = oy + oh - elHeight;
+							activeLines.push({
+								axis: "y",
+								position: oy + oh
+							});
+							snappedY = true;
+						}
+					}
+					if (snappedX && snappedY) break;
 				}
-				if (Math.abs(newY + elHeight - sectionHeight) < SNAP_THRESHOLD) {
-					newY = sectionHeight - elHeight;
-					activeLines.push({
-						axis: "y",
-						position: sectionHeight,
-						type: "edge"
-					});
+				if (!snappedY) {
+					if (Math.abs(newY) < SNAP_THRESHOLD) {
+						newY = 0;
+						activeLines.push({
+							axis: "y",
+							position: 0,
+							type: "edge"
+						});
+						snappedY = true;
+					} else if (Math.abs(newY + elHeight - sectionHeight) < SNAP_THRESHOLD) {
+						newY = sectionHeight - elHeight;
+						activeLines.push({
+							axis: "y",
+							position: sectionHeight,
+							type: "edge"
+						});
+						snappedY = true;
+					}
 				}
-				if (Math.abs(newX) < SNAP_THRESHOLD) {
-					newX = 0;
-					activeLines.push({
-						axis: "x",
-						position: 0,
-						type: "edge"
-					});
+				if (!snappedX) {
+					if (Math.abs(newX) < SNAP_THRESHOLD) {
+						newX = 0;
+						activeLines.push({
+							axis: "x",
+							position: 0,
+							type: "edge"
+						});
+						snappedX = true;
+					} else if (Math.abs(newX + elWidth - sectionWidth) < SNAP_THRESHOLD) {
+						newX = sectionWidth - elWidth;
+						activeLines.push({
+							axis: "x",
+							position: sectionWidth,
+							type: "edge"
+						});
+						snappedX = true;
+					}
 				}
-				if (Math.abs(newX + elWidth - sectionWidth) < SNAP_THRESHOLD) {
-					newX = sectionWidth - elWidth;
-					activeLines.push({
-						axis: "x",
-						position: sectionWidth,
-						type: "edge"
-					});
-				}
-				if ((useUIStore.getState().showGridLines ?? true) && sectionId !== "desktop") {
+				const isGridSnapEnabled = useUIStore.getState().showGridLines ?? true;
+				if (!snappedY && isGridSnapEnabled && sectionId !== "desktop") {
 					let maxY = 0;
 					const checkLayer = (layer) => {
 						const bottom = (parseFloat(layer.style?.y) || 0) + (parseFloat(layer.style?.height) || 0);
@@ -26453,65 +26517,36 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 					let sectionH = 844;
 					if (section?.layout?.minHeight && section.layout.minHeight !== "844px" && section.layout.minHeight !== "100vh") sectionH = parseFloat(section.layout.minHeight);
 					else if (maxY > 0) sectionH = maxY;
-					if (sectionH > 844) for (let i = 844; i < sectionH; i += 844) {
-						if (Math.abs(newY - i) < SNAP_THRESHOLD) {
-							newY = i;
-							activeLines.push({
-								axis: "y",
-								position: i,
-								type: "edge"
-							});
-						}
-						if (Math.abs(newY + elHeight - i) < SNAP_THRESHOLD) {
-							newY = i - elHeight;
-							activeLines.push({
-								axis: "y",
-								position: i,
-								type: "edge"
-							});
-						}
-						if (Math.abs(elCenterY - i) < SNAP_THRESHOLD) {
-							newY = i - elHeight / 2;
-							activeLines.push({
-								axis: "y",
-								position: i,
-								type: "center"
-							});
+					if (sectionH > 844) {
+						for (let i = 844; i < sectionH; i += 844) if (!snappedY) {
+							if (Math.abs(newY - i) < SNAP_THRESHOLD) {
+								newY = i;
+								activeLines.push({
+									axis: "y",
+									position: i,
+									type: "edge"
+								});
+								snappedY = true;
+							} else if (Math.abs(newY + elHeight - i) < SNAP_THRESHOLD) {
+								newY = i - elHeight;
+								activeLines.push({
+									axis: "y",
+									position: i,
+									type: "edge"
+								});
+								snappedY = true;
+							} else if (Math.abs(elCenterY - i) < SNAP_THRESHOLD) {
+								newY = i - elHeight / 2;
+								activeLines.push({
+									axis: "y",
+									position: i,
+									type: "center"
+								});
+								snappedY = true;
+							}
 						}
 					}
 				}
-				snapTargetsRef.current.forEach(({ ox, oy, ow, oh }) => {
-					if (Math.abs(newX - ox) < SNAP_THRESHOLD) {
-						newX = ox;
-						activeLines.push({
-							axis: "x",
-							position: ox
-						});
-					}
-					if (Math.abs(newY - oy) < SNAP_THRESHOLD) {
-						newY = oy;
-						activeLines.push({
-							axis: "y",
-							position: oy
-						});
-					}
-					const otherCX = ox + ow / 2;
-					if (Math.abs(newX + elWidth / 2 - otherCX) < SNAP_THRESHOLD) {
-						newX = otherCX - elWidth / 2;
-						activeLines.push({
-							axis: "x",
-							position: otherCX
-						});
-					}
-					const otherCY = oy + oh / 2;
-					if (Math.abs(newY + elHeight / 2 - otherCY) < SNAP_THRESHOLD) {
-						newY = otherCY - elHeight / 2;
-						activeLines.push({
-							axis: "y",
-							position: otherCY
-						});
-					}
-				});
 			}
 			setLocalPos({
 				x: newX,
@@ -28211,7 +28246,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-Thc2m2SX.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DLesLjzR.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
