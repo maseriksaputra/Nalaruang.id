@@ -241,6 +241,29 @@ const RightInspector = () => {
         }
     };
 
+    // Generate virtual screen options
+    const sectionOptions = [];
+    sections.forEach((sec, idx) => {
+        const secName = sec.name || `Halaman ${idx + 1}`;
+        let secHeight = 844;
+        if (sec.layout?.minHeight && String(sec.layout.minHeight).includes('px')) {
+            secHeight = parseFloat(sec.layout.minHeight);
+        }
+        const totalScreens = Math.max(1, Math.ceil(secHeight / 844));
+        
+        for (let i = 1; i <= totalScreens; i++) {
+            sectionOptions.push({
+                id: sec.id,
+                name: totalScreens > 1 ? `${secName} - Layar ${i}` : secName,
+                virtualScreen: i
+            });
+        }
+    });
+
+    const elementY = activeLayer?.style?.y || 0;
+    const currentVirtualScreen = Math.max(1, Math.floor(elementY / 844) + 1);
+    const currentValueStr = `${activeSectionId}_${currentVirtualScreen}`;
+
     return (
         <div className={`bg-white border-l border-gray-200 flex flex-col z-[60] shrink-0 shadow-2xl pointer-events-auto transition-all duration-300 relative ${isRightSidebarOpen ? 'w-[320px]' : 'w-0'}`}>
             {renderToggleButton()}
@@ -334,17 +357,31 @@ const RightInspector = () => {
                             
                             {useCanvasStore.getState().activeCanvasMode !== 'desktop' && (
                                 <select 
-                                    className="border border-gray-200 rounded p-1.5 text-[11px] text-gray-700 font-medium focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none cursor-pointer max-w-[130px] bg-gray-50 hover:bg-white transition-colors"
-                                    value={activeSectionId}
+                                    className="border border-gray-200 rounded p-1.5 text-[10px] text-gray-700 font-medium focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none cursor-pointer max-w-[140px] bg-gray-50 hover:bg-white transition-colors"
+                                    value={currentValueStr}
                                     title="Pindahkan elemen ini ke layar lain"
                                     onChange={(e) => {
-                                        if (e.target.value && e.target.value !== activeSectionId) {
-                                            useCanvasStore.getState().moveElementToSection(activeLayer.id, e.target.value);
+                                        if (e.target.value && e.target.value !== currentValueStr) {
+                                            const [targetSecId, targetScreenStr] = e.target.value.split('_');
+                                            const targetScreen = parseInt(targetScreenStr);
+                                            
+                                            // Handle relative Y positioning
+                                            let currentRelativeY = (activeLayer.style?.y || 0) % 844;
+                                            if (currentRelativeY < 0) currentRelativeY = 0; // Prevent negative jump
+                                            
+                                            const newY = ((targetScreen - 1) * 844) + currentRelativeY;
+                                            
+                                            useCanvasStore.getState().updateLayerStyle(activeLayer.id, { y: newY });
+                                            if (targetSecId !== activeSectionId) {
+                                                useCanvasStore.getState().moveElementToSection(activeLayer.id, targetSecId);
+                                            }
                                         }
                                     }}
                                 >
-                                    {sections.map((sec, idx) => (
-                                        <option key={sec.id} value={sec.id}>Pindah ke Layar {idx + 1}</option>
+                                    {sectionOptions.map((opt) => (
+                                        <option key={`${opt.id}_${opt.virtualScreen}`} value={`${opt.id}_${opt.virtualScreen}`}>
+                                            Pindah ke {opt.name}
+                                        </option>
                                     ))}
                                 </select>
                             )}
