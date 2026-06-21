@@ -124,27 +124,20 @@ Route::get('/fix-services', function () {
 });
 
 Route::get('/fix-elemen', function () {
-    \Illuminate\Support\Facades\Artisan::call('builder:fix-db');
-    $out1 = \Illuminate\Support\Facades\Artisan::output();
-    
-    // Force all existing elements to be global (visible to everyone)
-    $updatedRows = \Illuminate\Support\Facades\DB::table('global_elements')->update(['user_id' => null]);
-    
-    \Illuminate\Support\Facades\Artisan::call('builder:sync-global-media');
-    $out2 = \Illuminate\Support\Facades\Artisan::output();
-    
-    $countAll = \App\Models\GlobalElement::count();
-    $countVisible = \App\Models\GlobalElement::where('user_id', auth()->id())->orWhereNull('user_id')->count();
-    $authId = auth()->id() ?? 'NULL';
-    
-    return "<h3>Perbaikan Selesai!</h3>
-    <pre>Fix DB: {$out1}</pre>
-    <pre>Globalized Rows: {$updatedRows}</pre>
-    <pre>Sync: {$out2}</pre>
-    <pre>Total di DB: {$countAll}</pre>
-    <pre>Total yang harusnya tampil: {$countVisible}</pre>
-    <pre>User ID anda saat ini: {$authId}</pre>
-    <p>Silakan kembali ke Editor Builder dan segarkan halaman.</p>";
+    try {
+        $elements = \App\Models\GlobalElement::where('user_id', auth()->id())
+            ->orWhereNull('user_id')
+            ->latest()
+            ->get();
+            
+        // Force serialization to trigger any potential hydration/cast errors
+        $array = $elements->toArray();
+        $json = json_encode($array, JSON_THROW_ON_ERROR);
+        
+        return "<h3>Sukses!</h3><p>Berhasil meload " . count($array) . " elemen tanpa error.</p><pre>" . substr($json, 0, 500) . "...</pre>";
+    } catch (\Exception $e) {
+        return "<h3>Error saat meload elemen:</h3><pre>" . $e->getMessage() . "\n" . $e->getTraceAsString() . "</pre>";
+    }
 });
 
 Route::get('/debug-elements', function () {
