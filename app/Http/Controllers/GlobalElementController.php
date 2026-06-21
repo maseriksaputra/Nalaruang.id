@@ -69,7 +69,11 @@ class GlobalElementController extends Controller
 
     public function destroy($id)
     {
-        $element = GlobalElement::where('user_id', auth()->id())->findOrFail($id);
+        $element = GlobalElement::where(function($query) {
+            $query->where('user_id', auth()->id())
+                  ->orWhereNull('user_id');
+        })->findOrFail($id);
+        
         $element->delete();
 
         return response()->json([
