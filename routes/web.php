@@ -125,11 +125,22 @@ Route::get('/fix-services', function () {
 
 Route::get('/fix-elemen', function () {
     \Illuminate\Support\Facades\Artisan::call('builder:fix-db');
+    $out1 = \Illuminate\Support\Facades\Artisan::output();
+    
     \Illuminate\Support\Facades\Artisan::call('builder:sync-global-media');
+    $out2 = \Illuminate\Support\Facades\Artisan::output();
     
-    $outputDb = \Illuminate\Support\Facades\Artisan::output();
+    $countAll = \App\Models\GlobalElement::count();
+    $countVisible = \App\Models\GlobalElement::where('user_id', auth()->id())->orWhereNull('user_id')->count();
+    $authId = auth()->id() ?? 'NULL';
     
-    return "<h3>Perbaikan Selesai!</h3><pre>{$outputDb}</pre><p>Silakan kembali ke Editor Builder dan segarkan halaman.</p>";
+    return "<h3>Perbaikan Selesai!</h3>
+    <pre>Fix DB: {$out1}</pre>
+    <pre>Sync: {$out2}</pre>
+    <pre>Total di DB: {$countAll}</pre>
+    <pre>Total yang harusnya tampil: {$countVisible}</pre>
+    <pre>User ID anda saat ini: {$authId}</pre>
+    <p>Silakan kembali ke Editor Builder dan segarkan halaman.</p>";
 });
 
 Route::get('/fix-all', function () {
