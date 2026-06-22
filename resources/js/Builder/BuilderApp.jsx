@@ -399,7 +399,7 @@ const BuilderApp = () => {
             </div>
             
             {/* Background Audio Player for Timeline Preview */}
-            <audio ref={audioRef} src={global_settings?.audioUrl || ''} />
+            <audio ref={audioRef} src={global_settings?.audioUrl || ''} crossOrigin="anonymous" />
         </div>
     );
 };

@@ -21,7 +21,9 @@ const AudioWaveformEditor = ({
         setIsReady(false);
 
         // Initialize WaveSurfer with media element for faster playback
-        const audioEl = new Audio(audioUrl);
+        const audioEl = new Audio();
+        audioEl.crossOrigin = "anonymous";
+        audioEl.src = audioUrl;
         wavesurfer.current = WaveSurfer.create({
             container: waveformRef.current,
             waveColor: '#a5b4fc', // indigo-300
