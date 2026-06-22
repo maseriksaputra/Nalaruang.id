@@ -14,24 +14,40 @@ export const pointsToSmoothedSvgPath = (points) => {
     if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
     if (points.length === 2) return `M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`;
     
-    // Start the path at the first point
-    let path = `M ${points[0].x} ${points[0].y} `;
-    
-    // Draw quadratic curves through the midpoints of subsequent points
-    for (let i = 1; i < points.length - 1; i++) {
-        const p1 = points[i];
-        const p2 = points[i + 1];
-        
-        // Midpoint acts as the end of the curve, while the actual point acts as the control point
-        const midX = (p1.x + p2.x) / 2;
-        const midY = (p1.y + p2.y) / 2;
-        
-        path += `Q ${p1.x} ${p1.y}, ${midX} ${midY} `;
+    // Simplification pass to remove points that are too close (reduces jaggedness from micro-movements)
+    const simplified = [points[0]];
+    for (let i = 1; i < points.length; i++) {
+        const last = simplified[simplified.length - 1];
+        const curr = points[i];
+        if (Math.hypot(curr.x - last.x, curr.y - last.y) > 2 || i === points.length - 1) {
+            simplified.push(curr);
+        }
     }
+
+    if (simplified.length <= 2) {
+        return `M ${simplified[0].x} ${simplified[0].y} L ${simplified[simplified.length - 1].x} ${simplified[simplified.length - 1].y}`;
+    }
+
+    // Catmull-Rom spline to Bezier for perfectly smooth curves
+    let path = `M ${simplified[0].x} ${simplified[0].y} `;
     
-    // Finish the path at the last point
-    const lastPoint = points[points.length - 1];
-    path += `L ${lastPoint.x} ${lastPoint.y}`;
+    for (let i = 0; i < simplified.length - 1; i++) {
+        const p0 = i === 0 ? simplified[0] : simplified[i - 1];
+        const p1 = simplified[i];
+        const p2 = simplified[i + 1];
+        const p3 = i + 2 < simplified.length ? simplified[i + 2] : p2;
+        
+        // Tension parameter, usually 0.5 for Catmull-Rom, but we use a smoother tension for hand drawing
+        const tension = 0.2;
+        
+        const cp1x = p1.x + (p2.x - p0.x) * tension;
+        const cp1y = p1.y + (p2.y - p0.y) * tension;
+        
+        const cp2x = p2.x - (p3.x - p1.x) * tension;
+        const cp2y = p2.y - (p3.y - p1.y) * tension;
+        
+        path += `C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y} `;
+    }
     
     return path;
 };

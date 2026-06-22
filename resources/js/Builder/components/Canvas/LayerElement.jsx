@@ -1144,10 +1144,13 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                 const isDrawingPath = useUIStore.getState().isDrawingPath;
                 if (isDrawingPath) {
                     const last = pathRecordingRef.current[pathRecordingRef.current.length - 1];
-                    // Rekam pusat elemen. Sensitivitas jarak > 5
-                    if (!last || Math.hypot(elCenterX - last.x, elCenterY - last.y) > 5) {
+                    // Rekam pusat elemen. Sensitivitas jarak > 2 untuk kurva lebih mulus
+                    if (!last || Math.hypot(elCenterX - last.x, elCenterY - last.y) > 2) {
                         pathRecordingRef.current.push({ x: elCenterX, y: elCenterY });
-                        useUIStore.getState().setCurrentPathPoints([...pathRecordingRef.current]);
+                        // Update UI Store periodically instead of every 2px to prevent stuttering
+                        if (pathRecordingRef.current.length % 3 === 0 || !last) {
+                            useUIStore.getState().setCurrentPathPoints([...pathRecordingRef.current]);
+                        }
                     }
                 } else {
                     useUIStore.getState().setSnapLines(activeLines);
@@ -1205,7 +1208,9 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                 if (useUIStore.getState().isDrawingPath) {
                     wasDrawing = true;
                     useUIStore.getState().setIsDrawingPath(false);
-                    useUIStore.getState().setCurrentPathPoints([]);
+                    // Pastikan titik terakhir dirender
+                    useUIStore.getState().setCurrentPathPoints([...pathRecordingRef.current]);
+                    
                     const points = pathRecordingRef.current;
                     if (points.length > 2) {
                         const svgPath = pointsToSmoothedSvgPath(points);
@@ -1213,12 +1218,22 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                             idle: 'custom_path',
                             custom_path_data: {
                                 svgPath: svgPath,
-                                ease: 'power2.inOut',
+                                ease: 'power1.inOut',
                                 duration: 5,
                                 autoRotate: false
+                            },
+                            config: {
+                                ...(layer.animation?.config || {}),
+                                previewKey: Date.now()
                             }
                         });
                     }
+                    
+                    // Bersihkan SVG garis putus-putus setelah 500ms agar user bisa melihat hasil akhir sebentar
+                    setTimeout(() => {
+                        useUIStore.getState().setCurrentPathPoints([]);
+                    }, 500);
+                    
                     pathRecordingRef.current = [];
                 }
 

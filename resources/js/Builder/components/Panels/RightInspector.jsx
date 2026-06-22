@@ -1701,11 +1701,10 @@ const RightInspector = () => {
                                                             <input 
                                                                 type="range" min="0.5" max="30" step="0.5"
                                                                 value={activeLayer.animation.custom_path_data.duration || 5}
-                                                                onChange={(e) => {
-                                                                    updateLayerAnimation(activeLayer.id, { 
-                                                                        custom_path_data: { ...activeLayer.animation.custom_path_data, duration: parseFloat(e.target.value) } 
-                                                                    });
-                                                                }}
+                                                                onChange={(e) => updateLayerAnimation(activeLayer.id, { 
+                                                                    custom_path_data: { ...activeLayer.animation.custom_path_data, duration: parseFloat(e.target.value) },
+                                                                    config: { ...(activeLayer.animation?.config || {}), previewKey: Date.now() } 
+                                                                })}
                                                                 className="flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
                                                             />
                                                             <span className="text-[9px] text-gray-400 font-medium">30s</span>
@@ -1723,11 +1722,10 @@ const RightInspector = () => {
                                                                 type="checkbox" 
                                                                 className="sr-only peer" 
                                                                 checked={activeLayer.animation.custom_path_data.autoRotate || false}
-                                                                onChange={(e) => {
-                                                                    updateLayerAnimation(activeLayer.id, { 
-                                                                        custom_path_data: { ...activeLayer.animation.custom_path_data, autoRotate: e.target.checked } 
-                                                                    });
-                                                                }}
+                                                                onChange={(e) => updateLayerAnimation(activeLayer.id, { 
+                                                                    custom_path_data: { ...activeLayer.animation.custom_path_data, autoRotate: e.target.checked },
+                                                                    config: { ...(activeLayer.animation?.config || {}), previewKey: Date.now() } 
+                                                                })}
                                                             />
                                                             <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
                                                         </label>
@@ -1751,11 +1749,10 @@ const RightInspector = () => {
                                                                 return (
                                                                     <button
                                                                         key={easeOption.id}
-                                                                        onClick={() => {
-                                                                            updateLayerAnimation(activeLayer.id, { 
-                                                                                custom_path_data: { ...activeLayer.animation.custom_path_data, ease: easeOption.id } 
-                                                                            });
-                                                                        }}
+                                                                        onClick={() => updateLayerAnimation(activeLayer.id, { 
+                                                                            custom_path_data: { ...activeLayer.animation.custom_path_data, ease: easeOption.id },
+                                                                            config: { ...(activeLayer.animation?.config || {}), previewKey: Date.now() } 
+                                                                        })}
                                                                         className={`relative flex flex-col items-center justify-center p-2.5 rounded-xl border-2 transition-all group ${isActive ? 'border-indigo-500 bg-indigo-50/50 shadow-[0_2px_8px_rgba(99,102,241,0.15)]' : 'border-transparent bg-gray-50 hover:bg-gray-100'}`}
                                                                     >
                                                                         {isActive && (
