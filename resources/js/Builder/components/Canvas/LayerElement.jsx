@@ -216,7 +216,12 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
             // isBuilder = true prevents ScrollTrigger and plays immediately
             const startAt = window.__BUILDER_PLAYHEAD_POS__ || 0;
             animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, startAt);
-            if (window.__BUILDER_IS_PLAYING__ === false && animationInstance && typeof animationInstance.pause === 'function') {
+            
+            if (isPreviewing) {
+                if (animationInstance && typeof animationInstance.play === 'function') {
+                    animationInstance.play(0);
+                }
+            } else if (window.__BUILDER_IS_PLAYING__ === false && animationInstance && typeof animationInstance.pause === 'function') {
                 animationInstance.pause();
             }
         }
