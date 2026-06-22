@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BKSejAs2.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-BtFe1jyo.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-PiRcSS-r.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$1, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-BSWZw60U.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -4891,7 +4891,8 @@ var AudioWaveformEditor = ({ audioUrl, audioStart, audioEnd, onSetStart, onSetEn
 	(0, import_react.useEffect)(() => {
 		if (!waveformRef.current || !audioUrl) return;
 		setIsReady(false);
-		const audioEl = new Audio(audioUrl);
+		const audioEl = new Audio();
+		audioEl.crossOrigin = "anonymous";
 		wavesurfer.current = E.create({
 			container: waveformRef.current,
 			waveColor: "#a5b4fc",
@@ -4903,9 +4904,10 @@ var AudioWaveformEditor = ({ audioUrl, audioStart, audioEnd, onSetStart, onSetEn
 			height: 60,
 			normalize: true,
 			sampleRate: 8e3,
-			media: audioEl
+			media: audioEl,
+			url: audioUrl,
+			fetchParams: { mode: "cors" }
 		});
-		wavesurfer.current.load(audioUrl);
 		wavesurfer.current.on("error", (err) => {
 			console.error("WaveSurfer Error:", err);
 			setIsReady(true);
@@ -15815,7 +15817,15 @@ var RightInspector = () => {
 																		}),
 																		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 																			value: "power1.inOut",
-																			children: "Smooth (Mulus Alami)"
+																			children: "Melayang (Mulus Lambat)"
+																		}),
+																		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+																			value: "power2.inOut",
+																			children: "Smooth (Mulus Dinamis)"
+																		}),
+																		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+																			value: "sine.inOut",
+																			children: "Natural (Fisika Hewan Terbang)"
 																		}),
 																		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 																			value: "power2.in",
@@ -15826,16 +15836,12 @@ var RightInspector = () => {
 																			children: "Ease Out (Makin Lambat)"
 																		}),
 																		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-																			value: "back.out(1.7)",
-																			children: "Back (Mendal Kelebihan)"
+																			value: "back.out(1.2)",
+																			children: "Kenyal Alami (Sedikit Mendal)"
 																		}),
 																		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 																			value: "bounce.out",
 																			children: "Bounce (Memantul)"
-																		}),
-																		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-																			value: "elastic.out(1, 0.3)",
-																			children: "Elastic (Seperti Karet)"
 																		})
 																	]
 																})
@@ -16003,12 +16009,16 @@ var RightInspector = () => {
 																	max: "30",
 																	step: "0.5",
 																	value: activeLayer.animation.custom_path_data.duration || 5,
-																	onChange: (e) => {
-																		updateLayerAnimation(activeLayer.id, { custom_path_data: {
+																	onChange: (e) => updateLayerAnimation(activeLayer.id, {
+																		custom_path_data: {
 																			...activeLayer.animation.custom_path_data,
 																			duration: parseFloat(e.target.value)
-																		} });
-																	},
+																		},
+																		config: {
+																			...activeLayer.animation?.config || {},
+																			previewKey: Date.now()
+																		}
+																	}),
 																	className: "flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
 																}),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -16034,12 +16044,16 @@ var RightInspector = () => {
 																	type: "checkbox",
 																	className: "sr-only peer",
 																	checked: activeLayer.animation.custom_path_data.autoRotate || false,
-																	onChange: (e) => {
-																		updateLayerAnimation(activeLayer.id, { custom_path_data: {
+																	onChange: (e) => updateLayerAnimation(activeLayer.id, {
+																		custom_path_data: {
 																			...activeLayer.animation.custom_path_data,
 																			autoRotate: e.target.checked
-																		} });
-																	}
+																		},
+																		config: {
+																			...activeLayer.animation?.config || {},
+																			previewKey: Date.now()
+																		}
+																	})
 																}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600" })]
 															})]
 														}),
@@ -16068,7 +16082,7 @@ var RightInspector = () => {
 																	},
 																	{
 																		id: "power2.inOut",
-																		label: "Mulus",
+																		label: "Dinamis",
 																		icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
 																			strokeLinecap: "round",
 																			strokeLinejoin: "round",
@@ -16076,12 +16090,21 @@ var RightInspector = () => {
 																		})
 																	},
 																	{
-																		id: "power2.out",
-																		label: "Melambat",
+																		id: "sine.inOut",
+																		label: "Natural",
 																		icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
 																			strokeLinecap: "round",
 																			strokeLinejoin: "round",
-																			d: "M3 21c0-12 6-18 18-18"
+																			d: "M3 21c3-6 6-6 9 0s6-6 9 0"
+																		})
+																	},
+																	{
+																		id: "power1.inOut",
+																		label: "Melayang",
+																		icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+																			strokeLinecap: "round",
+																			strokeLinejoin: "round",
+																			d: "M3 21q9-18 18-18"
 																		})
 																	},
 																	{
@@ -16094,7 +16117,7 @@ var RightInspector = () => {
 																		})
 																	},
 																	{
-																		id: "elastic.out(1, 0.3)",
+																		id: "back.out(1.2)",
 																		label: "Kenyal",
 																		icon: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
 																			strokeLinecap: "round",
@@ -16105,12 +16128,16 @@ var RightInspector = () => {
 																].map((easeOption) => {
 																	const isActive = (activeLayer.animation.custom_path_data.ease || "power2.inOut") === easeOption.id;
 																	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-																		onClick: () => {
-																			updateLayerAnimation(activeLayer.id, { custom_path_data: {
+																		onClick: () => updateLayerAnimation(activeLayer.id, {
+																			custom_path_data: {
 																				...activeLayer.animation.custom_path_data,
 																				ease: easeOption.id
-																			} });
-																		},
+																			},
+																			config: {
+																				...activeLayer.animation?.config || {},
+																				previewKey: Date.now()
+																			}
+																		}),
 																		className: `relative flex flex-col items-center justify-center p-2.5 rounded-xl border-2 transition-all group ${isActive ? "border-indigo-500 bg-indigo-50/50 shadow-[0_2px_8px_rgba(99,102,241,0.15)]" : "border-transparent bg-gray-50 hover:bg-gray-100"}`,
 																		children: [
 																			isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -22587,7 +22614,8 @@ var BuilderApp = () => {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("audio", {
 				ref: audioRef,
-				src: global_settings?.audioUrl || ""
+				src: global_settings?.audioUrl || "",
+				crossOrigin: "anonymous"
 			})
 		]
 	});

@@ -125,7 +125,7 @@ const getShadowCss = (style) => {
     return `drop-shadow(${x}px ${y}px ${blur}px ${rgbaColor})`;
 };
 
-const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
+const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup = false }) => {
     if (layer.isHidden) return null;
     const elementRef = useRef(null);
     const [rsvpForm, setRsvpForm] = useState({ name: '', status: 'Hadir', message: '' });
@@ -186,7 +186,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 
         let animationCtx = null;
         if (layer.animation) {
-            animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style, 0, isCoverPage);
+            animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style, 0, isCoverPage, isChildOfGroup);
         }
         
         return () => {
@@ -197,7 +197,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
     useEffect(() => {
         const handlePlayExit = () => {
             if (layer.animation?.exit && elementRef.current) {
-                applyExitAnimation(elementRef.current, layer.animation, layer.style);
+                applyExitAnimation(elementRef.current, layer.animation, layer.style, isChildOfGroup);
             }
         };
         window.addEventListener('builder:play_exit_animations', handlePlayExit);
@@ -885,7 +885,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
             {layer.type === 'canvas_group' && (
                 <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                     {layer.children?.map(child => (
-                        <PublicLayer key={child.id} layer={child} isOpened={isOpened} isCoverPage={isCoverPage} />
+                        <PublicLayer key={child.id} layer={child} isOpened={isOpened} isCoverPage={isCoverPage} isChildOfGroup={true} />
                     ))}
                 </div>
             )}

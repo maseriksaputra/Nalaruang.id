@@ -141,12 +141,12 @@ const getIdleProps = (type, config = {}) => {
     }
 };
 
-export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle = null, startAtTime = 0, isCoverPage = true) => {
-    if (!elementRef) return { kill: () => {} };
-
-    let activeTweens = [];
-    let scrollTriggerTimeouts = [];
-    const isLooping = layerAnimation.isLooping || false;
+export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, styleParams = {}, playheadStart = 0, isCoverPage = false, isChildOfGroup = false) => {
+    if (!elementRef || !layerAnimation) return;
+    
+    const activeTweens = [];
+    const scrollTriggerTimeouts = [];
+    const { isLooping = false } = layerAnimation;
     const repeatConfig = isLooping ? { repeat: -1, yoyo: true } : {};
     
     // Temukan scroll container untuk Preview Modal. Jika tidak ada, gunakan default window
@@ -159,7 +159,9 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
     // FORCE onScroll for elements NOT on the cover page!
     const trigger = (!isBuilder && !isCoverPage) ? 'onScroll' : (config.trigger || 'onScroll');
     const isScrollTriggered = (!isBuilder && trigger === 'onScroll' && trigger !== 'onLoad');
-    const hasEntryAnimation = !!layerAnimation.entry;
+    
+    // Disable entry animation if element is a child of a canvas_group (parent will animate it)
+    const hasEntryAnimation = !!layerAnimation.entry && !isChildOfGroup;
     const globalDelay = parseFloat(config.delay) || 0;
 
     // Custom GSAP Code
@@ -465,9 +467,9 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
     };
 };
 
-export const applyExitAnimation = (elementRef, layerAnimation, layerStyle = null) => {
+export const applyExitAnimation = (elementRef, layerAnimation, layerStyle = null, isChildOfGroup = false) => {
     return new Promise((resolve) => {
-        if (!elementRef || !layerAnimation || !layerAnimation.exit) {
+        if (!elementRef || !layerAnimation || !layerAnimation.exit || isChildOfGroup) {
             resolve();
             return;
         }

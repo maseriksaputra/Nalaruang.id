@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-CinMQ70m.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BFajsdkO.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BKSejAs2.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-PiRcSS-r.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -2437,59 +2437,14 @@ var useCanvasStore = create(temporal((set, get) => ({
 		const { invitationId, global_settings, sections } = get();
 		if (!invitationId) return;
 		let cleanSections = JSON.parse(JSON.stringify(sections));
-		let cleanGlobalSettings = JSON.parse(JSON.stringify(global_settings));
-		let wasCleaned = false;
-		if (cleanGlobalSettings) Object.keys(cleanGlobalSettings).forEach((key) => {
-			const value = cleanGlobalSettings[key];
-			if (typeof value === "string") {
-				if (value.length > 2e5 || value.startsWith("data:image/")) {
-					cleanGlobalSettings[key] = "";
-					wasCleaned = true;
-				}
-			}
-		});
-		cleanSections.forEach((section) => {
-			if (section.layers) section.layers.forEach((layer, layerIndex) => {
-				if (JSON.stringify(layer).length > 5e6) {
-					section.layers[layerIndex] = {
-						id: layer.id,
-						type: "text",
-						content: "<div style=\"color:red; font-size:12px; border:1px dashed red; padding:5px;\">[ELEMEN DIHAPUS OTOMATIS OLEH SISTEM KARENA UKURAN > 5MB]</div>",
-						style: layer.style || {
-							width: 200,
-							height: 100,
-							x: 0,
-							y: 0
-						}
-					};
-					wasCleaned = true;
-				}
-			});
-		});
-		if (cleanGlobalSettings && JSON.stringify(cleanGlobalSettings).length > 5e6) Object.keys(cleanGlobalSettings).forEach((key) => {
-			const value = cleanGlobalSettings[key];
-			if (typeof value === "string" && value.length > 5e6) {
-				cleanGlobalSettings[key] = "";
-				wasCleaned = true;
-			}
-		});
 		const payload = { canvas_config: {
-			global_settings: cleanGlobalSettings,
+			global_settings: JSON.parse(JSON.stringify(global_settings)),
 			sections: cleanSections
 		} };
 		const payloadString = JSON.stringify(payload);
 		if (payloadString.length > 10 * 1024 * 1024) {
 			const sizeMB = (payloadString.length / 1024 / 1024).toFixed(2);
-			console.error("Payload terlalu besar!", payloadString.length);
-			alert(`Peringatan: Gagal Auto-Save! Ukuran desain Anda mencapai ${sizeMB} MB (Batas maksimal 10 MB). Silakan beritahu ini ke sistem AI agar bisa diinvestigasi elemen mana yang membengkak.`);
-			return;
-		}
-		if (wasCleaned) {
-			set({
-				sections: cleanSections,
-				global_settings: cleanGlobalSettings
-			});
-			alert("Sistem otomatis membersihkan elemen animasi/gambar yang ukurannya terlampau raksasa agar desain Anda bisa tersimpan kembali. Silakan upload ulang animasi/gambar tersebut dengan benar menggunakan tombol \"Upload\".");
+			console.warn(`Peringatan: Ukuran desain mencapai ${sizeMB} MB. Auto-Save mungkin gagal jika server membatasi ukuran request.`);
 		}
 		useUIStore.getState().setIsSaving(true);
 		try {
@@ -2612,7 +2567,7 @@ var useCanvasStore = create(temporal((set, get) => ({
 				state.activeLayerId = newGroup.id;
 			} else {
 				let activeGroup = targetLayers.find((l) => l.id === state.activeLayerId && l.type === "group");
-				if (!activeGroup && targetLayers.length > 0) activeGroup = targetLayers[targetLayers.length - 1];
+				if (!activeGroup && targetLayers.length > 0) activeGroup = targetLayers.slice().reverse().find((l) => l.type === "group");
 				if (!activeGroup) {
 					activeGroup = {
 						id: "layer_" + Date.now(),
@@ -2848,10 +2803,14 @@ var useCanvasStore = create(temporal((set, get) => ({
 					const layer = layers[i];
 					if (state.activeLayerIds.includes(layer.id)) {
 						elementsToGroup.unshift(layer);
-						minX = Math.min(minX, layer.style?.x || 0);
-						minY = Math.min(minY, layer.style?.y || 0);
-						maxX = Math.max(maxX, (layer.style?.x || 0) + (parseFloat(layer.style?.width) || 0));
-						maxY = Math.max(maxY, (layer.style?.y || 0) + (parseFloat(layer.style?.height) || 0));
+						const lx = parseFloat(layer.style?.x) || 0;
+						const ly = parseFloat(layer.style?.y) || 0;
+						const lw = parseFloat(layer.style?.width) || 0;
+						const lh = parseFloat(layer.style?.height) || 0;
+						minX = Math.min(minX, lx);
+						minY = Math.min(minY, ly);
+						maxX = Math.max(maxX, lx + lw);
+						maxY = Math.max(maxY, ly + lh);
 						if (!trackToInject && parent) {
 							trackToInject = parent;
 							injectIndex = i;
@@ -2869,8 +2828,8 @@ var useCanvasStore = create(temporal((set, get) => ({
 				...el,
 				style: {
 					...el.style,
-					x: (el.style?.x || 0) - minX,
-					y: (el.style?.y || 0) - minY
+					x: (parseFloat(el.style?.x) || 0) - minX,
+					y: (parseFloat(el.style?.y) || 0) - minY
 				}
 			}));
 			const newGroup = {
@@ -2883,28 +2842,30 @@ var useCanvasStore = create(temporal((set, get) => ({
 					y: minY,
 					width: maxX - minX,
 					height: maxY - minY,
-					zIndex: 1
+					zIndex: Math.max(1, ...elementsToGroup.map((el) => el.style?.zIndex || 0))
 				}
 			};
 			if (trackToInject === "root") {
+				const maxZIndex = targetLayers.reduce((max, l) => Math.max(max, l.style?.zIndex || 0), 0);
 				const rootGroup = {
 					id: "layer_" + Date.now(),
 					type: "group",
 					name: "Layer Baru",
 					children: [newGroup],
-					style: { zIndex: 1 }
+					style: { zIndex: maxZIndex + 1 }
 				};
 				if (injectIndex !== -1) targetLayers.splice(injectIndex, 0, rootGroup);
 				else targetLayers.push(rootGroup);
 			} else if (trackToInject && trackToInject.children) if (injectIndex !== -1) trackToInject.children.splice(injectIndex, 0, newGroup);
 			else trackToInject.children.push(newGroup);
 			else {
+				const maxZIndex = targetLayers.reduce((max, l) => Math.max(max, l.style?.zIndex || 0), 0);
 				const rootGroup = {
 					id: "layer_" + Date.now(),
 					type: "group",
 					name: "Layer Baru",
 					children: [newGroup],
-					style: { zIndex: 1 }
+					style: { zIndex: maxZIndex + 1 }
 				};
 				targetLayers.push(rootGroup);
 			}
@@ -2917,11 +2878,13 @@ var useCanvasStore = create(temporal((set, get) => ({
 		set(produce((state) => {
 			if (state.activeLayerIds.length !== 1) return;
 			const groupId = state.activeLayerIds[0];
-			const targetLayers = state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [];
+			state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers;
 			let groupToUngroup = null;
 			let parentLayer = null;
 			let insertIndex = -1;
+			let foundTargetLayers = null;
 			const findAndExtractGroup = (layers, parent = null) => {
+				if (!layers) return false;
 				for (let i = 0; i < layers.length; i++) {
 					if (layers[i].id === groupId) {
 						groupToUngroup = layers.splice(i, 1)[0];
@@ -2935,7 +2898,13 @@ var useCanvasStore = create(temporal((set, get) => ({
 				}
 				return false;
 			};
-			findAndExtractGroup(targetLayers);
+			if (state.activeCanvasMode === "desktop") {
+				foundTargetLayers = state.global_settings.desktop_layers;
+				findAndExtractGroup(foundTargetLayers);
+			} else for (let section of state.sections) if (findAndExtractGroup(section.layers)) {
+				foundTargetLayers = section.layers;
+				break;
+			}
 			if (!groupToUngroup || !groupToUngroup.children) return;
 			const newElements = groupToUngroup.children.map((child) => ({
 				...child,
@@ -2946,7 +2915,7 @@ var useCanvasStore = create(temporal((set, get) => ({
 				}
 			}));
 			if (parentLayer) parentLayer.children.splice(insertIndex, 0, ...newElements);
-			else targetLayers.splice(insertIndex, 0, ...newElements);
+			else if (foundTargetLayers) foundTargetLayers.splice(insertIndex, 0, ...newElements);
 			state.activeLayerId = newElements[0].id;
 			state.activeLayerIds = newElements.map((e) => e.id);
 		}));
@@ -13079,16 +13048,40 @@ var pointsToSmoothedSvgPath = (points) => {
 	if (!points || points.length === 0) return "";
 	if (points.length === 1) return `M ${points[0].x} ${points[0].y}`;
 	if (points.length === 2) return `M ${points[0].x} ${points[0].y} L ${points[1].x} ${points[1].y}`;
-	let path = `M ${points[0].x} ${points[0].y} `;
-	for (let i = 1; i < points.length - 1; i++) {
-		const p1 = points[i];
-		const p2 = points[i + 1];
-		const midX = (p1.x + p2.x) / 2;
-		const midY = (p1.y + p2.y) / 2;
-		path += `Q ${p1.x} ${p1.y}, ${midX} ${midY} `;
+	const simplified = [points[0]];
+	for (let i = 1; i < points.length; i++) {
+		const last = simplified[simplified.length - 1];
+		const curr = points[i];
+		if (Math.hypot(curr.x - last.x, curr.y - last.y) > 20 || i === points.length - 1) simplified.push(curr);
 	}
-	const lastPoint = points[points.length - 1];
-	path += `L ${lastPoint.x} ${lastPoint.y}`;
+	const smoothed = [];
+	if (simplified.length > 2) {
+		smoothed.push(simplified[0]);
+		for (let i = 1; i < simplified.length - 1; i++) {
+			const prev = simplified[i - 1];
+			const curr = simplified[i];
+			const next = simplified[i + 1];
+			smoothed.push({
+				x: (prev.x + curr.x + next.x) / 3,
+				y: (prev.y + curr.y + next.y) / 3
+			});
+		}
+		smoothed.push(simplified[simplified.length - 1]);
+	} else smoothed.push(...simplified);
+	if (smoothed.length <= 2) return `M ${smoothed[0].x} ${smoothed[0].y} L ${smoothed[smoothed.length - 1].x} ${smoothed[smoothed.length - 1].y}`;
+	let path = `M ${smoothed[0].x} ${smoothed[0].y} `;
+	for (let i = 0; i < smoothed.length - 1; i++) {
+		const p0 = i === 0 ? smoothed[0] : smoothed[i - 1];
+		const p1 = smoothed[i];
+		const p2 = smoothed[i + 1];
+		const p3 = i + 2 < smoothed.length ? smoothed[i + 2] : p2;
+		const tension = .25;
+		const cp1x = p1.x + (p2.x - p0.x) * tension;
+		const cp1y = p1.y + (p2.y - p0.y) * tension;
+		const cp2x = p2.x - (p3.x - p1.x) * tension;
+		const cp2y = p2.y - (p3.y - p1.y) * tension;
+		path += `C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y} `;
+	}
 	return path;
 };
 //#endregion
@@ -20362,11 +20355,11 @@ var getIdleProps = (type, config = {}) => {
 		default: return null;
 	}
 };
-var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle = null, startAtTime = 0, isCoverPage = true) => {
-	if (!elementRef) return { kill: () => {} };
-	let activeTweens = [];
-	let scrollTriggerTimeouts = [];
-	const isLooping = layerAnimation.isLooping || false;
+var applyAnimation = (elementRef, layerAnimation, isBuilder = false, styleParams = {}, playheadStart = 0, isCoverPage = false, isChildOfGroup = false) => {
+	if (!elementRef || !layerAnimation) return;
+	const activeTweens = [];
+	const scrollTriggerTimeouts = [];
+	const { isLooping = false } = layerAnimation;
 	const repeatConfig = isLooping ? {
 		repeat: -1,
 		yoyo: true
@@ -20379,7 +20372,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 		trigger: "onScroll"
 	};
 	const trigger = !isBuilder && !isCoverPage ? "onScroll" : config.trigger || "onScroll";
-	const hasEntryAnimation = !!layerAnimation.entry;
+	const hasEntryAnimation = !!layerAnimation.entry && !isChildOfGroup;
 	const globalDelay = parseFloat(config.delay) || 0;
 	if (layerAnimation.custom) try {
 		const customObj = new Function(`return ${layerAnimation.custom}`)();
@@ -20502,6 +20495,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 				repeat: isLooping ? -1 : 0,
 				yoyo: false,
 				delay: globalDelay,
+				immediateRender: true,
 				motionPath: {
 					path: svgPath,
 					align: "self",
@@ -20522,7 +20516,8 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 				delay: finalDelay,
 				force3D: true,
 				autoRound: false,
-				paused: isScrollTriggered
+				paused: isScrollTriggered,
+				immediateRender: true
 			});
 			activeTweens.push(tween);
 			if (isScrollTriggered) {
@@ -20597,7 +20592,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 			scrollTriggerTimeouts.push(stTimer);
 		}
 	}
-	if (isBuilder) activeTweens.forEach((t) => {
+	if (isBuilder) [...activeTweens].reverse().forEach((t) => {
 		if (t && typeof t.totalTime === "function") t.totalTime(startAtTime || 0);
 	});
 	return {
@@ -20621,9 +20616,9 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, layerStyle 
 		}
 	};
 };
-var applyExitAnimation = (elementRef, layerAnimation, layerStyle = null) => {
+var applyExitAnimation = (elementRef, layerAnimation, layerStyle = null, isChildOfGroup = false) => {
 	return new Promise((resolve) => {
-		if (!elementRef || !layerAnimation || !layerAnimation.exit) {
+		if (!elementRef || !layerAnimation || !layerAnimation.exit || isChildOfGroup) {
 			resolve();
 			return;
 		}
@@ -25529,7 +25524,7 @@ var CountdownDisplay$1 = ({ targetDate, textColor, bgColor, bgImage, fontFamily,
 		})]
 	});
 };
-var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
+var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 	if (layer.isHidden) return null;
 	useCanvasStore((state) => state.updateLayerPosition);
 	const zoom = useCanvasStore((state) => state.zoom);
@@ -25544,7 +25539,8 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 	});
 	const [isDragging, setIsDragging] = (0, import_react.useState)(false);
 	const [isEditing, setIsEditing] = (0, import_react.useState)(false);
-	const isActive = useCanvasStore((state) => state.activeLayerIds?.includes(layer.id) || state.activeLayerId === layer.id);
+	const isDrawingPath = useUIStore((state) => state.isDrawingPath);
+	const isActive = useCanvasStore((state) => state.activeLayerIds?.includes(layer.id) || state.activeLayerId === layer.id) || isActiveParent;
 	const isCropMode = activeTab === "edit_image" && isActive;
 	const visibilityRef = (0, import_react.useRef)(null);
 	const elementRef = (0, import_react.useRef)(null);
@@ -25621,8 +25617,10 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 		}
 		if (layer.animation && elementRef.current) {
 			const startAt = window.__BUILDER_PLAYHEAD_POS__ || 0;
-			animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, startAt);
-			if (window.__BUILDER_IS_PLAYING__ === false && animationInstance && typeof animationInstance.pause === "function") animationInstance.pause();
+			animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, startAt, false, isChildOfGroup);
+			if (isPreviewing) {
+				if (animationInstance && typeof animationInstance.play === "function") animationInstance.play(0);
+			} else if (window.__BUILDER_IS_PLAYING__ === false && animationInstance && typeof animationInstance.pause === "function") animationInstance.pause();
 		}
 		const handlePlayAll = () => {
 			if (visibilityRef.current) {
@@ -25636,7 +25634,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 					if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
 				}
 				const startAt = window.__BUILDER_PLAYHEAD_POS__ || 0;
-				animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, startAt);
+				animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, startAt, false, isChildOfGroup);
 				if (window.__BUILDER_IS_PLAYING__ === false && animationInstance && typeof animationInstance.pause === "function") animationInstance.pause();
 			}), void 0);
 		};
@@ -26466,7 +26464,8 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayerElement, {
 											layer: child,
 											isChildOfGroup: true,
-											sectionId
+											sectionId,
+											isActiveParent: isActive
 										})
 									}, child.id))
 								})
@@ -26502,6 +26501,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 			x: localPos.x,
 			y: localPos.y
 		},
+		enableResizing: !isDrawingPath,
 		onDrag: (e, d) => {
 			let newX = d.x;
 			let newY = d.y;
@@ -26522,7 +26522,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 			}
 			const elCenterX = newX + elWidth / 2;
 			const elCenterY = newY + elHeight / 2;
-			if (!e.shiftKey) {
+			if (!e.shiftKey && !isDrawingPath) {
 				let snappedX = false;
 				let snappedY = false;
 				const centerX = sectionWidth / 2;
@@ -26671,14 +26671,14 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 				x: newX,
 				y: newY
 			};
-			if (useUIStore.getState().isDrawingPath) {
+			if (isDrawingPath) {
 				const last = pathRecordingRef.current[pathRecordingRef.current.length - 1];
-				if (!last || Math.hypot(elCenterX - last.x, elCenterY - last.y) > 5) {
+				if (!last || Math.hypot(elCenterX - last.x, elCenterY - last.y) > 10) {
 					pathRecordingRef.current.push({
 						x: elCenterX,
 						y: elCenterY
 					});
-					useUIStore.getState().setCurrentPathPoints([...pathRecordingRef.current]);
+					if (pathRecordingRef.current.length % 2 === 0 || !last) useUIStore.getState().setCurrentPathPoints([...pathRecordingRef.current]);
 				}
 			} else useUIStore.getState().setSnapLines(activeLines);
 		},
@@ -26725,7 +26725,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 			if (useUIStore.getState().isDrawingPath) {
 				wasDrawing = true;
 				useUIStore.getState().setIsDrawingPath(false);
-				useUIStore.getState().setCurrentPathPoints([]);
+				useUIStore.getState().setCurrentPathPoints([...pathRecordingRef.current]);
 				const points = pathRecordingRef.current;
 				if (points.length > 2) {
 					const svgPath = pointsToSmoothedSvgPath(points);
@@ -26733,12 +26733,19 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
 						idle: "custom_path",
 						custom_path_data: {
 							svgPath,
-							ease: "power2.inOut",
+							ease: "power1.inOut",
 							duration: 5,
 							autoRotate: false
+						},
+						config: {
+							...layer.animation?.config || {},
+							previewKey: Date.now()
 						}
 					});
 				}
+				setTimeout(() => {
+					useUIStore.getState().setCurrentPathPoints([]);
+				}, 500);
 				pathRecordingRef.current = [];
 			}
 			if (!wasDrawing) {
@@ -28361,7 +28368,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-CinMQ70m.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BFajsdkO.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -29169,7 +29176,7 @@ var getShadowCss = (style) => {
 	const rgbaColor = hexToRgba(style.shadowColor || "#000000", (style.shadowOpacity ?? .5) * 100);
 	return `drop-shadow(${x}px ${y}px ${blur}px ${rgbaColor})`;
 };
-var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
+var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup = false }) => {
 	if (layer.isHidden) return null;
 	const elementRef = (0, import_react.useRef)(null);
 	const [rsvpForm, setRsvpForm] = (0, import_react.useState)({
@@ -29216,7 +29223,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 		if (!elementRef.current) return;
 		if (!isCoverPage && !isOpened) return;
 		let animationCtx = null;
-		if (layer.animation) animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style, 0, isCoverPage);
+		if (layer.animation) animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style, 0, isCoverPage, isChildOfGroup);
 		return () => {
 			if (animationCtx && animationCtx.kill) animationCtx.kill();
 		};
@@ -29227,7 +29234,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 	]);
 	(0, import_react.useEffect)(() => {
 		const handlePlayExit = () => {
-			if (layer.animation?.exit && elementRef.current) applyExitAnimation(elementRef.current, layer.animation, layer.style);
+			if (layer.animation?.exit && elementRef.current) applyExitAnimation(elementRef.current, layer.animation, layer.style, isChildOfGroup);
 		};
 		window.addEventListener("builder:play_exit_animations", handlePlayExit);
 		return () => {
@@ -30071,7 +30078,8 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true }) => {
 							children: layer.children?.map((child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PublicLayer, {
 								layer: child,
 								isOpened,
-								isCoverPage
+								isCoverPage,
+								isChildOfGroup: true
 							}, child.id))
 						}),
 						layer.custom_injection && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { dangerouslySetInnerHTML: { __html: layer.custom_injection } })
@@ -30126,14 +30134,32 @@ var PublicCanvas = ({ config }) => {
 		return () => window.removeEventListener("builder:open_invitation", handleOpenInvitation);
 	}, [sections]);
 	(0, import_react.useEffect)(() => {
+		let hasOpenButton = false;
 		sections.forEach((s) => {
 			s.layers?.forEach((l) => {
-				if (l.interaction?.action === "open_invitation");
+				if (l.interaction?.action === "open_invitation") hasOpenButton = true;
 				if (l.children) l.children.forEach((c) => {
-					if (c.interaction?.action === "open_invitation");
+					if (c.interaction?.action === "open_invitation") hasOpenButton = true;
 				});
 			});
 		});
+		if (hasOpenButton && !isOpened) {
+			document.body.style.overflow = "hidden";
+			document.documentElement.style.overflow = "hidden";
+			const preventScroll = (e) => {
+				if (e.target.closest(".overflow-y-auto")) return;
+				e.preventDefault();
+			};
+			window.addEventListener("touchmove", preventScroll, { passive: false });
+			return () => {
+				document.body.style.overflow = "";
+				document.documentElement.style.overflow = "";
+				window.removeEventListener("touchmove", preventScroll);
+			};
+		} else {
+			document.body.style.overflow = "";
+			document.documentElement.style.overflow = "";
+		}
 	}, [sections, isOpened]);
 	(0, import_react.useEffect)(() => {
 		const initEngine = async () => {
@@ -30179,7 +30205,7 @@ var PublicCanvas = ({ config }) => {
 		ref: containerRef,
 		style: {
 			width: "100%",
-			height: scaledHeight === "auto" ? "auto" : `${scaledHeight}px`,
+			height: !isOpened && hasAnyLayers ? "100vh" : scaledHeight === "auto" ? "auto" : `${scaledHeight}px`,
 			overflow: "hidden",
 			position: "relative"
 		},
@@ -30544,6 +30570,7 @@ var BackgroundAudio = ({ settings }) => {
 		ref: audioRef,
 		loop: audioEnd <= 0,
 		autoPlay: audioTrigger === "autoplay",
+		crossOrigin: "anonymous",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("source", {
 				src: audioUrl,
