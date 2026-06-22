@@ -692,8 +692,10 @@ const useCanvasStore = create(temporal((set, get) => ({
             let groupToUngroup = null;
             let parentLayer = null;
             let insertIndex = -1;
+            let foundTargetLayers = null;
 
             const findAndExtractGroup = (layers, parent = null) => {
+                if (!layers) return false;
                 for (let i = 0; i < layers.length; i++) {
                     if (layers[i].id === groupId) {
                         groupToUngroup = layers.splice(i, 1)[0];
@@ -708,7 +710,17 @@ const useCanvasStore = create(temporal((set, get) => ({
                 return false;
             };
 
-            findAndExtractGroup(targetLayers);
+            if (state.activeCanvasMode === 'desktop') {
+                foundTargetLayers = state.global_settings.desktop_layers;
+                findAndExtractGroup(foundTargetLayers);
+            } else {
+                for (let section of state.sections) {
+                    if (findAndExtractGroup(section.layers)) {
+                        foundTargetLayers = section.layers;
+                        break;
+                    }
+                }
+            }
 
             if (!groupToUngroup || !groupToUngroup.children) return;
 
@@ -723,8 +735,8 @@ const useCanvasStore = create(temporal((set, get) => ({
 
             if (parentLayer) {
                 parentLayer.children.splice(insertIndex, 0, ...newElements);
-            } else {
-                targetLayers.splice(insertIndex, 0, ...newElements);
+            } else if (foundTargetLayers) {
+                foundTargetLayers.splice(insertIndex, 0, ...newElements);
             }
 
             state.activeLayerId = newElements[0].id;
