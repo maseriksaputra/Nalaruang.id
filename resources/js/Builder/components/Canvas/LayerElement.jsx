@@ -131,7 +131,7 @@ const CountdownDisplay = ({ targetDate, textColor, bgColor, bgImage, fontFamily,
     );
 };
 
-const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
+const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
     if (layer.isHidden) return null;
     const updateLayerPosition = useCanvasStore(state => state.updateLayerPosition);
     const zoom = useCanvasStore(state => state.zoom);
@@ -142,7 +142,8 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
-    const isActive = useCanvasStore(state => state.activeLayerIds?.includes(layer.id) || state.activeLayerId === layer.id);
+    const isSelfActive = useCanvasStore(state => state.activeLayerIds?.includes(layer.id) || state.activeLayerId === layer.id);
+    const isActive = isSelfActive || isActiveParent;
     const isCropMode = activeTab === 'edit_image' && isActive;
     // Referensi untuk GSAP dan Rnd
     const visibilityRef = useRef(null);
@@ -987,7 +988,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId }) => {
                                             height: typeof child.style?.height === 'number' ? `${child.style.height}px` : child.style?.height,
                                             pointerEvents: 'auto'
                                         }}>
-                                            <LayerElement layer={child} isChildOfGroup={true} sectionId={sectionId} />
+                                            <LayerElement layer={child} isChildOfGroup={true} sectionId={sectionId} isActiveParent={isActive} />
                                         </div>
                                     ))}
                                 </div>

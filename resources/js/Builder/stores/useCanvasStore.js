@@ -642,7 +642,7 @@ const useCanvasStore = create(temporal((set, get) => ({
                 type: 'canvas_group',
                 name: 'Grup Baru',
                 children: groupChildren,
-                style: { x: minX, y: minY, width: maxX - minX, height: maxY - minY, zIndex: 1 }
+                style: { x: minX, y: minY, width: maxX - minX, height: maxY - minY, zIndex: Math.max(1, ...elementsToGroup.map(el => el.style?.zIndex || 0)) }
             };
 
             if (trackToInject === 'root') {
