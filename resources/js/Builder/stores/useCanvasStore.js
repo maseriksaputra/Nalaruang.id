@@ -603,10 +603,15 @@ const useCanvasStore = create(temporal((set, get) => ({
                     const layer = layers[i];
                     if (state.activeLayerIds.includes(layer.id)) {
                         elementsToGroup.unshift(layer);
-                        minX = Math.min(minX, layer.style?.x || 0);
-                        minY = Math.min(minY, layer.style?.y || 0);
-                        maxX = Math.max(maxX, (layer.style?.x || 0) + (parseFloat(layer.style?.width) || 0));
-                        maxY = Math.max(maxY, (layer.style?.y || 0) + (parseFloat(layer.style?.height) || 0));
+                        const lx = parseFloat(layer.style?.x) || 0;
+                        const ly = parseFloat(layer.style?.y) || 0;
+                        const lw = parseFloat(layer.style?.width) || 0;
+                        const lh = parseFloat(layer.style?.height) || 0;
+                        
+                        minX = Math.min(minX, lx);
+                        minY = Math.min(minY, ly);
+                        maxX = Math.max(maxX, lx + lw);
+                        maxY = Math.max(maxY, ly + lh);
                         
                         if (!trackToInject && parent) {
                             trackToInject = parent;
@@ -629,7 +634,7 @@ const useCanvasStore = create(temporal((set, get) => ({
 
             const groupChildren = elementsToGroup.map(el => ({
                 ...el,
-                style: { ...el.style, x: (el.style?.x || 0) - minX, y: (el.style?.y || 0) - minY }
+                style: { ...el.style, x: (parseFloat(el.style?.x) || 0) - minX, y: (parseFloat(el.style?.y) || 0) - minY }
             }));
 
             const newGroup = {
@@ -641,12 +646,13 @@ const useCanvasStore = create(temporal((set, get) => ({
             };
 
             if (trackToInject === 'root') {
+                const maxZIndex = targetLayers.reduce((max, l) => Math.max(max, l.style?.zIndex || 0), 0);
                 const rootGroup = {
                     id: 'layer_' + Date.now(),
                     type: 'group',
                     name: 'Layer Baru',
                     children: [newGroup],
-                    style: { zIndex: 1 }
+                    style: { zIndex: maxZIndex + 1 }
                 };
                 if (injectIndex !== -1) {
                     targetLayers.splice(injectIndex, 0, rootGroup);
@@ -660,12 +666,13 @@ const useCanvasStore = create(temporal((set, get) => ({
                     trackToInject.children.push(newGroup);
                 }
             } else {
+                const maxZIndex = targetLayers.reduce((max, l) => Math.max(max, l.style?.zIndex || 0), 0);
                 const rootGroup = {
                     id: 'layer_' + Date.now(),
                     type: 'group',
                     name: 'Layer Baru',
                     children: [newGroup],
-                    style: { zIndex: 1 }
+                    style: { zIndex: maxZIndex + 1 }
                 };
                 targetLayers.push(rootGroup);
             }
