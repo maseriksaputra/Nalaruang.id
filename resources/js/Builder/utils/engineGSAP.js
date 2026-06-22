@@ -315,6 +315,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                     repeat: isLooping ? -1 : 0,
                     yoyo: false,
                     delay: globalDelay,
+                    immediateRender: true,
                     motionPath: {
                         path: svgPath,
                         align: "self", 
@@ -336,7 +337,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
                     delay: finalDelay,
                     force3D: true,
                     autoRound: false,
-                    paused: isScrollTriggered
+                    paused: isScrollTriggered,
+                    immediateRender: true
                 });
                 activeTweens.push(tween);
                 
