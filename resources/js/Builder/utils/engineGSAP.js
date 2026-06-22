@@ -435,7 +435,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, la
 
     // Pastikan di Builder animasi sinkron sempurna dengan playhead
     if (isBuilder) {
-        activeTweens.forEach(t => {
+        // Balik urutan agar Entry dievaluasi duluan, baru ditimpa oleh Idle jika Idle sedang aktif
+        [...activeTweens].reverse().forEach(t => {
             if (t && typeof t.totalTime === 'function') {
                 t.totalTime(startAtTime || 0);
             }
