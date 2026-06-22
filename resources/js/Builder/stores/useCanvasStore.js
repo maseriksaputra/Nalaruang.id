@@ -164,6 +164,7 @@ const useCanvasStore = create(temporal((set, get) => ({
         let cleanGlobalSettings = JSON.parse(JSON.stringify(global_settings));
         let wasCleaned = false;
 
+        /* FITUR AUTO-CLEAN DINONAKTIFKAN SEMENTARA
         // Auto-clean massive base64 in global_settings
         if (cleanGlobalSettings) {
             Object.keys(cleanGlobalSettings).forEach(key => {
@@ -206,6 +207,7 @@ const useCanvasStore = create(temporal((set, get) => ({
                 }
             });
         }
+        */
 
         const payload = { canvas_config: { global_settings: cleanGlobalSettings, sections: cleanSections } };
         const payloadString = JSON.stringify(payload);
@@ -217,11 +219,13 @@ const useCanvasStore = create(temporal((set, get) => ({
             return;
         }
 
+        /*
         if (wasCleaned) {
             // Update the state with the cleaned sections so the UI reflects the removal
             set({ sections: cleanSections, global_settings: cleanGlobalSettings });
             alert('Sistem otomatis membersihkan elemen animasi/gambar yang ukurannya terlampau raksasa agar desain Anda bisa tersimpan kembali. Silakan upload ulang animasi/gambar tersebut dengan benar menggunakan tombol "Upload".');
         }
+        */
 
         useUIStore.getState().setIsSaving(true);
         try {
