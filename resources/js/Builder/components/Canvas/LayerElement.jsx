@@ -1145,11 +1145,11 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                 
                 if (isDrawingPath) {
                     const last = pathRecordingRef.current[pathRecordingRef.current.length - 1];
-                    // Rekam pusat elemen. Sensitivitas jarak > 2 untuk kurva lebih mulus
-                    if (!last || Math.hypot(elCenterX - last.x, elCenterY - last.y) > 2) {
+                    // Rekam pusat elemen. Sensitivitas jarak > 10 untuk kurva lebih mulus dan mencegah lag
+                    if (!last || Math.hypot(elCenterX - last.x, elCenterY - last.y) > 10) {
                         pathRecordingRef.current.push({ x: elCenterX, y: elCenterY });
-                        // Update UI Store periodically instead of every 2px to prevent stuttering
-                        if (pathRecordingRef.current.length % 3 === 0 || !last) {
+                        // Update UI Store periodically
+                        if (pathRecordingRef.current.length % 2 === 0 || !last) {
                             useUIStore.getState().setCurrentPathPoints([...pathRecordingRef.current]);
                         }
                     }

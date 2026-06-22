@@ -19,7 +19,7 @@ export const pointsToSmoothedSvgPath = (points) => {
     for (let i = 1; i < points.length; i++) {
         const last = simplified[simplified.length - 1];
         const curr = points[i];
-        if (Math.hypot(curr.x - last.x, curr.y - last.y) > 2 || i === points.length - 1) {
+        if (Math.hypot(curr.x - last.x, curr.y - last.y) > 15 || i === points.length - 1) {
             simplified.push(curr);
         }
     }
