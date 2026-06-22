@@ -28,26 +28,26 @@ export const pointsToSmoothedSvgPath = (points) => {
         return `M ${simplified[0].x} ${simplified[0].y} L ${simplified[simplified.length - 1].x} ${simplified[simplified.length - 1].y}`;
     }
 
-    // Catmull-Rom spline to Bezier for perfectly smooth curves
+    // Midpoint Quadratic Bezier Curve algorithm
+    // Ini menjamin 100% kurva mulus tanpa ada "overshoot" atau melingkar mundur seperti Catmull-Rom
     let path = `M ${simplified[0].x} ${simplified[0].y} `;
     
-    for (let i = 0; i < simplified.length - 1; i++) {
-        const p0 = i === 0 ? simplified[0] : simplified[i - 1];
-        const p1 = simplified[i];
-        const p2 = simplified[i + 1];
-        const p3 = i + 2 < simplified.length ? simplified[i + 2] : p2;
+    let p1 = simplified[0];
+    let p2 = simplified[1];
+
+    for (let i = 1; i < simplified.length; i++) {
+        const midPoint = {
+            x: p1.x + (p2.x - p1.x) / 2,
+            y: p1.y + (p2.y - p1.y) / 2
+        };
         
-        // Tension parameter, usually 0.5 for Catmull-Rom, but we use a smoother tension for hand drawing
-        const tension = 0.2;
+        path += `Q ${p1.x} ${p1.y}, ${midPoint.x} ${midPoint.y} `;
         
-        const cp1x = p1.x + (p2.x - p0.x) * tension;
-        const cp1y = p1.y + (p2.y - p0.y) * tension;
-        
-        const cp2x = p2.x - (p3.x - p1.x) * tension;
-        const cp2y = p2.y - (p3.y - p1.y) * tension;
-        
-        path += `C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y} `;
+        p1 = simplified[i];
+        p2 = simplified[i + 1] || p1;
     }
+    
+    path += `L ${p1.x} ${p1.y}`;
     
     return path;
 };
