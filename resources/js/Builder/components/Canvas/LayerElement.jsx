@@ -141,6 +141,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
     const [localSize, setLocalSize] = useState({ width: layer.style?.width || 100, height: layer.style?.height || 100 });
     const [isDragging, setIsDragging] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
+    const isDrawingPath = useUIStore(state => state.isDrawingPath);
 
     const isSelfActive = useCanvasStore(state => state.activeLayerIds?.includes(layer.id) || state.activeLayerId === layer.id);
     const isActive = isSelfActive || isActiveParent;
@@ -1033,6 +1034,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
             ref={rndRef}
             size={{ width: localSize.width, height: localSize.height }}
             position={{ x: localPos.x, y: localPos.y }}
+            enableResizing={!isDrawingPath}
             onDrag={(e, d) => {
                 let newX = d.x;
                 let newY = d.y;
@@ -1141,7 +1143,6 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                 setLocalPos({ x: newX, y: newY });
                 localPosRef.current = { x: newX, y: newY };
                 
-                const isDrawingPath = useUIStore.getState().isDrawingPath;
                 if (isDrawingPath) {
                     const last = pathRecordingRef.current[pathRecordingRef.current.length - 1];
                     // Rekam pusat elemen. Sensitivitas jarak > 2 untuk kurva lebih mulus
