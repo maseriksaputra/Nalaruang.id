@@ -32,8 +32,13 @@ class PortfolioResource extends Resource
         return $form
             ->schema([
                 TextInput::make('title')->required()->maxLength(255),
-                TextInput::make('category')->required()->maxLength(255),
-                FileUpload::make('image')->image()->directory('portfolios')->required(),
+                Select::make('category')->options([
+                    'Cetak Fisik Premium' => 'Cetak Fisik Premium',
+                    'Event Digital' => 'Event Digital',
+                    'Souvenir & Merchandise' => 'Souvenir & Merchandise',
+                    'Web & Mobile App' => 'Web & Mobile App',
+                ])->required(),
+                FileUpload::make('image')->image()->directory('portfolios'),
                 FileUpload::make('video')
                     ->directory('portfolios/videos')
                     ->acceptedFileTypes(['video/mp4', 'video/webm', 'video/ogg'])

@@ -619,18 +619,32 @@
 
             <div class="portfolio-marquee-track flex gap-4 w-max" id="portfolio-track">
                 
-                <!-- We create 3 identical sets to ensure smooth infinite looping on ultra-wide screens -->
-                @for ($i = 0; $i < 3; $i++)
-                <div class="portfolio-group grid grid-rows-2 grid-flow-col gap-4 auto-cols-max shrink-0 items-center">
+                <style>
+                    @keyframes slideLeft {
+                        from { transform: translateX(100vw); }
+                        to { transform: translateX(-100%); }
+                    }
+                    .animate-slide-left {
+                        animation: slideLeft 25s linear infinite;
+                    }
+                    .animate-slide-left:hover {
+                        animation-play-state: paused;
+                    }
+                </style>
+                <div class="portfolio-group grid grid-rows-2 grid-flow-col gap-4 auto-cols-max shrink-0 items-center animate-slide-left pr-[100vw]">
                     @foreach($portfolios as $portfolio)
                         <div class="relative {{ $portfolio->aspect_ratio ?? 'aspect-square' }} h-[150px] md:h-[220px] rounded-2xl overflow-hidden shadow-2xl group transition-transform duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)] border border-white/10 cursor-pointer">
                             @if($portfolio->video)
-                                <video autoplay loop muted playsinline class="w-full h-full object-cover">
+                                <video autoplay loop muted playsinline class="w-full h-full object-cover" {!! $portfolio->image ? 'poster="'.Storage::url($portfolio->image).'"' : '' !!}>
                                     <source src="{{ Storage::url($portfolio->video) }}" type="video/mp4">
                                 </video>
-                            @else
-                                <img src="{{ $portfolio->image ? Storage::url($portfolio->image) : 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000' }}" 
+                            @elseif($portfolio->image)
+                                <img src="{{ Storage::url($portfolio->image) }}" 
                                      alt="{{ $portfolio->title }}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 vintage-film">
+                            @else
+                                <div class="w-full h-full bg-brand-800 flex items-center justify-center">
+                                    <span class="text-white/50 text-xs font-medium">Portofolio</span>
+                                </div>
                             @endif
                             <div class="absolute inset-0 bg-gradient-to-t from-brand-900/95 via-brand-900/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-5">
                                 <span class="text-brand-300 text-xs font-bold uppercase tracking-widest mb-1">{{ $portfolio->category }}</span>
@@ -639,7 +653,6 @@
                         </div>
                     @endforeach
                 </div>
-                @endfor
 
             </div>
         </div>
@@ -851,52 +864,7 @@
             // Ganti gambar setiap 5 detik
             setInterval(nextSlide, 5000);
         });
-        // GSAP Marquee untuk Portofolio
-        if (typeof gsap !== 'undefined') {
-            const track = document.getElementById('portfolio-track');
-            if (track) {
-                // Menghitung lebar 1 grup (dari 3 grup yang ada) untuk jarak looping yang pas
-                const group = track.querySelector('.portfolio-group');
-                if (group) {
-                    // Beri sedikit jeda agar DOM ter-render sempurna sebelum kalkulasi lebar
-                    setTimeout(() => {
-                        const distanceToTranslate = group.offsetWidth + 16; // 16px adalah gap-4
-                        
-                        // Buat animasi berjalan ke kiri sejauh 1 grup, lalu diulang (infinite loop)
-                        gsap.to(track, {
-                            x: -distanceToTranslate,
-                            duration: 20, // Semakin besar semakin lambat
-                            ease: "none",
-                            repeat: -1
-                        });
-
-                        // Opsional: Pause saat hover
-                        track.addEventListener('mouseenter', () => gsap.killTweensOf(track, "x"));
-                        // Saat mouse leave, kita lanjutkan animasinya dari posisinya saat ini
-                        track.addEventListener('mouseleave', () => {
-                            const currentX = gsap.getProperty(track, "x");
-                            const remainingRatio = 1 - (Math.abs(currentX) / distanceToTranslate);
-                            gsap.to(track, {
-                                x: -distanceToTranslate,
-                                duration: 20 * remainingRatio,
-                                ease: "none",
-                                onComplete: () => {
-                                    gsap.set(track, { x: 0 }); // Reset ke awal
-                                    // Mulai lagi dari awal dengan durasi penuh
-                                    gsap.to(track, {
-                                        x: -distanceToTranslate,
-                                        duration: 20,
-                                        ease: "none",
-                                        repeat: -1
-                                    });
-                                }
-                            });
-                        });
-
-                    }, 500);
-                }
-            }
-        }
+        // GSAP Marquee (dihapus dan diganti dengan pure CSS)
     </script>
 @include('components.lightbox')
 </body>
