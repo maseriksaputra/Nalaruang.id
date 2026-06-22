@@ -1061,7 +1061,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                 const elCenterX = newX + elWidth / 2;
                 const elCenterY = newY + elHeight / 2;
 
-                if (!e.shiftKey) {
+                if (!e.shiftKey && !isDrawingPath) {
                     let snappedX = false;
                     let snappedY = false;
 
