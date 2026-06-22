@@ -1593,12 +1593,13 @@ const RightInspector = () => {
                                                                     style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em' }}
                                                                 >
                                                                     <option value="none">Linear (Datar & Konstan)</option>
-                                                                    <option value="power1.inOut">Smooth (Mulus Alami)</option>
+                                                                    <option value="power1.inOut">Melayang (Mulus Lambat)</option>
+                                                                    <option value="power2.inOut">Smooth (Mulus Dinamis)</option>
+                                                                    <option value="sine.inOut">Natural (Fisika Hewan Terbang)</option>
                                                                     <option value="power2.in">Ease In (Makin Cepat)</option>
                                                                     <option value="power2.out">Ease Out (Makin Lambat)</option>
-                                                                    <option value="back.out(1.7)">Back (Mendal Kelebihan)</option>
+                                                                    <option value="back.out(1.2)">Kenyal Alami (Sedikit Mendal)</option>
                                                                     <option value="bounce.out">Bounce (Memantul)</option>
-                                                                    <option value="elastic.out(1, 0.3)">Elastic (Seperti Karet)</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -1740,10 +1741,11 @@ const RightInspector = () => {
                                                         <div className="grid grid-cols-3 gap-2">
                                                             {[
                                                                 { id: 'none', label: 'Konstan', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M3 21L21 3" /> },
-                                                                { id: 'power2.inOut', label: 'Mulus', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M3 21c9 0 9-18 18-18" /> },
-                                                                { id: 'power2.out', label: 'Melambat', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M3 21c0-12 6-18 18-18" /> },
+                                                                { id: 'power2.inOut', label: 'Dinamis', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M3 21c9 0 9-18 18-18" /> },
+                                                                { id: 'sine.inOut', label: 'Natural', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M3 21c3-6 6-6 9 0s6-6 9 0" /> },
+                                                                { id: 'power1.inOut', label: 'Melayang', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M3 21q9-18 18-18" /> },
                                                                 { id: 'bounce.out', label: 'Memantul', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M3 21c3-10 6-10 9 0 2-5 4-5 6 0 1-2 2-2 3 0" /> },
-                                                                { id: 'elastic.out(1, 0.3)', label: 'Kenyal', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M3 21c2-15 4 5 6-8 2 10 3-4 5 2 1-3 2 0 4 0" /> },
+                                                                { id: 'back.out(1.2)', label: 'Kenyal', icon: <path strokeLinecap="round" strokeLinejoin="round" d="M3 21c2-15 4 5 6-8 2 10 3-4 5 2 1-3 2 0 4 0" /> },
                                                             ].map((easeOption) => {
                                                                 const isActive = (activeLayer.animation.custom_path_data.ease || 'power2.inOut') === easeOption.id;
                                                                 return (
