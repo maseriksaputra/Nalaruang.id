@@ -214,9 +214,7 @@ const useCanvasStore = create(temporal((set, get) => ({
         
         if (payloadString.length > 10 * 1024 * 1024) { // 10MB limit
             const sizeMB = (payloadString.length / 1024 / 1024).toFixed(2);
-            console.error('Payload terlalu besar!', payloadString.length);
-            alert(`Peringatan: Gagal Auto-Save! Ukuran desain Anda mencapai ${sizeMB} MB (Batas maksimal 10 MB). Silakan beritahu ini ke sistem AI agar bisa diinvestigasi elemen mana yang membengkak.`);
-            return;
+            console.warn(`Peringatan: Ukuran desain mencapai ${sizeMB} MB. Auto-Save mungkin gagal jika server membatasi ukuran request.`);
         }
 
         /*
