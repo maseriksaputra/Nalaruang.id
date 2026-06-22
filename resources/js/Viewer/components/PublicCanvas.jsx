@@ -79,8 +79,27 @@ const PublicCanvas = ({ config }) => {
             });
         });
 
-        // We no longer lock the scroll here, because we hide the content pages instead!
-        // This allows the user to scroll the cover page if it is taller than their screen.
+        if (hasOpenButton && !isOpened) {
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+            
+            // Prevent touch scrolling on iOS Safari
+            const preventScroll = (e) => {
+                // Allow scrolling if target is inside a scrollable element, but generally for cover we lock it
+                if (e.target.closest('.overflow-y-auto')) return;
+                e.preventDefault();
+            };
+            window.addEventListener('touchmove', preventScroll, { passive: false });
+            
+            return () => {
+                document.body.style.overflow = '';
+                document.documentElement.style.overflow = '';
+                window.removeEventListener('touchmove', preventScroll);
+            };
+        } else {
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+        }
     }, [sections, isOpened]);
 
     useEffect(() => {
@@ -143,7 +162,7 @@ const PublicCanvas = ({ config }) => {
     const hideEmptySections = global_settings?.custom_code && !hasAnyLayers;
 
     return (
-        <div ref={containerRef} style={{ width: '100%', height: scaledHeight === 'auto' ? 'auto' : `${scaledHeight}px`, overflow: 'hidden', position: 'relative' }}>
+        <div ref={containerRef} style={{ width: '100%', height: (!isOpened && hasAnyLayers) ? '100vh' : (scaledHeight === 'auto' ? 'auto' : `${scaledHeight}px`), overflow: 'hidden', position: 'relative' }}>
             <div ref={innerRef} style={{ 
                 width: '414px', 
                 maxWidth: '414px', 
