@@ -348,7 +348,7 @@ const useCanvasStore = create(temporal((set, get) => ({
             } else {
                 let activeGroup = targetLayers.find(l => l.id === state.activeLayerId && l.type === 'group');
                 if (!activeGroup && targetLayers.length > 0) {
-                    activeGroup = targetLayers[targetLayers.length - 1];
+                    activeGroup = targetLayers.slice().reverse().find(l => l.type === 'group');
                 }
                 if (!activeGroup) {
                     activeGroup = { id: 'layer_' + Date.now(), type: 'group', name: 'Layer Utama', children: [], style: { zIndex: 1 } };
