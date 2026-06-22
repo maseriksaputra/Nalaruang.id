@@ -23,7 +23,7 @@ const AudioWaveformEditor = ({
         // Initialize WaveSurfer with media element for faster playback
         const audioEl = new Audio();
         audioEl.crossOrigin = "anonymous";
-        audioEl.src = audioUrl;
+
         wavesurfer.current = WaveSurfer.create({
             container: waveformRef.current,
             waveColor: '#a5b4fc', // indigo-300
@@ -36,10 +36,11 @@ const AudioWaveformEditor = ({
             normalize: true,
             sampleRate: 8000,
             media: audioEl,
+            url: audioUrl,
+            fetchParams: {
+                mode: 'cors',
+            }
         });
-
-        // Load audio peaks (playback handles by media)
-        wavesurfer.current.load(audioUrl);
 
         wavesurfer.current.on('error', (err) => {
             console.error("WaveSurfer Error:", err);
