@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\IconColumn;
@@ -33,6 +34,23 @@ class PortfolioResource extends Resource
                 TextInput::make('title')->required()->maxLength(255),
                 TextInput::make('category')->required()->maxLength(255),
                 FileUpload::make('image')->image()->directory('portfolios')->required(),
+                FileUpload::make('video')
+                    ->directory('portfolios/videos')
+                    ->acceptedFileTypes(['video/mp4', 'video/webm', 'video/ogg'])
+                    ->maxSize(10240) // 10MB max
+                    ->helperText('Maksimal 10MB. Gunakan resolusi kecil agar ringan saat diload di landing page.'),
+                Select::make('aspect_ratio')
+                    ->options([
+                        'aspect-square' => '1:1 (Persegi)',
+                        'aspect-video' => '16:9 (Landscape / Layar Lebar)',
+                        'aspect-[9/16]' => '9:16 (Portrait / Reels)',
+                        'aspect-[4/3]' => '4:3 (Landscape Standar)',
+                        'aspect-[3/4]' => '3:4 (Portrait Standar)',
+                        'aspect-[3/2]' => '3:2 (Foto Landscape)',
+                        'aspect-[2/3]' => '2:3 (Foto Portrait)',
+                    ])
+                    ->default('aspect-square')
+                    ->required(),
                 TextInput::make('sort_order')->numeric()->default(0),
                 Toggle::make('is_active')->default(true)
             ]);

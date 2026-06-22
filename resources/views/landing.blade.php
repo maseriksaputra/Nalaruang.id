@@ -591,63 +591,59 @@
         </div>
     </section>
 
-    <!-- Portofolio Section -->
-    @if($portfolios->count() > 0)
-    <section id="portofolio" class="py-24 bg-sand">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12" data-aos="fade-up">
-                <div>
-                    <h2 class="text-3xl md:text-5xl font-serif text-brand-900 mb-4 italic">Karya Portofolio</h2>
-                    <p class="text-gray-500 max-w-xl">Inspirasi dari ragam karya terbaik yang telah kami ciptakan, menggabungkan seni visual cetak dan teknologi.</p>
-                </div>
-                <div class="mt-6 md:mt-0">
-                    <a href="#" class="border border-brand-800 text-brand-900 hover:bg-brand-800 hover:text-white px-6 py-2.5 rounded-full text-sm font-medium transition duration-300">
-                        Lihat Semua Karya
-                    </a>
-                </div>
-            </div>
-
-            <!-- Portfolio Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                @foreach($portfolios as $portfolio)
-                <div class="portfolio-item rounded-xl relative group block overflow-hidden" 
-                     style="aspect-ratio: 1/1;"
-                     data-aos="zoom-in" data-aos-delay="{{ $loop->iteration * 100 }}">
-                    
-                    <img width="600" height="400" loading="lazy" src="{{ $portfolio->image ? Storage::url($portfolio->image) : 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000' }}" 
-                         class="portfolio-img absolute inset-0 w-full h-full object-cover" 
-                         alt="{{ $portfolio->title }}">
-                         
-                    <div class="portfolio-overlay absolute inset-0 flex flex-col justify-end p-6 pointer-events-none">
-                        <div class="portfolio-text pointer-events-auto">
-                            <span class="text-brand-100 hover:text-white text-xs font-bold tracking-wider uppercase mb-1 block transition">{{ $portfolio->category ?? 'Karya' }}</span>
-                            <h3 class="text-lg font-serif text-white">{{ $portfolio->title }}</h3>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-    @endif
-
-    <!-- Mid Banner Section -->
-    <section class="relative py-32 mt-10">
+    <!-- Merged Portofolio & Mid Banner Section -->
+    <section id="portofolio" class="relative py-32 mt-10 overflow-hidden flex flex-col justify-center min-h-[80vh]">
         <div class="absolute inset-0 w-full h-full bg-fixed" style="background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&q=80&w=1920'); background-size: cover; background-position: center;">
             <div class="absolute inset-0 mid-overlay"></div>
+            <div class="absolute inset-0 bg-brand-900/60"></div>
         </div>
         
-        <div class="relative z-10 text-center px-4 max-w-3xl mx-auto" data-aos="fade-up">
+        <div class="relative z-10 text-center px-4 max-w-3xl mx-auto mb-16" data-aos="fade-up">
             <h2 class="text-4xl md:text-5xl font-serif text-white mb-6 italic drop-shadow-md">
                 Wujudkan Ide Brilian Anda<br>Bersama Kami
             </h2>
             <p class="text-white/90 text-sm md:text-base mb-10 font-light italic">
-                Baik itu merencanakan hari pernikahan yang sempurna atau membangun ekosistem digital untuk bisnis Anda, kami siap merealisasikannya.
+                Eksplorasi ragam karya portofolio terbaik kami yang menggabungkan seni visual dan teknologi.
             </p>
             <a href="#kontak" class="inline-block bg-brand-500/90 hover:bg-brand-500 backdrop-blur-md text-white px-8 py-3.5 rounded-full text-sm font-medium transition duration-300 border border-white/20 hover:scale-105 transform shadow-2xl">
                 KONSULTASI SEKARANG
             </a>
         </div>
+
+        @if($portfolios->count() > 0)
+        <!-- Portfolio Marquee (GSAP Horizontal Loop) -->
+        <div class="relative z-10 w-full overflow-hidden mt-8">
+            <!-- Blur edges for smooth entrance/exit -->
+            <div class="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-[#8c086c] to-transparent z-20 pointer-events-none mix-blend-multiply"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-[#8c086c] to-transparent z-20 pointer-events-none mix-blend-multiply"></div>
+
+            <div class="portfolio-marquee-track flex gap-4 w-max" id="portfolio-track">
+                
+                <!-- We create 3 identical sets to ensure smooth infinite looping on ultra-wide screens -->
+                @for ($i = 0; $i < 3; $i++)
+                <div class="portfolio-group grid grid-rows-2 grid-flow-col gap-4 auto-cols-max shrink-0 items-center">
+                    @foreach($portfolios as $portfolio)
+                        <div class="relative {{ $portfolio->aspect_ratio ?? 'aspect-square' }} h-[150px] md:h-[220px] rounded-2xl overflow-hidden shadow-2xl group transition-transform duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)] border border-white/10 cursor-pointer">
+                            @if($portfolio->video)
+                                <video autoplay loop muted playsinline class="w-full h-full object-cover">
+                                    <source src="{{ Storage::url($portfolio->video) }}" type="video/mp4">
+                                </video>
+                            @else
+                                <img src="{{ $portfolio->image ? Storage::url($portfolio->image) : 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000' }}" 
+                                     alt="{{ $portfolio->title }}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 vintage-film">
+                            @endif
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-900/95 via-brand-900/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-5">
+                                <span class="text-brand-300 text-xs font-bold uppercase tracking-widest mb-1">{{ $portfolio->category }}</span>
+                                <h4 class="text-white text-base md:text-lg font-serif truncate drop-shadow-md">{{ $portfolio->title }}</h4>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                @endfor
+
+            </div>
+        </div>
+        @endif
     </section>
 
     <!-- Testimonial / Review Section -->
@@ -828,6 +824,9 @@
             }
         });
 
+    <!-- GSAP Core CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
         // Script untuk Animasi Slideshow Horizontal (Kanan ke Kiri)
         document.addEventListener('DOMContentLoaded', function() {
             const track = document.getElementById('hero-slider-track');
@@ -851,6 +850,52 @@
             // Ganti gambar setiap 5 detik
             setInterval(nextSlide, 5000);
         });
+        // GSAP Marquee untuk Portofolio
+        if (typeof gsap !== 'undefined') {
+            const track = document.getElementById('portfolio-track');
+            if (track) {
+                // Menghitung lebar 1 grup (dari 3 grup yang ada) untuk jarak looping yang pas
+                const group = track.querySelector('.portfolio-group');
+                if (group) {
+                    // Beri sedikit jeda agar DOM ter-render sempurna sebelum kalkulasi lebar
+                    setTimeout(() => {
+                        const distanceToTranslate = group.offsetWidth + 16; // 16px adalah gap-4
+                        
+                        // Buat animasi berjalan ke kiri sejauh 1 grup, lalu diulang (infinite loop)
+                        gsap.to(track, {
+                            x: -distanceToTranslate,
+                            duration: 20, // Semakin besar semakin lambat
+                            ease: "none",
+                            repeat: -1
+                        });
+
+                        // Opsional: Pause saat hover
+                        track.addEventListener('mouseenter', () => gsap.killTweensOf(track, "x"));
+                        // Saat mouse leave, kita lanjutkan animasinya dari posisinya saat ini
+                        track.addEventListener('mouseleave', () => {
+                            const currentX = gsap.getProperty(track, "x");
+                            const remainingRatio = 1 - (Math.abs(currentX) / distanceToTranslate);
+                            gsap.to(track, {
+                                x: -distanceToTranslate,
+                                duration: 20 * remainingRatio,
+                                ease: "none",
+                                onComplete: () => {
+                                    gsap.set(track, { x: 0 }); // Reset ke awal
+                                    // Mulai lagi dari awal dengan durasi penuh
+                                    gsap.to(track, {
+                                        x: -distanceToTranslate,
+                                        duration: 20,
+                                        ease: "none",
+                                        repeat: -1
+                                    });
+                                }
+                            });
+                        });
+
+                    }, 500);
+                }
+            }
+        }
     </script>
 @include('components.lightbox')
 </body>
