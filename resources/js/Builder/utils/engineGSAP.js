@@ -210,8 +210,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
         const triggerElement = elementRef;
         const keyframes = layerAnimation.custom_keyframes;
         
-        const baseX = parseFloat(layerStyle?.x) || 0;
-        const baseY = parseFloat(layerStyle?.y) || 0;
+        const baseX = parseFloat(styleParams?.x) || 0;
+        const baseY = parseFloat(styleParams?.y) || 0;
         const getValidNum = (val, fallback) => {
             if (val === undefined || val === null || val === '') return fallback;
             const parsed = parseFloat(val);
@@ -225,9 +225,9 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             gsap.set(elementRef, {
                 x: getValidNum(firstKf.x, baseX) - baseX,
                 y: getValidNum(firstKf.y, baseY) - baseY,
-                scale: getValidNum(firstKf.scale, layerStyle?.scale ?? 1),
-                rotation: getValidNum(firstKf.rotation, layerStyle?.rotation ?? 0),
-                opacity: globalDelay > 0 ? 0 : getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1),
+                scale: getValidNum(firstKf.scale, styleParams?.scale ?? 1),
+                rotation: getValidNum(firstKf.rotation, styleParams?.rotation ?? 0),
+                opacity: globalDelay > 0 ? 0 : getValidNum(firstKf.opacity, styleParams?.opacity ?? 1),
                 ...(firstKf.width !== undefined && { width: firstKf.width }),
                 ...(firstKf.height !== undefined && { height: firstKf.height })
             });
@@ -241,7 +241,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
 
         // Waktu absolut timeline dimulai dari 0 (yang mana aslinya sudah ter-delay oleh globalDelay)
         if (!hasEntryAnimation && globalDelay > 0) {
-            tl.set(elementRef, { opacity: getValidNum(firstKf.opacity, layerStyle?.opacity ?? 1), immediateRender: false, overwrite: false }, 0);
+            tl.set(elementRef, { opacity: getValidNum(firstKf.opacity, styleParams?.opacity ?? 1), immediateRender: false, overwrite: false }, 0);
         }
 
         // Loop titik pergerakan keyframe (K1 ke K2 ke K3 dst)
