@@ -1048,7 +1048,7 @@ const useCanvasStore = create(temporal((set, get) => ({
         return isEqual(pastState.sections, currentState.sections) && 
                isEqual(pastState.global_settings, currentState.global_settings);
     },
-    limit: 25
+    limit: 5
 }));
 
 export default useCanvasStore;

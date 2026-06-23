@@ -7,7 +7,7 @@ const apiClient = axios.create({
     },
     // Sangat krusial agar cookie session Laravel dikirim (SPA Embedded)
     withCredentials: true,
-    timeout: 15000 // 15 seconds timeout to prevent infinite hanging
+    timeout: 60000 // 60 seconds timeout for large canvas payloads
 });
 
 // Otomatis mencari tag <meta name="csrf-token" content="..."> di Blade
