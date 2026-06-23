@@ -19,7 +19,7 @@ class DashboardPortalController extends Controller
         $baseSlug = Str::slug($title);
         $slug = $baseSlug;
         $counter = 1;
-        while (Invitation::where('slug', $slug)->exists()) {
+        while (Invitation::withTrashed()->where('slug', $slug)->exists()) {
             $slug = $baseSlug . '-' . $counter;
             $counter++;
         }
@@ -131,7 +131,7 @@ class DashboardPortalController extends Controller
             // Increment total_uses
             $template->increment('total_uses');
 
-            $count = Invitation::where('is_template', false)->count();
+            $count = Invitation::withTrashed()->where('is_template', false)->count();
             $newTitle = 'Desain ' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
 
             $newInvitation = Invitation::create([
@@ -305,7 +305,7 @@ class DashboardPortalController extends Controller
     public function store(Request $request)
     {
         try {
-            $count = Invitation::where('is_template', false)->count();
+            $count = Invitation::withTrashed()->where('is_template', false)->count();
             $newTitle = 'Desain ' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
 
             $invitation = Invitation::create([
@@ -417,7 +417,7 @@ class DashboardPortalController extends Controller
 
             $templateProject->increment('total_uses');
 
-            $count = Invitation::where('is_template', false)->count();
+            $count = Invitation::withTrashed()->where('is_template', false)->count();
             $newTitle = 'Undangan ' . $order->customer_name . ' - ' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
 
             $newInvitation = Invitation::create([
