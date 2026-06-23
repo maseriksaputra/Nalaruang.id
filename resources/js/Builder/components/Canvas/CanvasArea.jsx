@@ -176,12 +176,15 @@ const CanvasArea = () => {
                                                     return '844px'; // Cover is 844px to match phone aspect ratio on PC
                                                 }
                                                 let maxY = 0;
-                                                const checkLayer = (layer) => {
-                                                    const bottom = (parseFloat(layer.style?.y) || 0) + (parseFloat(layer.style?.height) || 0);
+                                                const checkLayer = (layer, parentY = 0) => {
+                                                    const currentY = parentY + (parseFloat(layer.style?.y) || 0);
+                                                    const bottom = currentY + (parseFloat(layer.style?.height) || 0);
                                                     if (bottom > maxY) maxY = bottom;
-                                                    if (layer.children) layer.children.forEach(checkLayer);
+                                                    if (layer.children) {
+                                                        layer.children.forEach(child => checkLayer(child, (layer.type === 'canvas_group' || layer.type === 'group') ? currentY : parentY));
+                                                    }
                                                 };
-                                                section.layers?.forEach(checkLayer);
+                                                section.layers?.forEach(l => checkLayer(l, 0));
                                                 return maxY > 0 ? `${maxY}px` : (section.layout?.minHeight || '844px');
                                             })(),
                                         flex: 1, // Stretch to fill grid if iframe is taller
@@ -216,12 +219,15 @@ const CanvasArea = () => {
                         {/* Visual Grid Lines for Long Content Pages */}
                         {index > 0 && activeCanvasMode !== 'desktop' && showGridLines && (() => {
                             let maxY = 0;
-                            const checkLayer = (layer) => {
-                                const bottom = (parseFloat(layer.style?.y) || 0) + (parseFloat(layer.style?.height) || 0);
+                            const checkLayer = (layer, parentY = 0) => {
+                                const currentY = parentY + (parseFloat(layer.style?.y) || 0);
+                                const bottom = currentY + (parseFloat(layer.style?.height) || 0);
                                 if (bottom > maxY) maxY = bottom;
-                                if (layer.children) layer.children.forEach(checkLayer);
+                                if (layer.children) {
+                                    layer.children.forEach(child => checkLayer(child, (layer.type === 'canvas_group' || layer.type === 'group') ? currentY : parentY));
+                                }
                             };
-                            section.layers?.forEach(checkLayer);
+                            section.layers?.forEach(l => checkLayer(l, 0));
                             
                             let sectionH = 844;
                             if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {

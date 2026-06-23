@@ -284,8 +284,12 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                         transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
                         borderRadius: (() => {
                         if (layer.style?.borderRadius === undefined) return '0px';
-                        const r = `${layer.style.borderRadius}px`;
-                        switch(layer.style.borderRadiusType) {
+                        let val = layer.style.borderRadius;
+                        let r = (typeof val === 'number' || (typeof val === 'string' && !isNaN(val) && val.trim() !== '')) 
+                            ? `${val}px` 
+                            : val;
+                            
+                        switch(layer.style.borderRadiusConfig) {
                             case 'top': return `${r} ${r} 0 0`;
                             case 'bottom': return `0 0 ${r} ${r}`;
                             case 'left': return `${r} 0 0 ${r}`;

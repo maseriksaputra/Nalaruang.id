@@ -192,22 +192,25 @@ const PublicCanvas = ({ config }) => {
                 {!hideEmptySections && sections.map((section, index) => {
                     
                     let hasOpenButton = false;
-                    sections.forEach(s => {
-                        s.layers?.forEach(l => {
+                    const checkInteraction = (layers) => {
+                        if (!layers) return;
+                        layers.forEach(l => {
                             if (l.interaction?.action === 'open_invitation') hasOpenButton = true;
-                            if (l.children) l.children.forEach(c => {
-                                if (c.interaction?.action === 'open_invitation') hasOpenButton = true;
-                            });
+                            if (l.children) checkInteraction(l.children);
                         });
-                    });
+                    };
+                    sections.forEach(s => checkInteraction(s.layers));
 
                     let maxY = 0;
-                    const checkLayer = (layer) => {
-                        const bottom = (parseFloat(layer.style?.y) || 0) + (parseFloat(layer.style?.height) || 0);
+                    const checkLayer = (layer, parentY = 0) => {
+                        const currentY = parentY + (parseFloat(layer.style?.y) || 0);
+                        const bottom = currentY + (parseFloat(layer.style?.height) || 0);
                         if (bottom > maxY) maxY = bottom;
-                        if (layer.children) layer.children.forEach(checkLayer);
+                        if (layer.children) {
+                            layer.children.forEach(child => checkLayer(child, (layer.type === 'canvas_group' || layer.type === 'group') ? currentY : parentY));
+                        }
                     };
-                    section.layers?.forEach(checkLayer);
+                    section.layers?.forEach(l => checkLayer(l, 0));
 
                     const sectionHeight = (() => {
                         if (section.layout?.height && section.layout.height !== 'auto' && section.layout.height !== '100vh') {
