@@ -23,6 +23,7 @@ class Template extends Model
         'category',
         'preview_url',
         'demo_views',
+        'shares',
         'total_invitation_views',
         'is_active',
         'stok',

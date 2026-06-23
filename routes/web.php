@@ -25,6 +25,7 @@ Route::get('/order/{template_id}', [OrderController::class, 'create'])->name('or
 Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 
 Route::get('/p/{id}', [ProductController::class, 'show'])->name('product.show');
+Route::post('/p/{id}/share', [ProductController::class, 'share'])->name('product.share');
 
 Route::get('/debug-log', function () {
     $logFile = storage_path('logs/laravel.log');

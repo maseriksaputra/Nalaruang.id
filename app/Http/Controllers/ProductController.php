@@ -19,4 +19,12 @@ class ProductController extends Controller
 
         return view('product-detail', compact('product'));
     }
+
+    public function share($id)
+    {
+        $product = Template::findOrFail($id);
+        $product->increment('shares');
+        
+        return response()->json(['success' => true, 'shares' => $product->shares]);
+    }
 }

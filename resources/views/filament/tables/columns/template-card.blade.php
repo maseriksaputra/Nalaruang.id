@@ -111,32 +111,41 @@
         </div>
         
         <div style="margin-top: auto; border-top: 1px solid #f3f4f6; padding-top: 0.75rem;">
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; position: relative;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.25rem; position: relative;">
                 <!-- Terjual -->
                 <div style="display: flex; flex-direction: column;">
                     <span style="font-weight: 700; color: #111827; font-size: 14px; line-height: 1;">{{ $record->orders_count ?? 0 }}</span>
-                    <span style="font-size: 12px; color: #6b7280; margin-top: 4px;">Terjual</span>
+                    <span style="font-size: 11px; color: #6b7280; margin-top: 4px;">Terjual</span>
                 </div>
                 
                 <!-- Separator 1 -->
-                <div style="position: absolute; left: 33%; transform: translateX(-50%); width: 1px; height: 24px; background-color: #e5e7eb; top: 4px;"></div>
+                <div style="position: absolute; left: 25%; transform: translateX(-50%); width: 1px; height: 24px; background-color: #e5e7eb; top: 4px;"></div>
                 
                 <!-- Views -->
-                <div style="display: flex; flex-direction: column; padding-left: 0.5rem;">
+                <div style="display: flex; flex-direction: column; padding-left: 0.25rem;">
                     <span style="font-weight: 700; color: #111827; font-size: 14px; line-height: 1;">{{ ($record->demo_views ?? 0) + ($record->total_invitation_views ?? 0) }}</span>
-                    <span style="font-size: 12px; color: #6b7280; margin-top: 4px;">Views</span>
+                    <span style="font-size: 11px; color: #6b7280; margin-top: 4px;">Views</span>
                 </div>
 
                 <!-- Separator 2 -->
-                <div style="position: absolute; left: 66%; transform: translateX(-50%); width: 1px; height: 24px; background-color: #e5e7eb; top: 4px;"></div>
+                <div style="position: absolute; left: 50%; transform: translateX(-50%); width: 1px; height: 24px; background-color: #e5e7eb; top: 4px;"></div>
+
+                <!-- Shares -->
+                <div style="display: flex; flex-direction: column; padding-left: 0.25rem;">
+                    <span style="font-weight: 700; color: #111827; font-size: 14px; line-height: 1;">{{ $record->shares ?? 0 }}</span>
+                    <span style="font-size: 11px; color: #6b7280; margin-top: 4px;">Share</span>
+                </div>
+
+                <!-- Separator 3 -->
+                <div style="position: absolute; left: 75%; transform: translateX(-50%); width: 1px; height: 24px; background-color: #e5e7eb; top: 4px;"></div>
 
                 <!-- Stok -->
-                <div style="display: flex; flex-direction: column; padding-left: 0.5rem;">
+                <div style="display: flex; flex-direction: column; padding-left: 0.25rem;">
                     <span style="font-size: 10px; color: #6b7280; line-height: 1; margin-bottom: 4px;">Stok</span>
                     @if(($record->stok ?? 0) > 0)
-                        <span style="font-weight: 700; color: #22c55e; font-size: 12px; line-height: 1;">Tersedia</span>
+                        <span style="font-weight: 700; color: #22c55e; font-size: 11px; line-height: 1;">Ada</span>
                     @else
-                        <span style="font-weight: 700; color: #ef4444; font-size: 12px; line-height: 1;">Habis</span>
+                        <span style="font-weight: 700; color: #ef4444; font-size: 11px; line-height: 1;">Habis</span>
                     @endif
                 </div>
             </div>

@@ -97,6 +97,10 @@
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                             <span><strong class="text-gray-900">{{ $product->orders_count ?? 0 }}</strong> Terjual</span>
                         </div>
+                        <div class="flex items-center gap-1.5" id="share-stat-container">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                            <span><strong class="text-gray-900" id="share-count">{{ $product->shares ?? 0 }}</strong> Dibagikan</span>
+                        </div>
                     </div>
 
                     <!-- Price -->
@@ -123,6 +127,10 @@
                             Live Preview
                         </a>
                         @endif
+                        <button type="button" onclick="shareProduct()" class="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl border-2 border-gray-200 text-gray-700 font-bold hover:bg-gray-50 hover:border-gray-300 transition-all">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                            Bagikan
+                        </button>
                         <a href="{{ route('order.create', $product->id) }}" class="flex-1 flex items-center justify-center bg-[#d81b60] hover:bg-[#b0164e] text-white font-bold rounded-xl px-8 py-3.5 transition-all transform hover:-translate-y-0.5 shadow-lg shadow-pink-500/30 text-lg">
                             Beli Sekarang
                         </a>
@@ -186,10 +194,54 @@
             </a>
             @endif
             
+            <button type="button" onclick="shareProduct()" class="flex-none flex items-center justify-center w-12 h-12 rounded-xl border-2 border-gray-200 text-gray-600 hover:bg-gray-50 active:bg-gray-100 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+            </button>
+
             <a href="{{ route('order.create', $product->id) }}" class="flex-1 flex items-center justify-center bg-[#d81b60] active:bg-[#b0164e] text-white font-bold rounded-xl h-12 transition-colors shadow-md shadow-pink-500/30">
                 Beli Sekarang
             </a>
         </div>
     </div>
 
+    <script>
+        function shareProduct() {
+            const url = window.location.href;
+            const title = "{{ $product->name }}";
+            const text = "Lihat produk keren ini: " + title;
+
+            // Increment share count in backend
+            fetch(`{{ route('product.share', $product->id) }}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    const el = document.getElementById('share-count');
+                    if(el) el.innerText = data.shares;
+                }
+            })
+            .catch(err => console.error(err));
+
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: text,
+                    url: url,
+                })
+                .then(() => console.log('Successful share'))
+                .catch((error) => console.log('Error sharing', error));
+            } else {
+                navigator.clipboard.writeText(url).then(function() {
+                    alert('Link berhasil disalin ke clipboard!');
+                }, function(err) {
+                    console.error('Could not copy text: ', err);
+                });
+            }
+        }
+    </script>
 @endsection
