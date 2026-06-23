@@ -114,7 +114,7 @@
 <body class="font-sans text-gray-800 overflow-x-hidden selection:bg-brand-500 selection:text-white">
 
     <!-- Navbar -->
-    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/10 backdrop-blur-sm border-b border-white/10">
+    <nav id="navbar" x-data="{ mobileMenuOpen: false }" class="fixed w-full z-50 transition-all duration-300 bg-white/10 backdrop-blur-sm border-b border-white/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
                 <div class="flex-shrink-0 flex items-center">
@@ -122,15 +122,53 @@
                         <img width="200" height="80" src="{{ asset('logo.png') }}" alt="Nalaruang.id" class="h-20 w-auto object-contain transform scale-150 origin-left transition duration-300" id="logo-img">
                     </div>
                 </div>
+                
+                <!-- Desktop Menu -->
                 <div class="hidden lg:flex space-x-8 text-sm font-medium">
                     <a href="#beranda" class="text-white hover:text-brand-500 transition duration-300 nav-link">HOME</a>
                     <a href="#katalog" class="text-white hover:text-brand-500 transition duration-300 nav-link">LAYANAN</a>
                     <a href="#portofolio" class="text-white hover:text-brand-500 transition duration-300 nav-link">PORTOFOLIO</a>
                     <a href="#review" class="text-white hover:text-brand-500 transition duration-300 nav-link">CERITA KLIEN</a>
                 </div>
-                <div class="hidden md:flex items-center gap-6">
-
+                
+                <!-- Desktop CTA -->
+                <div class="hidden lg:flex items-center gap-6">
                     <a href="#kontak" id="nav-btn" class="bg-white/20 hover:bg-white hover:text-brand-900 backdrop-blur-sm text-white px-6 py-2.5 rounded-full text-sm font-medium transition duration-300 flex items-center gap-2 transform">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                        Hubungi Kami
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="lg:hidden flex items-center">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-white hover:text-brand-500 transition duration-300 focus:outline-none p-2 nav-link">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" style="display:none;"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div x-show="mobileMenuOpen" 
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 -translate-y-4"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-4"
+             @click.away="mobileMenuOpen = false"
+             class="absolute top-full left-0 w-full bg-white shadow-[0_10px_20px_rgba(0,0,0,0.1)] border-t border-gray-100 lg:hidden"
+             style="display: none;">
+            <div class="px-4 pt-4 pb-6 space-y-2 flex flex-col">
+                <a @click="mobileMenuOpen = false" href="#beranda" class="block px-4 py-3 rounded-xl text-base font-bold text-gray-800 hover:text-brand-600 hover:bg-brand-50 transition">HOME</a>
+                <a @click="mobileMenuOpen = false" href="#katalog" class="block px-4 py-3 rounded-xl text-base font-bold text-gray-800 hover:text-brand-600 hover:bg-brand-50 transition">LAYANAN</a>
+                <a @click="mobileMenuOpen = false" href="#portofolio" class="block px-4 py-3 rounded-xl text-base font-bold text-gray-800 hover:text-brand-600 hover:bg-brand-50 transition">PORTOFOLIO</a>
+                <a @click="mobileMenuOpen = false" href="#review" class="block px-4 py-3 rounded-xl text-base font-bold text-gray-800 hover:text-brand-600 hover:bg-brand-50 transition">CERITA KLIEN</a>
+                <div class="mt-4 px-2 pt-2">
+                    <a @click="mobileMenuOpen = false" href="#kontak" class="w-full bg-brand-800 text-white px-6 py-3.5 rounded-full text-sm font-bold text-center shadow-md hover:bg-brand-900 transition block flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                         Hubungi Kami
                     </a>
