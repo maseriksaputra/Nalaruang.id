@@ -3147,6 +3147,33 @@ const RightInspector = () => {
                             </div>
 
                             <div>
+                                <label className="text-[11px] font-bold text-gray-800 block mb-2">Pilihan Font</label>
+                                <button 
+                                    onClick={() => setActiveTab('fonts')}
+                                    className="w-full flex items-center justify-between text-sm border border-gray-300 rounded p-2 focus:border-indigo-500 bg-white hover:bg-gray-50 transition-colors text-left mb-4"
+                                >
+                                    <span style={{ fontFamily: activeLayer.style?.fontFamily || 'monospace' }}>
+                                        {activeLayer.style?.fontFamily || 'Default Font'}
+                                    </span>
+                                    <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                                </button>
+                            </div>
+
+                            <div>
+                                <div className="flex items-center justify-between mb-2">
+                                    <label className="text-[11px] font-bold text-gray-800">Ukuran Font</label>
+                                    <span className="text-xs text-gray-500">{activeLayer.style?.fontSize ?? 16}px</span>
+                                </div>
+                                <input 
+                                    type="range" 
+                                    min="8" max="48" step="1"
+                                    value={activeLayer.style?.fontSize ?? 16}
+                                    onChange={(e) => updateLayerStyle(activeLayer.id, { fontSize: parseInt(e.target.value) })}
+                                    className="w-full accent-indigo-600 mb-4"
+                                />
+                            </div>
+
+                            <div>
                                 <label className="text-[11px] font-bold text-gray-800 block mb-2">No. Rekening / Teks</label>
                                 <input 
                                     type="text" 

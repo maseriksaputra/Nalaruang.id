@@ -338,7 +338,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 
 
     // Load font if it's a text layer
-    if (layer.type === 'text' || layer.type === 'dynamic_guest_name') {
+    if (layer.type === 'text' || layer.type === 'dynamic_guest_name' || layer.type === 'interactive_copy' || layer.type === 'interactive_countdown') {
         loadFont(layer.style?.fontFamily);
     }
     if (layer.type === 'polaroid') {
@@ -908,15 +908,23 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                         <div className="flex flex-col flex-1 min-w-0 pr-2">
                                             {layer.style?.bankName && (
                                                 <span 
-                                                    className="text-[10px] font-bold uppercase tracking-wider mb-0.5 truncate w-full"
-                                                    style={{ color: hexToRgba(textColor, Math.max(0.2, textOpacity - 0.3)) }}
+                                                    className="font-bold uppercase tracking-wider mb-0.5 truncate w-full"
+                                                    style={{ 
+                                                        color: hexToRgba(textColor, Math.max(0.2, textOpacity - 0.3)),
+                                                        fontFamily: layer.style?.fontFamily || 'monospace',
+                                                        fontSize: layer.style?.fontSize ? `${Math.max(8, Math.round(layer.style.fontSize * 0.65))}px` : '10px'
+                                                    }}
                                                 >
                                                     {layer.style.bankName}
                                                 </span>
                                             )}
                                             <span 
-                                                className="text-base font-mono font-bold truncate w-full"
-                                                style={{ color: hexToRgba(textColor, textOpacity) }}
+                                                className="font-mono font-bold truncate w-full"
+                                                style={{ 
+                                                    color: hexToRgba(textColor, textOpacity),
+                                                    fontFamily: layer.style?.fontFamily || 'monospace',
+                                                    fontSize: layer.style?.fontSize ? `${layer.style.fontSize}px` : '16px'
+                                                }}
                                             >
                                                 {layer.content || ''}
                                             </span>
