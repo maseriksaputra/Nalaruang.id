@@ -259,9 +259,9 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                 tl.set(elementRef, {
                     x: getValidNum(kf.x, baseX) - baseX,
                     y: getValidNum(kf.y, baseY) - baseY,
-                    opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
-                    scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
-                    rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
+                    opacity: getValidNum(kf.opacity, styleParams?.opacity ?? 1),
+                    scale: getValidNum(kf.scale, styleParams?.scale ?? 1),
+                    rotation: getValidNum(kf.rotation, styleParams?.rotation ?? 0),
                     ...(kf.width !== undefined && { width: kf.width }),
                     ...(kf.height !== undefined && { height: kf.height }),
                     immediateRender: false,
@@ -272,9 +272,9 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                 tl.to(elementRef, {
                     x: getValidNum(kf.x, baseX) - baseX,
                     y: getValidNum(kf.y, baseY) - baseY,
-                    opacity: getValidNum(kf.opacity, layerStyle?.opacity ?? 1),
-                    scale: getValidNum(kf.scale, layerStyle?.scale ?? 1),
-                    rotation: getValidNum(kf.rotation, layerStyle?.rotation ?? 0),
+                    opacity: getValidNum(kf.opacity, styleParams?.opacity ?? 1),
+                    scale: getValidNum(kf.scale, styleParams?.scale ?? 1),
+                    rotation: getValidNum(kf.rotation, styleParams?.rotation ?? 0),
                     ...(kf.width !== undefined && { width: kf.width }),
                     ...(kf.height !== undefined && { height: kf.height }),
                     duration: kfDuration,
@@ -364,7 +364,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
     if (hasEntryAnimation) {
         const hasEntry = config.mode === 'enter' || config.mode === 'both' || !config.mode;
         const hasExit = config.mode === 'exit' || config.mode === 'both';
-        const entryProps = getAnimationProps(layerAnimation.entry, false, config, layerStyle);
+        const entryProps = getAnimationProps(layerAnimation.entry, false, config, styleParams);
             
         if (hasEntry) {
             if (config.scale !== undefined && config.scale !== 1) {
@@ -407,7 +407,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
     } else if (!hasEntryAnimation && layerAnimation.idle !== 'custom_timeline' && globalDelay > 0) {
         // Fallback: Elemen yang hanya punya delay tapi tidak punya Entry dan Timeline,
         // akan disembunyikan secara harfiah, lalu dimunculkan setelah delay.
-        const tweenProps = { opacity: layerStyle?.opacity ?? 1, duration: 0.01, delay: globalDelay, immediateRender: true };
+        const tweenProps = { opacity: styleParams?.opacity ?? 1, duration: 0.01, delay: globalDelay, immediateRender: true };
         
         const isScrollTriggered = (!isBuilder && trigger === 'onScroll');
         if (isScrollTriggered) {
@@ -440,7 +440,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
         // Balik urutan agar Entry dievaluasi duluan, baru ditimpa oleh Idle jika Idle sedang aktif
         [...activeTweens].reverse().forEach(t => {
             if (t && typeof t.totalTime === 'function') {
-                t.totalTime(startAtTime || 0);
+                t.totalTime(playheadStart || 0);
             }
         });
     }
