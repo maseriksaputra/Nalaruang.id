@@ -69,7 +69,47 @@ class BuilderController extends Controller
         if ($request->file('file')) {
             $file = $request->file('file');
             $disk = config('filesystems.default');
-            $path = $file->store('invitations/media', $disk);
+            
+            $mimeType = $file->getMimeType();
+            $extension = strtolower($file->getClientOriginalExtension());
+            $path = '';
+
+            if (str_starts_with($mimeType, 'image/') && in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
+                $sourceImage = null;
+                if (in_array($mimeType, ['image/jpeg', 'image/jpg'])) $sourceImage = @imagecreatefromjpeg($file->getPathname());
+                elseif ($mimeType == 'image/png') $sourceImage = @imagecreatefrompng($file->getPathname());
+                elseif ($mimeType == 'image/webp') $sourceImage = @imagecreatefromwebp($file->getPathname());
+
+                if ($sourceImage !== false) {
+                    $tempPath = tempnam(sys_get_temp_dir(), 'cmp_');
+                    
+                    if ($mimeType == 'image/png' || $mimeType == 'image/webp') {
+                        imagepalettetotruecolor($sourceImage);
+                        imagealphablending($sourceImage, false);
+                        imagesavealpha($sourceImage, true);
+                    }
+
+                    if ($mimeType == 'image/png') {
+                        imagepng($sourceImage, $tempPath, 7);
+                    } elseif ($mimeType == 'image/webp') {
+                        imagewebp($sourceImage, $tempPath, 70);
+                    } else {
+                        imagejpeg($sourceImage, $tempPath, 70);
+                    }
+                    
+                    imagedestroy($sourceImage);
+
+                    $filename = \Illuminate\Support\Str::random(40) . '.' . $extension;
+                    $path = 'invitations/media/' . $filename;
+                    
+                    \Illuminate\Support\Facades\Storage::disk($disk)->put($path, file_get_contents($tempPath), 'public');
+                    @unlink($tempPath);
+                } else {
+                    $path = $file->storePublicly('invitations/media', $disk);
+                }
+            } else {
+                $path = $file->storePublicly('invitations/media', $disk);
+            }
             
             return response()->json([
                 'success' => true,
