@@ -103,17 +103,17 @@
                             <!-- Overlay -->
                             <div class="absolute inset-0 bg-brand-900/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center gap-2 z-10 pointer-events-none">
                                 <div class="pointer-events-auto flex flex-col gap-2 w-full px-4 md:px-6">
-                                    <template x-if="'{{ $service->slug }}' === 'event-digital'">
+                                    <template x-if="template.preview_url || '{{ $service->slug }}' === 'event-digital'">
                                         <a x-bind:href="template.preview_url || '#'" 
                                            x-bind:target="template.preview_url ? '_blank' : '_self'"
                                            @click.stop="if(!template.preview_url) { $event.preventDefault(); alert('Demo belum tersedia untuk produk ini.'); }"
-                                           class="w-full py-1.5 md:py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-[10px] md:text-xs font-medium transition backdrop-blur-sm text-center">
+                                           class="w-full py-1.5 md:py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-[10px] md:text-xs font-medium transition backdrop-blur-sm text-center mb-1">
                                            Lihat Demo
                                         </a>
                                     </template>
                                     <template x-if="'{{ $service->slug }}' !== 'event-digital'">
                                         <button @click.prevent.stop="$dispatch('open-lightbox', { images: slides })" 
-                                           class="w-full py-1.5 md:py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-[10px] md:text-xs font-medium transition backdrop-blur-sm text-center">
+                                           class="w-full py-1.5 md:py-2 bg-white/20 hover:bg-white text-white hover:text-brand-900 rounded-full text-[10px] md:text-xs font-medium transition backdrop-blur-sm text-center mb-1">
                                            Lihat Gambar
                                         </button>
                                     </template>
