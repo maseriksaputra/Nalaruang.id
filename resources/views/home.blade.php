@@ -190,14 +190,34 @@
             @foreach($services as $service)
                 @if($service->templates->count() > 0)
                 <div class="mb-16 last:mb-0" data-aos="fade-up">
-                    <div class="flex flex-col md:flex-row justify-between items-end mb-6">
-                        <div>
-                            <h3 class="text-2xl font-serif text-brand-900 mb-1">{{ $service->title }}</h3>
-                            <p class="text-sm text-brand-600">{{ $service->templates->count() }} Produk Tersedia</p>
+                    <div class="flex flex-col md:flex-row justify-between items-center md:items-end mb-8 border-b border-brand-200/50 pb-5 relative">
+                        <div class="absolute bottom-[-1px] left-0 w-32 h-0.5 bg-gradient-to-r from-brand-600 to-transparent"></div>
+                        <div class="mb-5 md:mb-0 flex items-center gap-4 w-full md:w-auto">
+                            <!-- Icon Box -->
+                            <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-50 to-white flex items-center justify-center text-brand-600 shadow-sm border border-brand-100 group-hover:shadow-md transition-shadow">
+                                @if($service->slug == 'event-digital')
+                                    <svg class="w-7 h-7 filter drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                                @elseif($service->slug == 'web-mobile-app')
+                                    <svg class="w-7 h-7 filter drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                @elseif($service->slug == 'cetak-fisik-premium' || $service->slug == 'undangan-cetak' || $service->slug == 'cetak-fisik')
+                                    <svg class="w-7 h-7 filter drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+                                @else
+                                    <svg class="w-7 h-7 filter drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                                @endif
+                            </div>
+                            <div class="text-left">
+                                <h3 class="text-2xl md:text-3xl font-serif text-brand-900 mb-2 font-bold">{{ $service->title }}</h3>
+                                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50/80 border border-brand-100 shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)]">
+                                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse shadow-[0_0_8px_rgba(246,62,161,0.6)]"></span>
+                                    <span class="text-[11px] md:text-xs font-bold text-brand-700 tracking-wider uppercase">{{ $service->templates->count() }} Pilihan Tersedia</span>
+                                </div>
+                            </div>
                         </div>
-                        <a href="{{ $service->slug ? route('service.show', $service->slug) : '#' }}" class="mt-4 md:mt-0 text-brand-600 hover:text-brand-800 text-sm font-semibold inline-flex items-center group transition-colors">
-                            Lihat Selengkapnya 
-                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        <a href="{{ $service->slug ? route('service.show', $service->slug) : '#' }}" class="mt-4 md:mt-0 w-full md:w-auto px-6 py-3 rounded-full bg-white border border-gray-200 text-gray-700 hover:text-brand-700 hover:bg-brand-50 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-500/10 text-sm font-bold inline-flex items-center justify-center group transition-all duration-300">
+                            Eksplorasi Katalog 
+                            <div class="ml-2 bg-brand-100 text-brand-600 rounded-full p-1 group-hover:bg-brand-600 group-hover:text-white transition-colors duration-300">
+                                <svg class="w-3 h-3 transform group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </div>
                         </a>
                     </div>
                     
