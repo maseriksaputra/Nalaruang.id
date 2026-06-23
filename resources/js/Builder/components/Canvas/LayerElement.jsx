@@ -979,27 +979,70 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                 );
                             })()}
 
-                            {layer.type === 'interactive_comments' && (
-                                <div 
-                                    className="w-full h-full flex flex-col pointer-events-none overflow-hidden"
-                                    style={{
-                                        backgroundColor: layer.style?.backgroundColor || '#f8fafc',
-                                        borderRadius: layer.style?.borderRadius || '1rem',
-                                        padding: layer.style?.padding || '1rem',
-                                        color: layer.style?.color || '#333333',
-                                        borderWidth: layer.style?.borderWidth || 0,
-                                        borderColor: layer.style?.borderColor || '#e2e8f0',
-                                        borderStyle: layer.style?.borderWidth ? 'solid' : 'none',
-                                    }}
-                                >
-                                    <h3 className="text-sm font-bold mb-3 border-b border-gray-200 pb-2" style={{ color: layer.style?.color || '#333333' }}>
-                                        Ucapan & Doa
-                                    </h3>
-                                    <div className="flex-1 overflow-hidden opacity-50 flex flex-col items-center justify-center">
-                                        <span className="text-[10px] text-gray-400">(Daftar komentar akan muncul di sini saat tamu mengisi form RSVP)</span>
+                            {layer.type === 'interactive_comments' && (() => {
+                                const theme = layer.style?.rsvpTheme || 'solid';
+                                let containerStyle = {
+                                    width: '100%', height: '100%', display: 'flex', flexDirection: 'column', overflow: 'hidden',
+                                    backgroundColor: layer.style?.backgroundColor || '#f8fafc',
+                                    backgroundImage: layer.style?.backgroundImageUrl ? `url(${layer.style.backgroundImageUrl})` : 'none',
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    borderRadius: layer.style?.borderRadius || '1rem',
+                                    borderWidth: layer.style?.borderWidth || 0,
+                                    borderColor: layer.style?.borderColor || '#e2e8f0',
+                                    borderStyle: layer.style?.borderWidth ? 'solid' : 'none',
+                                    padding: layer.style?.padding || '1rem', boxSizing: 'border-box'
+                                };
+                                const hexToRgba = (hex, alpha) => {
+                                    if (!hex || !hex.startsWith('#')) return hex;
+                                    const r = parseInt(hex.slice(1, 3), 16) || 0;
+                                    const g = parseInt(hex.slice(3, 5), 16) || 0;
+                                    const b = parseInt(hex.slice(5, 7), 16) || 0;
+                                    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+                                };
+
+                                if (theme === 'glass') {
+                                    containerStyle.backgroundColor = layer.style?.backgroundColor ? layer.style.backgroundColor : 'rgba(255, 255, 255, 0.2)';
+                                    containerStyle.backdropFilter = 'blur(10px)';
+                                    containerStyle.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+                                } else if (theme === 'classic') {
+                                    containerStyle.borderStyle = 'double';
+                                    containerStyle.borderWidth = layer.style?.borderWidth || '6px';
+                                    containerStyle.borderColor = layer.style?.borderColor || '#d97706';
+                                    containerStyle.borderRadius = '0';
+                                } else if (theme === 'romance') {
+                                    containerStyle.borderRadius = '2rem';
+                                    containerStyle.boxShadow = '0 10px 25px -5px rgba(225,29,72,0.1), 0 8px 10px -6px rgba(225,29,72,0.1)';
+                                } else if (theme === 'adat') {
+                                    containerStyle.borderRadius = '3rem 3rem 0 0';
+                                    containerStyle.borderTop = `8px solid ${layer.style?.borderColor || '#8b5a2b'}`;
+                                    containerStyle.borderBottom = `8px solid ${layer.style?.borderColor || '#8b5a2b'}`;
+                                } else if (theme === 'minimalist') {
+                                    containerStyle.borderStyle = 'dashed';
+                                    containerStyle.borderWidth = '1px';
+                                    containerStyle.borderColor = layer.style?.borderColor || '#9ca3af';
+                                } else if (theme === 'rustic') {
+                                    containerStyle.borderStyle = 'solid';
+                                    containerStyle.borderWidth = '4px';
+                                    containerStyle.borderColor = layer.style?.borderColor || '#78716c';
+                                    containerStyle.outline = '2px dashed ' + (layer.style?.borderColor || '#78716c');
+                                    containerStyle.outlineOffset = '-8px';
+                                }
+
+                                return (
+                                    <div 
+                                        className="pointer-events-none"
+                                        style={containerStyle}
+                                    >
+                                        <h3 className="text-sm font-bold mb-3 border-b border-gray-200 pb-2 z-10" style={{ color: layer.style?.textColor || '#333333', borderColor: layer.style?.textColor ? hexToRgba(layer.style.textColor, 0.2) : '#e2e8f0' }}>
+                                            Ucapan & Doa
+                                        </h3>
+                                        <div className="flex-1 overflow-hidden opacity-50 flex flex-col items-center justify-center z-10">
+                                            <span className="text-[10px] text-center" style={{ color: layer.style?.textColor || '#9ca3af' }}>(Daftar komentar akan muncul di sini saat tamu mengisi form RSVP)</span>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                );
+                            })()}
 
                             {layer.type === 'canvas_group' && (
                                 <div className="w-full h-full relative" style={{ pointerEvents: 'none' }}>
