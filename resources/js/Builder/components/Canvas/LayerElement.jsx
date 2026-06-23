@@ -905,12 +905,22 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                             boxShadow: layer.style?.isShadowActive ? `0px ${layer.style?.shadowY || 4}px 6px -1px rgba(0, 0, 0, 0.1)` : 'none',
                                         }}
                                     >
-                                        <span 
-                                            className="text-base font-mono font-bold w-full"
-                                            style={{ color: hexToRgba(textColor, textOpacity) }}
-                                        >
-                                            {layer.content || ''}
-                                        </span>
+                                        <div className="flex flex-col flex-1 min-w-0 pr-2">
+                                            {layer.style?.bankName && (
+                                                <span 
+                                                    className="text-[10px] font-bold uppercase tracking-wider mb-0.5 truncate w-full"
+                                                    style={{ color: hexToRgba(textColor, Math.max(0.2, textOpacity - 0.3)) }}
+                                                >
+                                                    {layer.style.bankName}
+                                                </span>
+                                            )}
+                                            <span 
+                                                className="text-base font-mono font-bold truncate w-full"
+                                                style={{ color: hexToRgba(textColor, textOpacity) }}
+                                            >
+                                                {layer.content || ''}
+                                            </span>
+                                        </div>
                                         <div 
                                             className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ml-2"
                                             style={{ 

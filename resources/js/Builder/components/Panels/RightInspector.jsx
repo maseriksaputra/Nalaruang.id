@@ -3136,11 +3136,22 @@ const RightInspector = () => {
                             <h3 className="font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded">Pengaturan Salin Rekening</h3>
                             
                             <div>
-                                <label className="text-[11px] font-bold text-gray-800 block mb-2">Isi Rekening / Teks</label>
+                                <label className="text-[11px] font-bold text-gray-800 block mb-2">Nama Bank / E-Wallet</label>
+                                <input 
+                                    type="text" 
+                                    value={activeLayer.style?.bankName || ''}
+                                    placeholder="Cth: BCA, Mandiri, DANA, OVO"
+                                    onChange={(e) => updateLayerStyle(activeLayer.id, { bankName: e.target.value })}
+                                    className="w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none mb-4"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="text-[11px] font-bold text-gray-800 block mb-2">No. Rekening / Teks</label>
                                 <input 
                                     type="text" 
                                     value={activeLayer.content || ''}
-                                    placeholder="Cth: BCA 1234567890 (Budi)"
+                                    placeholder="Cth: 1234567890 (Budi)"
                                     onChange={(e) => updateLayerContent(activeLayer.id, e.target.value)}
                                     className="w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
                                 />

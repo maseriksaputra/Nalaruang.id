@@ -772,12 +772,22 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                             }
                         }}
                     >
-                        <span 
-                            className="text-base font-mono font-bold transition-colors w-full"
-                            style={{ color: hexToRgba(textColor, textOpacity) }}
-                        >
-                            {layer.content || ''}
-                        </span>
+                        <div className="flex flex-col flex-1 min-w-0 pr-2">
+                            {layer.style?.bankName && (
+                                <span 
+                                    className="text-[10px] font-bold uppercase tracking-wider mb-0.5 truncate w-full"
+                                    style={{ color: hexToRgba(textColor, Math.max(0.2, textOpacity - 0.3)) }}
+                                >
+                                    {layer.style.bankName}
+                                </span>
+                            )}
+                            <span 
+                                className="text-base font-mono font-bold transition-colors truncate w-full"
+                                style={{ color: hexToRgba(textColor, textOpacity) }}
+                            >
+                                {layer.content || ''}
+                            </span>
+                        </div>
                         <div 
                             className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 active:scale-95 ml-2"
                             style={{ 
