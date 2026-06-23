@@ -289,7 +289,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                             ? `${val}px` 
                             : val;
                             
-                        switch(layer.style.borderRadiusConfig) {
+                        switch(layer.style.borderRadiusType) {
                             case 'top': return `${r} ${r} 0 0`;
                             case 'bottom': return `0 0 ${r} ${r}`;
                             case 'left': return `${r} 0 0 ${r}`;
