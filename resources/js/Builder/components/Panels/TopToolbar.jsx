@@ -100,7 +100,7 @@ const TopToolbar = () => {
 
     return (
         <>
-        <header className="h-14 bg-gradient-to-r from-primary-600 to-indigo-600 flex items-center justify-between px-4 z-50 text-white shadow">
+        <header className="h-14 bg-primary-600 flex items-center justify-between px-4 z-50 text-white shadow">
             <div className="flex items-center gap-4">
                 <a href="/admin/invitation-portal" className="p-2 hover:bg-white/10 rounded-full transition">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
@@ -117,14 +117,14 @@ const TopToolbar = () => {
                 <div className="flex bg-white/10 p-0.5 rounded-md hidden md:flex">
                     <button 
                         onClick={() => setWorkspaceView('desktop')} 
-                        className={`p-1.5 text-sm font-semibold rounded transition flex items-center justify-center ${workspaceView === 'desktop' ? 'bg-white shadow-sm text-indigo-600' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+                        className={`p-1.5 text-sm font-semibold rounded transition flex items-center justify-center ${workspaceView === 'desktop' ? 'bg-white shadow-sm text-primary-600' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                         title="Tampilan Desktop"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </button>
                     <button 
                         onClick={() => setWorkspaceView('mobile')} 
-                        className={`p-1.5 text-sm font-semibold rounded transition flex items-center justify-center ${workspaceView === 'mobile' ? 'bg-white shadow-sm text-indigo-600' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+                        className={`p-1.5 text-sm font-semibold rounded transition flex items-center justify-center ${workspaceView === 'mobile' ? 'bg-white shadow-sm text-primary-600' : 'text-white/70 hover:text-white hover:bg-white/10'}`}
                         title="Tampilan Mobile"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
@@ -160,7 +160,7 @@ const TopToolbar = () => {
                 )}
                 <button 
                     onClick={() => setShowMockup(!showMockup)}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition border shadow-sm ${showMockup ? 'bg-white text-indigo-600 border-white' : 'text-white bg-white/10 hover:bg-white/20 border-transparent hover:border-white/20'}`}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition border shadow-sm ${showMockup ? 'bg-white text-primary-600 border-white' : 'text-white bg-white/10 hover:bg-white/20 border-transparent hover:border-white/20'}`}
                     title="Tampilkan Mockup HP"
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
@@ -168,7 +168,7 @@ const TopToolbar = () => {
                 </button>
                 <button 
                     onClick={() => setShowGridLines(!showGridLines)}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition border shadow-sm ${showGridLines ? 'bg-white text-indigo-600 border-white' : 'text-white bg-white/10 hover:bg-white/20 border-transparent hover:border-white/20'}`}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md transition border shadow-sm ${showGridLines ? 'bg-white text-primary-600 border-white' : 'text-white bg-white/10 hover:bg-white/20 border-transparent hover:border-white/20'}`}
                     title="Tampilkan Kisi-kisi Batas Layar"
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -197,7 +197,7 @@ const TopToolbar = () => {
                 {window.__IS_TEMPLATE__ ? (
                     <button 
                         onClick={() => setIsTemplateModalOpen(true)}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-md transition text-white bg-indigo-500 hover:bg-indigo-600 shadow-sm hidden xl:flex"
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-md transition text-white bg-primary-500 hover:bg-primary-600 shadow-sm hidden xl:flex"
                         title="Update Metadata Template"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
@@ -215,7 +215,7 @@ const TopToolbar = () => {
                 )}
                 <button 
                     onClick={handlePublishSubmit}
-                    className="px-4 py-1.5 text-sm bg-white text-indigo-600 hover:bg-indigo-50 rounded-md font-semibold transition shadow-sm flex items-center gap-2 ml-1"
+                    className="px-4 py-1.5 text-sm bg-white text-primary-600 hover:bg-primary-50 rounded-md font-semibold transition shadow-sm flex items-center gap-2 ml-1"
                 >
                     <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></div>
                     <span className="hidden sm:inline">Publish & Bagikan</span>
@@ -246,7 +246,7 @@ const TopToolbar = () => {
                                     value={templateData.title}
                                     onChange={e => setTemplateData({...templateData, title: e.target.value})}
                                     placeholder="Contoh: Template Pernikahan Elegan"
-                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm"
+                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm"
                                 />
                             </div>
                             
@@ -258,7 +258,7 @@ const TopToolbar = () => {
                                     value={templateData.category}
                                     onChange={e => setTemplateData({...templateData, category: e.target.value})}
                                     placeholder="Contoh: Premium, Pernikahan, Khitanan"
-                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm"
+                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm"
                                 />
                                 <datalist id="folder-options">
                                     {folderList.map(f => (
@@ -276,7 +276,7 @@ const TopToolbar = () => {
                                     value={templateData.price}
                                     onChange={e => setTemplateData({...templateData, price: e.target.value})}
                                     placeholder="0 untuk gratis"
-                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm"
+                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm"
                                 />
                             </div>
                             
@@ -287,7 +287,7 @@ const TopToolbar = () => {
                                     value={templateData.description}
                                     onChange={e => setTemplateData({...templateData, description: e.target.value})}
                                     placeholder="Deskripsi template ini..."
-                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm resize-none"
+                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm resize-none"
                                 ></textarea>
                             </div>
 
@@ -303,7 +303,7 @@ const TopToolbar = () => {
                                                 id="feat_photo"
                                                 checked={templateData.features.photo}
                                                 onChange={e => setTemplateData({...templateData, features: {...templateData.features, photo: e.target.checked}})}
-                                                className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+                                                className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
                                             />
                                             <label htmlFor="feat_photo" className="text-sm font-semibold text-gray-700 cursor-pointer">Fitur Foto / Galeri</label>
                                         </div>
@@ -316,7 +316,7 @@ const TopToolbar = () => {
                                                     value={templateData.features.max_photos === 0 ? '' : templateData.features.max_photos}
                                                     onChange={e => setTemplateData({...templateData, features: {...templateData.features, max_photos: e.target.value ? parseInt(e.target.value) : 0}})}
                                                     placeholder="∞"
-                                                    className="w-16 text-xs bg-white border border-gray-300 rounded px-2 py-1 outline-none focus:border-indigo-500"
+                                                    className="w-16 text-xs bg-white border border-gray-300 rounded px-2 py-1 outline-none focus:border-primary-500"
                                                     title="Kosongkan untuk tak terbatas"
                                                 />
                                                 <span className="text-[10px] text-gray-400">
@@ -341,7 +341,7 @@ const TopToolbar = () => {
                                                     id={`feat_${feat.id}`}
                                                     checked={templateData.features[feat.id]}
                                                     onChange={e => setTemplateData({...templateData, features: {...templateData.features, [feat.id]: e.target.checked}})}
-                                                    className="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+                                                    className="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
                                                 />
                                                 <label htmlFor={`feat_${feat.id}`} className="text-sm font-medium text-gray-700 cursor-pointer flex-1 line-clamp-1">{feat.label}</label>
                                             </div>
@@ -362,7 +362,7 @@ const TopToolbar = () => {
                             <button 
                                 type="submit"
                                 disabled={isSavingTemplate}
-                                className="flex-1 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold transition-colors shadow-lg shadow-indigo-200 text-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+                                className="flex-1 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-bold transition-colors shadow-lg shadow-primary-200 text-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
                             >
                                 {isSavingTemplate ? (
                                     <>
