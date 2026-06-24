@@ -156,8 +156,8 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
 
     const config = layerAnimation.config || { mode: 'enter', speed: 1.5, direction: 'up', trigger: 'onScroll' };
     
-    // FORCE onScroll for elements NOT on the cover page!
-    const trigger = (!isBuilder && !isCoverPage) ? 'onScroll' : (config.trigger || 'onScroll');
+    // FORCE onLoad for elements ON the cover page, FORCE onScroll for elements NOT on the cover page!
+    const trigger = (!isBuilder && isCoverPage) ? 'onLoad' : (!isBuilder ? 'onScroll' : (config.trigger || 'onLoad'));
     const isScrollTriggered = (!isBuilder && trigger === 'onScroll' && trigger !== 'onLoad');
     
     // Disable entry animation if element is a child of a canvas_group (parent will animate it)
