@@ -15,7 +15,12 @@ const BackgroundAudio = ({ settings }) => {
         audioEffect = 'none'
     } = settings || {};
 
-    const maxVolume = Math.min(1, Math.max(0, audioVolume / 100));
+    const start = parseFloat(audioStart) || 0;
+    const end = parseFloat(audioEnd) || 0;
+    const fadeIn = parseFloat(audioFadeIn) || 0;
+    const fadeOut = parseFloat(audioFadeOut) || 0;
+    const vol = parseFloat(audioVolume) !== undefined && !isNaN(parseFloat(audioVolume)) ? parseFloat(audioVolume) : 100;
+    const maxVol = Math.min(1, Math.max(0, vol / 100));
 
     useEffect(() => {
         const audio = audioRef.current;
@@ -24,46 +29,45 @@ const BackgroundAudio = ({ settings }) => {
         let animationFrameId;
 
         const getExpectedVolume = (current) => {
-            const targetEnd = (audioEnd > 0 && audioEnd > audioStart) ? audioEnd : audio.duration;
-            if (audioFadeIn > 0 && current < audioStart + audioFadeIn) {
-                const progress = Math.max(0, current - audioStart) / audioFadeIn;
-                return Math.max(0, Math.min(maxVolume, progress * maxVolume));
-            } else if (audioFadeOut > 0 && targetEnd && current > targetEnd - audioFadeOut) {
-                const progress = Math.max(0, targetEnd - current) / audioFadeOut;
-                return Math.max(0, Math.min(maxVolume, progress * maxVolume));
+            const targetEnd = (end > 0 && end > start) ? end : audio.duration;
+            if (fadeIn > 0 && current < start + fadeIn) {
+                const progress = Math.max(0, current - start) / fadeIn;
+                return Math.max(0, Math.min(maxVol, progress * maxVol));
+            } else if (fadeOut > 0 && targetEnd && current > targetEnd - fadeOut) {
+                const progress = Math.max(0, targetEnd - current) / fadeOut;
+                return Math.max(0, Math.min(maxVol, progress * maxVol));
             }
-            return maxVolume;
+            return maxVol;
         };
         
-        // Mencegah patahan suara saat autoplay: set volume awal yang presisi
+        // Mencegah patahan suara: set volume awal yang presisi
         audio.volume = getExpectedVolume(audio.currentTime);
         
         const updateAudio = () => {
             if (!audio || audio.paused) return;
 
             const current = audio.currentTime;
-            const targetEnd = (audioEnd > 0 && audioEnd > audioStart) ? audioEnd : audio.duration;
+            const targetEnd = (end > 0 && end > start) ? end : audio.duration;
             
-            // Handle looping back to start if we passed audioEnd
+            // Handle looping back to start if we passed end
             if (targetEnd && current >= targetEnd) {
-                audio.currentTime = audioStart || 0;
-                audio.volume = getExpectedVolume(audioStart || 0);
+                audio.currentTime = start || 0;
+                audio.volume = getExpectedVolume(start || 0);
                 audio.play().catch(e => console.log(e));
                 return;
             }
 
             audio.volume = getExpectedVolume(current);
-            if (audio.muted && audioFadeIn > 0) {
-                audio.muted = false; // Buka mute hanya setelah volume dijamin 0 atau sesuai kalkulasi
+            if (audio.muted && fadeIn > 0) {
+                audio.muted = false; // Buka mute hanya setelah volume dijamin terkunci di perhitungan
             }
             animationFrameId = requestAnimationFrame(updateAudio);
         };
         
-        // Ensure starting point
         const handlePlay = () => {
             setIsPlaying(true);
             audio.volume = getExpectedVolume(audio.currentTime);
-            // Mulai loop update di setiap frame (60fps) untuk transisi super halus
+            if (audio.muted && fadeIn > 0) audio.muted = false;
             animationFrameId = requestAnimationFrame(updateAudio);
         };
 
@@ -73,9 +77,9 @@ const BackgroundAudio = ({ settings }) => {
         };
 
         const onLoadedMetadata = () => {
-            if (audioStart > 0 && audio.currentTime < audioStart) {
-                audio.currentTime = audioStart;
-                audio.volume = getExpectedVolume(audioStart);
+            if (start > 0 && audio.currentTime < start) {
+                audio.currentTime = start;
+                audio.volume = getExpectedVolume(start);
             }
         };
 
@@ -83,8 +87,12 @@ const BackgroundAudio = ({ settings }) => {
         audio.addEventListener('pause', handlePause);
         audio.addEventListener('loadedmetadata', onLoadedMetadata);
 
-        // Optional Web Audio API for effects could be added here if needed,
-        // but it requires AudioContext and CORS handling which can be tricky on cross-origin media.
+        // Jika autoplay diaktifkan, kita kendalikan secara manual via JS agar tidak didahului browser
+        if (audioTrigger === 'autoplay' && audio.paused) {
+            audio.volume = getExpectedVolume(audio.currentTime);
+            if (fadeIn > 0) audio.muted = true;
+            audio.play().catch(e => console.log("Autoplay prevented:", e));
+        }
 
         return () => {
             audio.removeEventListener('play', handlePlay);
@@ -92,27 +100,24 @@ const BackgroundAudio = ({ settings }) => {
             audio.removeEventListener('loadedmetadata', onLoadedMetadata);
             cancelAnimationFrame(animationFrameId);
         };
-    }, [audioUrl, audioStart, audioEnd, audioVolume, audioFadeIn, audioFadeOut, isPlaying]);
+    }, [audioUrl, start, end, vol, fadeIn, fadeOut, isPlaying, audioTrigger]);
 
-    // Apply audioStart whenever it changes (e.g. from the builder preview)
+    // Apply start time whenever it changes (e.g. from the builder preview)
     useEffect(() => {
-        if (audioRef.current && audioStart > 0) {
-            // Only seek if we are outside the valid window
-            const end = audioEnd > 0 ? audioEnd : audioRef.current.duration;
-            if (audioRef.current.currentTime < audioStart || (end && audioRef.current.currentTime > end)) {
-                audioRef.current.currentTime = audioStart;
-                // Kami biarkan updateAudio yang akan menangkap volume yang benar di frame berikutnya, 
-                // atau jika sedang pause, kami paksa volume di update
+        if (audioRef.current && start > 0) {
+            const targetEnd = end > 0 ? end : audioRef.current.duration;
+            if (audioRef.current.currentTime < start || (targetEnd && audioRef.current.currentTime > targetEnd)) {
+                audioRef.current.currentTime = start;
                 const getExpectedVolume = (current) => {
-                    if (audioFadeIn > 0 && current < audioStart + audioFadeIn) {
-                        return Math.max(0, Math.min(1, Math.max(0, audioVolume / 100)) * (Math.max(0, current - audioStart) / audioFadeIn));
+                    if (fadeIn > 0 && current < start + fadeIn) {
+                        return Math.max(0, Math.min(maxVol, maxVol * (Math.max(0, current - start) / fadeIn)));
                     }
-                    return Math.min(1, Math.max(0, audioVolume / 100));
+                    return maxVol;
                 };
-                audioRef.current.volume = getExpectedVolume(audioStart);
+                audioRef.current.volume = getExpectedVolume(start);
             }
         }
-    }, [audioStart, audioEnd, audioFadeIn, audioVolume]);
+    }, [start, end, fadeIn, maxVol]);
 
     if (!audioUrl) return null;
 
@@ -122,22 +127,20 @@ const BackgroundAudio = ({ settings }) => {
                 id="background-audio" 
                 ref={(el) => {
                     audioRef.current = el;
-                    if (el && audioFadeIn > 0) {
-                        // Secara sinkron mengatur volume 0 di mount
-                        if (el.currentTime <= audioStart) {
-                            el.volume = 0;
-                        }
+                    if (el && fadeIn > 0) {
+                        // Secara sinkron mengatur volume dan mute di DOM
+                        el.muted = true;
+                        el.volume = 0;
                     }
                 }}
-                loop={audioEnd <= 0} // Native loop if no custom end time
-                autoPlay={audioTrigger === 'autoplay'}
+                loop={end <= 0} // Native loop if no custom end time
+                // autoPlay dihilangkan dari HTML murni agar bisa kita kontrol sepenuhnya via JS di useEffect
                 crossOrigin="anonymous"
-                muted={audioFadeIn > 0} // Hardware-level mute untuk blokir 100% suara awal sebelum fade
             >
-                {/* Gunakan media fragments url#t=... untuk native browser seeking sebelum mendownload audio */}
-                <source src={`${audioUrl}#t=${audioStart || 0}`} type="audio/mpeg" />
-                <source src={`${audioUrl}#t=${audioStart || 0}`} type="audio/wav" />
-                <source src={`${audioUrl}#t=${audioStart || 0}`} type="audio/ogg" />
+                {/* Gunakan media fragments url#t=... untuk native browser seeking */}
+                <source src={`${audioUrl}#t=${start || 0}`} type="audio/mpeg" />
+                <source src={`${audioUrl}#t=${start || 0}`} type="audio/wav" />
+                <source src={`${audioUrl}#t=${start || 0}`} type="audio/ogg" />
             </audio>
 
             {/* Floating Speaker Control */}
@@ -147,15 +150,14 @@ const BackgroundAudio = ({ settings }) => {
                         if (isPlaying) {
                             audioRef.current.pause();
                         } else {
-                            // Kalkulasi volume presisi saat tombol play ditekan agar tidak ada suara bocor
+                            // Kalkulasi volume presisi saat tombol play ditekan
                             let current = audioRef.current.currentTime;
-                            let maxVol = Math.min(1, Math.max(0, audioVolume / 100));
-                            if (audioFadeIn > 0 && current < audioStart + audioFadeIn) {
-                                audioRef.current.volume = Math.max(0, Math.min(maxVol, maxVol * (Math.max(0, current - audioStart) / audioFadeIn)));
+                            if (fadeIn > 0 && current < start + fadeIn) {
+                                audioRef.current.volume = Math.max(0, Math.min(maxVol, maxVol * (Math.max(0, current - start) / fadeIn)));
                             } else {
                                 audioRef.current.volume = maxVol;
                             }
-                            if (audioRef.current.muted) audioRef.current.muted = false;
+                            if (audioRef.current.muted && fadeIn > 0) audioRef.current.muted = false;
                             audioRef.current.play().catch(e => console.log(e));
                         }
                     }
