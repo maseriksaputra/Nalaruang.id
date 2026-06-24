@@ -795,7 +795,8 @@ const useCanvasStore = create(temporal((set, get) => ({
             const layer = findElement(contextSections, layerId);
             if (layer) { 
                 if (layer.type === 'canvas_group' && layer.children && styleData.width && styleData.height) {
-                    const ratioH = newH / oldH;
+                    const ratioW = styleData.width / (layer.style.width || 1);
+                    const ratioH = styleData.height / (layer.style.height || 1);
                     
                     const scaleChildren = (children) => {
                         children.forEach(c => {
