@@ -21,12 +21,22 @@ const BackgroundAudio = ({ settings }) => {
         const audio = audioRef.current;
         if (!audio || !audioUrl) return;
 
-        // Mencegah patahan suara saat autoplay: set volume ke 0 sesegera mungkin
-        if (audioFadeIn > 0 && audio.currentTime <= audioStart + 0.5) {
-            audio.volume = 0;
-        }
-
         let animationFrameId;
+
+        const getExpectedVolume = (current) => {
+            const targetEnd = (audioEnd > 0 && audioEnd > audioStart) ? audioEnd : audio.duration;
+            if (audioFadeIn > 0 && current < audioStart + audioFadeIn) {
+                const progress = Math.max(0, current - audioStart) / audioFadeIn;
+                return Math.max(0, Math.min(maxVolume, progress * maxVolume));
+            } else if (audioFadeOut > 0 && targetEnd && current > targetEnd - audioFadeOut) {
+                const progress = Math.max(0, targetEnd - current) / audioFadeOut;
+                return Math.max(0, Math.min(maxVolume, progress * maxVolume));
+            }
+            return maxVolume;
+        };
+        
+        // Mencegah patahan suara saat autoplay: set volume awal yang presisi
+        audio.volume = getExpectedVolume(audio.currentTime);
         
         const updateAudio = () => {
             if (!audio || audio.paused) return;
@@ -37,44 +47,19 @@ const BackgroundAudio = ({ settings }) => {
             // Handle looping back to start if we passed audioEnd
             if (targetEnd && current >= targetEnd) {
                 audio.currentTime = audioStart || 0;
-                if (audioFadeIn > 0) {
-                    audio.volume = 0;
-                }
+                audio.volume = getExpectedVolume(audioStart || 0);
                 audio.play().catch(e => console.log(e));
                 return;
             }
 
-            // Handle Fade In
-            if (audioFadeIn > 0 && current < audioStart + audioFadeIn) {
-                const progress = (current - audioStart) / audioFadeIn;
-                const newVol = progress * maxVolume;
-                audio.volume = Math.max(0, Math.min(maxVolume, newVol));
-            } 
-            // Handle Fade Out
-            else if (audioFadeOut > 0 && targetEnd && current > targetEnd - audioFadeOut) {
-                const progress = (targetEnd - current) / audioFadeOut;
-                const newVol = progress * maxVolume;
-                audio.volume = Math.max(0, Math.min(maxVolume, newVol));
-            } 
-            // Normal Volume
-            else {
-                audio.volume = maxVolume;
-            }
-
+            audio.volume = getExpectedVolume(current);
             animationFrameId = requestAnimationFrame(updateAudio);
         };
         
         // Ensure starting point
         const handlePlay = () => {
             setIsPlaying(true);
-            
-            // Set initial volume for fade-in or normal play
-            if (audioFadeIn > 0 && audio.currentTime <= audioStart + 0.5) {
-                audio.volume = 0;
-            } else {
-                audio.volume = maxVolume;
-            }
-
+            audio.volume = getExpectedVolume(audio.currentTime);
             // Mulai loop update di setiap frame (60fps) untuk transisi super halus
             animationFrameId = requestAnimationFrame(updateAudio);
         };
@@ -87,6 +72,7 @@ const BackgroundAudio = ({ settings }) => {
         const onLoadedMetadata = () => {
             if (audioStart > 0 && audio.currentTime < audioStart) {
                 audio.currentTime = audioStart;
+                audio.volume = getExpectedVolume(audioStart);
             }
         };
 
@@ -111,13 +97,19 @@ const BackgroundAudio = ({ settings }) => {
             // Only seek if we are outside the valid window
             const end = audioEnd > 0 ? audioEnd : audioRef.current.duration;
             if (audioRef.current.currentTime < audioStart || (end && audioRef.current.currentTime > end)) {
-                if (audioFadeIn > 0) {
-                    audioRef.current.volume = 0;
-                }
                 audioRef.current.currentTime = audioStart;
+                // Kami biarkan updateAudio yang akan menangkap volume yang benar di frame berikutnya, 
+                // atau jika sedang pause, kami paksa volume di update
+                const getExpectedVolume = (current) => {
+                    if (audioFadeIn > 0 && current < audioStart + audioFadeIn) {
+                        return Math.max(0, Math.min(1, Math.max(0, audioVolume / 100)) * (Math.max(0, current - audioStart) / audioFadeIn));
+                    }
+                    return Math.min(1, Math.max(0, audioVolume / 100));
+                };
+                audioRef.current.volume = getExpectedVolume(audioStart);
             }
         }
-    }, [audioStart, audioEnd, audioFadeIn]);
+    }, [audioStart, audioEnd, audioFadeIn, audioVolume]);
 
     if (!audioUrl) return null;
 
@@ -125,14 +117,23 @@ const BackgroundAudio = ({ settings }) => {
         <>
             <audio 
                 id="background-audio" 
-                ref={audioRef}
+                ref={(el) => {
+                    audioRef.current = el;
+                    if (el && audioFadeIn > 0) {
+                        // Secara sinkron mengatur volume 0 di mount
+                        if (el.currentTime <= audioStart) {
+                            el.volume = 0;
+                        }
+                    }
+                }}
                 loop={audioEnd <= 0} // Native loop if no custom end time
                 autoPlay={audioTrigger === 'autoplay'}
                 crossOrigin="anonymous"
             >
-                <source src={audioUrl} type="audio/mpeg" />
-                <source src={audioUrl} type="audio/wav" />
-                <source src={audioUrl} type="audio/ogg" />
+                {/* Gunakan media fragments url#t=... untuk native browser seeking sebelum mendownload audio */}
+                <source src={`${audioUrl}#t=${audioStart || 0}`} type="audio/mpeg" />
+                <source src={`${audioUrl}#t=${audioStart || 0}`} type="audio/wav" />
+                <source src={`${audioUrl}#t=${audioStart || 0}`} type="audio/ogg" />
             </audio>
 
             {/* Floating Speaker Control */}
@@ -142,9 +143,13 @@ const BackgroundAudio = ({ settings }) => {
                         if (isPlaying) {
                             audioRef.current.pause();
                         } else {
-                            // Mencegah patahan suara: Set volume ke 0 SEBELUM memanggil play() jika berada di titik awal fade-in
-                            if (audioFadeIn > 0 && audioRef.current.currentTime <= audioStart + 0.5) {
-                                audioRef.current.volume = 0;
+                            // Kalkulasi volume presisi saat tombol play ditekan agar tidak ada suara bocor
+                            let current = audioRef.current.currentTime;
+                            let maxVol = Math.min(1, Math.max(0, audioVolume / 100));
+                            if (audioFadeIn > 0 && current < audioStart + audioFadeIn) {
+                                audioRef.current.volume = Math.max(0, Math.min(maxVol, maxVol * (Math.max(0, current - audioStart) / audioFadeIn)));
+                            } else {
+                                audioRef.current.volume = maxVol;
                             }
                             audioRef.current.play().catch(e => console.log(e));
                         }
