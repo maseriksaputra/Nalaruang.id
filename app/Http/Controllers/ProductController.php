@@ -11,11 +11,8 @@ class ProductController extends Controller
     {
         $product = Template::with(['service', 'serviceCategory', 'package'])->withCount('orders')->findOrFail($id);
         
-        // Track views for non-admin visitors
-        $isAdmin = auth()->check();
-        if (!$isAdmin) {
-            $product->increment('demo_views');
-        }
+        // Track views (always track as requested so it updates in real time even for admin)
+        $product->increment('demo_views');
 
         return view('product-detail', compact('product'));
     }

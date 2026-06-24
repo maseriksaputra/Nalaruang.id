@@ -23,7 +23,7 @@ class ViewerController extends Controller
             return view('expired');
         }
 
-        // Track visitor if not admin
+        // Track visitor (we keep the IP log only for non-admin, but always increment the view counts for real-time testing)
         if (!$isAdmin) {
             \Illuminate\Support\Facades\DB::table('invitation_visitors')->insert([
                 'invitation_id' => $invitation->id,
@@ -32,19 +32,19 @@ class ViewerController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+        }
 
-            // Cek apakah ini adalah demo dari sebuah Template
-            $template = \App\Models\Template::where('invitation_id', $invitation->id)->first();
-            if ($template) {
-                $template->increment('demo_views');
-            }
+        // Cek apakah ini adalah demo dari sebuah Template
+        $template = \App\Models\Template::where('invitation_id', $invitation->id)->first();
+        if ($template) {
+            $template->increment('demo_views');
+        }
 
-            // Cek apakah ini adalah undangan milik klien yang dibuat dari sebuah Template
-            if ($invitation->order_id) {
-                $order = \App\Models\Order::find($invitation->order_id);
-                if ($order && $order->template_id) {
-                    \App\Models\Template::where('id', $order->template_id)->increment('total_invitation_views');
-                }
+        // Cek apakah ini adalah undangan milik klien yang dibuat dari sebuah Template
+        if ($invitation->order_id) {
+            $order = \App\Models\Order::find($invitation->order_id);
+            if ($order && $order->template_id) {
+                \App\Models\Template::where('id', $order->template_id)->increment('total_invitation_views');
             }
         }
 
