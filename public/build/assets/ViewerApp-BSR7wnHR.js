@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DmLUiduj.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-Crb2o8kj.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-AMrUmwHP.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DLcNCWO4.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -28430,7 +28430,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DmLUiduj.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-Crb2o8kj.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -30657,13 +30657,11 @@ var BackgroundAudio = ({ settings }) => {
 				return;
 			}
 			audio.volume = getExpectedVolume(current);
-			if (audio.muted && fadeIn > 0) audio.muted = false;
 			animationFrameId = requestAnimationFrame(updateAudio);
 		};
 		const handlePlay = () => {
 			setIsPlaying(true);
 			audio.volume = getExpectedVolume(audio.currentTime);
-			if (audio.muted && fadeIn > 0) audio.muted = false;
 			animationFrameId = requestAnimationFrame(updateAudio);
 		};
 		const handlePause = () => {
@@ -30681,7 +30679,6 @@ var BackgroundAudio = ({ settings }) => {
 		audio.addEventListener("loadedmetadata", onLoadedMetadata);
 		if (audioTrigger === "autoplay" && audio.paused) {
 			audio.volume = getExpectedVolume(audio.currentTime);
-			if (fadeIn > 0) audio.muted = true;
 			audio.play().catch((e) => console.log("Autoplay prevented:", e));
 		}
 		return () => {
@@ -30723,10 +30720,7 @@ var BackgroundAudio = ({ settings }) => {
 		id: "background-audio",
 		ref: (el) => {
 			audioRef.current = el;
-			if (el && fadeIn > 0) {
-				el.muted = true;
-				el.volume = 0;
-			}
+			if (el && fadeIn > 0) el.volume = 0;
 		},
 		loop: end <= 0,
 		crossOrigin: "anonymous",
@@ -30751,7 +30745,6 @@ var BackgroundAudio = ({ settings }) => {
 				let current = audioRef.current.currentTime;
 				if (fadeIn > 0 && current < start + fadeIn) audioRef.current.volume = Math.max(0, Math.min(maxVol, maxVol * (Math.max(0, current - start) / fadeIn)));
 				else audioRef.current.volume = maxVol;
-				if (audioRef.current.muted && fadeIn > 0) audioRef.current.muted = false;
 				audioRef.current.play().catch((e) => console.log(e));
 			}
 		},
