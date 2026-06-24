@@ -27,13 +27,36 @@ class UserAssetController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $disk = config('filesystems.default');
-            $path = $file->storePublicly('user_assets', $disk);
             
             $type = str_starts_with($file->getMimeType(), 'video/') ? 'video' : 'image';
+            $extension = strtolower($file->getClientOriginalExtension());
+            $filename = $file->getClientOriginalName();
+
+            // Format yang tidak perlu dikonversi ke WebP
+            $skipConversion = ['svg', 'webp', 'gif'];
+
+            if ($type === 'image' && !in_array($extension, $skipConversion)) {
+                // Konversi gambar ke WebP menggunakan Intervention Image
+                $manager = new \Intervention\Image\ImageManager(new \Intervention\Image\Drivers\Gd\Driver());
+                $image = $manager->read($file->getRealPath());
+                
+                // Buat nama file baru dengan ekstensi .webp
+                $filenameWithoutExt = pathinfo($filename, PATHINFO_FILENAME);
+                $newFilename = $filenameWithoutExt . '_' . time() . '.webp';
+                $path = 'user_assets/' . $newFilename;
+                $filename = $newFilename;
+
+                // Kompres dan ubah ke webp dengan kualitas 85 (menjaga kualitas, ukuran kecil)
+                $encoded = $image->toWebp(85);
+                Storage::disk($disk)->put($path, (string) $encoded);
+            } else {
+                // Upload file normal (video, svg, gif, webp, dll)
+                $path = $file->storePublicly('user_assets', $disk);
+            }
 
             $asset = UserAsset::create([
                 'user_id' => auth()->id(),
-                'name' => $file->getClientOriginalName(),
+                'name' => $filename,
                 'type' => $type,
                 'url' => Storage::disk($disk)->url($path),
             ]);
