@@ -600,7 +600,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                             className={`w-full h-full object-cover ${isCropMode ? 'cursor-move pointer-events-auto no-drag' : ''}`}
                                             style={{
                                                 objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
-                                                filter: `${layer.style?.brightness ? `brightness(${layer.style.brightness}) ` : ''}${layer.style?.contrast ? `contrast(${layer.style.contrast}) ` : ''}${layer.style?.saturate ? `saturate(${layer.style.saturate}) ` : ''}${layer.style?.blur ? `blur(${layer.style.blur}px) ` : ''}`.trim() || 'none'
+                                                filter: `${layer.style?.polaroidData?.filterId && layer.style.polaroidData.filterId !== 'none' ? getFilterById(layer.style.polaroidData.filterId).getCss(100) + ' ' : ''}${layer.style?.brightness ? `brightness(${layer.style.brightness}) ` : ''}${layer.style?.contrast ? `contrast(${layer.style.contrast}) ` : ''}${layer.style?.saturate ? `saturate(${layer.style.saturate}) ` : ''}${layer.style?.blur ? `blur(${layer.style.blur}px) ` : ''}`.trim() || 'none'
                                             }}
                                         />
                                         {layer.style?.polaroidData?.filterId && layer.style.polaroidData.filterId !== 'none' && (

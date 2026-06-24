@@ -2461,7 +2461,7 @@ const RightInspector = () => {
                                                 >
                                                     <div className={`w-full aspect-square rounded-xl overflow-hidden border-2 transition-all ${activeLayer.style?.imageFilter === filter.id ? 'border-primary-600 ring-2 ring-primary-200 shadow-md' : 'border-transparent group-hover:border-gray-300 bg-gray-50'}`}>
                                                         <img 
-                                                            src={activeLayer.url} 
+                                                            src={activeLayer.style?.url || activeLayer.url} 
                                                             alt={filter.name} 
                                                             className="w-full h-full object-cover"
                                                             style={{ filter: filter.getCss(100) }}
