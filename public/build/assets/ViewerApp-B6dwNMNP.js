@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-Cc3Y3wvm.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DnW8PDY6.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-8vbZutKh.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-C0YPOAlZ.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -28430,7 +28430,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-Cc3Y3wvm.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DnW8PDY6.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -29281,18 +29281,30 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 			return () => window.removeEventListener("rsvp_submitted", handleRsvpSubmit);
 		}
 	}, [layer.type]);
+	const hasAnimatedRef = (0, import_react.useRef)(false);
+	const prevLayerRef = (0, import_react.useRef)(layer);
 	(0, import_react.useLayoutEffect)(() => {
 		if (!elementRef.current) return;
+		if (prevLayerRef.current !== layer) {
+			hasAnimatedRef.current = false;
+			prevLayerRef.current = layer;
+		}
 		if (!isCoverPage && !isOpened) return;
+		if (hasAnimatedRef.current) return;
+		hasAnimatedRef.current = true;
 		let animationCtx = null;
 		if (layer.animation) animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style, 0, isCoverPage, isChildOfGroup);
 		return () => {
-			if (animationCtx && animationCtx.kill) animationCtx.kill();
+			if (animationCtx && animationCtx.kill) {
+				animationCtx.kill();
+				hasAnimatedRef.current = false;
+			}
 		};
 	}, [
 		layer,
 		isOpened,
-		isCoverPage
+		isCoverPage,
+		isChildOfGroup
 	]);
 	(0, import_react.useEffect)(() => {
 		const handlePlayExit = () => {
@@ -30397,54 +30409,62 @@ var PublicCanvas = ({ config }) => {
 							height: sectionHeight,
 							background: section.layout?.background_value || "#ffffff",
 							overflow: "hidden",
-							display: !isOpened && hasOpenButton && index > 0 ? "none" : "block",
+							display: "block",
+							visibility: !isOpened && hasOpenButton && index > 0 ? "hidden" : "visible",
 							zIndex: index === 0 ? 50 : 1,
 							...index === 0 ? (() => {
 								let isSlideUp = transitionType === "slide_up" || !transitionType;
 								let transStyle = {
 									transition: "all 1.2s cubic-bezier(0.85, 0, 0.15, 1)",
-									pointerEvents: isOpened ? "none" : "auto"
+									pointerEvents: isOpened ? "none" : "auto",
+									willChange: "transform, opacity, filter"
 								};
-								if (isOpened) {
+								if (hasOpenButton && sections.length > 1) {
 									transStyle.position = "absolute";
 									transStyle.top = "0";
 									transStyle.left = "0";
 									transStyle.width = "100%";
 									transStyle.zIndex = 50;
-									if (isSlideUp) transStyle.transform = `translateY(calc(-1 * max(100vh, ${maxY > 0 ? maxY : 0}px)))`;
-									else switch (transitionType) {
-										case "slide_down":
-											transStyle.transform = "translateY(100vh)";
-											transStyle.opacity = 0;
-											break;
-										case "slide_left":
-											transStyle.transform = "translateX(-100vw)";
-											transStyle.opacity = 0;
-											break;
-										case "slide_right":
-											transStyle.transform = "translateX(100vw)";
-											transStyle.opacity = 0;
-											break;
-										case "fade_out":
-											transStyle.opacity = 0;
-											break;
-										case "zoom_out":
-											transStyle.transform = "scale(0.2)";
-											transStyle.opacity = 0;
-											break;
-										case "zoom_in":
-											transStyle.transform = "scale(2)";
-											transStyle.opacity = 0;
-											break;
-										case "blur_out":
-											transStyle.filter = "blur(20px)";
-											transStyle.opacity = 0;
-											break;
-										case "split_horizontal":
-											transStyle.transform = "scaleY(0)";
-											transStyle.opacity = 0;
-											break;
-									}
+								} else if (isOpened) {
+									transStyle.position = "absolute";
+									transStyle.top = "0";
+									transStyle.left = "0";
+									transStyle.width = "100%";
+									transStyle.zIndex = 50;
+								}
+								if (isOpened) if (isSlideUp) transStyle.transform = `translateY(calc(-1 * max(100vh, ${maxY > 0 ? maxY : 0}px)))`;
+								else switch (transitionType) {
+									case "slide_down":
+										transStyle.transform = "translateY(100vh)";
+										transStyle.opacity = 0;
+										break;
+									case "slide_left":
+										transStyle.transform = "translateX(-100vw)";
+										transStyle.opacity = 0;
+										break;
+									case "slide_right":
+										transStyle.transform = "translateX(100vw)";
+										transStyle.opacity = 0;
+										break;
+									case "fade_out":
+										transStyle.opacity = 0;
+										break;
+									case "zoom_out":
+										transStyle.transform = "scale(0.2)";
+										transStyle.opacity = 0;
+										break;
+									case "zoom_in":
+										transStyle.transform = "scale(2)";
+										transStyle.opacity = 0;
+										break;
+									case "blur_out":
+										transStyle.filter = "blur(20px)";
+										transStyle.opacity = 0;
+										break;
+									case "split_horizontal":
+										transStyle.transform = "scaleY(0)";
+										transStyle.opacity = 0;
+										break;
 								}
 								return transStyle;
 							})() : {}

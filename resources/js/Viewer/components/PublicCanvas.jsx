@@ -232,22 +232,34 @@ const PublicCanvas = ({ config }) => {
                             height: sectionHeight,
                             background: section.layout?.background_value || '#ffffff',
                             overflow: 'hidden',
-                            display: (!isOpened && hasOpenButton && index > 0) ? 'none' : 'block',
+                            display: 'block',
+                            visibility: (!isOpened && hasOpenButton && index > 0) ? 'hidden' : 'visible',
                             zIndex: index === 0 ? 50 : 1,
                             ...(index === 0 ? (() => {
                                 let isSlideUp = transitionType === 'slide_up' || !transitionType;
                                 let transStyle = {
                                     transition: 'all 1.2s cubic-bezier(0.85, 0, 0.15, 1)',
-                                    pointerEvents: isOpened ? 'none' : 'auto'
+                                    pointerEvents: isOpened ? 'none' : 'auto',
+                                    willChange: 'transform, opacity, filter'
                                 };
                                 
-                                if (isOpened) {
+                                // Jika ada tombol buka dan lebih dari 1 seksi, paksa absolut sedari awal 
+                                // agar tidak memicu recalculate style yang berat (jank/patah) saat isOpened berubah
+                                if (hasOpenButton && sections.length > 1) {
                                     transStyle.position = 'absolute';
                                     transStyle.top = '0';
                                     transStyle.left = '0';
                                     transStyle.width = '100%';
                                     transStyle.zIndex = 50;
-                                    
+                                } else if (isOpened) {
+                                    transStyle.position = 'absolute';
+                                    transStyle.top = '0';
+                                    transStyle.left = '0';
+                                    transStyle.width = '100%';
+                                    transStyle.zIndex = 50;
+                                }
+                                
+                                if (isOpened) {
                                     if (isSlideUp) {
                                         transStyle.transform = `translateY(calc(-1 * max(100vh, ${maxY > 0 ? maxY : 0}px)))`;
                                     } else {

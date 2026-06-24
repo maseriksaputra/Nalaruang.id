@@ -178,11 +178,25 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
         }
     }, [layer.type]);
 
+    const hasAnimatedRef = useRef(false);
+    const prevLayerRef = useRef(layer);
+
     useLayoutEffect(() => {
         if (!elementRef.current) return;
         
+        // Handle changes from Builder
+        if (prevLayerRef.current !== layer) {
+            hasAnimatedRef.current = false;
+            prevLayerRef.current = layer;
+        }
+
         // Wait until invitation is opened before applying animations for non-cover pages
         if (!isCoverPage && !isOpened) return;
+
+        // CRITICAL PERFORMANCE FIX: Prevent GSAP from re-parsing and thrashing layout 
+        // when state (like isOpened) toggles.
+        if (hasAnimatedRef.current) return;
+        hasAnimatedRef.current = true;
 
         let animationCtx = null;
         if (layer.animation) {
@@ -190,9 +204,12 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
         }
         
         return () => {
-            if (animationCtx && animationCtx.kill) animationCtx.kill();
+            if (animationCtx && animationCtx.kill) {
+                animationCtx.kill();
+                hasAnimatedRef.current = false;
+            }
         };
-    }, [layer, isOpened, isCoverPage]);
+    }, [layer, isOpened, isCoverPage, isChildOfGroup]);
 
     useEffect(() => {
         const handlePlayExit = () => {
