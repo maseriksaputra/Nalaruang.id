@@ -163,7 +163,7 @@ const PublicCanvas = ({ config }) => {
     const coverBackground = sections[0]?.layout?.background_value || '#ffffff';
 
     return (
-        <div ref={containerRef} style={{ width: '100%', height: (!isOpened && hasAnyLayers) ? '100vh' : (scaledHeight === 'auto' ? 'auto' : `${scaledHeight}px`), overflow: 'hidden', position: 'relative', background: coverBackground }}>
+        <div ref={containerRef} style={{ width: '100%', height: (!isOpened && hasAnyLayers) ? '100%' : (scaledHeight === 'auto' ? 'auto' : `${scaledHeight}px`), overflow: 'hidden', position: 'relative', background: coverBackground }}>
             <div ref={innerRef} style={{ 
                 width: '414px', 
                 maxWidth: '414px', 
