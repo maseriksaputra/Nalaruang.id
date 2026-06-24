@@ -28,6 +28,27 @@ const BackgroundAudio = ({ settings }) => {
 
         let animationFrameId;
 
+        // Initialize Web Audio API ONLY ONCE per audio element to act as an impenetrable volume gate
+        if (!audio.audioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (AudioContext) {
+                audio.audioCtx = new AudioContext();
+                try {
+                    audio.sourceNode = audio.audioCtx.createMediaElementSource(audio);
+                    audio.gainNode = audio.audioCtx.createGain();
+                    
+                    // Hardware-level volume lock BEFORE any sound can be played
+                    audio.gainNode.gain.value = 0; 
+                    
+                    audio.sourceNode.connect(audio.gainNode);
+                    audio.gainNode.connect(audio.audioCtx.destination);
+                    console.log("Web Audio API GainNode initialized for flawless fade");
+                } catch (e) {
+                    console.warn("Web Audio API routing failed, falling back to HTML5 volume", e);
+                }
+            }
+        }
+
         const getExpectedVolume = (current) => {
             const targetEnd = (end > 0 && end > start) ? end : audio.duration;
             if (fadeIn > 0 && current < start + fadeIn) {
@@ -40,8 +61,23 @@ const BackgroundAudio = ({ settings }) => {
             return maxVol;
         };
         
+        const applyVolume = (v) => {
+            if (audio.gainNode && audio.audioCtx) {
+                // Ensure context is running if we have user interaction
+                if (audio.audioCtx.state === 'suspended' && !audio.paused) {
+                    audio.audioCtx.resume();
+                }
+                audio.gainNode.gain.value = v; // Digital multiplication, 100% immune to browser bugs
+                
+                // Keep HTML volume at max so GainNode has full control, but fallback to v if GainNode fails
+                if (audio.volume !== 1) audio.volume = 1; 
+            } else {
+                audio.volume = v; // Fallback
+            }
+        };
+
         // Mencegah patahan suara: set volume awal yang presisi
-        audio.volume = getExpectedVolume(audio.currentTime);
+        applyVolume(getExpectedVolume(audio.currentTime));
         
         const updateAudio = () => {
             if (!audio || audio.paused) return;
@@ -52,22 +88,21 @@ const BackgroundAudio = ({ settings }) => {
             // Handle looping back to start if we passed end
             if (targetEnd && current >= targetEnd) {
                 audio.currentTime = start || 0;
-                audio.volume = getExpectedVolume(start || 0);
+                applyVolume(getExpectedVolume(start || 0));
                 audio.play().catch(e => console.log(e));
                 return;
             }
 
-            audio.volume = getExpectedVolume(current);
-            if (audio.muted && fadeIn > 0) {
-                audio.muted = false; // Buka mute hanya setelah volume dijamin terkunci di perhitungan
-            }
+            applyVolume(getExpectedVolume(current));
             animationFrameId = requestAnimationFrame(updateAudio);
         };
         
         const handlePlay = () => {
             setIsPlaying(true);
-            audio.volume = getExpectedVolume(audio.currentTime);
-            if (audio.muted && fadeIn > 0) audio.muted = false;
+            if (audio.audioCtx && audio.audioCtx.state === 'suspended') {
+                audio.audioCtx.resume();
+            }
+            applyVolume(getExpectedVolume(audio.currentTime));
             animationFrameId = requestAnimationFrame(updateAudio);
         };
 
@@ -79,7 +114,7 @@ const BackgroundAudio = ({ settings }) => {
         const onLoadedMetadata = () => {
             if (start > 0 && audio.currentTime < start) {
                 audio.currentTime = start;
-                audio.volume = getExpectedVolume(start);
+                applyVolume(getExpectedVolume(start));
             }
         };
 
@@ -89,8 +124,7 @@ const BackgroundAudio = ({ settings }) => {
 
         // Jika autoplay diaktifkan, kita kendalikan secara manual via JS agar tidak didahului browser
         if (audioTrigger === 'autoplay' && audio.paused) {
-            audio.volume = getExpectedVolume(audio.currentTime);
-            if (fadeIn > 0) audio.muted = true;
+            applyVolume(getExpectedVolume(audio.currentTime));
             audio.play().catch(e => console.log("Autoplay prevented:", e));
         }
 
@@ -114,7 +148,11 @@ const BackgroundAudio = ({ settings }) => {
                     }
                     return maxVol;
                 };
-                audioRef.current.volume = getExpectedVolume(start);
+                if (audioRef.current.gainNode) {
+                    audioRef.current.gainNode.gain.value = getExpectedVolume(start);
+                } else {
+                    audioRef.current.volume = getExpectedVolume(start);
+                }
             }
         }
     }, [start, end, fadeIn, maxVol]);
@@ -128,16 +166,16 @@ const BackgroundAudio = ({ settings }) => {
                 ref={(el) => {
                     audioRef.current = el;
                     if (el && fadeIn > 0) {
-                        // Secara sinkron mengatur volume dan mute di DOM
-                        el.muted = true;
+                        // Fallback pengaman volume HTML5, di-override oleh GainNode jika didukung
                         el.volume = 0;
                     }
                 }}
                 loop={end <= 0} // Native loop if no custom end time
                 // autoPlay dihilangkan dari HTML murni agar bisa kita kontrol sepenuhnya via JS di useEffect
                 crossOrigin="anonymous"
+                preload="auto"
             >
-                {/* Gunakan media fragments url#t=... untuk native browser seeking */}
+                {/* Kembalikan media fragments url#t=... agar browser melakukan pre-seek secara native sehingga tidak patah (stutter). Kebocoran volumenya sekarang 100% ditahan oleh GainNode. */}
                 <source src={`${audioUrl}#t=${start || 0}`} type="audio/mpeg" />
                 <source src={`${audioUrl}#t=${start || 0}`} type="audio/wav" />
                 <source src={`${audioUrl}#t=${start || 0}`} type="audio/ogg" />
@@ -152,12 +190,20 @@ const BackgroundAudio = ({ settings }) => {
                         } else {
                             // Kalkulasi volume presisi saat tombol play ditekan
                             let current = audioRef.current.currentTime;
+                            let targetVol = maxVol;
                             if (fadeIn > 0 && current < start + fadeIn) {
-                                audioRef.current.volume = Math.max(0, Math.min(maxVol, maxVol * (Math.max(0, current - start) / fadeIn)));
-                            } else {
-                                audioRef.current.volume = maxVol;
+                                targetVol = Math.max(0, Math.min(maxVol, maxVol * (Math.max(0, current - start) / fadeIn)));
                             }
-                            if (audioRef.current.muted && fadeIn > 0) audioRef.current.muted = false;
+                            
+                            if (audioRef.current.audioCtx && audioRef.current.audioCtx.state === 'suspended') {
+                                audioRef.current.audioCtx.resume();
+                            }
+                            if (audioRef.current.gainNode) {
+                                audioRef.current.gainNode.gain.value = targetVol;
+                                audioRef.current.volume = 1;
+                            } else {
+                                audioRef.current.volume = targetVol;
+                            }
                             audioRef.current.play().catch(e => console.log(e));
                         }
                     }
