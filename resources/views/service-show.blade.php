@@ -6,7 +6,7 @@
     <section id="etalase" class="pt-32 pb-24 lg:pt-36 bg-sand" x-data="{
         sortBy: 'murah',
         packageFilter: 'all',
-        activeCategory: '{{ $service->categories->first()->id ?? 'all' }}',
+        activeCategory: new URLSearchParams(window.location.search).get('category') || '{{ $service->categories->first()->id ?? 'all' }}',
         get templates() {
             let categoriesData = {{ Js::from($service->categories ?? []) }};
             let directTemplates = {{ Js::from($service->templates ?? []) }};

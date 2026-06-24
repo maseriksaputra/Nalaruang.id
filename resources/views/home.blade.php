@@ -213,12 +213,30 @@
                                 </div>
                             </div>
                         </div>
+                        @if($service->categories && $service->categories->count() > 0)
+                        <div x-data="{ open: false }" class="relative mt-4 md:mt-0 w-full md:w-auto">
+                            <button @click="open = !open" @click.away="open = false" class="w-full px-6 py-3 rounded-full bg-white border border-gray-200 text-gray-700 hover:text-brand-700 hover:bg-brand-50 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-500/10 text-sm font-bold inline-flex items-center justify-center group transition-all duration-300">
+                                Eksplorasi Katalog 
+                                <div class="ml-2 bg-brand-100 text-brand-600 rounded-full p-1 group-hover:bg-brand-600 group-hover:text-white transition-colors duration-300">
+                                    <svg class="w-3 h-3 transform group-hover:translate-y-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" :class="{'rotate-180': open}"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
+                            </button>
+                            <div x-show="open" x-transition.opacity.duration.200ms style="display: none;" class="absolute z-50 mt-2 w-full md:w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-2 right-0 top-full origin-top-right text-left">
+                                @foreach($service->categories as $category)
+                                <a href="{{ route('service.show', $service->slug) }}?category={{ $category->id }}" class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-brand-50 hover:text-brand-700 font-medium transition-colors border-b border-gray-50 last:border-0">
+                                    {{ $category->name }}
+                                </a>
+                                @endforeach
+                            </div>
+                        </div>
+                        @else
                         <a href="{{ $service->slug ? route('service.show', $service->slug) : '#' }}" class="mt-4 md:mt-0 w-full md:w-auto px-6 py-3 rounded-full bg-white border border-gray-200 text-gray-700 hover:text-brand-700 hover:bg-brand-50 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-500/10 text-sm font-bold inline-flex items-center justify-center group transition-all duration-300">
                             Eksplorasi Katalog 
                             <div class="ml-2 bg-brand-100 text-brand-600 rounded-full p-1 group-hover:bg-brand-600 group-hover:text-white transition-colors duration-300">
                                 <svg class="w-3 h-3 transform group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </div>
                         </a>
+                        @endif
                     </div>
                     
                     <!-- Horizontal Slider Container -->
