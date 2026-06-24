@@ -21,6 +21,11 @@ const BackgroundAudio = ({ settings }) => {
         const audio = audioRef.current;
         if (!audio || !audioUrl) return;
 
+        // Mencegah patahan suara saat autoplay: set volume ke 0 sesegera mungkin
+        if (audioFadeIn > 0 && audio.currentTime <= audioStart + 0.5) {
+            audio.volume = 0;
+        }
+
         let animationFrameId;
         
         const updateAudio = () => {
@@ -106,10 +111,13 @@ const BackgroundAudio = ({ settings }) => {
             // Only seek if we are outside the valid window
             const end = audioEnd > 0 ? audioEnd : audioRef.current.duration;
             if (audioRef.current.currentTime < audioStart || (end && audioRef.current.currentTime > end)) {
+                if (audioFadeIn > 0) {
+                    audioRef.current.volume = 0;
+                }
                 audioRef.current.currentTime = audioStart;
             }
         }
-    }, [audioStart, audioEnd]);
+    }, [audioStart, audioEnd, audioFadeIn]);
 
     if (!audioUrl) return null;
 
@@ -134,6 +142,10 @@ const BackgroundAudio = ({ settings }) => {
                         if (isPlaying) {
                             audioRef.current.pause();
                         } else {
+                            // Mencegah patahan suara: Set volume ke 0 SEBELUM memanggil play() jika berada di titik awal fade-in
+                            if (audioFadeIn > 0 && audioRef.current.currentTime <= audioStart + 0.5) {
+                                audioRef.current.volume = 0;
+                            }
                             audioRef.current.play().catch(e => console.log(e));
                         }
                     }
