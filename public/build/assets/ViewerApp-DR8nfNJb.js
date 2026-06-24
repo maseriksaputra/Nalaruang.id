@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-Cev1D2sB.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-D7ThjNBF.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BueU00G_.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CwI8FbCb.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -28430,7 +28430,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-Cev1D2sB.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-D7ThjNBF.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -30637,6 +30637,22 @@ var BackgroundAudio = ({ settings }) => {
 		const audio = audioRef.current;
 		if (!audio || !audioUrl) return;
 		let animationFrameId;
+		if (!audio.audioCtx) {
+			const AudioContext = window.AudioContext || window.webkitAudioContext;
+			if (AudioContext) {
+				audio.audioCtx = new AudioContext();
+				try {
+					audio.sourceNode = audio.audioCtx.createMediaElementSource(audio);
+					audio.gainNode = audio.audioCtx.createGain();
+					audio.gainNode.gain.value = 0;
+					audio.sourceNode.connect(audio.gainNode);
+					audio.gainNode.connect(audio.audioCtx.destination);
+					console.log("Web Audio API GainNode initialized for flawless fade");
+				} catch (e) {
+					console.warn("Web Audio API routing failed, falling back to HTML5 volume", e);
+				}
+			}
+		}
 		const getExpectedVolume = (current) => {
 			const targetEnd = end > 0 && end > start ? end : audio.duration;
 			if (fadeIn > 0 && current < start + fadeIn) {
@@ -30648,23 +30664,31 @@ var BackgroundAudio = ({ settings }) => {
 			}
 			return maxVol;
 		};
-		audio.volume = getExpectedVolume(audio.currentTime);
+		const applyVolume = (v) => {
+			if (audio.gainNode && audio.audioCtx) {
+				if (audio.audioCtx.state === "suspended" && !audio.paused) audio.audioCtx.resume();
+				audio.gainNode.gain.value = v;
+				if (audio.volume !== 1) audio.volume = 1;
+			} else audio.volume = v;
+		};
+		applyVolume(getExpectedVolume(audio.currentTime));
 		const updateAudio = () => {
 			if (!audio || audio.paused) return;
 			const current = audio.currentTime;
 			const targetEnd = end > 0 && end > start ? end : audio.duration;
 			if (targetEnd && current >= targetEnd) {
 				audio.currentTime = start || 0;
-				audio.volume = getExpectedVolume(start || 0);
+				applyVolume(getExpectedVolume(start || 0));
 				audio.play().catch((e) => console.log(e));
 				return;
 			}
-			audio.volume = getExpectedVolume(current);
+			applyVolume(getExpectedVolume(current));
 			animationFrameId = requestAnimationFrame(updateAudio);
 		};
 		const handlePlay = () => {
 			setIsPlaying(true);
-			audio.volume = getExpectedVolume(audio.currentTime);
+			if (audio.audioCtx && audio.audioCtx.state === "suspended") audio.audioCtx.resume();
+			applyVolume(getExpectedVolume(audio.currentTime));
 			animationFrameId = requestAnimationFrame(updateAudio);
 		};
 		const handlePause = () => {
@@ -30674,14 +30698,14 @@ var BackgroundAudio = ({ settings }) => {
 		const onLoadedMetadata = () => {
 			if (start > 0 && audio.currentTime < start) {
 				audio.currentTime = start;
-				audio.volume = getExpectedVolume(start);
+				applyVolume(getExpectedVolume(start));
 			}
 		};
 		audio.addEventListener("play", handlePlay);
 		audio.addEventListener("pause", handlePause);
 		audio.addEventListener("loadedmetadata", onLoadedMetadata);
 		if (audioTrigger === "autoplay" && audio.paused) {
-			audio.volume = getExpectedVolume(audio.currentTime);
+			applyVolume(getExpectedVolume(audio.currentTime));
 			audio.play().catch((e) => console.log("Autoplay prevented:", e));
 		}
 		return () => {
@@ -30709,7 +30733,8 @@ var BackgroundAudio = ({ settings }) => {
 					if (fadeIn > 0 && current < start + fadeIn) return Math.max(0, Math.min(maxVol, maxVol * (Math.max(0, current - start) / fadeIn)));
 					return maxVol;
 				};
-				audioRef.current.volume = getExpectedVolume(start);
+				if (audioRef.current.gainNode) audioRef.current.gainNode.gain.value = getExpectedVolume(start);
+				else audioRef.current.volume = getExpectedVolume(start);
 			}
 		}
 	}, [
@@ -30747,8 +30772,13 @@ var BackgroundAudio = ({ settings }) => {
 			if (audioRef.current) if (isPlaying) audioRef.current.pause();
 			else {
 				let current = audioRef.current.currentTime;
-				if (fadeIn > 0 && current < start + fadeIn) audioRef.current.volume = Math.max(0, Math.min(maxVol, maxVol * (Math.max(0, current - start) / fadeIn)));
-				else audioRef.current.volume = maxVol;
+				let targetVol = maxVol;
+				if (fadeIn > 0 && current < start + fadeIn) targetVol = Math.max(0, Math.min(maxVol, maxVol * (Math.max(0, current - start) / fadeIn)));
+				if (audioRef.current.audioCtx && audioRef.current.audioCtx.state === "suspended") audioRef.current.audioCtx.resume();
+				if (audioRef.current.gainNode) {
+					audioRef.current.gainNode.gain.value = targetVol;
+					audioRef.current.volume = 1;
+				} else audioRef.current.volume = targetVol;
 				audioRef.current.play().catch((e) => console.log(e));
 			}
 		},
