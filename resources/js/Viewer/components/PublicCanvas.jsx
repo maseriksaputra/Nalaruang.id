@@ -104,7 +104,11 @@ const PublicCanvas = ({ config }) => {
             await loadFireflyPreset(tsParticles);
             await loadSnowPreset(tsParticles);
             window.tsParticles = tsParticles;
-            setInit(true);
+            
+            // Tunda efek partikel agar tidak mencekik CPU saat animasi masuk (entrance) Cover sedang berjalan
+            setTimeout(() => {
+                setInit(true);
+            }, 800);
         };
         initEngine();
 
