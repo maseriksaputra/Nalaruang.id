@@ -57,14 +57,7 @@ const PublicCanvas = ({ config }) => {
             setIsOpened(true);
             
             // Auto play audio if exists logic can be added here
-            const audioEl = document.getElementById('background-audio');
-            if (audioEl) {
-                audioEl.volume = 0; // Force absolute zero synchronously before telling browser to play
-                if (audioEl.audioCtx && audioEl.audioCtx.state === 'suspended') {
-                    audioEl.audioCtx.resume();
-                }
-                audioEl.play().catch(err => console.log('Audio autoplay prevented:', err));
-            }
+            window.dispatchEvent(new CustomEvent('builder:play_background_audio'));
         };
         window.addEventListener('builder:open_invitation', handleOpenInvitation);
         return () => window.removeEventListener('builder:open_invitation', handleOpenInvitation);
