@@ -215,6 +215,7 @@ Keterangan Kode Kategori:
 - ATK = Alat Tulis Kantor
 - PRN = Cetak / Printing
 - DGT = Produk Digital / Jasa Desain
+- SVN = Souvenir / Hadiah
 
 Catatan Penting:
 - Gunakan + jika itu pemasukan, dan - jika pengeluaran.
@@ -225,7 +226,8 @@ Contoh Output:
 + FNB Es Kopi Susu Aren 2 15000
 + PRN Cetak Undangan Pernikahan 100 2500
 - ATK Kertas HVS A4 70gr 1 50000
-+ DGT Jasa Desain Logo Usaha 1 250000</pre>
++ DGT Jasa Desain Logo Usaha 1 250000
++ SVN Gantungan Kunci Custom 50 5000</pre>
                 </div>
 
                 <!-- Textarea -->

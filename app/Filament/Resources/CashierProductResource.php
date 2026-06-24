@@ -33,6 +33,7 @@ class CashierProductResource extends Resource
                         'ATK' => 'ATK',
                         'Printing' => 'Printing',
                         'Digital' => 'Digital',
+                        'Souvenir' => 'Souvenir',
                     ])
                     ->required()
                     ->label('Kategori'),
@@ -66,6 +67,7 @@ class CashierProductResource extends Resource
                         'ATK' => 'info',
                         'Printing' => 'success',
                         'Digital' => 'primary',
+                        'Souvenir' => 'danger',
                         default => 'gray',
                     })
                     ->searchable()
@@ -90,6 +92,7 @@ class CashierProductResource extends Resource
                         'ATK' => 'ATK',
                         'Printing' => 'Printing',
                         'Digital' => 'Digital',
+                        'Souvenir' => 'Souvenir',
                     ])
                     ->label('Filter Kategori'),
             ])

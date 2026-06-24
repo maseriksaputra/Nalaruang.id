@@ -27,7 +27,7 @@ class Kasir extends Page implements HasTable
     public string $transactionDate;
     
     public array $cart = [];
-    public array $categories = ['F&B', 'ATK', 'Printing', 'Digital'];
+    public array $categories = ['F&B', 'ATK', 'Printing', 'Digital', 'Souvenir'];
 
     public string $manualName = '';
     public $manualPrice = '';
@@ -204,6 +204,9 @@ class Kasir extends Page implements HasTable
                 'ATK' => 'ATK',
                 'PRN' => 'Printing',
                 'DGT' => 'Digital',
+                'SOUVENIR' => 'Souvenir',
+                'SOUV' => 'Souvenir',
+                'SVN' => 'Souvenir',
                 default => null,
             };
 
@@ -318,6 +321,7 @@ class Kasir extends Page implements HasTable
                         'ATK' => 'gray',
                         'Printing' => 'info',
                         'Digital' => 'success',
+                        'Souvenir' => 'danger',
                         default => 'primary',
                     }),
                 TextColumn::make('description')

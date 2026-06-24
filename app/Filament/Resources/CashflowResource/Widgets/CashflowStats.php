@@ -36,6 +36,7 @@ class CashflowStats extends BaseWidget
                 SUM(CASE WHEN type = 'income' AND category = 'ATK' THEN amount ELSE 0 END) as income_atk,
                 SUM(CASE WHEN type = 'income' AND category = 'Printing' THEN amount ELSE 0 END) as income_print,
                 SUM(CASE WHEN type = 'income' AND category = 'Digital' THEN amount ELSE 0 END) as income_digital,
+                SUM(CASE WHEN type = 'income' AND category = 'Souvenir' THEN amount ELSE 0 END) as income_souvenir,
                 COUNT(*) as total_count
             ")->first();
 
@@ -47,6 +48,7 @@ class CashflowStats extends BaseWidget
         $incomeAtk = $stats->income_atk ?? 0;
         $incomePrint = $stats->income_print ?? 0;
         $incomeDigital = $stats->income_digital ?? 0;
+        $incomeSouvenir = $stats->income_souvenir ?? 0;
         $totalCount = $stats->total_count ?? 0;
 
         $formatValue = function ($amount) {
@@ -170,6 +172,11 @@ class CashflowStats extends BaseWidget
                 ->description('Pemasukan kategori Digital')
                 ->descriptionIcon('heroicon-m-device-phone-mobile', \Filament\Support\Enums\IconPosition::Before)
                 ->color('primary'),
+
+            Stat::make($boldTitle('Omzet Souvenir'), $formatValue($incomeSouvenir))
+                ->description('Pemasukan kategori Souvenir')
+                ->descriptionIcon('heroicon-m-gift', \Filament\Support\Enums\IconPosition::Before)
+                ->color('danger'),
 
             Stat::make($boldTitle('Jumlah Transaksi'), $formatString($totalCount, 'Transaksi'))
                 ->description('Total aktivitas tercatat')

@@ -28,5 +28,10 @@
                        {{ $activeCategory === 'Digital' ? 'bg-primary-600 text-white border border-primary-600' : 'bg-white text-gray-600 border border-gray-300 hover:bg-gray-50' }}">
             Digital
         </button>
+        <button wire:click="$set('tableFilters.category.value', 'Souvenir')" 
+                class="px-4 py-1.5 rounded-full text-sm font-medium transition-all shrink-0
+                       {{ $activeCategory === 'Souvenir' ? 'bg-primary-600 text-white border border-primary-600' : 'bg-white text-gray-600 border border-gray-300 hover:bg-gray-50' }}">
+            Souvenir
+        </button>
     </div>
 </template>

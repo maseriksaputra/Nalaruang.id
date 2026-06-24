@@ -39,7 +39,8 @@ class CashflowLineChart extends ChartWidget
                 DB::raw('SUM(CASE WHEN type = "income" AND category = "F&B" THEN amount ELSE 0 END) as fnb_income'),
                 DB::raw('SUM(CASE WHEN type = "income" AND category = "ATK" THEN amount ELSE 0 END) as atk_income'),
                 DB::raw('SUM(CASE WHEN type = "income" AND category = "Printing" THEN amount ELSE 0 END) as print_income'),
-                DB::raw('SUM(CASE WHEN type = "income" AND category = "Digital" THEN amount ELSE 0 END) as digital_income')
+                DB::raw('SUM(CASE WHEN type = "income" AND category = "Digital" THEN amount ELSE 0 END) as digital_income'),
+                DB::raw('SUM(CASE WHEN type = "income" AND category = "Souvenir" THEN amount ELSE 0 END) as souvenir_income')
             )
             ->groupBy('transaction_date')
             ->orderBy('transaction_date')
@@ -52,6 +53,7 @@ class CashflowLineChart extends ChartWidget
         $atkIncome = [];
         $printIncome = [];
         $digitalIncome = [];
+        $souvenirIncome = [];
 
         foreach ($data as $row) {
             $labels[] = Carbon::parse($row->date)->format('d M');
@@ -61,6 +63,7 @@ class CashflowLineChart extends ChartWidget
             $atkIncome[] = $row->atk_income;
             $printIncome[] = $row->print_income;
             $digitalIncome[] = $row->digital_income;
+            $souvenirIncome[] = $row->souvenir_income;
         }
 
         return [
@@ -100,6 +103,12 @@ class CashflowLineChart extends ChartWidget
                     'data' => $digitalIncome,
                     'borderColor' => '#6366f1', // indigo
                     'backgroundColor' => 'rgba(99, 102, 241, 0.1)',
+                ],
+                [
+                    'label' => 'Souvenir',
+                    'data' => $souvenirIncome,
+                    'borderColor' => '#ec4899', // pink
+                    'backgroundColor' => 'rgba(236, 72, 153, 0.1)',
                 ],
             ],
             'labels' => $labels,
