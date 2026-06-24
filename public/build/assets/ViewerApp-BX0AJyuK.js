@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-C5djZlSN.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-qiktns4J.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-CNnfe87w.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CUKCb13H.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -28431,7 +28431,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-C5djZlSN.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-qiktns4J.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -30311,11 +30311,8 @@ var PublicCanvas = ({ config }) => {
 			const isPreview = new URLSearchParams(window.location.search).get("preview") === "1";
 			const hasDesktopThumbnail = config?.global_settings?.desktop_thumbnail?.enabled;
 			if (isPreview) newScale = screenWidth / baseWidth;
-			else if (screenWidth < baseWidth || screenWidth < 1024) {
-				const widthRatio = screenWidth / baseWidth;
-				const heightRatio = screenHeight / 844;
-				newScale = Math.max(widthRatio, heightRatio);
-			} else if (hasDesktopThumbnail) newScale = screenHeight / 844;
+			else if (screenWidth < baseWidth || screenWidth < 1024) newScale = screenWidth / baseWidth;
+			else if (hasDesktopThumbnail) newScale = screenHeight / 844;
 			else newScale = 1;
 			setScale(newScale);
 			setScaledHeight(844 * newScale);
@@ -30334,13 +30331,15 @@ var PublicCanvas = ({ config }) => {
 	}, [scale, sections]);
 	const hasAnyLayers = sections.some((s) => s.layers && s.layers.length > 0);
 	const hideEmptySections = global_settings?.custom_code && !hasAnyLayers;
+	const coverBackground = sections[0]?.layout?.background_value || "#ffffff";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		ref: containerRef,
 		style: {
 			width: "100%",
 			height: !isOpened && hasAnyLayers ? "100vh" : scaledHeight === "auto" ? "auto" : `${scaledHeight}px`,
 			overflow: "hidden",
-			position: "relative"
+			position: "relative",
+			background: coverBackground
 		},
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			ref: innerRef,

@@ -126,10 +126,9 @@ const PublicCanvas = ({ config }) => {
             if (isPreview) {
                 newScale = screenWidth / baseWidth;
             } else if (screenWidth < baseWidth || screenWidth < 1024) {
-                // Mobile and Tablet: fit the screen to prevent white space
-                const widthRatio = screenWidth / baseWidth;
-                const heightRatio = screenHeight / 844;
-                newScale = Math.max(widthRatio, heightRatio);
+                // Mobile and Tablet: ALWAYS fit the width to prevent horizontal clipping and "zoomed in" effect.
+                // Letting height be shorter or cut off is standard for absolute positioning builders.
+                newScale = screenWidth / baseWidth;
             } else {
                 // Desktop (>= 1024px)
                 if (hasDesktopThumbnail) {
@@ -161,9 +160,10 @@ const PublicCanvas = ({ config }) => {
 
     const hasAnyLayers = sections.some(s => s.layers && s.layers.length > 0);
     const hideEmptySections = global_settings?.custom_code && !hasAnyLayers;
+    const coverBackground = sections[0]?.layout?.background_value || '#ffffff';
 
     return (
-        <div ref={containerRef} style={{ width: '100%', height: (!isOpened && hasAnyLayers) ? '100vh' : (scaledHeight === 'auto' ? 'auto' : `${scaledHeight}px`), overflow: 'hidden', position: 'relative' }}>
+        <div ref={containerRef} style={{ width: '100%', height: (!isOpened && hasAnyLayers) ? '100vh' : (scaledHeight === 'auto' ? 'auto' : `${scaledHeight}px`), overflow: 'hidden', position: 'relative', background: coverBackground }}>
             <div ref={innerRef} style={{ 
                 width: '414px', 
                 maxWidth: '414px', 
