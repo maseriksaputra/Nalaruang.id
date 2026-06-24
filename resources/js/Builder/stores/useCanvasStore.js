@@ -791,8 +791,8 @@ const useCanvasStore = create(temporal((set, get) => ({
 
     updateLayerStyle: (layerId, styleData) => {
         set(produce((state) => {
-            const targetLayers = state.activeCanvasMode === 'desktop' ? state.global_settings.desktop_layers : (state.sections.find(s => s.id === state.activeSectionId)?.layers || []);
-            const layer = findLayer(targetLayers, layerId);
+            const contextSections = state.activeCanvasMode === 'desktop' ? [{ layers: state.global_settings.desktop_layers || [] }] : state.sections;
+            const layer = findElement(contextSections, layerId);
             if (layer) { 
                 if (layer.type === 'canvas_group' && layer.children && styleData.width && styleData.height) {
                     const ratioH = newH / oldH;
