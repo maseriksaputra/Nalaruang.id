@@ -23,25 +23,9 @@ const BackgroundAudio = ({ settings }) => {
 
         let animationFrameId;
         
-        // Ensure starting point
-        const handlePlay = () => {
-            setIsPlaying(true);
-            
-            // Set initial volume for fade-in or normal play
-            if (audioFadeIn > 0 && audio.currentTime <= audioStart + 0.5) {
-                audio.volume = 0;
-            } else {
-                audio.volume = maxVolume;
-            }
-        };
+        const updateAudio = () => {
+            if (!audio || audio.paused) return;
 
-        const handlePause = () => {
-            setIsPlaying(false);
-        };
-
-        const handleTimeUpdate = () => {
-            if (!isPlaying) return;
-            
             const current = audio.currentTime;
             const targetEnd = (audioEnd > 0 && audioEnd > audioStart) ? audioEnd : audio.duration;
             
@@ -71,6 +55,28 @@ const BackgroundAudio = ({ settings }) => {
             else {
                 audio.volume = maxVolume;
             }
+
+            animationFrameId = requestAnimationFrame(updateAudio);
+        };
+        
+        // Ensure starting point
+        const handlePlay = () => {
+            setIsPlaying(true);
+            
+            // Set initial volume for fade-in or normal play
+            if (audioFadeIn > 0 && audio.currentTime <= audioStart + 0.5) {
+                audio.volume = 0;
+            } else {
+                audio.volume = maxVolume;
+            }
+
+            // Mulai loop update di setiap frame (60fps) untuk transisi super halus
+            animationFrameId = requestAnimationFrame(updateAudio);
+        };
+
+        const handlePause = () => {
+            setIsPlaying(false);
+            cancelAnimationFrame(animationFrameId);
         };
 
         const onLoadedMetadata = () => {
@@ -81,7 +87,6 @@ const BackgroundAudio = ({ settings }) => {
 
         audio.addEventListener('play', handlePlay);
         audio.addEventListener('pause', handlePause);
-        audio.addEventListener('timeupdate', handleTimeUpdate);
         audio.addEventListener('loadedmetadata', onLoadedMetadata);
 
         // Optional Web Audio API for effects could be added here if needed,
@@ -90,7 +95,6 @@ const BackgroundAudio = ({ settings }) => {
         return () => {
             audio.removeEventListener('play', handlePlay);
             audio.removeEventListener('pause', handlePause);
-            audio.removeEventListener('timeupdate', handleTimeUpdate);
             audio.removeEventListener('loadedmetadata', onLoadedMetadata);
             cancelAnimationFrame(animationFrameId);
         };
