@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import WaveSurfer from 'wavesurfer.js';
+import RegionsPlugin from 'wavesurfer.js/dist/plugins/regions.esm.js';
 
 const AudioWaveformEditor = ({ 
     audioUrl, 
@@ -10,6 +11,7 @@ const AudioWaveformEditor = ({
 }) => {
     const waveformRef = useRef(null);
     const wavesurfer = useRef(null);
+    const wsRegions = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -20,9 +22,10 @@ const AudioWaveformEditor = ({
 
         setIsReady(false);
 
-        // Initialize WaveSurfer with media element for faster playback
         const audioEl = new Audio();
         audioEl.crossOrigin = "anonymous";
+
+        wsRegions.current = RegionsPlugin.create();
 
         wavesurfer.current = WaveSurfer.create({
             container: waveformRef.current,
@@ -37,6 +40,7 @@ const AudioWaveformEditor = ({
             sampleRate: 8000,
             media: audioEl,
             url: audioUrl,
+            plugins: [wsRegions.current],
             fetchParams: {
                 mode: 'cors',
             }
@@ -44,24 +48,47 @@ const AudioWaveformEditor = ({
 
         wavesurfer.current.on('error', (err) => {
             console.error("WaveSurfer Error:", err);
-            // Tetap set ready agar user bisa play meskipun gelombang gagal dimuat
             setIsReady(true);
             setDuration(audioEl.duration || 0);
         });
 
         wavesurfer.current.on('ready', () => {
             setIsReady(true);
-            setDuration(wavesurfer.current.getDuration());
+            const totalDuration = wavesurfer.current.getDuration();
+            setDuration(totalDuration);
             
-            // If we have an audioStart, seek to it
-            if (audioStart > 0 && audioStart < wavesurfer.current.getDuration()) {
+            // Add a region for the current start and end
+            const start = audioStart || 0;
+            const end = audioEnd > 0 ? audioEnd : totalDuration;
+            
+            wsRegions.current.addRegion({
+                start: start,
+                end: end,
+                color: 'rgba(79, 70, 229, 0.2)', // indigo-600 with opacity
+                drag: true,
+                resize: true,
+                id: 'cut-region'
+            });
+
+            if (audioStart > 0 && audioStart < totalDuration) {
                 wavesurfer.current.setTime(audioStart);
+            }
+        });
+
+        wsRegions.current.on('region-updated', (region) => {
+            if (region.id === 'cut-region') {
+                const startStr = parseFloat(region.start.toFixed(2));
+                const endStr = parseFloat(region.end.toFixed(2));
+                
+                // Update parent state safely without triggering infinite loops
+                if (Math.abs(startStr - audioStart) > 0.05) onSetStart(startStr);
+                if (audioEnd > 0 && Math.abs(endStr - audioEnd) > 0.05) onSetEnd(endStr);
+                else if (audioEnd === 0 && Math.abs(endStr - wavesurfer.current.getDuration()) > 0.05) onSetEnd(endStr);
             }
         });
 
         audioEl.addEventListener('loadedmetadata', () => {
             if (!isReady) {
-                // Audio bisa di-play meskipun waveform belum selesai dirender
                 setIsReady(true);
                 setDuration(audioEl.duration);
             }
@@ -69,10 +96,14 @@ const AudioWaveformEditor = ({
 
         wavesurfer.current.on('audioprocess', () => {
             setCurrentTime(wavesurfer.current.getCurrentTime());
-            // Stop if it hits audioEnd
-            if (audioEnd > 0 && wavesurfer.current.getCurrentTime() >= audioEnd) {
+            // Stop if it hits the end of the region
+            const regions = wsRegions.current.getRegions();
+            const cutRegion = regions.find(r => r.id === 'cut-region');
+            const endLimit = cutRegion ? cutRegion.end : (audioEnd || 0);
+            
+            if (endLimit > 0 && wavesurfer.current.getCurrentTime() >= endLimit) {
                 wavesurfer.current.pause();
-                wavesurfer.current.setTime(audioStart || 0);
+                wavesurfer.current.setTime(cutRegion ? cutRegion.start : (audioStart || 0));
             }
         });
 
@@ -89,6 +120,26 @@ const AudioWaveformEditor = ({
             }
         };
     }, [audioUrl]);
+
+    // Update region visually if props change from outside
+    useEffect(() => {
+        if (isReady && wsRegions.current) {
+            const regions = wsRegions.current.getRegions();
+            const cutRegion = regions.find(r => r.id === 'cut-region');
+            if (cutRegion) {
+                const newStart = audioStart || 0;
+                const newEnd = audioEnd > 0 ? audioEnd : duration;
+                
+                // Avoid updating if the difference is tiny (prevents jitter)
+                if (Math.abs(cutRegion.start - newStart) > 0.05 || Math.abs(cutRegion.end - newEnd) > 0.05) {
+                    cutRegion.setOptions({
+                        start: newStart,
+                        end: newEnd
+                    });
+                }
+            }
+        }
+    }, [audioStart, audioEnd, isReady, duration]);
 
     const handlePlayPause = () => {
         if (wavesurfer.current) {
