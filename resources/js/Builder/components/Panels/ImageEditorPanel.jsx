@@ -76,7 +76,7 @@ const ImageEditorPanel = () => {
                             type="range" min="0" max="360" step="1" 
                             value={activeLayer.style?.rotation ?? 0} 
                             onChange={(e) => updateLayerStyle(activeLayer.id, { rotation: parseInt(e.target.value) })} 
-                            className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" 
+                            className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600" 
                         />
                     </div>
                 </div>
@@ -90,7 +90,7 @@ const ImageEditorPanel = () => {
                             <span>Kecerahan (Brightness)</span>
                             <span>{Math.round((activeLayer.style?.brightness ?? 1) * 100)}%</span>
                         </div>
-                        <input type="range" min="0" max="2" step="0.05" value={activeLayer.style?.brightness ?? 1} onChange={(e) => updateLayerStyle(activeLayer.id, { brightness: parseFloat(e.target.value) })} className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" />
+                        <input type="range" min="0" max="2" step="0.05" value={activeLayer.style?.brightness ?? 1} onChange={(e) => updateLayerStyle(activeLayer.id, { brightness: parseFloat(e.target.value) })} className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600" />
                     </div>
 
                     <div>
@@ -98,7 +98,7 @@ const ImageEditorPanel = () => {
                             <span>Kontras (Contrast)</span>
                             <span>{Math.round((activeLayer.style?.contrast ?? 1) * 100)}%</span>
                         </div>
-                        <input type="range" min="0" max="2" step="0.05" value={activeLayer.style?.contrast ?? 1} onChange={(e) => updateLayerStyle(activeLayer.id, { contrast: parseFloat(e.target.value) })} className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" />
+                        <input type="range" min="0" max="2" step="0.05" value={activeLayer.style?.contrast ?? 1} onChange={(e) => updateLayerStyle(activeLayer.id, { contrast: parseFloat(e.target.value) })} className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600" />
                     </div>
 
                     <div>
@@ -106,7 +106,7 @@ const ImageEditorPanel = () => {
                             <span>Saturasi Warna</span>
                             <span>{Math.round((activeLayer.style?.saturate ?? 1) * 100)}%</span>
                         </div>
-                        <input type="range" min="0" max="2" step="0.05" value={activeLayer.style?.saturate ?? 1} onChange={(e) => updateLayerStyle(activeLayer.id, { saturate: parseFloat(e.target.value) })} className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" />
+                        <input type="range" min="0" max="2" step="0.05" value={activeLayer.style?.saturate ?? 1} onChange={(e) => updateLayerStyle(activeLayer.id, { saturate: parseFloat(e.target.value) })} className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600" />
                     </div>
 
                     <div>
@@ -114,7 +114,7 @@ const ImageEditorPanel = () => {
                             <span>Blur</span>
                             <span>{activeLayer.style?.blur ?? 0}px</span>
                         </div>
-                        <input type="range" min="0" max="20" step="0.5" value={activeLayer.style?.blur ?? 0} onChange={(e) => updateLayerStyle(activeLayer.id, { blur: parseFloat(e.target.value) })} className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600" />
+                        <input type="range" min="0" max="20" step="0.5" value={activeLayer.style?.blur ?? 0} onChange={(e) => updateLayerStyle(activeLayer.id, { blur: parseFloat(e.target.value) })} className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600" />
                     </div>
                     
                     <button 

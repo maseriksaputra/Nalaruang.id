@@ -135,7 +135,7 @@ const CanvasArea = () => {
                         }}
                     >
                         {/* Halaman Indicator */}
-                        <div className="absolute top-0 left-0 z-50 px-3 py-1.5 text-[10px] font-bold tracking-wider rounded-br-lg shadow-sm border-b border-r bg-indigo-600 text-white border-indigo-700">
+                        <div className="absolute top-0 left-0 z-50 px-3 py-1.5 text-[10px] font-bold tracking-wider rounded-br-lg shadow-sm border-b border-r bg-primary-600 text-white border-primary-700">
                             🖥️ KANVAS DESKTOP (16:9)
                         </div>
 
@@ -166,7 +166,7 @@ const CanvasArea = () => {
                                                 if (global_settings?.custom_code) return; // Prevent selecting section if it's acting as a transparent overlay
                                                 setActiveSection(section.id);
                                             }}
-                                            className={`relative group ${activeSectionId === section.id ? 'ring-2 ring-inset ring-indigo-500 z-10' : 'z-0'} ${index > 0 ? 'border-t border-dashed border-gray-300' : ''}`}
+                                            className={`relative group ${activeSectionId === section.id ? 'ring-2 ring-inset ring-primary-500 z-10' : 'z-0'} ${index > 0 ? 'border-t border-dashed border-gray-300' : ''}`}
                                         style={{
                                             minHeight: (() => {
                                                 if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
@@ -212,7 +212,7 @@ const CanvasArea = () => {
                             </div>
                         )}
                         {/* Halaman Indicator */}
-                        <div className={`absolute top-0 left-0 z-50 px-3 py-1.5 text-[10px] font-bold tracking-wider rounded-br-lg shadow-sm border-b border-r bg-indigo-600 text-white border-indigo-700`}>
+                        <div className={`absolute top-0 left-0 z-50 px-3 py-1.5 text-[10px] font-bold tracking-wider rounded-br-lg shadow-sm border-b border-r bg-primary-600 text-white border-primary-700`}>
                             {index === 0 ? '📄 HALAMAN SAMPUL (COVER)' : '📄 HALAMAN ISI'}
                         </div>
 
@@ -240,11 +240,11 @@ const CanvasArea = () => {
                             for (let i = 844; i < sectionH; i += 844) {
                                 grids.push(
                                     <div key={`grid-${i}`} className="absolute w-full z-[9999] flex items-center pointer-events-none" style={{ top: `${i}px` }}>
-                                        <div className="flex-1 border-t border-dashed border-indigo-400/60"></div>
-                                        <div className="px-2 py-0.5 bg-indigo-50 text-indigo-500 text-[10px] font-bold rounded-full mx-2 border border-indigo-300/50 shadow-sm">
+                                        <div className="flex-1 border-t border-dashed border-primary-400/60"></div>
+                                        <div className="px-2 py-0.5 bg-primary-50 text-primary-500 text-[10px] font-bold rounded-full mx-2 border border-primary-300/50 shadow-sm">
                                             Batas Layar {Math.floor(i/844) + 1}
                                         </div>
-                                        <div className="flex-1 border-t border-dashed border-indigo-400/60"></div>
+                                        <div className="flex-1 border-t border-dashed border-primary-400/60"></div>
                                     </div>
                                 );
                             }
@@ -268,7 +268,7 @@ const CanvasArea = () => {
                         {/* Resize Handle for Content Pages */}
                         {index > 0 && (
                             <div 
-                                className="absolute bottom-0 left-0 w-full h-4 bg-indigo-100 hover:bg-indigo-200 cursor-ns-resize flex items-center justify-center border-t border-indigo-200 z-50 transition-colors"
+                                className="absolute bottom-0 left-0 w-full h-4 bg-primary-100 hover:bg-primary-200 cursor-ns-resize flex items-center justify-center border-t border-primary-200 z-50 transition-colors"
                                 onMouseDown={(e) => {
                                     e.stopPropagation();
                                     e.preventDefault();
@@ -299,7 +299,7 @@ const CanvasArea = () => {
                                     document.addEventListener('mouseup', handleMouseUp);
                                 }}
                             >
-                                <div className="w-12 h-1 bg-indigo-400 rounded-full"></div>
+                                <div className="w-12 h-1 bg-primary-400 rounded-full"></div>
                             </div>
                         )}
                     </section>
@@ -316,7 +316,7 @@ const CanvasArea = () => {
                             e.preventDefault();
                             useCanvasStore.getState().addSection();
                         }}
-                        className="flex items-center gap-2 px-6 py-3 bg-white hover:bg-indigo-50 border-2 border-dashed border-indigo-300 hover:border-indigo-500 rounded-xl text-indigo-600 font-bold shadow-sm transition-all"
+                        className="flex items-center gap-2 px-6 py-3 bg-white hover:bg-primary-50 border-2 border-dashed border-primary-300 hover:border-primary-500 rounded-xl text-primary-600 font-bold shadow-sm transition-all"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
                         Tambah Halaman Isi

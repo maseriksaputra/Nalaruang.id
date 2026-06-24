@@ -39,16 +39,16 @@ const ContextualToolbar = () => {
     if (activeLayerIds.length > 1) {
         return (
             <div 
-                className="absolute top-6 left-1/2 -translate-x-1/2 h-12 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center px-4 z-50 shadow-lg gap-3 w-max transition-all duration-200"
+                className="absolute top-6 left-1/2 -translate-x-1/2 h-12 bg-primary-50 border border-primary-100 rounded-xl flex items-center px-4 z-50 shadow-lg gap-3 w-max transition-all duration-200"
                 onMouseDown={(e) => e.stopPropagation()}
             >
-                <div className="text-sm font-semibold text-indigo-700">
+                <div className="text-sm font-semibold text-primary-700">
                     {activeLayerIds.length} Elemen Terseleksi
                 </div>
                 <div className="flex items-center gap-2">
                     <button 
                         onClick={() => useCanvasStore.getState().groupElements()} 
-                        className="px-4 py-1.5 text-sm bg-indigo-600 text-white rounded font-medium shadow-sm hover:bg-indigo-700 transition flex items-center gap-2"
+                        className="px-4 py-1.5 text-sm bg-primary-600 text-white rounded font-medium shadow-sm hover:bg-primary-700 transition flex items-center gap-2"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
                         Grupkan (Ctrl+G)
@@ -103,7 +103,7 @@ const ContextualToolbar = () => {
                     {/* Font Family */}
                     <button 
                         onClick={() => setActiveTab('fonts')}
-                        className="flex items-center bg-white border border-gray-300 text-gray-700 py-1.5 px-3 rounded hover:border-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm font-medium min-w-[120px] justify-between cursor-pointer transition-colors"
+                        className="flex items-center bg-white border border-gray-300 text-gray-700 py-1.5 px-3 rounded hover:border-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-500 text-sm font-medium min-w-[120px] justify-between cursor-pointer transition-colors"
                     >
                         <span style={{ fontFamily: activeLayer.style?.fontFamily || 'Inter' }}>
                             {activeLayer.style?.fontFamily || 'Inter'}
@@ -120,7 +120,7 @@ const ContextualToolbar = () => {
                             type="number" 
                             value={currentFontSize}
                             onChange={(e) => updateLayerStyle(activeLayer.id, { fontSize: parseInt(e.target.value) || 16 })}
-                            className="w-12 text-center text-sm font-medium border-x border-gray-300 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 appearance-none m-0"
+                            className="w-12 text-center text-sm font-medium border-x border-gray-300 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary-500 appearance-none m-0"
                             style={{ MozAppearance: 'textfield' }}
                         />
                         <button onClick={() => updateLayerStyle(activeLayer.id, { fontSize: currentFontSize + 1 })} className="px-3 py-1.5 text-gray-600 hover:bg-gray-100 transition-colors">+</button>
@@ -176,7 +176,7 @@ const ContextualToolbar = () => {
                             setInspectorTab('effects');
                             setIsRightSidebarOpen(true);
                         }} 
-                        className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors border ${activeLayer.style?.removeBg ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'text-gray-700 hover:bg-gray-100 border-transparent hover:border-gray-200'}`}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors border ${activeLayer.style?.removeBg ? 'bg-primary-50 text-primary-700 border-primary-200' : 'text-gray-700 hover:bg-gray-100 border-transparent hover:border-gray-200'}`}
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
                         Hapus Latar
@@ -228,7 +228,7 @@ const ContextualToolbar = () => {
                 
                 <div className="w-px h-6 bg-gray-300 mx-2"></div>
                 
-                <button onClick={() => useCanvasStore.getState().toggleLayerLock(activeLayer.id)} className={`w-8 h-8 flex items-center justify-center rounded transition-colors ${isLocked ? 'bg-indigo-50 text-indigo-600' : 'text-gray-500 hover:bg-gray-100'}`} title={isLocked ? "Buka Kunci" : "Kunci Posisi"}>
+                <button onClick={() => useCanvasStore.getState().toggleLayerLock(activeLayer.id)} className={`w-8 h-8 flex items-center justify-center rounded transition-colors ${isLocked ? 'bg-primary-50 text-primary-600' : 'text-gray-500 hover:bg-gray-100'}`} title={isLocked ? "Buka Kunci" : "Kunci Posisi"}>
                     {isLocked ? (
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd"></path></svg>
                     ) : (

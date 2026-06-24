@@ -29,9 +29,9 @@ const AudioWaveformEditor = ({
 
         wavesurfer.current = WaveSurfer.create({
             container: waveformRef.current,
-            waveColor: '#a5b4fc', // indigo-300
-            progressColor: '#4f46e5', // indigo-600
-            cursorColor: '#312e81', // indigo-900
+            waveColor: '#a5b4fc', // primary-300
+            progressColor: '#db2777', // primary-600
+            cursorColor: '#312e81', // primary-900
             barWidth: 2,
             barGap: 1,
             barRadius: 2,
@@ -73,7 +73,7 @@ const AudioWaveformEditor = ({
                 wsRegions.current.addRegion({
                     start: start,
                     end: end,
-                    color: 'rgba(79, 70, 229, 0.4)', // indigo-600 with higher opacity for visibility
+                    color: 'rgba(79, 70, 229, 0.4)', // primary-600 with higher opacity for visibility
                     drag: true,
                     resize: true,
                     id: 'cut-region'
@@ -211,10 +211,10 @@ const AudioWaveformEditor = ({
         <div className="bg-white border border-gray-200 rounded-xl p-3 shadow-sm my-4">
             <div className="flex items-center justify-between mb-2">
                 <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1">
-                    <svg className="w-3 h-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <svg className="w-3 h-3 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     Pemotong Pintar
                 </span>
-                <span className="text-[10px] font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">
+                <span className="text-[10px] font-mono font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">
                     {formatTime(currentTime)} / {formatTime(duration)}
                 </span>
             </div>
@@ -222,7 +222,7 @@ const AudioWaveformEditor = ({
             <div className="relative">
                 <div ref={waveformRef} className="w-full h-[60px] bg-gray-50 rounded-lg border border-gray-100 overflow-hidden cursor-pointer" />
                 {!isReady && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-10 text-[10px] text-indigo-500 font-bold animate-pulse pointer-events-none">
+                    <div className="absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-10 text-[10px] text-primary-500 font-bold animate-pulse pointer-events-none">
                         Memuat Gelombang...
                     </div>
                 )}
@@ -232,7 +232,7 @@ const AudioWaveformEditor = ({
                 <button 
                     onClick={handlePlayPause}
                     disabled={!isReady}
-                    className="flex shrink-0 items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition shadow disabled:opacity-50"
+                    className="flex shrink-0 items-center justify-center w-8 h-8 rounded-full bg-primary-600 text-white hover:bg-primary-700 transition shadow disabled:opacity-50"
                 >
                     {isPlaying ? (
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
@@ -245,14 +245,14 @@ const AudioWaveformEditor = ({
                     <button 
                         onClick={handleSetStart}
                         disabled={!isReady}
-                        className="flex-1 px-2 py-1.5 text-[9px] font-bold bg-white border border-gray-300 text-gray-700 rounded-lg hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50 transition disabled:opacity-50"
+                        className="flex-1 px-2 py-1.5 text-[9px] font-bold bg-white border border-gray-300 text-gray-700 rounded-lg hover:border-primary-500 hover:text-primary-600 hover:bg-primary-50 transition disabled:opacity-50"
                     >
                         Jadikan Mulai
                     </button>
                     <button 
                         onClick={handleSetEnd}
                         disabled={!isReady}
-                        className="flex-1 px-2 py-1.5 text-[9px] font-bold bg-white border border-gray-300 text-gray-700 rounded-lg hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50 transition disabled:opacity-50"
+                        className="flex-1 px-2 py-1.5 text-[9px] font-bold bg-white border border-gray-300 text-gray-700 rounded-lg hover:border-primary-500 hover:text-primary-600 hover:bg-primary-50 transition disabled:opacity-50"
                     >
                         Jadikan Selesai
                     </button>

@@ -79,7 +79,7 @@ const IframePreview = ({ htmlContent, style }) => {
                             el.addEventListener('focus', function(e) {
                                 e.stopPropagation();
                                 this.dataset.original = this.innerHTML;
-                                this.style.outline = '2px dashed #4f46e5';
+                                this.style.outline = '2px dashed #db2777';
                                 this.style.outlineOffset = '2px';
                             });
                             

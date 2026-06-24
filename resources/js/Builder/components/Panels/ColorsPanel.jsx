@@ -4,7 +4,7 @@ import useCanvasStore from '../../stores/useCanvasStore';
 const TAILWIND_COLORS = [
     '#000000', '#ffffff', '#ef4444', '#f97316', '#f59e0b', '#eab308', 
     '#84cc16', '#22c55e', '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9', 
-    '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e',
+    '#ec4899', '#ec4899', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899', '#f43f5e',
     '#64748b', '#78716c', '#475569', '#334155', '#1e293b', '#0f172a'
 ];
 
@@ -122,7 +122,7 @@ const ColorsPanel = () => {
                             )}
 
                             {/* Warna Saat Ini */}
-                            <div className="w-10 h-10 rounded-full border-2 border-indigo-500 flex items-center justify-center p-0.5">
+                            <div className="w-10 h-10 rounded-full border-2 border-primary-500 flex items-center justify-center p-0.5">
                                 <div className="w-full h-full rounded-full border border-gray-200" style={{ backgroundColor: currentBackgroundType === 'solid' ? currentColor : '#ffffff' }}></div>
                             </div>
                         </div>
@@ -147,7 +147,7 @@ const ColorsPanel = () => {
                                     <button
                                         key={index}
                                         onClick={() => handleSelectColor(color)}
-                                        className={`w-full aspect-square rounded-md border shadow-sm transition-transform hover:scale-110 flex items-center justify-center ${isActive ? 'ring-2 ring-indigo-500 ring-offset-2' : 'border-gray-200'}`}
+                                        className={`w-full aspect-square rounded-md border shadow-sm transition-transform hover:scale-110 flex items-center justify-center ${isActive ? 'ring-2 ring-primary-500 ring-offset-2' : 'border-gray-200'}`}
                                         style={{ backgroundColor: color }}
                                         title={color}
                                     >

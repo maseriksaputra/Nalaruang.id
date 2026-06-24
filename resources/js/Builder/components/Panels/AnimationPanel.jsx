@@ -9,14 +9,14 @@ const AnimatedIcon = ({ anim, isText = false, isActive = false }) => {
         <div className="w-full h-14 mb-2 flex items-center justify-center overflow-hidden border border-gray-100 bg-white rounded-lg group-hover:shadow-sm transition-shadow">
             {isText ? (
                 <div 
-                    className={`font-bold text-[20px] tracking-widest transition-colors ${isActive ? 'text-indigo-600' : 'text-purple-600 group-hover:text-purple-500'}`} 
+                    className={`font-bold text-[20px] tracking-widest transition-colors ${isActive ? 'text-primary-600' : 'text-primary-600 group-hover:text-primary-500'}`} 
                     style={{ animation: anim.anim }}
                 >
                     ABC
                 </div>
             ) : (
                 <div 
-                    className={`w-8 h-8 rounded transition-colors ${isActive ? 'bg-indigo-600' : 'bg-purple-500 group-hover:bg-purple-400'}`} 
+                    className={`w-8 h-8 rounded transition-colors ${isActive ? 'bg-primary-600' : 'bg-primary-500 group-hover:bg-primary-400'}`} 
                     style={{ animation: anim.anim }}
                 ></div>
             )}
@@ -151,7 +151,7 @@ const AnimationPanel = () => {
                     </button>
                     <button 
                         onClick={() => setSubTab('kustom')}
-                        className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors flex items-center justify-center gap-1 ${subTab === 'kustom' ? 'bg-indigo-50 text-indigo-600 shadow-sm' : 'text-indigo-400 hover:text-indigo-600'}`}
+                        className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors flex items-center justify-center gap-1 ${subTab === 'kustom' ? 'bg-primary-50 text-primary-600 shadow-sm' : 'text-primary-400 hover:text-primary-600'}`}
                     >
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                         Kustom
@@ -170,14 +170,14 @@ const AnimationPanel = () => {
                         <div className="space-y-4">
                             {/* Toggle Mode Animasi Kustom */}
                             <div className="flex bg-gray-100 rounded-lg p-1 mb-2">
-                                <button onClick={() => setCustomMode('keyframes')} className={`flex-1 py-1.5 text-xs rounded transition-colors ${customMode === 'keyframes' ? 'bg-white shadow text-indigo-600 font-bold' : 'text-gray-500'}`}>Titik Bertahap</button>
-                                <button onClick={() => setCustomMode('path')} className={`flex-1 py-1.5 text-xs rounded transition-colors ${customMode === 'path' ? 'bg-white shadow text-indigo-600 font-bold' : 'text-gray-500'}`}>Jalur Bebas (Freehand)</button>
+                                <button onClick={() => setCustomMode('keyframes')} className={`flex-1 py-1.5 text-xs rounded transition-colors ${customMode === 'keyframes' ? 'bg-white shadow text-primary-600 font-bold' : 'text-gray-500'}`}>Titik Bertahap</button>
+                                <button onClick={() => setCustomMode('path')} className={`flex-1 py-1.5 text-xs rounded transition-colors ${customMode === 'path' ? 'bg-white shadow text-primary-600 font-bold' : 'text-gray-500'}`}>Jalur Bebas (Freehand)</button>
                             </div>
 
                             {customMode === 'keyframes' ? (
                                 <>
-                                    <div className="flex items-center justify-between bg-indigo-50 p-3 rounded-lg border border-indigo-100 mb-2">
-                                        <div className="text-xs text-indigo-800">
+                                    <div className="flex items-center justify-between bg-primary-50 p-3 rounded-lg border border-primary-100 mb-2">
+                                        <div className="text-xs text-primary-800">
                                             <span className="font-bold block">Animasi Keyframe</span>
                                             Geser elemen di kanvas lalu rekam sebagai titik pergerakan.
                                         </div>
@@ -194,7 +194,7 @@ const AnimationPanel = () => {
                                             checked={activeLayer.animation?.isLooping ?? true}
                                             onChange={(e) => updateLayerAnimation(activeLayer.id, { isLooping: e.target.checked })}
                                         />
-                                        <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                                        <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-600"></div>
                                     </label>
                                 </div>
                             )}
@@ -202,10 +202,10 @@ const AnimationPanel = () => {
                             {/* Daftar Keyframes */}
                             <div className="space-y-2">
                                 {(activeLayer.animation?.custom_keyframes || []).map((kf, index) => (
-                                    <div key={kf.id} className="p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-indigo-300 transition-colors">
+                                    <div key={kf.id} className="p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-primary-300 transition-colors">
                                         <div className="flex items-center justify-between mb-2">
                                             <span className="text-xs font-bold text-gray-800 flex items-center gap-2">
-                                                <div className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-[10px]">{index + 1}</div>
+                                                <div className="w-5 h-5 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center text-[10px]">{index + 1}</div>
                                                 Titik {index + 1}
                                             </span>
                                             <div className="flex items-center gap-2">
@@ -224,13 +224,13 @@ const AnimationPanel = () => {
                                                     <div className="mt-3 pl-2 pt-3 border-t border-gray-100">
                                                         <div className="flex justify-between items-center mb-1">
                                                             <span className="text-[10px] font-semibold text-gray-600 block">Waktu Tempuh (s)</span>
-                                                            <span className="text-[10px] font-bold text-indigo-600">{kf.duration || 1}s</span>
+                                                            <span className="text-[10px] font-bold text-primary-600">{kf.duration || 1}s</span>
                                                         </div>
                                                         <input 
                                                             type="range" min="0" max="15" step="0.05"
                                                             value={kf.duration || 1}
                                                             onChange={(e) => handleUpdateKeyframe(index, 'duration', parseFloat(e.target.value))}
-                                                            className="w-full accent-indigo-600 cursor-pointer"
+                                                            className="w-full accent-primary-600 cursor-pointer"
                                                         />
                                                     </div>
 
@@ -240,7 +240,7 @@ const AnimationPanel = () => {
                                                             <select 
                                                                 value={kf.ease}
                                                                 onChange={(e) => handleUpdateKeyframe(index, 'ease', e.target.value)}
-                                                                className="appearance-none w-full text-[11px] font-medium text-gray-700 bg-gray-50 border border-gray-200 hover:border-indigo-400 hover:bg-white rounded-lg py-2 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all cursor-pointer shadow-sm"
+                                                                className="appearance-none w-full text-[11px] font-medium text-gray-700 bg-gray-50 border border-gray-200 hover:border-primary-400 hover:bg-white rounded-lg py-2 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all cursor-pointer shadow-sm"
                                                                 style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: 'right 0.5rem center', backgroundRepeat: 'no-repeat', backgroundSize: '1.5em 1.5em' }}
                                                             >
                                                                 <option value="none">Linear (Datar & Konstan)</option>
@@ -273,7 +273,7 @@ const AnimationPanel = () => {
                             
                             <button 
                                 onClick={handleAddKeyframe}
-                                className="w-full py-3 mt-4 border-2 border-dashed border-indigo-300 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 hover:border-indigo-400 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2"
+                                className="w-full py-3 mt-4 border-2 border-dashed border-primary-300 text-primary-600 bg-primary-50 hover:bg-primary-100 hover:border-primary-400 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2"
                             >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
                                 {(activeLayer.animation?.custom_keyframes?.length > 0) ? 'Rekam Titik Selanjutnya' : 'Mulai Rekam Titik 1'}
@@ -281,8 +281,8 @@ const AnimationPanel = () => {
                                 </>
                             ) : (
                                 <div className="space-y-4">
-                                    <div className="flex items-center justify-between bg-indigo-50 p-3 rounded-lg border border-indigo-100 mb-2">
-                                        <div className="text-xs text-indigo-800">
+                                    <div className="flex items-center justify-between bg-primary-50 p-3 rounded-lg border border-primary-100 mb-2">
+                                        <div className="text-xs text-primary-800">
                                             <span className="font-bold block">Animasi Jalur (Freehand)</span>
                                             Seret (drag) elemen ini di kanvas untuk merekam pergerakan rute secara langsung.
                                         </div>
@@ -290,7 +290,7 @@ const AnimationPanel = () => {
 
                                     <button 
                                         onClick={() => setIsDrawingPath(!isDrawingPath)}
-                                        className={`w-full py-3 mt-2 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2 ${isDrawingPath ? 'bg-red-500 text-white shadow-lg shadow-red-500/30' : 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 hover:bg-indigo-700'}`}
+                                        className={`w-full py-3 mt-2 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2 ${isDrawingPath ? 'bg-red-500 text-white shadow-lg shadow-red-500/30' : 'bg-primary-600 text-white shadow-lg shadow-primary-600/30 hover:bg-primary-700'}`}
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                         {isDrawingPath ? 'Selesai & Berhenti Merekam' : (activeLayer.animation?.idle === 'custom_path' ? 'Rekam Ulang Jalur' : 'Mulai Rekam Jalur')}
@@ -306,7 +306,7 @@ const AnimationPanel = () => {
                                             <div>
                                                 <label className="text-[10px] font-semibold text-gray-500 mb-2 flex justify-between">
                                                     <span>Kecepatan/Durasi (Detik)</span>
-                                                    <span className="text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded font-bold">{activeLayer.animation.custom_path_data.duration}s</span>
+                                                    <span className="text-primary-600 bg-primary-50 px-1.5 py-0.5 rounded font-bold">{activeLayer.animation.custom_path_data.duration}s</span>
                                                 </label>
                                                 <input 
                                                     type="range" 
@@ -315,7 +315,7 @@ const AnimationPanel = () => {
                                                     onChange={(e) => updateLayerAnimation(activeLayer.id, { 
                                                         custom_path_data: { ...activeLayer.animation.custom_path_data, duration: parseFloat(e.target.value) } 
                                                     })}
-                                                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+                                                    className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
                                                 />
                                             </div>
 
@@ -326,7 +326,7 @@ const AnimationPanel = () => {
                                                     onChange={(e) => updateLayerAnimation(activeLayer.id, { 
                                                         custom_path_data: { ...activeLayer.animation.custom_path_data, ease: e.target.value } 
                                                     })}
-                                                    className="w-full text-xs p-2 border border-gray-300 rounded focus:ring-indigo-500 focus:border-indigo-500 bg-white"
+                                                    className="w-full text-xs p-2 border border-gray-300 rounded focus:ring-primary-500 focus:border-primary-500 bg-white"
                                                 >
                                                     <option value="power2.inOut">Mulus (Smooth/Default)</option>
                                                     <option value="none">Konstan (Linear)</option>
@@ -347,7 +347,7 @@ const AnimationPanel = () => {
                                                             custom_path_data: { ...activeLayer.animation.custom_path_data, autoRotate: e.target.checked } 
                                                         })}
                                                     />
-                                                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                                                    <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-600"></div>
                                                 </label>
                                             </div>
                                         </div>
@@ -389,9 +389,9 @@ const AnimationPanel = () => {
                                                     onClick={() => setAnimation(anim.id, category.isContinuous)}
                                                     className="group flex flex-col items-center cursor-pointer outline-none"
                                                 >
-                                                    <div className={`w-full rounded-xl transition-all p-1 ${isActive ? 'bg-indigo-50 border-indigo-500 ring-1 ring-indigo-500' : 'border-transparent hover:bg-gray-50'}`}>
+                                                    <div className={`w-full rounded-xl transition-all p-1 ${isActive ? 'bg-primary-50 border-primary-500 ring-1 ring-primary-500' : 'border-transparent hover:bg-gray-50'}`}>
                                                         <AnimatedIcon anim={anim} isText={isText} isActive={isActive} />
-                                                        <span className={`text-[10px] text-center leading-tight block pb-1 ${isActive ? 'text-indigo-700 font-semibold' : 'text-gray-600 group-hover:text-gray-800'}`}>{anim.label}</span>
+                                                        <span className={`text-[10px] text-center leading-tight block pb-1 ${isActive ? 'text-primary-700 font-semibold' : 'text-gray-600 group-hover:text-gray-800'}`}>{anim.label}</span>
                                                     </div>
                                                 </button>
                                             );

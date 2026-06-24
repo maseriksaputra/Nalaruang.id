@@ -51,7 +51,7 @@ const FontsPanel = () => {
                         placeholder="Cari font..." 
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
+                        className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors"
                     />
                 </div>
             </div>
@@ -62,10 +62,10 @@ const FontsPanel = () => {
                         <div className="mb-4">
                             <h3 className="px-2 py-1 text-xs font-semibold tracking-wider text-gray-500 uppercase">Font Saat Ini</h3>
                             <button 
-                                className="w-full flex items-center justify-between px-3 py-3 mt-1 bg-indigo-50 border border-indigo-100 rounded-lg"
+                                className="w-full flex items-center justify-between px-3 py-3 mt-1 bg-primary-50 border border-primary-100 rounded-lg"
                             >
-                                <span className="text-lg text-indigo-900" style={{ fontFamily: currentFont }}>{currentFont}</span>
-                                <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                                <span className="text-lg text-primary-900" style={{ fontFamily: currentFont }}>{currentFont}</span>
+                                <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                             </button>
                         </div>
                     )}
@@ -79,10 +79,10 @@ const FontsPanel = () => {
                                     <button 
                                         key={font}
                                         onClick={() => handleSelectFont(font)}
-                                        className={`w-full flex items-center justify-between px-3 py-3 rounded-lg transition-colors ${isActive ? 'bg-indigo-50 text-indigo-900' : 'hover:bg-gray-50 text-gray-800'}`}
+                                        className={`w-full flex items-center justify-between px-3 py-3 rounded-lg transition-colors ${isActive ? 'bg-primary-50 text-primary-900' : 'hover:bg-gray-50 text-gray-800'}`}
                                     >
                                         <span className="text-lg truncate" style={{ fontFamily: font }}>{font}</span>
-                                        {isActive && <svg className="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>}
+                                        {isActive && <svg className="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>}
                                     </button>
                                 );
                             })}

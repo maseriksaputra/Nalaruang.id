@@ -117,7 +117,7 @@ const AssetSelectionModal = () => {
                     <div className="flex gap-4 mb-6">
                         <button 
                             onClick={() => fileInputRef.current?.click()}
-                            className="flex-1 py-3 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors"
+                            className="flex-1 py-3 px-4 bg-primary-50 hover:bg-primary-100 text-primary-700 border border-primary-200 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                             Unggah dari Perangkat
@@ -148,7 +148,7 @@ const AssetSelectionModal = () => {
                                         <div 
                                             key={asset.id}
                                             onClick={() => handleSelectAsset(asset.url)}
-                                            className={`relative group aspect-square rounded-xl overflow-hidden border-2 cursor-pointer transition-all ${isSelected ? 'border-indigo-500 shadow-md ring-2 ring-indigo-200' : 'border-gray-200 hover:border-indigo-300'}`}
+                                            className={`relative group aspect-square rounded-xl overflow-hidden border-2 cursor-pointer transition-all ${isSelected ? 'border-primary-500 shadow-md ring-2 ring-primary-200' : 'border-gray-200 hover:border-primary-300'}`}
                                         >
                                             <div className="w-full h-full bg-gray-100 flex items-center justify-center">
                                                 {isVideo ? (
@@ -159,7 +159,7 @@ const AssetSelectionModal = () => {
                                             </div>
                                             
                                             {assetSelectionTarget.multiple && isSelected && (
-                                                <div className="absolute top-2 right-2 bg-indigo-500 text-white rounded-full p-0.5 shadow-sm">
+                                                <div className="absolute top-2 right-2 bg-primary-500 text-white rounded-full p-0.5 shadow-sm">
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                                                 </div>
                                             )}
@@ -179,7 +179,7 @@ const AssetSelectionModal = () => {
                     <div className="p-4 border-t border-gray-100 bg-gray-50 flex justify-end">
                         <button 
                             onClick={() => applySelection(selectedAssets)}
-                            className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-sm transition-colors"
+                            className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl shadow-sm transition-colors"
                         >
                             Terapkan ({selectedAssets.length} Dipilih)
                         </button>

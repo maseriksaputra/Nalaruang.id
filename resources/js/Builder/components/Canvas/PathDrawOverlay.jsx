@@ -79,7 +79,7 @@ const PathDrawOverlay = ({ sectionId }) => {
             onPointerLeave={handlePointerUp}
         >
             <div className="absolute top-4 w-full text-center pointer-events-none">
-                <span className="bg-indigo-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg shadow-indigo-500/30">
+                <span className="bg-primary-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg shadow-primary-500/30">
                     Mulai coret/geser untuk merekam lintasan...
                 </span>
             </div>
@@ -90,7 +90,7 @@ const PathDrawOverlay = ({ sectionId }) => {
                     <path 
                         d={pointsToSmoothedSvgPath(points)}
                         fill="none"
-                        stroke="#4f46e5"
+                        stroke="#db2777"
                         strokeWidth="3"
                         strokeDasharray="6 6"
                         strokeLinecap="round"

@@ -51,12 +51,12 @@ const ZoomControls = ({ zoomIn, zoomOut, setTransform, centerView, scale, positi
     return (
         <div className="h-12 bg-white border-t border-gray-200 flex items-center px-4 z-10 shrink-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
             <div className="flex items-center gap-2 border-r border-gray-200 pr-6 mr-6">
-                <button onClick={() => centerView(1, 300)} className="flex items-center gap-1 p-1.5 mr-2 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded transition font-medium text-xs shadow-sm" title="Kembalikan Layar 100% ke Tengah">
+                <button onClick={() => centerView(1, 300)} className="flex items-center gap-1 p-1.5 mr-2 text-primary-600 bg-primary-50 hover:bg-primary-100 rounded transition font-medium text-xs shadow-sm" title="Kembalikan Layar 100% ke Tengah">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
                     Reset Layar
                 </button>
                 <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider w-10">Zoom</span>
-                <button onClick={() => zoomOut()} className="p-1 text-gray-500 hover:text-indigo-600 transition">
+                <button onClick={() => zoomOut()} className="p-1 text-gray-500 hover:text-primary-600 transition">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 12H4"></path></svg>
                 </button>
                 <SyncSlider 
@@ -67,9 +67,9 @@ const ZoomControls = ({ zoomIn, zoomOut, setTransform, centerView, scale, positi
                         const newScale = val / 100;
                         setTransform(positionX, positionY, newScale, 0);
                     }}
-                    className="w-24 accent-indigo-600 cursor-ew-resize h-1.5 bg-gray-200 rounded-lg appearance-none"
+                    className="w-24 accent-primary-600 cursor-ew-resize h-1.5 bg-gray-200 rounded-lg appearance-none"
                 />
-                <button onClick={() => zoomIn()} className="p-1 text-gray-500 hover:text-indigo-600 transition">
+                <button onClick={() => zoomIn()} className="p-1 text-gray-500 hover:text-primary-600 transition">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
                 </button>
                 <span className="text-xs font-semibold text-gray-500 w-10 text-right">

@@ -34,7 +34,7 @@ const DraggableChildItem = ({ childId, child, parentId, isActive }) => {
             ref={setNodeRef}
             style={style}
             onClick={() => useCanvasStore.getState().setActiveLayer(child.id)}
-            className={`flex items-center justify-between h-8 px-2 border cursor-pointer ${isActive ? 'bg-indigo-50 border-indigo-200' : 'bg-white border-gray-100 hover:bg-gray-50'}`}
+            className={`flex items-center justify-between h-8 px-2 border cursor-pointer ${isActive ? 'bg-primary-50 border-primary-200' : 'bg-white border-gray-100 hover:bg-gray-50'}`}
         >
             <div className="flex items-center gap-2 overflow-hidden flex-1">
                 <button 
@@ -49,13 +49,13 @@ const DraggableChildItem = ({ childId, child, parentId, isActive }) => {
                     {child.type === 'image' && child.url ? (
                         <img src={child.url} alt="" className="w-full h-full object-cover" />
                     ) : child.type === 'shape' ? (
-                        <div className="w-3 h-3 bg-indigo-500 rounded-sm"></div>
+                        <div className="w-3 h-3 bg-primary-500 rounded-sm"></div>
                     ) : child.type === 'text' ? (
                         <span className="text-[10px] font-bold text-gray-700 font-serif">T</span>
                     ) : child.type === 'lottie' ? (
                         <svg className="w-3 h-3 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     ) : child.type === 'canvas_group' ? (
-                        <svg className="w-3 h-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                        <svg className="w-3 h-3 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
                     ) : (
                         <span className="text-[8px] font-bold text-gray-500 uppercase">{(child.type || 'E').charAt(0)}</span>
                     )}
@@ -135,19 +135,19 @@ const SortableLayerItem = ({ layer }) => {
             <div 
                 ref={setNodeRef} 
                 style={style} 
-                className={`w-full flex items-center h-8 px-2 border-b-2 border-t-2 mt-4 mb-2 first:mt-0 shadow-sm rounded-sm cursor-pointer transition ${isActiveSection ? 'bg-indigo-100 border-indigo-300' : 'bg-indigo-50 border-indigo-100 hover:bg-indigo-100/70'}`}
+                className={`w-full flex items-center h-8 px-2 border-b-2 border-t-2 mt-4 mb-2 first:mt-0 shadow-sm rounded-sm cursor-pointer transition ${isActiveSection ? 'bg-primary-100 border-primary-300' : 'bg-primary-50 border-primary-100 hover:bg-primary-100/70'}`}
                 onClick={() => useCanvasStore.getState().setActiveSection(sectionId)}
             >
                 <button 
                     {...attributes} 
                     {...listeners}
-                    className={`p-1 mr-2 rounded cursor-grab flex-shrink-0 transition ${isActiveSection ? 'text-indigo-600' : 'text-indigo-400 hover:text-indigo-600'}`}
+                    className={`p-1 mr-2 rounded cursor-grab flex-shrink-0 transition ${isActiveSection ? 'text-primary-600' : 'text-primary-400 hover:text-primary-600'}`}
                     title="Geser urutan halaman"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16"></path></svg>
                 </button>
-                <span className={`text-[10px] font-bold uppercase tracking-widest ${isActiveSection ? 'text-indigo-900' : 'text-indigo-700'}`}>{layer.title}</span>
+                <span className={`text-[10px] font-bold uppercase tracking-widest ${isActiveSection ? 'text-primary-900' : 'text-primary-700'}`}>{layer.title}</span>
             </div>
         );
     }
@@ -158,7 +158,7 @@ const SortableLayerItem = ({ layer }) => {
         <div ref={setNodeRef} style={style} className="mb-2">
             <div 
                 onClick={() => useCanvasStore.getState().setActiveLayer(layer.id)}
-                className={`flex items-center justify-between h-10 px-2 border cursor-pointer ${isActive ? 'bg-indigo-50 border-indigo-500' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
+                className={`flex items-center justify-between h-10 px-2 border cursor-pointer ${isActive ? 'bg-primary-50 border-primary-500' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
             >
                 <div className="flex items-center gap-2 overflow-hidden flex-1">
                     <button 
@@ -169,7 +169,7 @@ const SortableLayerItem = ({ layer }) => {
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 8h16M4 16h16"></path></svg>
                     </button>
-                    <div className="w-5 h-5 bg-indigo-100 rounded flex items-center justify-center shrink-0 text-indigo-600">
+                    <div className="w-5 h-5 bg-primary-100 rounded flex items-center justify-center shrink-0 text-primary-600">
                         <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                     </div>
                     <span className="text-xs font-bold text-gray-800 truncate">{layer.name || 'Layer'}</span>
@@ -467,21 +467,21 @@ const LeftDrawer = () => {
                         <div className="grid grid-cols-3 gap-2 mt-2">
                             <button
                                 onClick={() => updateGlobalSettings({ particleEffect: 'none' })}
-                                className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${(!global_settings?.particleEffect || global_settings.particleEffect === 'none') ? 'bg-indigo-50 border-indigo-500 text-indigo-600' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300'}`}
+                                className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${(!global_settings?.particleEffect || global_settings.particleEffect === 'none') ? 'bg-primary-50 border-primary-500 text-primary-600' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300'}`}
                             >
                                 <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
                                 <span className="text-[9px] font-bold">Tidak Ada</span>
                             </button>
                             <button
                                 onClick={() => updateGlobalSettings({ particleEffect: 'firefly' })}
-                                className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${global_settings?.particleEffect === 'firefly' ? 'bg-indigo-50 border-indigo-500 text-indigo-600' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300'}`}
+                                className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${global_settings?.particleEffect === 'firefly' ? 'bg-primary-50 border-primary-500 text-primary-600' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300'}`}
                             >
                                 <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
                                 <span className="text-[9px] font-bold text-center leading-tight">Kunang<br/>kunang</span>
                             </button>
                             <button
                                 onClick={() => updateGlobalSettings({ particleEffect: 'snow' })}
-                                className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${global_settings?.particleEffect === 'snow' ? 'bg-indigo-50 border-indigo-500 text-indigo-600' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300'}`}
+                                className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${global_settings?.particleEffect === 'snow' ? 'bg-primary-50 border-primary-500 text-primary-600' : 'bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300'}`}
                             >
                                 <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
                                 <span className="text-[9px] font-bold text-center leading-tight">Salju /<br/>Kelopak</span>
@@ -528,7 +528,7 @@ const LeftDrawer = () => {
                         
                         <div>
                             {!global_settings?.audioUrl ? (
-                                <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:border-indigo-500 hover:bg-indigo-50 transition-colors group cursor-pointer relative">
+                                <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:border-primary-500 hover:bg-primary-50 transition-colors group cursor-pointer relative">
                                     <input 
                                         type="file" 
                                         accept="audio/mpeg, audio/wav, audio/ogg" 
@@ -536,8 +536,8 @@ const LeftDrawer = () => {
                                         onChange={handleAudioUpload} 
                                         disabled={isUploadingAudio}
                                     />
-                                    <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                                        <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+                                    <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                                        <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
                                     </div>
                                     <h4 className="text-xs font-bold text-gray-700">{isUploadingAudio ? 'Mengunggah...' : 'Pilih atau Tarik File Musik'}</h4>
                                     <p className="text-[9px] text-gray-500 mt-1">MP3, WAV, OGG (Maks 20MB)</p>
@@ -557,7 +557,7 @@ const LeftDrawer = () => {
                                             >
                                                 Hapus
                                             </button>
-                                            <label className="cursor-pointer text-[9px] text-indigo-600 font-bold hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100 transition-colors hover:bg-indigo-100">
+                                            <label className="cursor-pointer text-[9px] text-primary-600 font-bold hover:text-primary-800 flex items-center gap-1 bg-primary-50 px-2 py-1 rounded-md border border-primary-100 transition-colors hover:bg-primary-100">
                                                 {isUploadingAudio ? 'Mengunggah...' : 'Ganti Lagu'}
                                                 <input 
                                                     type="file" 
@@ -574,7 +574,7 @@ const LeftDrawer = () => {
                                         placeholder="Atau tempel https://contoh.com/lagu.mp3"
                                         value={global_settings?.audioUrl || ''}
                                         onChange={(e) => updateGlobalSettings({ audioUrl: e.target.value })}
-                                        className="w-full border border-gray-200 bg-gray-50 rounded-lg p-2 text-xs text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow"
+                                        className="w-full border border-gray-200 bg-gray-50 rounded-lg p-2 text-xs text-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-shadow"
                                     />
                                     
                                     <AudioWaveformEditor 
@@ -596,15 +596,15 @@ const LeftDrawer = () => {
                                         <button 
                                             key={asset.id}
                                             onClick={() => updateGlobalSettings({ audioUrl: (window.ASSET_URL || '/storage/') + asset.file_path, audioStart: null, audioEnd: null })}
-                                            className="w-full text-left p-2 rounded-lg border hover:bg-indigo-50 border-gray-200 hover:border-indigo-300 transition text-xs flex items-center justify-between group"
+                                            className="w-full text-left p-2 rounded-lg border hover:bg-primary-50 border-gray-200 hover:border-primary-300 transition text-xs flex items-center justify-between group"
                                         >
                                             <div className="flex items-center gap-2 overflow-hidden">
-                                                <div className="w-6 h-6 bg-indigo-100 text-indigo-500 rounded flex items-center justify-center shrink-0">
+                                                <div className="w-6 h-6 bg-primary-100 text-primary-500 rounded flex items-center justify-center shrink-0">
                                                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
                                                 </div>
                                                 <span className="truncate font-medium text-gray-700">{asset.field_name || 'Audio Klien'}</span>
                                             </div>
-                                            <span className="text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded text-[9px] font-bold shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">Pakai</span>
+                                            <span className="text-primary-600 bg-primary-100 px-2 py-0.5 rounded text-[9px] font-bold shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">Pakai</span>
                                         </button>
                                     ))}
                                 </div>
@@ -614,14 +614,14 @@ const LeftDrawer = () => {
                         <div>
                             <div className="flex items-center justify-between mb-1">
                                 <label className="text-[10px] font-semibold text-gray-500">Volume Suara</label>
-                                <span className="text-[10px] font-bold text-indigo-600">{global_settings?.audioVolume ?? 100}%</span>
+                                <span className="text-[10px] font-bold text-primary-600">{global_settings?.audioVolume ?? 100}%</span>
                             </div>
                             <input 
                                 type="range" 
                                 min="0" max="100" 
                                 value={global_settings?.audioVolume ?? 100}
                                 onChange={(e) => updateGlobalSettings({ audioVolume: parseInt(e.target.value) })}
-                                className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                                className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-500"
                             />
                         </div>
 
@@ -633,7 +633,7 @@ const LeftDrawer = () => {
                                         type="range" min="0" max="5" step="0.5"
                                         value={global_settings?.audioFadeIn || 0}
                                         onChange={(e) => updateGlobalSettings({ audioFadeIn: parseFloat(e.target.value) })}
-                                        className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                                        className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-500"
                                     />
                                     <span className="text-[10px] font-bold text-gray-600 w-6 text-right">{global_settings?.audioFadeIn || 0}s</span>
                                 </div>
@@ -645,7 +645,7 @@ const LeftDrawer = () => {
                                         type="range" min="0" max="5" step="0.5"
                                         value={global_settings?.audioFadeOut || 0}
                                         onChange={(e) => updateGlobalSettings({ audioFadeOut: parseFloat(e.target.value) })}
-                                        className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                                        className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-500"
                                     />
                                     <span className="text-[10px] font-bold text-gray-600 w-6 text-right">{global_settings?.audioFadeOut || 0}s</span>
                                 </div>
@@ -661,7 +661,7 @@ const LeftDrawer = () => {
                                         <button
                                             key={effect.id}
                                             onClick={() => updateGlobalSettings({ audioEffect: effect.id })}
-                                            className={`py-2 px-1 rounded-xl text-[9px] font-bold transition-all border ${isSelected ? 'bg-indigo-50 border-indigo-500 text-indigo-700 shadow-[0_2px_10px_-3px_rgba(79,70,229,0.3)] ring-1 ring-indigo-500' : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300'}`}
+                                            className={`py-2 px-1 rounded-xl text-[9px] font-bold transition-all border ${isSelected ? 'bg-primary-50 border-primary-500 text-primary-700 shadow-[0_2px_10px_-3px_rgba(79,70,229,0.3)] ring-1 ring-primary-500' : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300'}`}
                                         >
                                             {effect.label}
                                         </button>
@@ -677,7 +677,7 @@ const LeftDrawer = () => {
                                     type="number" min="0" step="0.5"
                                     value={global_settings?.audioStart || 0}
                                     onChange={(e) => updateGlobalSettings({ audioStart: parseFloat(e.target.value) || 0 })}
-                                    className="w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none"
+                                    className="w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-800 focus:ring-2 focus:ring-primary-500 outline-none"
                                 />
                             </div>
                             <div>
@@ -686,7 +686,7 @@ const LeftDrawer = () => {
                                     type="number" min="0" step="0.5"
                                     value={global_settings?.audioEnd || 0}
                                     onChange={(e) => updateGlobalSettings({ audioEnd: parseFloat(e.target.value) || 0 })}
-                                    className="w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none"
+                                    className="w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-800 focus:ring-2 focus:ring-primary-500 outline-none"
                                 />
                             </div>
                         </div>
@@ -696,7 +696,7 @@ const LeftDrawer = () => {
                             <select
                                 value={global_settings?.audioTrigger || 'onclick'}
                                 onChange={(e) => updateGlobalSettings({ audioTrigger: e.target.value })}
-                                className="w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none"
+                                className="w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-800 focus:ring-2 focus:ring-primary-500 outline-none"
                             >
                                 <option value="autoplay">Dari Halaman Pertama (Cover)</option>
                                 <option value="onclick">Dari Halaman Isi (Setelah Buka)</option>
@@ -717,7 +717,7 @@ const LeftDrawer = () => {
                                 <div className="flex items-center gap-2 mb-2">
                                     <button 
                                         onClick={() => { setActiveFolder(null); setSearchGlobal(''); }}
-                                        className="p-1 hover:bg-gray-100 rounded text-gray-500 hover:text-indigo-600 transition"
+                                        className="p-1 hover:bg-gray-100 rounded text-gray-500 hover:text-primary-600 transition"
                                         title="Kembali ke Folder"
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
@@ -732,7 +732,7 @@ const LeftDrawer = () => {
                                         placeholder={`Cari di ${activeFolder}...`} 
                                         value={searchGlobal}
                                         onChange={(e) => setSearchGlobal(e.target.value)}
-                                        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none"
+                                        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary-500 outline-none"
                                     />
                                 </div>
                                 <div className="grid grid-cols-3 gap-2">
@@ -740,13 +740,13 @@ const LeftDrawer = () => {
                                         <div key={el.id} className="relative group">
                                             <button 
                                                 onClick={() => addLayer({ id: 'layer_' + Date.now(), ...el.payload })}
-                                                className="w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-indigo-500 hover:shadow-sm transition aspect-square"
+                                                className="w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-primary-500 hover:shadow-sm transition aspect-square"
                                                 title={el.name}
                                             >
                                                 {el.type === 'image' && el.thumbnail_url ? (
                                                     <img src={el.thumbnail_url} alt={el.name} className="w-8 h-8 object-contain mb-1" />
                                                 ) : el.type === 'lottie' ? (
-                                                    <div className="w-8 h-8 bg-indigo-50 text-indigo-400 flex items-center justify-center rounded mb-1">
+                                                    <div className="w-8 h-8 bg-primary-50 text-primary-400 flex items-center justify-center rounded mb-1">
                                                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                                     </div>
                                                 ) : (
@@ -772,7 +772,7 @@ const LeftDrawer = () => {
                                 <div className="flex items-center justify-between mb-2">
                                     <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
                                         Koleksi Permanen
-                                        {isLoadingElements && <span className="text-[10px] text-indigo-500 normal-case animate-pulse">Memuat...</span>}
+                                        {isLoadingElements && <span className="text-[10px] text-primary-500 normal-case animate-pulse">Memuat...</span>}
                                     </h3>
                                 </div>
                                 <div className="mb-3">
@@ -781,7 +781,7 @@ const LeftDrawer = () => {
                                         placeholder="Cari semua koleksi..." 
                                         value={searchGlobal}
                                         onChange={(e) => setSearchGlobal(e.target.value)}
-                                        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none"
+                                        className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary-500 outline-none"
                                     />
                                 </div>
                                 {globalElements.length === 0 && !isLoadingElements ? (
@@ -794,13 +794,13 @@ const LeftDrawer = () => {
                                             <div key={el.id} className="relative group">
                                                 <button 
                                                     onClick={() => addLayer({ id: 'layer_' + Date.now(), ...el.payload })}
-                                                    className="w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-indigo-500 hover:shadow-sm transition aspect-square"
+                                                    className="w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-primary-500 hover:shadow-sm transition aspect-square"
                                                     title={el.name}
                                                 >
                                                     {el.type === 'image' && el.thumbnail_url ? (
                                                         <img src={el.thumbnail_url} alt={el.name} className="w-8 h-8 object-contain mb-1" />
                                                     ) : el.type === 'lottie' ? (
-                                                        <div className="w-8 h-8 bg-indigo-50 text-indigo-400 flex items-center justify-center rounded mb-1">
+                                                        <div className="w-8 h-8 bg-primary-50 text-primary-400 flex items-center justify-center rounded mb-1">
                                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                                         </div>
                                                     ) : (
@@ -828,9 +828,9 @@ const LeftDrawer = () => {
                                                 <button
                                                     key={folder}
                                                     onClick={() => setActiveFolder(folder)}
-                                                    className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2"
+                                                    className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2"
                                                 >
-                                                    <div className="w-10 h-10 bg-indigo-50 flex items-center justify-center rounded-lg text-indigo-500">
+                                                    <div className="w-10 h-10 bg-primary-50 flex items-center justify-center rounded-lg text-primary-500">
                                                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                                                     </div>
                                                     <div className="text-center">
@@ -852,7 +852,7 @@ const LeftDrawer = () => {
                         <div className="space-y-2">
                             {/* Lottie Upload */}
                             <div>
-                                <label className="w-full flex items-center justify-center gap-2 p-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 hover:shadow-md transition cursor-pointer">
+                                <label className="w-full flex items-center justify-center gap-2 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:shadow-md transition cursor-pointer">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                                     <span className="text-xs font-semibold">Upload Animasi (JSON)</span>
                                     <input 
@@ -869,7 +869,7 @@ const LeftDrawer = () => {
                             
                             {/* Image/SVG Element Upload */}
                             <div>
-                                <label className="w-full flex items-center justify-center gap-2 p-2.5 bg-white text-indigo-600 border border-indigo-200 rounded-lg hover:bg-indigo-50 hover:shadow-md transition cursor-pointer">
+                                <label className="w-full flex items-center justify-center gap-2 p-2.5 bg-white text-primary-600 border border-primary-200 rounded-lg hover:bg-primary-50 hover:shadow-md transition cursor-pointer">
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                     <span className="text-xs font-semibold">Upload Gambar (PNG/SVG/GIF)</span>
                                     <input 
@@ -897,9 +897,9 @@ const LeftDrawer = () => {
                                     content: 'square',
                                     style: { x: 50, y: 50, width: 100, height: 100, backgroundColor: '#e0e7ff', borderRadius: '0px' }
                                 })}
-                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2"
+                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2"
                             >
-                                <div className="w-8 h-8 bg-indigo-100 border-2 border-indigo-500"></div>
+                                <div className="w-8 h-8 bg-primary-100 border-2 border-primary-500"></div>
                                 <span className="text-[10px] font-semibold text-gray-700">Persegi</span>
                             </button>
                             <button 
@@ -909,7 +909,7 @@ const LeftDrawer = () => {
                                     content: 'circle',
                                     style: { x: 50, y: 50, width: 100, height: 100, backgroundColor: '#fce7f3', borderRadius: '50%' }
                                 })}
-                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2"
+                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2"
                             >
                                 <div className="w-8 h-8 bg-pink-100 border-2 border-pink-500 rounded-full"></div>
                                 <span className="text-[10px] font-semibold text-gray-700">Lingkaran</span>
@@ -921,7 +921,7 @@ const LeftDrawer = () => {
                                     content: 'pill',
                                     style: { x: 50, y: 50, width: 150, height: 50, backgroundColor: '#dcfce3', borderRadius: '9999px' }
                                 })}
-                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2"
+                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2"
                             >
                                 <div className="w-10 h-5 bg-green-100 border-2 border-green-500 rounded-full"></div>
                                 <span className="text-[10px] font-semibold text-gray-700">Kapsul</span>
@@ -933,7 +933,7 @@ const LeftDrawer = () => {
                                     content: 'line',
                                     style: { x: 50, y: 50, width: 200, height: 4, backgroundColor: '#9ca3af', borderRadius: '2px' }
                                 })}
-                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2"
+                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2"
                             >
                                 <div className="w-10 h-1 bg-gray-400 rounded-full"></div>
                                 <span className="text-[10px] font-semibold text-gray-700">Garis</span>
@@ -952,7 +952,7 @@ const LeftDrawer = () => {
                                     content: 'frame',
                                     style: { x: 50, y: 50, width: 120, height: 120, backgroundColor: '#f3f4f6', borderRadius: '0px', borderWidth: 2, borderColor: '#d1d5db', borderStyle: 'dashed' }
                                 })}
-                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2"
+                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2"
                             >
                                 <div className="w-8 h-8 bg-gray-100 border-2 border-dashed border-gray-400 flex items-center justify-center">
                                     <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -966,7 +966,7 @@ const LeftDrawer = () => {
                                     content: 'frame',
                                     style: { x: 50, y: 50, width: 120, height: 120, backgroundColor: '#f3f4f6', borderRadius: '50%', borderWidth: 2, borderColor: '#d1d5db', borderStyle: 'dashed' }
                                 })}
-                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2"
+                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2"
                             >
                                 <div className="w-8 h-8 bg-gray-100 border-2 border-dashed border-gray-400 rounded-full flex items-center justify-center">
                                     <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -980,7 +980,7 @@ const LeftDrawer = () => {
                                     content: 'frame',
                                     style: { x: 50, y: 50, width: 120, height: 160, backgroundColor: '#f3f4f6', borderRadiusType: 'top', borderRadius: 60, borderWidth: 2, borderColor: '#d1d5db', borderStyle: 'dashed' }
                                 })}
-                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2"
+                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2"
                             >
                                 <div className="w-6 h-8 bg-gray-100 border-2 border-dashed border-gray-400 rounded-t-full flex items-center justify-center"></div>
                                 <span className="text-[10px] font-semibold text-gray-700">Kubah (Arch)</span>
@@ -992,7 +992,7 @@ const LeftDrawer = () => {
                                     content: 'frame',
                                     style: { x: 50, y: 50, width: 160, height: 100, backgroundColor: '#f3f4f6', borderRadius: '16px', borderWidth: 2, borderColor: '#d1d5db', borderStyle: 'dashed' }
                                 })}
-                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2"
+                                className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2"
                             >
                                 <div className="w-8 h-6 bg-gray-100 border-2 border-dashed border-gray-400 rounded-md flex items-center justify-center"></div>
                                 <span className="text-[10px] font-semibold text-gray-700">Lengkung</span>
@@ -1013,9 +1013,9 @@ const LeftDrawer = () => {
                             content: 'Judul Utama',
                             style: { x: 50, y: 50, width: 300, height: 60, fontSize: '32px', fontWeight: 'bold', color: '#1f2937', textAlign: 'center', fontFamily: 'serif' }
                         })}
-                        className="w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition"
+                        className="w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition"
                     >
-                        <div className="w-10 h-10 bg-indigo-50 rounded flex items-center justify-center text-indigo-600 font-bold text-lg">T</div>
+                        <div className="w-10 h-10 bg-primary-50 rounded flex items-center justify-center text-primary-600 font-bold text-lg">T</div>
                         <div className="text-left flex-1">
                             <span className="text-sm font-bold text-gray-800 block">Tambahkan Judul</span>
                             <span className="text-[10px] text-gray-400">Teks ukuran besar (H1)</span>
@@ -1028,9 +1028,9 @@ const LeftDrawer = () => {
                             content: 'Subjudul Acara',
                             style: { x: 50, y: 120, width: 300, height: 40, fontSize: '20px', fontWeight: 'normal', color: '#4b5563', textAlign: 'center' }
                         })}
-                        className="w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition"
+                        className="w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition"
                     >
-                        <div className="w-10 h-10 bg-indigo-50 rounded flex items-center justify-center text-indigo-600 font-medium">T</div>
+                        <div className="w-10 h-10 bg-primary-50 rounded flex items-center justify-center text-primary-600 font-medium">T</div>
                         <div className="text-left flex-1">
                             <span className="text-sm font-semibold text-gray-700 block">Tambahkan Subjudul</span>
                             <span className="text-[10px] text-gray-400">Teks ukuran sedang (H2)</span>
@@ -1043,9 +1043,9 @@ const LeftDrawer = () => {
                             content: 'Tambahkan sedikit isi teks deskripsi di sini',
                             style: { x: 50, y: 180, width: 300, height: 40, fontSize: '14px', color: '#6b7280', textAlign: 'left' }
                         })}
-                        className="w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition"
+                        className="w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition"
                     >
-                        <div className="w-10 h-10 bg-indigo-50 rounded flex items-center justify-center text-indigo-600 text-sm">t</div>
+                        <div className="w-10 h-10 bg-primary-50 rounded flex items-center justify-center text-primary-600 text-sm">t</div>
                         <div className="text-left flex-1">
                             <span className="text-sm font-medium text-gray-600 block">Tambahkan Isi Teks</span>
                             <span className="text-[10px] text-gray-400">Teks paragraf biasa</span>
@@ -1058,9 +1058,9 @@ const LeftDrawer = () => {
                             content: '[Nama Tamu]',
                             style: { x: 50, y: 240, width: 300, height: 50, fontSize: '24px', fontWeight: 'bold', color: '#1f2937', textAlign: 'center', fontFamily: 'serif' }
                         })}
-                        className="w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-purple-500 hover:shadow-md transition"
+                        className="w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition"
                     >
-                        <div className="w-10 h-10 bg-purple-50 rounded flex items-center justify-center text-purple-600 text-sm font-bold border border-purple-200">
+                        <div className="w-10 h-10 bg-primary-50 rounded flex items-center justify-center text-primary-600 text-sm font-bold border border-primary-200">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
                         </div>
                         <div className="text-left flex-1">
@@ -1211,7 +1211,7 @@ const LeftDrawer = () => {
                                 type: 'group',
                                 name: `Layer Baru`,
                             })}
-                            className="w-full py-2 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded-lg text-[10px] font-bold hover:bg-indigo-100 transition shadow-sm flex flex-col items-center justify-center gap-1"
+                            className="w-full py-2 bg-primary-50 text-primary-600 border border-primary-200 rounded-lg text-[10px] font-bold hover:bg-primary-100 transition shadow-sm flex flex-col items-center justify-center gap-1"
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
                             Tambah Wadah
@@ -1264,16 +1264,16 @@ const LeftDrawer = () => {
 
             return (
                 <div className="p-4 space-y-6">
-                    <label className="border-2 border-dashed border-indigo-300 rounded-xl p-6 flex flex-col items-center justify-center bg-indigo-50 hover:bg-indigo-100 transition cursor-pointer">
+                    <label className="border-2 border-dashed border-primary-300 rounded-xl p-6 flex flex-col items-center justify-center bg-primary-50 hover:bg-primary-100 transition cursor-pointer">
                         <input type="file" className="hidden" accept="image/*,video/mp4" onChange={handleFileUpload} />
-                        <svg className="w-8 h-8 text-indigo-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                        <span className="text-sm font-bold text-indigo-700">Pilih File Media</span>
-                        <span className="text-xs text-indigo-400 mt-1">PNG, JPG, SVG, MP4</span>
+                        <svg className="w-8 h-8 text-primary-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        <span className="text-sm font-bold text-primary-700">Pilih File Media</span>
+                        <span className="text-xs text-primary-400 mt-1">PNG, JPG, SVG, MP4</span>
                     </label>
                     <div>
                         <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between mb-3">
                             Pustaka Media Anda
-                            {isLoadingAssets && <span className="text-[10px] text-indigo-500 normal-case animate-pulse">Memuat...</span>}
+                            {isLoadingAssets && <span className="text-[10px] text-primary-500 normal-case animate-pulse">Memuat...</span>}
                         </h3>
                         {userAssets.length === 0 && !isLoadingAssets ? (
                             <div className="text-center p-4 bg-gray-50 border border-dashed border-gray-200 rounded-lg text-xs text-gray-400">
@@ -1290,7 +1290,7 @@ const LeftDrawer = () => {
                                             url: asset.url, 
                                             style: { x: 50, y: 50, width: 200, height: 200 } 
                                         })}
-                                        className="relative group flex flex-col items-center justify-center p-1 bg-gray-50 border border-gray-200 rounded hover:border-indigo-500 cursor-pointer aspect-square overflow-hidden"
+                                        className="relative group flex flex-col items-center justify-center p-1 bg-gray-50 border border-gray-200 rounded hover:border-primary-500 cursor-pointer aspect-square overflow-hidden"
                                         title={asset.name}
                                     >
                                         {asset.type === 'video' ? (
@@ -1327,7 +1327,7 @@ const LeftDrawer = () => {
                             content: 'Yth. [Nama Tamu]',
                             style: { x: 50, y: 50, width: 250, height: 40, color: '#1f2937', fontSize: 24, textAlign: 'center', fontFamily: 'serif' }
                         })}
-                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center"
+                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center"
                     >
                         <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center text-pink-600 shrink-0">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
@@ -1341,9 +1341,9 @@ const LeftDrawer = () => {
                             content: 'Hitung Mundur',
                             style: { x: 50, y: 50, width: 300, height: 100 }
                         })}
-                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center"
+                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center"
                     >
-                        <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 shrink-0">
+                        <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 shrink-0">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         </div>
                         <span className="text-xs font-semibold text-gray-700 leading-tight">Hitung<br/>Mundur</span>
@@ -1355,7 +1355,7 @@ const LeftDrawer = () => {
                             content: 'Form RSVP',
                             style: { x: 50, y: 50, width: 300, height: 400 }
                         })}
-                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center"
+                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center"
                     >
                         <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 shrink-0">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -1369,7 +1369,7 @@ const LeftDrawer = () => {
                             content: 'Komentar RSVP',
                             style: { x: 50, y: 50, width: 320, height: 300, backgroundColor: '#f8fafc', borderRadius: '1rem', padding: '1rem' }
                         })}
-                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center"
+                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center"
                     >
                         <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 shrink-0">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
@@ -1383,7 +1383,7 @@ const LeftDrawer = () => {
                             content: 'Salin Rekening',
                             style: { x: 50, y: 50, width: 250, height: 60 }
                         })}
-                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center"
+                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center"
                     >
                         <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center text-yellow-600 shrink-0">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
@@ -1397,7 +1397,7 @@ const LeftDrawer = () => {
                             content: 'Google Maps',
                             style: { x: 50, y: 50, width: 300, height: 250 }
                         })}
-                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center"
+                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center"
                     >
                         <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center text-red-600 shrink-0">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -1422,16 +1422,16 @@ const LeftDrawer = () => {
                                 y: 50, 
                                 width: 250, 
                                 height: 50,
-                                backgroundColor: '#4f46e5',
+                                backgroundColor: '#db2777',
                                 textColor: '#ffffff',
                                 borderRadius: 8,
                                 opacity: 1,
                                 showIcon: true
                             }
                         })}
-                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center"
+                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center"
                     >
-                        <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 shrink-0">
+                        <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 shrink-0">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         </div>
                         <span className="text-xs font-semibold text-gray-700 leading-tight">Simpan<br/>Tanggal</span>
@@ -1451,7 +1451,7 @@ const LeftDrawer = () => {
                                 }
                             }
                         })}
-                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center"
+                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center"
                     >
                         <div className="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 shrink-0">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -1475,7 +1475,7 @@ const LeftDrawer = () => {
                                 }
                             }
                         })}
-                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center"
+                        className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center"
                     >
                         <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-600 shrink-0">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="14" height="18" x="5" y="3" rx="1" ry="1" strokeWidth="2"></rect><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 16h14"></path></svg>
@@ -1494,7 +1494,7 @@ const LeftDrawer = () => {
                         Masukkan HTML, CSS, atau Javascript yang akan diterapkan secara global pada seluruh halaman undangan. Kode ini otomatis dirender di kanvas utama.
                     </p>
                     <textarea 
-                        className="w-full flex-1 border border-gray-300 rounded-lg p-3 text-sm font-mono bg-gray-50 text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none outline-none" 
+                        className="w-full flex-1 border border-gray-300 rounded-lg p-3 text-sm font-mono bg-gray-50 text-gray-800 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 resize-none outline-none" 
                         placeholder="<!-- Ketik HTML/CSS di sini... -->"
                         value={global_settings?.custom_code || ''}
                         onChange={(e) => updateGlobalSettings({ custom_code: e.target.value })}
@@ -1534,7 +1534,7 @@ const LeftDrawer = () => {
             {/* Collapse Button */}
             <button 
                 onClick={() => useCanvasStore.getState().setActiveTab(null)}
-                className="absolute top-1/2 -right-4 -translate-y-1/2 w-8 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:bg-gray-50 shadow-md z-40 transition-all hover:scale-105"
+                className="absolute top-1/2 -right-4 -translate-y-1/2 w-8 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:text-primary-600 hover:bg-gray-50 shadow-md z-40 transition-all hover:scale-105"
                 title="Tutup Panel"
             >
                 <svg className="w-4 h-4 pr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M15 19l-7-7 7-7"></path></svg>

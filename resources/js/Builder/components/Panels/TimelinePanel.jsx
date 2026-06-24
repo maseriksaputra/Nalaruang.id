@@ -190,7 +190,7 @@ const TimelinePanel = () => {
             {isOpen && (
                 <div 
                     ref={resizerRef}
-                    className="absolute top-0 left-0 right-0 h-2 -translate-y-1 cursor-row-resize z-50 hover:bg-indigo-500/20"
+                    className="absolute top-0 left-0 right-0 h-2 -translate-y-1 cursor-row-resize z-50 hover:bg-primary-500/20"
                     onMouseDown={() => {
                         isResizing.current = true;
                         setIsDraggingResizer(true);
@@ -204,12 +204,12 @@ const TimelinePanel = () => {
                 <div className="flex items-center gap-3">
                     <button 
                         onClick={() => setIsOpen(!isOpen)}
-                        className="p-1 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded transition"
+                        className="p-1 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded transition"
                     >
                         <svg className={`w-5 h-5 transform transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <span className="font-bold text-sm text-gray-700 flex items-center gap-2">
-                        <svg className="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <svg className="w-4 h-4 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         Nalaruang Studio
                     </span>
                     
@@ -218,7 +218,7 @@ const TimelinePanel = () => {
                         <div className="flex items-center gap-2 ml-4 border-l border-gray-300 pl-4">
                             <button 
                                 onClick={() => setPlayheadPos(0)}
-                                className="p-1.5 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded transition"
+                                className="p-1.5 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded transition"
                                 title="Kembali ke Awal"
                             >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path></svg>
@@ -233,7 +233,7 @@ const TimelinePanel = () => {
                                         window.dispatchEvent(new Event('builder:stop_all_animations'));
                                     }
                                 }}
-                                className="p-1.5 bg-indigo-600 text-white hover:bg-indigo-700 rounded transition flex items-center justify-center w-8 h-8"
+                                className="p-1.5 bg-primary-600 text-white hover:bg-primary-700 rounded transition flex items-center justify-center w-8 h-8"
                             >
                                 {isPlaying ? (
                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -247,16 +247,16 @@ const TimelinePanel = () => {
                             
                             {/* Switch Section Buttons */}
                             {sections.length > 1 && (
-                                <div className="flex items-center ml-2 border border-indigo-200 rounded-lg overflow-hidden shrink-0">
+                                <div className="flex items-center ml-2 border border-primary-200 rounded-lg overflow-hidden shrink-0">
                                     <button 
                                         onClick={() => useCanvasStore.getState().setActiveSection(sections[0].id)}
-                                        className={`px-3 py-1.5 text-[10px] font-bold transition-colors ${activeSectionId === sections[0].id ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'}`}
+                                        className={`px-3 py-1.5 text-[10px] font-bold transition-colors ${activeSectionId === sections[0].id ? 'bg-primary-600 text-white' : 'bg-primary-50 text-primary-600 hover:bg-primary-100'}`}
                                     >
                                         Halaman Cover
                                     </button>
                                     <button 
                                         onClick={() => useCanvasStore.getState().setActiveSection(sections[1].id)}
-                                        className={`px-3 py-1.5 text-[10px] font-bold transition-colors border-l border-indigo-200 ${activeSectionId === sections[1].id ? 'bg-indigo-600 text-white border-l-indigo-600' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100'}`}
+                                        className={`px-3 py-1.5 text-[10px] font-bold transition-colors border-l border-primary-200 ${activeSectionId === sections[1].id ? 'bg-primary-600 text-white border-l-primary-600' : 'bg-primary-50 text-primary-600 hover:bg-primary-100'}`}
                                     >
                                         Halaman Isi
                                     </button>
@@ -275,7 +275,7 @@ const TimelinePanel = () => {
                             max="300" 
                             value={timeScale}
                             onChange={(e) => setTimeScale(parseInt(e.target.value))}
-                            className="w-32 accent-indigo-600 h-1.5 bg-gray-200 rounded-lg appearance-none"
+                            className="w-32 accent-primary-600 h-1.5 bg-gray-200 rounded-lg appearance-none"
                         />
                     </div>
                 )}
@@ -358,7 +358,7 @@ const TimelinePanel = () => {
 
                                     return (
                                         <React.Fragment key={track.id}>
-                                            <div className={`h-12 border-b border-gray-200 flex items-center relative w-full mb-1 ${isRealGroup && isExpanded ? 'bg-indigo-50/50' : 'hover:bg-gray-100/50'}`}>
+                                            <div className={`h-12 border-b border-gray-200 flex items-center relative w-full mb-1 ${isRealGroup && isExpanded ? 'bg-primary-50/50' : 'hover:bg-gray-100/50'}`}>
                                                 {/* Track Label */}
                                                 <div className="absolute left-0 top-0 bottom-0 w-24 bg-white/50 border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] backdrop-blur-sm pointer-events-none">
                                                     {isRealGroup && (
@@ -723,7 +723,7 @@ const TimeBlock = ({ layer, parentTrackId, startTime, endTime, timeScale, update
 
     return (
         <div 
-            className={`timeline-block absolute top-1.5 bottom-1.5 rounded shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-hidden transition-all ${active ? 'bg-indigo-500 ring-2 ring-white z-30 shadow-[0_4px_15px_rgba(0,0,0,0.3)] opacity-100' : 'bg-indigo-500 hover:ring-1 hover:ring-white/50 z-10 opacity-40 hover:opacity-70'}`}
+            className={`timeline-block absolute top-1.5 bottom-1.5 rounded shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-hidden transition-all ${active ? 'bg-primary-500 ring-2 ring-white z-30 shadow-[0_4px_15px_rgba(0,0,0,0.3)] opacity-100' : 'bg-primary-500 hover:ring-1 hover:ring-white/50 z-10 opacity-40 hover:opacity-70'}`}
             style={{ 
                 left: `${tempStart * timeScale}px`,
                 width: `${(tempEnd - tempStart) * timeScale}px`,
@@ -748,7 +748,7 @@ const TimeBlock = ({ layer, parentTrackId, startTime, endTime, timeScale, update
             )}
             
             {!thumbUrl && (
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-indigo-600 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-500 to-primary-600 pointer-events-none"></div>
             )}
 
             {/* Entry Handle (Green) */}

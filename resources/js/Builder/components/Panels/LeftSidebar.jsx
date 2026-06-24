@@ -24,10 +24,10 @@ const LeftSidebar = () => {
                 <button 
                     key={tab.id}
                     onClick={() => setActiveTab(activeTab === tab.id ? null : tab.id)}
-                    className={`flex flex-col items-center justify-center w-16 h-16 rounded-2xl transition-all duration-300 relative group ${activeTab === tab.id ? 'bg-indigo-50 text-indigo-600' : 'text-gray-500 hover:bg-indigo-50 hover:text-indigo-500 hover:-translate-y-1'}`}
+                    className={`flex flex-col items-center justify-center w-16 h-16 rounded-2xl transition-all duration-300 relative group ${activeTab === tab.id ? 'bg-primary-50 text-primary-600' : 'text-gray-500 hover:bg-primary-50 hover:text-primary-500 hover:-translate-y-1'}`}
                 >
                     {activeTab === tab.id && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-indigo-600 rounded-r-full shadow-sm"></div>
+                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-primary-600 rounded-r-full shadow-sm"></div>
                     )}
                     <svg className={`w-5 h-5 mb-1 transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : 'group-hover:scale-110'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         {tab.icon}

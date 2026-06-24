@@ -44,7 +44,7 @@ const ClientAssetsPanel = () => {
             <div className="space-y-2 flex-shrink-0">
                 <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between">
                     Aset Klien
-                    {isLoading && <span className="text-[10px] text-indigo-500 normal-case animate-pulse">Memuat...</span>}
+                    {isLoading && <span className="text-[10px] text-primary-500 normal-case animate-pulse">Memuat...</span>}
                 </h3>
                 <p className="text-[10px] text-gray-500 leading-relaxed">
                     Aset yang diunggah klien melalui form data otomatis muncul di sini. Klik untuk menambahkan ke kanvas atau salin.
@@ -67,7 +67,7 @@ const ClientAssetsPanel = () => {
                     <>
                         {imageAssets.length > 0 && (
                             <div>
-                                <h4 className="text-[10px] font-bold text-indigo-700 uppercase mb-3 border-b border-indigo-100 pb-1 flex items-center gap-1">
+                                <h4 className="text-[10px] font-bold text-primary-700 uppercase mb-3 border-b border-primary-100 pb-1 flex items-center gap-1">
                                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                     Media Gambar / Video
                                 </h4>
@@ -83,7 +83,7 @@ const ClientAssetsPanel = () => {
                                                 url: asset.url, 
                                                 style: { x: 50, y: 50, width: 200, height: 200 } 
                                             })}
-                                            className="relative group flex flex-col items-center justify-center p-1 bg-gray-100 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer aspect-square overflow-hidden shadow-sm"
+                                            className="relative group flex flex-col items-center justify-center p-1 bg-gray-100 border border-gray-200 rounded-xl hover:border-primary-500 cursor-pointer aspect-square overflow-hidden shadow-sm"
                                             title={`Klik untuk menambahkan: ${asset.field_name}`}
                                         >
                                             {isVideo ? (
@@ -105,18 +105,18 @@ const ClientAssetsPanel = () => {
 
                         {textAssets.length > 0 && (
                             <div>
-                                <h4 className="text-[10px] font-bold text-indigo-700 uppercase mb-3 border-b border-indigo-100 pb-1 flex items-center gap-1 mt-4">
+                                <h4 className="text-[10px] font-bold text-primary-700 uppercase mb-3 border-b border-primary-100 pb-1 flex items-center gap-1 mt-4">
                                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
                                     Data Teks
                                 </h4>
                                 <div className="space-y-3">
                                     {textAssets.map((asset) => (
-                                        <div key={asset.id} className="p-3 bg-indigo-50/50 border border-indigo-100 rounded-xl shadow-sm">
+                                        <div key={asset.id} className="p-3 bg-primary-50/50 border border-primary-100 rounded-xl shadow-sm">
                                             <div className="flex items-center justify-between mb-1.5">
-                                                <p className="text-[9px] text-indigo-600 uppercase font-bold">{asset.field_name}</p>
+                                                <p className="text-[9px] text-primary-600 uppercase font-bold">{asset.field_name}</p>
                                                 <button
                                                     onClick={(e) => { e.stopPropagation(); copyToClipboard(asset.id, asset.content); }}
-                                                    className="text-xs flex items-center gap-1 px-1.5 py-0.5 rounded text-indigo-500 hover:bg-indigo-100 transition-colors font-medium"
+                                                    className="text-xs flex items-center gap-1 px-1.5 py-0.5 rounded text-primary-500 hover:bg-primary-100 transition-colors font-medium"
                                                 >
                                                     {copiedId === asset.id ? 'Tersalin!' : 'Salin'}
                                                 </button>
@@ -131,7 +131,7 @@ const ClientAssetsPanel = () => {
                                                     content: asset.content, 
                                                     style: { x: 50, y: 50, width: 300, height: Math.max(40, asset.content.length > 50 ? 100 : 40), fontSize: '18px', color: '#1f2937' } 
                                                 })}
-                                                className="mt-2 w-full text-[10px] py-1 text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-indigo-600 transition-colors font-semibold"
+                                                className="mt-2 w-full text-[10px] py-1 text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-primary-600 transition-colors font-semibold"
                                             >
                                                 Tambah sebagai Elemen Teks
                                             </button>
@@ -143,7 +143,7 @@ const ClientAssetsPanel = () => {
 
                         {audioAssets.length > 0 && (
                             <div>
-                                <h4 className="text-[10px] font-bold text-indigo-700 uppercase mb-3 border-b border-indigo-100 pb-1 flex items-center gap-1 mt-4">
+                                <h4 className="text-[10px] font-bold text-primary-700 uppercase mb-3 border-b border-primary-100 pb-1 flex items-center gap-1 mt-4">
                                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
                                     Audio & Musik Latar
                                 </h4>

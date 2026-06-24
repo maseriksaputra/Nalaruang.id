@@ -117,7 +117,7 @@ const RightSidebar = () => {
                 {/* Simulasi Menu Animasi */}
                 <div className="space-y-3 pt-4 border-t border-[#334155]">
                     <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Animasi Masuk</h4>
-                    <select className="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-2.5 text-sm text-gray-200 focus:border-purple-500 focus:outline-none">
+                    <select className="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-2.5 text-sm text-gray-200 focus:border-primary-500 focus:outline-none">
                         <option value="">Tanpa Animasi</option>
                         <option value="fade-in-up">Fade In Up</option>
                         <option value="zoom-in">Zoom In</option>

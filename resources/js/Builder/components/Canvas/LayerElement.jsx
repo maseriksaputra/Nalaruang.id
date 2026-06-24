@@ -60,7 +60,7 @@ const getShadowCss = (style) => {
 };
 
 const ResizeHandle = () => (
-    <div className="w-3 h-3 bg-white border-2 border-indigo-500 rounded-full shadow pointer-events-auto hover:bg-indigo-50 transition-colors" />
+    <div className="w-3 h-3 bg-white border-2 border-primary-500 rounded-full shadow pointer-events-auto hover:bg-primary-50 transition-colors" />
 );
 
 const CountdownDisplay = ({ targetDate, textColor, bgColor, bgImage, fontFamily, bgOpacity, gap, showSeconds, bgStyle }) => {
@@ -372,12 +372,12 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                     >
                         <div 
                             onMouseDown={handleRotateStart}
-                            className="w-5 h-5 bg-white border-2 border-indigo-500 rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center shadow hover:bg-indigo-50 transition-colors"
+                            className="w-5 h-5 bg-white border-2 border-primary-500 rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center shadow hover:bg-primary-50 transition-colors"
                             style={{ transform: `scale(${1 / Math.max(0.1, zoom)})` }}
                         >
-                            <svg className="w-3 h-3 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                            <svg className="w-3 h-3 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                         </div>
-                        <div className="w-[1.5px] bg-indigo-500" style={{ height: `${20 / Math.max(0.1, zoom)}px` }}></div>
+                        <div className="w-[1.5px] bg-primary-500" style={{ height: `${20 / Math.max(0.1, zoom)}px` }}></div>
                     </div>
                 )}
                 
@@ -490,7 +490,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                                     multiple: false
                                                 });
                                             }}
-                                            className="absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition"
+                                            className="absolute top-2 right-2 bg-primary-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-primary-700 transition"
                                             title="Ubah Gambar"
                                         >
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -528,7 +528,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                                     multiple: true
                                                 });
                                             }}
-                                            className="absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition"
+                                            className="absolute top-2 right-2 bg-primary-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-primary-700 transition"
                                             title="Isi Wadah Bingkai"
                                         >
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
@@ -582,7 +582,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                                 multiple: false
                                             });
                                         }}
-                                        className="absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition"
+                                        className="absolute top-2 right-2 bg-primary-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-primary-700 transition"
                                         title="Ubah Foto Polaroid"
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -654,7 +654,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                         id={layer.id + '_path'}
                                         d="M 10 90 Q 30 10 70 50 T 90 10" 
                                         fill="transparent" 
-                                        stroke={isActive ? "#6366f1" : "rgba(99,102,241,0.2)"} 
+                                        stroke={isActive ? "#ec4899" : "rgba(99,102,241,0.2)"} 
                                         strokeWidth="2" 
                                         strokeDasharray="4 4" 
                                     />
@@ -685,7 +685,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                                     multiple: true
                                                 });
                                             }}
-                                            className="absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition"
+                                            className="absolute top-2 right-2 bg-primary-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-primary-700 transition"
                                             title="Isi Wadah Album"
                                         >
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
@@ -790,7 +790,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                 const finalInputBg = hexToRgba(defaultInputBg, opacity);
 
                                 let inputStyle = { backgroundColor: finalInputBg, color: layer.style?.textColor || '#9ca3af', border: 'none', borderRadius: '0.5rem' };
-                                let buttonStyle = { backgroundColor: layer.style?.buttonColor || '#4f46e5', color: layer.style?.buttonTextColor || '#ffffff', borderRadius: '0.5rem' };
+                                let buttonStyle = { backgroundColor: layer.style?.buttonColor || '#db2777', color: layer.style?.buttonTextColor || '#ffffff', borderRadius: '0.5rem' };
                                 let wrapperClass = "w-full h-full flex flex-col items-center justify-center pointer-events-none p-4 space-y-3 relative";
 
                                 if (theme === 'glass') {
@@ -933,7 +933,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                             className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ml-2"
                                             style={{ 
                                                 backgroundColor: layer.style?.iconBgColor || '#e0e7ff',
-                                                color: layer.style?.iconColor || '#4f46e5'
+                                                color: layer.style?.iconColor || '#db2777'
                                             }}
                                         >
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
@@ -954,7 +954,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
                                 };
 
-                                const bgColor = layer.style?.backgroundColor || '#4f46e5';
+                                const bgColor = layer.style?.backgroundColor || '#db2777';
                                 const textColor = layer.style?.textColor || '#ffffff';
 
                                 return (
@@ -1347,7 +1347,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                 bottomLeft: <React.Fragment />,
                 bottomRight: <React.Fragment />
             }}
-            className={`layer-wrapper ${layer.isLocked ? (isActive ? 'pointer-events-auto cursor-default' : 'pointer-events-none') : 'pointer-events-auto hover:cursor-move'} ${isActive ? 'active-layer outline outline-1 outline-indigo-500 rounded' : ''}`}
+            className={`layer-wrapper ${layer.isLocked ? (isActive ? 'pointer-events-auto cursor-default' : 'pointer-events-none') : 'pointer-events-auto hover:cursor-move'} ${isActive ? 'active-layer outline outline-1 outline-primary-500 rounded' : ''}`}
             onClick={(e) => {
                 if (layer.isLocked && !isActive) return;
                 e.stopPropagation();
@@ -1386,7 +1386,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                     }
                                 }, 50);
                             }}
-                            className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors border-r border-gray-100"
+                            className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary-600 hover:bg-primary-50 transition-colors border-r border-gray-100"
                             title="Edit Teks"
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
