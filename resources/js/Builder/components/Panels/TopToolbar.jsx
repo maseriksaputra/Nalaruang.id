@@ -100,7 +100,7 @@ const TopToolbar = () => {
 
     return (
         <>
-        <header className="h-14 bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-between px-4 z-50 text-white shadow">
+        <header className="h-14 bg-gradient-to-r from-primary-600 to-indigo-600 flex items-center justify-between px-4 z-50 text-white shadow">
             <div className="flex items-center gap-4">
                 <a href="/admin/invitation-portal" className="p-2 hover:bg-white/10 rounded-full transition">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
@@ -217,7 +217,7 @@ const TopToolbar = () => {
                     onClick={handlePublishSubmit}
                     className="px-4 py-1.5 text-sm bg-white text-indigo-600 hover:bg-indigo-50 rounded-md font-semibold transition shadow-sm flex items-center gap-2 ml-1"
                 >
-                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                    <div className="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></div>
                     <span className="hidden sm:inline">Publish & Bagikan</span>
                 </button>
             </div>

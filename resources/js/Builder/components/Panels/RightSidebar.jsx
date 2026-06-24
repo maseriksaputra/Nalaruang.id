@@ -61,7 +61,7 @@ const RightSidebar = () => {
                                     return { sections: newSections };
                                 });
                             }}
-                            className="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-2.5 text-sm text-gray-200 focus:border-blue-500 focus:outline-none"
+                            className="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-2.5 text-sm text-gray-200 focus:border-primary-500 focus:outline-none"
                         />
                     </div>
                 )}
@@ -71,7 +71,7 @@ const RightSidebar = () => {
                         <textarea 
                             value={activeLayer.content}
                             onChange={(e) => updateLayerContent(activeLayer.id, e.target.value)}
-                            className="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-2.5 text-sm text-gray-200 focus:border-blue-500 focus:outline-none min-h-[80px]"
+                            className="w-full bg-[#0f172a] border border-[#334155] rounded-lg p-2.5 text-sm text-gray-200 focus:border-primary-500 focus:outline-none min-h-[80px]"
                         />
                     </div>
                 )}
@@ -109,7 +109,7 @@ const RightSidebar = () => {
                             type="range" min="0" max="1" step="0.1" 
                             value={activeLayer.style.opacity ?? 1}
                             onChange={(e) => updateLayerStyle(activeLayer.id, { opacity: parseFloat(e.target.value) })}
-                            className="w-full accent-blue-500"
+                            className="w-full accent-primary-500"
                         />
                     </div>
                 </div>

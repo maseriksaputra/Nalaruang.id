@@ -40,7 +40,7 @@ const ImageEditorPanel = () => {
                 {/* Crop Tool */}
                 <div className="space-y-3">
                     <h3 className="font-bold text-gray-800 text-xs uppercase tracking-wider">Potong (Crop) Langsung</h3>
-                    <p className="text-[11px] text-gray-500 bg-blue-50 p-3 rounded-lg border border-blue-100 leading-relaxed">
+                    <p className="text-[11px] text-gray-500 bg-primary-50 p-3 rounded-lg border border-primary-100 leading-relaxed">
                         Anda sekarang berada dalam <strong>Mode Editor Foto</strong>. <br/><br/>
                         Untuk melakukan crop, <strong>langsung klik dan seret (drag)</strong> gambar di dalam kanvas untuk menggeser posisinya. Anda juga dapat mengatur ukuran bingkainya menggunakan ujung titik biru.
                     </p>

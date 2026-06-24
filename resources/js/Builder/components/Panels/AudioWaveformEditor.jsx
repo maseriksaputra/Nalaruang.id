@@ -57,21 +57,33 @@ const AudioWaveformEditor = ({
             const totalDuration = wavesurfer.current.getDuration();
             setDuration(totalDuration);
             
-            // Add a region for the current start and end
-            const start = audioStart || 0;
-            const end = audioEnd > 0 ? audioEnd : totalDuration;
+            // Strictly parse to float, handling Indonesian comma decimals
+            const parseVal = (v) => {
+                if (typeof v === 'number') return v;
+                if (!v) return 0;
+                const p = parseFloat(v.toString().replace(',', '.'));
+                return isNaN(p) ? 0 : p;
+            };
             
-            wsRegions.current.addRegion({
-                start: start,
-                end: end,
-                color: 'rgba(79, 70, 229, 0.2)', // indigo-600 with opacity
-                drag: true,
-                resize: true,
-                id: 'cut-region'
-            });
+            const start = parseVal(audioStart);
+            const endVal = parseVal(audioEnd);
+            const end = endVal > 0 ? endVal : totalDuration;
+            
+            try {
+                wsRegions.current.addRegion({
+                    start: start,
+                    end: end,
+                    color: 'rgba(79, 70, 229, 0.4)', // indigo-600 with higher opacity for visibility
+                    drag: true,
+                    resize: true,
+                    id: 'cut-region'
+                });
+            } catch (e) {
+                console.error("Failed to add region:", e);
+            }
 
-            if (audioStart > 0 && audioStart < totalDuration) {
-                wavesurfer.current.setTime(audioStart);
+            if (start > 0 && start < totalDuration) {
+                wavesurfer.current.setTime(start);
             }
         });
 
@@ -80,10 +92,19 @@ const AudioWaveformEditor = ({
                 const startStr = parseFloat(region.start.toFixed(2));
                 const endStr = parseFloat(region.end.toFixed(2));
                 
+                const parseVal = (v) => {
+                    if (typeof v === 'number') return v;
+                    if (!v) return 0;
+                    const p = parseFloat(v.toString().replace(',', '.'));
+                    return isNaN(p) ? 0 : p;
+                };
+                const currentStart = parseVal(audioStart);
+                const currentEnd = parseVal(audioEnd);
+
                 // Update parent state safely without triggering infinite loops
-                if (Math.abs(startStr - audioStart) > 0.05) onSetStart(startStr);
-                if (audioEnd > 0 && Math.abs(endStr - audioEnd) > 0.05) onSetEnd(endStr);
-                else if (audioEnd === 0 && Math.abs(endStr - wavesurfer.current.getDuration()) > 0.05) onSetEnd(endStr);
+                if (Math.abs(startStr - currentStart) > 0.05) onSetStart(startStr);
+                if (currentEnd > 0 && Math.abs(endStr - currentEnd) > 0.05) onSetEnd(endStr);
+                else if (currentEnd === 0 && Math.abs(endStr - wavesurfer.current.getDuration()) > 0.05) onSetEnd(endStr);
             }
         });
 
@@ -99,11 +120,21 @@ const AudioWaveformEditor = ({
             // Stop if it hits the end of the region
             const regions = wsRegions.current.getRegions();
             const cutRegion = regions.find(r => r.id === 'cut-region');
-            const endLimit = cutRegion ? cutRegion.end : (audioEnd || 0);
+            
+            const parseVal = (v) => {
+                if (typeof v === 'number') return v;
+                if (!v) return 0;
+                const p = parseFloat(v.toString().replace(',', '.'));
+                return isNaN(p) ? 0 : p;
+            };
+            const currentStart = parseVal(audioStart);
+            const currentEnd = parseVal(audioEnd);
+
+            const endLimit = cutRegion ? cutRegion.end : currentEnd;
             
             if (endLimit > 0 && wavesurfer.current.getCurrentTime() >= endLimit) {
                 wavesurfer.current.pause();
-                wavesurfer.current.setTime(cutRegion ? cutRegion.start : (audioStart || 0));
+                wavesurfer.current.setTime(cutRegion ? cutRegion.start : currentStart);
             }
         });
 
@@ -127,8 +158,15 @@ const AudioWaveformEditor = ({
             const regions = wsRegions.current.getRegions();
             const cutRegion = regions.find(r => r.id === 'cut-region');
             if (cutRegion) {
-                const newStart = audioStart || 0;
-                const newEnd = audioEnd > 0 ? audioEnd : duration;
+                const parseVal = (v) => {
+                    if (typeof v === 'number') return v;
+                    if (!v) return 0;
+                    const p = parseFloat(v.toString().replace(',', '.'));
+                    return isNaN(p) ? 0 : p;
+                };
+                const newStart = parseVal(audioStart);
+                const endVal = parseVal(audioEnd);
+                const newEnd = endVal > 0 ? endVal : duration;
                 
                 // Avoid updating if the difference is tiny (prevents jitter)
                 if (Math.abs(cutRegion.start - newStart) > 0.05 || Math.abs(cutRegion.end - newEnd) > 0.05) {

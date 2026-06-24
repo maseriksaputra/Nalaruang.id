@@ -2082,7 +2082,7 @@ const RightInspector = () => {
                                         className={`flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.polaroidTheme === 'modern') ? 'border-indigo-500 bg-indigo-50 text-indigo-600' : 'border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50'}`}
                                     >
                                         <div className="w-8 h-10 bg-white shadow p-1 rounded-md flex flex-col mb-2 items-center">
-                                            <div className="w-full h-full bg-blue-100 rounded-sm"></div>
+                                            <div className="w-full h-full bg-primary-100 rounded-sm"></div>
                                             <div className="w-3 h-[2px] bg-gray-800 rounded-full mt-[3px]"></div>
                                         </div>
                                         <span className="text-[10px] font-bold text-center">Modern Bawah</span>
@@ -2095,7 +2095,7 @@ const RightInspector = () => {
                                         className={`flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.polaroidTheme === 'modern-notext') ? 'border-indigo-500 bg-indigo-50 text-indigo-600' : 'border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50'}`}
                                     >
                                         <div className="w-8 h-10 bg-white shadow p-1 rounded-md flex flex-col mb-2 items-center">
-                                            <div className="w-full h-full bg-blue-100 rounded-sm"></div>
+                                            <div className="w-full h-full bg-primary-100 rounded-sm"></div>
                                         </div>
                                         <span className="text-[10px] font-bold text-center">Modern (No Teks)</span>
                                     </button>
@@ -2517,7 +2517,7 @@ const RightInspector = () => {
                                         onClick={() => updateLayerStyle(activeLayer.id, { rsvpTheme: 'glass' })}
                                         className={`flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === 'glass' ? 'border-indigo-500 bg-indigo-50 text-indigo-600' : 'border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50'}`}
                                     >
-                                        <div className="w-10 h-8 bg-blue-100/30 border border-blue-200/50 rounded backdrop-blur-sm mb-1 relative overflow-hidden">
+                                        <div className="w-10 h-8 bg-primary-100/30 border border-primary-200/50 rounded backdrop-blur-sm mb-1 relative overflow-hidden">
                                             <div className="absolute inset-0 bg-gradient-to-tr from-white/40 to-transparent"></div>
                                         </div>
                                         <span className="text-[9px] font-bold">Glassmorphism</span>
@@ -2699,9 +2699,9 @@ const RightInspector = () => {
 
                 {inspectorTab === 'map' && activeLayer.type === 'interactive_map' && (
                     <div className="space-y-4">
-                        <div className="bg-blue-50 border border-blue-100 p-3 rounded-lg mb-4">
-                            <h3 className="text-[11px] font-bold text-blue-800 uppercase tracking-wider mb-1">Pengaturan Peta</h3>
-                            <p className="text-[10px] text-blue-600">Sesuaikan lokasi dan tampilan Google Maps Anda.</p>
+                        <div className="bg-primary-50 border border-primary-100 p-3 rounded-lg mb-4">
+                            <h3 className="text-[11px] font-bold text-primary-800 uppercase tracking-wider mb-1">Pengaturan Peta</h3>
+                            <p className="text-[10px] text-primary-600">Sesuaikan lokasi dan tampilan Google Maps Anda.</p>
                         </div>
                         
                         <div>
