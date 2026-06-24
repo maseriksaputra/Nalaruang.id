@@ -53,6 +53,9 @@ const BackgroundAudio = ({ settings }) => {
             }
 
             audio.volume = getExpectedVolume(current);
+            if (audio.muted && audioFadeIn > 0) {
+                audio.muted = false; // Buka mute hanya setelah volume dijamin 0 atau sesuai kalkulasi
+            }
             animationFrameId = requestAnimationFrame(updateAudio);
         };
         
@@ -129,6 +132,7 @@ const BackgroundAudio = ({ settings }) => {
                 loop={audioEnd <= 0} // Native loop if no custom end time
                 autoPlay={audioTrigger === 'autoplay'}
                 crossOrigin="anonymous"
+                muted={audioFadeIn > 0} // Hardware-level mute untuk blokir 100% suara awal sebelum fade
             >
                 {/* Gunakan media fragments url#t=... untuk native browser seeking sebelum mendownload audio */}
                 <source src={`${audioUrl}#t=${audioStart || 0}`} type="audio/mpeg" />
@@ -151,6 +155,7 @@ const BackgroundAudio = ({ settings }) => {
                             } else {
                                 audioRef.current.volume = maxVol;
                             }
+                            if (audioRef.current.muted) audioRef.current.muted = false;
                             audioRef.current.play().catch(e => console.log(e));
                         }
                     }
