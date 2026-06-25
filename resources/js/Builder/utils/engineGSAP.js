@@ -224,13 +224,14 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
         const firstKf = keyframes[0];
         
         // Setup initial state: HIDE element entirely during global delay if there is no entry animation overriding it
+        // FIX: Remove 'globalDelay > 0 ? 0 :' to ensure element stays at first keyframe state during delay
         if (!hasEntryAnimation) {
             gsap.set(elementRef, {
                 x: getValidNum(firstKf.x, baseX) - baseX,
                 y: getValidNum(firstKf.y, baseY) - baseY,
                 scale: getValidNum(firstKf.scale, styleParams?.scale ?? 1),
                 rotation: getValidNum(firstKf.rotation, styleParams?.rotation ?? 0),
-                opacity: globalDelay > 0 ? 0 : getValidNum(firstKf.opacity, styleParams?.opacity ?? 1),
+                opacity: getValidNum(firstKf.opacity, styleParams?.opacity ?? 1),
                 ...(firstKf.width !== undefined && { width: firstKf.width }),
                 ...(firstKf.height !== undefined && { height: firstKf.height })
             });

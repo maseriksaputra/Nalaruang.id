@@ -1414,15 +1414,15 @@ const RightInspector = () => {
 
                         {/* Advanced Motion Panel (Kustomisasi Gerak / Keyframe) */}
                         <div className="mt-2 p-4 bg-white border border-gray-200 rounded-xl space-y-4 shadow-sm">
-                            <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-3">
+                            <label className="flex items-center justify-between border-b border-gray-100 pb-3 mb-3 cursor-pointer group">
                                 <div className="flex gap-2 items-center">
-                                    <svg className="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                                    <svg className="w-5 h-5 text-primary-600 group-hover:text-primary-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                                     <div>
                                         <h3 className="text-xs font-bold text-gray-800">Kustomisasi Gerak & Motion</h3>
                                         <p className="text-[10px] text-gray-500 mt-0.5">Atur Keyframe dan animasi lanjutan</p>
                                     </div>
                                 </div>
-                                <label className="relative inline-flex items-center cursor-pointer">
+                                <div className="relative inline-flex items-center">
                                     <input 
                                         type="checkbox" 
                                         className="sr-only peer" 
@@ -1438,8 +1438,8 @@ const RightInspector = () => {
                                         }}
                                     />
                                     <div className="w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary-600"></div>
-                                </label>
-                            </div>
+                                </div>
+                            </label>
 
                             {['custom_timeline', 'custom_path'].includes(activeLayer.animation?.idle) && (
                                 <div className="space-y-4">
