@@ -177,7 +177,8 @@ const PublicCanvas = ({ config }) => {
                 overflowX: 'hidden', 
                 transform: `translateX(-50%) scale(${scale})`,
                 transformOrigin: 'top center',
-                backgroundColor: 'transparent'
+                backgroundColor: 'transparent',
+                height: '100%'
             }}>
                 {global_settings?.custom_code && (
                     <IframePreview 
@@ -290,6 +291,7 @@ const PublicCanvas = ({ config }) => {
                     >
                         {section.layers?.map((layer) => (
                             <div key={layer.id} style={{ zIndex: layer.style?.zIndex || 1, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+                                <h1 style={{ position: 'absolute', top: '100px', left: '100px', color: 'blue', fontSize: '50px', zIndex: 999999 }}>LOOP RUNNING {layer.id}</h1>
                                 {!layer.isHidden && (
                                     <PublicLayer key={layer.id} layer={layer} isOpened={isOpened} isCoverPage={index === 0} />
                                 )}
