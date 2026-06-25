@@ -47,17 +47,18 @@ class TemplateStatsOverview extends BaseWidget
         $outOfStock = $stats->out_of_stock ?? 0;
         $totalViews = $stats->total_views ?? 0;
 
-        // Calculate chart data for Top 5 Products
-        $topProducts = $this->getBaseQuery()->where('is_active', true)
-            ->select('name', \Illuminate\Support\Facades\DB::raw('(COALESCE(demo_views, 0) + COALESCE(total_invitation_views, 0)) as total_views'))
-            ->orderByDesc('total_views')
-            ->limit(5)
-            ->get();
+        // Calculate Total Produk Terjual and trend for the last 7 days
+        $templateIds = $this->getBaseQuery()->pluck('id')->toArray();
+        $totalSold = \App\Models\Order::whereIn('template_id', $templateIds)->count();
 
-        // User requested highest bar on the right (ascending order)
-        $topProductsAsc = $topProducts->sortBy('total_views')->values();
-        $chartData = $topProductsAsc->pluck('total_views')->toArray();
-        $totalViewsTop5 = $topProducts->sum('total_views');
+        $chartData = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $count = \App\Models\Order::whereIn('template_id', $templateIds)
+                ->whereDate('created_at', $date)
+                ->count();
+            $chartData[] = $count;
+        }
 
         return [
             Stat::make('Total View Produk', number_format($totalViews, 0, ',', '.'))
@@ -80,11 +81,11 @@ class TemplateStatsOverview extends BaseWidget
                 ->description('Kosong')
                 ->descriptionIcon('heroicon-m-x-circle')
                 ->color('danger'),
-            Stat::make('Top 5 Produk (View)', number_format($totalViewsTop5, 0, ',', '.'))
-                ->description('Diagram: Produk teramai')
-                ->descriptionIcon('heroicon-m-chart-bar')
+            Stat::make('Produk Terjual', number_format($totalSold, 0, ',', '.'))
+                ->description('Trend penjualan 7 hari terakhir')
+                ->descriptionIcon('heroicon-m-currency-dollar')
                 ->chart($chartData)
-                ->color($totalViewsTop5 > 0 ? 'success' : 'gray'),
+                ->color($totalSold > 0 ? 'success' : 'gray'),
         ];
     }
 }
