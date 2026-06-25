@@ -47,20 +47,17 @@ class TemplateStatsOverview extends BaseWidget
         $outOfStock = $stats->out_of_stock ?? 0;
         $totalViews = $stats->total_views ?? 0;
 
-        // Get invitation IDs for the current filtered templates
-        $invitationIds = $this->getBaseQuery()->whereNotNull('invitation_id')->pluck('invitation_id')->toArray();
-        
-        // Calculate chart data for the last 7 days
-        $chartData = [];
-        $totalViews7Days = 0;
-        for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i)->format('Y-m-d');
-            $count = \App\Models\InvitationVisitor::whereIn('invitation_id', $invitationIds)
-                ->whereDate('created_at', $date)
-                ->count();
-            $chartData[] = $count;
-            $totalViews7Days += $count;
-        }
+        // Calculate chart data for Top 5 Products
+        $topProducts = $this->getBaseQuery()->where('is_active', true)
+            ->select('name', \Illuminate\Support\Facades\DB::raw('(COALESCE(demo_views, 0) + COALESCE(total_invitation_views, 0)) as total_views'))
+            ->orderByDesc('total_views')
+            ->limit(5)
+            ->get();
+
+        // User requested highest bar on the right (ascending order)
+        $topProductsAsc = $topProducts->sortBy('total_views')->values();
+        $chartData = $topProductsAsc->pluck('total_views')->toArray();
+        $totalViewsTop5 = $topProducts->sum('total_views');
 
         return [
             Stat::make('Total View Produk', number_format($totalViews, 0, ',', '.'))
@@ -83,11 +80,11 @@ class TemplateStatsOverview extends BaseWidget
                 ->description('Kosong')
                 ->descriptionIcon('heroicon-m-x-circle')
                 ->color('danger'),
-            Stat::make('View Harian (7 Hari)', number_format($totalViews7Days, 0, ',', '.'))
-                ->description('Trend 7 hari terakhir')
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
+            Stat::make('Top 5 Produk (View)', number_format($totalViewsTop5, 0, ',', '.'))
+                ->description('Diagram: Produk teramai')
+                ->descriptionIcon('heroicon-m-chart-bar')
                 ->chart($chartData)
-                ->color($totalViews7Days > 0 ? 'success' : 'gray'),
+                ->color($totalViewsTop5 > 0 ? 'success' : 'gray'),
         ];
     }
 }
