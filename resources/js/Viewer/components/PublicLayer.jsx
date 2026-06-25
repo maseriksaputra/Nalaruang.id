@@ -277,9 +277,18 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
         height: layer.style?.height !== undefined ? getPx(layer.style.height) : '100px',
         zIndex: layer.style?.zIndex || 1,
         pointerEvents: layer.interaction ? 'auto' : 'none',
-        filter: isChildOfGroup ? 'none' : getFilterById(layer.style?.filterId),
-        opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
+        // Opacity & filter are applied via useLayoutEffect below to prevent React from overwriting GSAP's animations!
     };
+
+    useLayoutEffect(() => {
+        if (!elementRef.current) return;
+        // Apply initial opacity & filter manually ONCE. GSAP will take over from here.
+        // If React's style prop had these, it would overwrite GSAP's inline styles during re-renders (e.g. when isOpened changes).
+        if (!hasAnimatedRef.current) {
+            elementRef.current.style.opacity = layer.style?.opacity !== undefined ? layer.style.opacity : 1;
+            elementRef.current.style.filter = isChildOfGroup ? 'none' : getFilterById(layer.style?.filterId);
+        }
+    }, [layer.style?.opacity, layer.style?.filterId, isChildOfGroup]);
 
     return (
         <div 
