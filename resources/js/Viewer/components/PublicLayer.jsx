@@ -372,7 +372,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
             {layer.type === 'image' && (
                 <div className={`w-full h-full relative pointer-events-none`}>
                     <img 
-                        src={layer.url || layer.content} 
+                        src={layer.style?.url || layer.url || layer.content} 
                         alt="" 
                         loading={isCoverPage ? "eager" : "lazy"}
                         decoding="async"
@@ -474,7 +474,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
             {layer.type === 'video' && (
                 <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                     <video 
-                        src={layer.url} 
+                        src={layer.style?.url || layer.url || layer.content} 
                         autoPlay 
                         loop 
                         muted 
