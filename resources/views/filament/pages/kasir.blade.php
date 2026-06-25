@@ -121,7 +121,7 @@
             <!-- Product Grid -->
             <div class="product-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; margin-bottom: 1.5rem;">
                 @forelse($this->products as $product)
-                    <div class="relative group" style="display: flex;" x-show="tab === '{{ $product->category }}' && type === '{{ $product->type ?? 'income' }}'">
+                    <div class="relative group flex" x-show="tab === '{{ $product->category }}' && type === '{{ $product->type ?? 'income' }}'">
                         <button @click="addToCartLocal({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->default_price }}, '{{ $product->category }}')" 
                                 style="background-color: white; border: 1px solid #fbcfe8; border-radius: 8px; padding: 8px; text-align: left; min-height: 70px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.1s, background-color 0.2s; width: 100%;"
                                 onmouseover="this.style.backgroundColor='#fdf2f8'" onmouseout="this.style.backgroundColor='white'" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
@@ -129,8 +129,8 @@
                             <span style="color: #db2777; font-weight: bold; font-size: 11px; margin-top: 4px;">Rp {{ number_format($product->default_price, 0, ',', '.') }}</span>
                         </button>
                         <button type="button" 
-                                x-on:click="if(confirm('Yakin ingin menghapus template produk ini?')) { $wire.deleteProduct({{ $product->id }}) }"
-                                class="absolute -top-2 -right-2 w-5 h-5 bg-red-100 text-red-600 hover:bg-red-500 hover:text-white rounded-full flex items-center justify-center text-[10px] opacity-0 lg:group-hover:opacity-100 transition-opacity shadow-sm z-10 font-bold border border-red-200 lg:opacity-0 opacity-100">
+                                x-on:click.stop="if(confirm('Yakin ingin menghapus template produk ini?')) { $wire.deleteProduct({{ $product->id }}) }"
+                                class="absolute -top-2 -right-2 w-5 h-5 bg-red-100 text-red-600 hover:bg-red-500 hover:text-white rounded-full flex items-center justify-center text-[10px] shadow-sm z-10 font-bold border border-red-200 opacity-100">
                             ✕
                         </button>
                     </div>
