@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-CcswIp0p.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DTF-7VIJ.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser--qHpKbXw.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-C0K3ozjF.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -28432,7 +28432,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-CcswIp0p.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DTF-7VIJ.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -29359,12 +29359,15 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 	};
 	const wrapperStyle = {
 		position: "absolute",
-		left: getPx(layer.style?.x ?? 0),
-		top: getPx(layer.style?.y ?? 0),
-		width: getPx(layer.style?.width ?? 100),
-		height: getPx(layer.style?.height ?? 100),
+		top: layer.style?.y !== void 0 ? getPx(layer.style.y) : 0,
+		left: layer.style?.x !== void 0 ? getPx(layer.style.x) : 0,
+		width: layer.style?.width !== void 0 ? getPx(layer.style.width) : "100px",
+		height: layer.style?.height !== void 0 ? getPx(layer.style.height) : "100px",
 		zIndex: layer.style?.zIndex || 1,
-		pointerEvents: layer.type === "canvas_group" ? "none" : "auto"
+		pointerEvents: layer.interaction ? "auto" : "none",
+		border: "2px solid red",
+		filter: isChildOfGroup ? "none" : getFilterById(layer.style?.filterId),
+		opacity: layer.style?.opacity !== void 0 ? layer.style.opacity : 1
 	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		id: layer.id,

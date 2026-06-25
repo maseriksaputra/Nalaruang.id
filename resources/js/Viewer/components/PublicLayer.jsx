@@ -271,12 +271,15 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
 
     const wrapperStyle = {
         position: 'absolute',
-        left: getPx(layer.style?.x ?? 0),
-        top: getPx(layer.style?.y ?? 0),
-        width: getPx(layer.style?.width ?? 100),
-        height: getPx(layer.style?.height ?? 100),
+        top: layer.style?.y !== undefined ? getPx(layer.style.y) : 0,
+        left: layer.style?.x !== undefined ? getPx(layer.style.x) : 0,
+        width: layer.style?.width !== undefined ? getPx(layer.style.width) : '100px',
+        height: layer.style?.height !== undefined ? getPx(layer.style.height) : '100px',
         zIndex: layer.style?.zIndex || 1,
-        pointerEvents: layer.type === 'canvas_group' ? 'none' : 'auto'
+        pointerEvents: layer.interaction ? 'auto' : 'none',
+        border: '2px solid red', // DEBUG: Show border
+        filter: isChildOfGroup ? 'none' : getFilterById(layer.style?.filterId),
+        opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
     };
 
     return (
