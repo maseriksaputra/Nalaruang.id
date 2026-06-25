@@ -10,13 +10,13 @@ trait WithStatTracker
     /**
      * Wrap a stat value with an Alpine.js tracker to show increments since last seen.
      *
-     * @param string $label Widget label
+     * @param string|\Illuminate\Contracts\Support\Htmlable $label Widget label
      * @param mixed $value The raw numeric value (for tracking)
      * @param string $storageKey Unique key for LocalStorage
      * @param string|null $formattedValue The formatted display value (optional)
      * @return Stat
      */
-    protected function makeTrackedStat(string $label, $value, string $storageKey, string $formattedValue = null): Stat
+    protected function makeTrackedStat($label, $value, string $storageKey, string $formattedValue = null): Stat
     {
         $displayValue = $formattedValue ?? (string) $value;
         $numericValue = is_numeric($value) ? $value : preg_replace('/[^0-9\-]/', '', $value);
