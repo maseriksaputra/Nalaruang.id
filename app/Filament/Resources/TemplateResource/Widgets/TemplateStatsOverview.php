@@ -6,9 +6,11 @@ use App\Models\Template;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Livewire\Attributes\Reactive;
+use App\Filament\Traits\WithStatTracker;
 
 class TemplateStatsOverview extends BaseWidget
 {
+    use WithStatTracker;
     #[Reactive]
     public ?string $activeTab = null;
 
@@ -61,27 +63,27 @@ class TemplateStatsOverview extends BaseWidget
         }
 
         return [
-            Stat::make('Total View Produk', number_format($totalViews, 0, ',', '.'))
+            $this->makeTrackedStat('Total View Produk', $totalViews, 'template_total_views', number_format($totalViews, 0, ',', '.'))
                 ->description('Berdasarkan filter aktif')
                 ->descriptionIcon('heroicon-m-eye')
                 ->color('info'),
-            Stat::make('Total Produk', number_format($total, 0, ',', '.'))
+            $this->makeTrackedStat('Total Produk', $total, 'template_total_products', number_format($total, 0, ',', '.'))
                 ->description('Semua produk')
                 ->descriptionIcon('heroicon-m-shopping-bag')
                 ->color('primary'),
-            Stat::make('Produk Aktif', number_format($active, 0, ',', '.'))
+            $this->makeTrackedStat('Produk Aktif', $active, 'template_active_products', number_format($active, 0, ',', '.'))
                 ->description('Ditampilkan di web')
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color('success'),
-            Stat::make('Stok Rendah', $lowStock)
+            $this->makeTrackedStat('Stok Rendah', $lowStock, 'template_low_stock')
                 ->description('< 10 stok tersisa')
                 ->descriptionIcon('heroicon-m-exclamation-triangle')
                 ->color('warning'),
-            Stat::make('Habis Stok', $outOfStock)
+            $this->makeTrackedStat('Habis Stok', $outOfStock, 'template_out_stock')
                 ->description('Kosong')
                 ->descriptionIcon('heroicon-m-x-circle')
                 ->color('danger'),
-            Stat::make('Produk Terjual', number_format($totalSold, 0, ',', '.'))
+            $this->makeTrackedStat('Produk Terjual', $totalSold, 'template_total_sold', number_format($totalSold, 0, ',', '.'))
                 ->description('Trend penjualan 7 hari terakhir')
                 ->descriptionIcon('heroicon-m-currency-dollar')
                 ->chart($chartData)

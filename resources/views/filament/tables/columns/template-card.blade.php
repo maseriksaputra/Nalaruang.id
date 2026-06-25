@@ -113,8 +113,33 @@
         <div style="margin-top: auto; border-top: 1px solid #f3f4f6; padding-top: 0.75rem;">
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.25rem; position: relative;">
                 <!-- Terjual -->
-                <div style="display: flex; flex-direction: column;">
-                    <span style="font-weight: 700; color: #111827; font-size: 14px; line-height: 1;">{{ $record->orders_count ?? 0 }}</span>
+                <div style="display: flex; flex-direction: column;"
+                    x-data="{
+                        current: {{ $record->orders_count ?? 0 }},
+                        diff: 0,
+                        init() {
+                            let key = 'card_orders_{{ $record->id }}';
+                            let stored = localStorage.getItem(key);
+                            if (stored !== null) {
+                                this.diff = this.current - parseInt(stored);
+                            }
+                            localStorage.setItem(key, this.current);
+                        }
+                    }">
+                    <div style="display: flex; align-items: center; gap: 2px;">
+                        <span style="font-weight: 700; color: #111827; font-size: 14px; line-height: 1;">{{ $record->orders_count ?? 0 }}</span>
+                        
+                        <span x-show="diff > 0" x-cloak
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 transform scale-75 -translate-y-1"
+                            x-transition:enter-end="opacity-100 transform scale-100 translate-y-0"
+                            style="display: none; align-items: center; background: #ecfdf5; color: #10b981; font-size: 9px; font-weight: 800; padding: 1px 3px; border-radius: 4px; line-height: 1;">
+                            <svg style="width: 8px; height: 8px;" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
+                            </svg>
+                            <span x-text="diff"></span>
+                        </span>
+                    </div>
                     <span style="font-size: 11px; color: #6b7280; margin-top: 4px;">Terjual</span>
                 </div>
                 
@@ -122,8 +147,33 @@
                 <div style="position: absolute; left: 25%; transform: translateX(-50%); width: 1px; height: 24px; background-color: #e5e7eb; top: 4px;"></div>
                 
                 <!-- Views -->
-                <div style="display: flex; flex-direction: column; padding-left: 0.25rem;">
-                    <span style="font-weight: 700; color: #111827; font-size: 14px; line-height: 1;">{{ ($record->demo_views ?? 0) + ($record->total_invitation_views ?? 0) }}</span>
+                <div style="display: flex; flex-direction: column; padding-left: 0.25rem;"
+                    x-data="{
+                        current: {{ ($record->demo_views ?? 0) + ($record->total_invitation_views ?? 0) }},
+                        diff: 0,
+                        init() {
+                            let key = 'card_views_{{ $record->id }}';
+                            let stored = localStorage.getItem(key);
+                            if (stored !== null) {
+                                this.diff = this.current - parseInt(stored);
+                            }
+                            localStorage.setItem(key, this.current);
+                        }
+                    }">
+                    <div style="display: flex; align-items: center; gap: 2px;">
+                        <span style="font-weight: 700; color: #111827; font-size: 14px; line-height: 1;">{{ ($record->demo_views ?? 0) + ($record->total_invitation_views ?? 0) }}</span>
+                        
+                        <span x-show="diff > 0" x-cloak
+                            x-transition:enter="transition ease-out duration-300"
+                            x-transition:enter-start="opacity-0 transform scale-75 -translate-y-1"
+                            x-transition:enter-end="opacity-100 transform scale-100 translate-y-0"
+                            style="display: none; align-items: center; background: #ecfdf5; color: #10b981; font-size: 9px; font-weight: 800; padding: 1px 3px; border-radius: 4px; line-height: 1;">
+                            <svg style="width: 8px; height: 8px;" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
+                            </svg>
+                            <span x-text="diff"></span>
+                        </span>
+                    </div>
                     <span style="font-size: 11px; color: #6b7280; margin-top: 4px;">Views</span>
                 </div>
 

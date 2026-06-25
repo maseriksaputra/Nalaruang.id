@@ -6,11 +6,13 @@ use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
 use Carbon\Carbon;
+use App\Filament\Traits\WithStatTracker;
 
 class StatsOverview extends BaseWidget
 {
     use \Filament\Widgets\Concerns\InteractsWithPageFilters;
     use \App\Filament\Traits\AppliesDashboardFilters;
+    use WithStatTracker;
 
     protected static ?int $sort = 1;
     protected static bool $isLazy = true;
@@ -87,31 +89,31 @@ class StatsOverview extends BaseWidget
         };
 
         return [
-            Stat::make($boldTitle('Total Pendapatan'), $formatValue($income))
+            $this->makeTrackedStat($boldTitle('Total Pendapatan'), $income, 'dashboard_income', $formatValue($income))
                 ->description('Seluruh kas masuk')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success')
                 ->url(\App\Filament\Resources\CashflowResource::getUrl('index'))
                 ->extraAttributes(['style' => 'background-color: rgba(16, 185, 129, 0.05);']),
-            Stat::make($boldTitle('Total Pengeluaran'), $formatValue($expense))
+            $this->makeTrackedStat($boldTitle('Total Pengeluaran'), $expense, 'dashboard_expense', $formatValue($expense))
                 ->description('Termasuk tabungan BEP')
                 ->descriptionIcon('heroicon-m-arrow-trending-down')
                 ->color('danger')
                 ->url(\App\Filament\Resources\CashflowResource::getUrl('index'))
                 ->extraAttributes(['style' => 'background-color: rgba(239, 68, 68, 0.05);']),
-            Stat::make($boldTitle('Laba Bersih Murni'), $formatValue($labaBersih))
+            $this->makeTrackedStat($boldTitle('Laba Bersih Murni'), $labaBersih, 'dashboard_net_profit', $formatValue($labaBersih))
                 ->description('Dari operasional (tanpa hitung BEP)')
                 ->color($labaBersih >= 0 ? 'success' : 'danger')
                 ->extraAttributes(['style' => $labaBersih >= 0 ? 'background-color: rgba(16, 185, 129, 0.05);' : 'background-color: rgba(239, 68, 68, 0.05);']),
-            Stat::make($boldTitle('Sisa Kas (Di Laci)'), $formatValue($kasLaci))
+            $this->makeTrackedStat($boldTitle('Sisa Kas (Di Laci)'), $kasLaci, 'dashboard_cash_drawer', $formatValue($kasLaci))
                 ->description('Uang operasional yang siap dipakai')
                 ->color($kasLaci >= 0 ? 'warning' : 'danger')
                 ->extraAttributes(['style' => 'background-color: rgba(245, 158, 11, 0.05);']),
-            Stat::make($boldTitle('Tabungan BEP'), $formatValue($totalBep))
+            $this->makeTrackedStat($boldTitle('Tabungan BEP'), $totalBep, 'dashboard_bep_savings', $formatValue($totalBep))
                 ->description('Tersimpan di kotak BEP')
                 ->color('success')
                 ->extraAttributes(['style' => 'background-color: rgba(16, 185, 129, 0.05);']),
-            Stat::make($boldTitle('Total Aset Keseluruhan'), $formatValue($totalAset))
+            $this->makeTrackedStat($boldTitle('Total Aset Keseluruhan'), $totalAset, 'dashboard_total_assets', $formatValue($totalAset))
                 ->description('Laci Kasir + Tabungan BEP')
                 ->color('primary')
                 ->extraAttributes(['style' => 'background-color: rgba(59, 130, 246, 0.05);']),
