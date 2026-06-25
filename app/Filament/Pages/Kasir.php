@@ -87,6 +87,7 @@ class Kasir extends Page implements HasTable
         $product = CashierProduct::firstOrCreate([
             'name' => $this->manualName, 
             'category' => $category,
+            'type' => $this->transactionType,
             'default_price' => $price
         ]);
 
@@ -222,6 +223,7 @@ class Kasir extends Page implements HasTable
             $product = CashierProduct::firstOrCreate([
                 'name' => $description, 
                 'category' => $category,
+                'type' => $type,
                 'default_price' => $price
             ]);
 
@@ -352,5 +354,18 @@ class Kasir extends Page implements HasTable
             ])
             ->paginated([5, 10, 25])
             ->defaultPaginationPageOption(5);
+    }
+
+    public function deleteProduct($id)
+    {
+        $product = CashierProduct::find($id);
+        if ($product) {
+            $product->delete();
+            Notification::make()
+                ->success()
+                ->title('Produk dihapus')
+                ->body('Template produk berhasil dihapus.')
+                ->send();
+        }
     }
 }

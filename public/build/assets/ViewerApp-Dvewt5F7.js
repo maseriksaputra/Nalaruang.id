@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-qiktns4J.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BiDRTxGX.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-CUKCb13H.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-C24mZBlR.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -2969,7 +2969,7 @@ var useCanvasStore = create(temporal((set, get) => ({
 	},
 	updateLayerStyle: (layerId, styleData) => {
 		set(produce((state) => {
-			const layer = findLayer(state.activeCanvasMode === "desktop" ? state.global_settings.desktop_layers : state.sections.find((s) => s.id === state.activeSectionId)?.layers || [], layerId);
+			const layer = findElement(state.activeCanvasMode === "desktop" ? [{ layers: state.global_settings.desktop_layers || [] }] : state.sections, layerId);
 			if (layer) {
 				if (layer.type === "canvas_group" && layer.children && styleData.width && styleData.height) {
 					const ratioH = newH / oldH;
@@ -25410,7 +25410,7 @@ var getShadowCss$1 = (style) => {
 	const rgbaColor = hexToRgba$1(style.shadowColor || "#000000", (style.shadowOpacity ?? .5) * 100);
 	return `drop-shadow(${x}px ${y}px ${blur}px ${rgbaColor})`;
 };
-var ResizeHandle = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-3 h-3 bg-white border-2 border-indigo-500 rounded-full shadow pointer-events-auto hover:bg-indigo-50 transition-colors" });
+var ResizeHandle = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-3 h-3 bg-white border-2 border-primary-500 rounded-full shadow pointer-events-auto hover:bg-primary-50 transition-colors" });
 var CountdownDisplay$1 = ({ targetDate, textColor, bgColor, bgImage, fontFamily, bgOpacity, gap, showSeconds, bgStyle }) => {
 	const [timeLeft, setTimeLeft] = (0, import_react.useState)({
 		days: 12,
@@ -25736,10 +25736,10 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 				style: { top: `-${40 / Math.max(.1, zoom)}px` },
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					onMouseDown: handleRotateStart,
-					className: "w-5 h-5 bg-white border-2 border-indigo-500 rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center shadow hover:bg-indigo-50 transition-colors",
+					className: "w-5 h-5 bg-white border-2 border-primary-500 rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center shadow hover:bg-primary-50 transition-colors",
 					style: { transform: `scale(${1 / Math.max(.1, zoom)})` },
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-						className: "w-3 h-3 text-indigo-500",
+						className: "w-3 h-3 text-primary-500",
 						fill: "none",
 						stroke: "currentColor",
 						viewBox: "0 0 24 24",
@@ -25751,7 +25751,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 						})
 					})
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "w-[1.5px] bg-indigo-500",
+					className: "w-[1.5px] bg-primary-500",
 					style: { height: `${20 / Math.max(.1, zoom)}px` }
 				})]
 			}),
@@ -25854,7 +25854,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 													multiple: false
 												});
 											},
-											className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
+											className: "absolute top-2 right-2 bg-primary-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-primary-700 transition",
 											title: "Ubah Gambar",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-4 h-4",
@@ -25896,7 +25896,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 												multiple: true
 											});
 										},
-										className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
+										className: "absolute top-2 right-2 bg-primary-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-primary-700 transition",
 										title: "Isi Wadah Bingkai",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 											className: "w-4 h-4",
@@ -25973,7 +25973,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 														multiple: false
 													});
 												},
-												className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
+												className: "absolute top-2 right-2 bg-primary-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-primary-700 transition",
 												title: "Ubah Foto Polaroid",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 													className: "w-4 h-4",
@@ -25997,7 +25997,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 												className: `w-full h-full object-cover ${isCropMode ? "cursor-move pointer-events-auto no-drag" : ""}`,
 												style: {
 													objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
-													filter: `${layer.style?.brightness ? `brightness(${layer.style.brightness}) ` : ""}${layer.style?.contrast ? `contrast(${layer.style.contrast}) ` : ""}${layer.style?.saturate ? `saturate(${layer.style.saturate}) ` : ""}${layer.style?.blur ? `blur(${layer.style.blur}px) ` : ""}`.trim() || "none"
+													filter: `${layer.style?.polaroidData?.filterId && layer.style.polaroidData.filterId !== "none" ? getFilterById(layer.style.polaroidData.filterId).getCss(100) + " " : ""}${layer.style?.brightness ? `brightness(${layer.style.brightness}) ` : ""}${layer.style?.contrast ? `contrast(${layer.style.contrast}) ` : ""}${layer.style?.saturate ? `saturate(${layer.style.saturate}) ` : ""}${layer.style?.blur ? `blur(${layer.style.blur}px) ` : ""}`.trim() || "none"
 												}
 											}), layer.style?.polaroidData?.filterId && layer.style.polaroidData.filterId !== "none" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { dangerouslySetInnerHTML: { __html: getFilterById(layer.style.polaroidData.filterId)?.getOverlay(100, {
 												type: "polaroid",
@@ -26059,7 +26059,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 										id: layer.id + "_path",
 										d: "M 10 90 Q 30 10 70 50 T 90 10",
 										fill: "transparent",
-										stroke: isActive ? "#6366f1" : "rgba(99,102,241,0.2)",
+										stroke: isActive ? "#ec4899" : "rgba(99,102,241,0.2)",
 										strokeWidth: "2",
 										strokeDasharray: "4 4"
 									})
@@ -26085,7 +26085,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 												multiple: true
 											});
 										},
-										className: "absolute top-2 right-2 bg-indigo-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-indigo-700 transition",
+										className: "absolute top-2 right-2 bg-primary-600 text-white p-2 rounded-full shadow-lg z-50 pointer-events-auto hover:bg-primary-700 transition",
 										title: "Isi Wadah Album",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 											className: "w-4 h-4",
@@ -26224,7 +26224,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 										borderRadius: "0.5rem"
 									};
 									let buttonStyle = {
-										backgroundColor: layer.style?.buttonColor || "#4f46e5",
+										backgroundColor: layer.style?.buttonColor || "#db2777",
 										color: layer.style?.buttonTextColor || "#ffffff",
 										borderRadius: "0.5rem"
 									};
@@ -26389,7 +26389,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 											className: "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ml-2",
 											style: {
 												backgroundColor: layer.style?.iconBgColor || "#e0e7ff",
-												color: layer.style?.iconColor || "#4f46e5"
+												color: layer.style?.iconColor || "#db2777"
 											},
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-4 h-4",
@@ -26413,7 +26413,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 										if (hex.length === 3) hex = hex.split("").map((x) => x + x).join("");
 										return `rgba(${parseInt(hex.substring(0, 2), 16) || 0}, ${parseInt(hex.substring(2, 4), 16) || 0}, ${parseInt(hex.substring(4, 6), 16) || 0}, ${opacity})`;
 									};
-									const bgColor = layer.style?.backgroundColor || "#4f46e5";
+									const bgColor = layer.style?.backgroundColor || "#db2777";
 									const textColor = layer.style?.textColor || "#ffffff";
 									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "w-full h-full flex items-center justify-center gap-2 shadow-sm pointer-events-none px-4",
@@ -26863,7 +26863,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 			bottomLeft: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, {}),
 			bottomRight: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, {})
 		},
-		className: `layer-wrapper ${layer.isLocked ? isActive ? "pointer-events-auto cursor-default" : "pointer-events-none" : "pointer-events-auto hover:cursor-move"} ${isActive ? "active-layer outline outline-1 outline-indigo-500 rounded" : ""}`,
+		className: `layer-wrapper ${layer.isLocked ? isActive ? "pointer-events-auto cursor-default" : "pointer-events-none" : "pointer-events-auto hover:cursor-move"} ${isActive ? "active-layer outline outline-1 outline-primary-500 rounded" : ""}`,
 		onClick: (e) => {
 			if (layer.isLocked && !isActive) return;
 			e.stopPropagation();
@@ -26894,7 +26894,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 						}
 					}, 50);
 				},
-				className: "w-8 h-8 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors border-r border-gray-100",
+				className: "w-8 h-8 flex items-center justify-center text-gray-500 hover:text-primary-600 hover:bg-primary-50 transition-colors border-r border-gray-100",
 				title: "Edit Teks",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 					className: "w-4 h-4",
@@ -26988,7 +26988,7 @@ var IframePreview = ({ htmlContent, style }) => {
                             el.addEventListener('focus', function(e) {
                                 e.stopPropagation();
                                 this.dataset.original = this.innerHTML;
-                                this.style.outline = '2px dashed #4f46e5';
+                                this.style.outline = '2px dashed #db2777';
                                 this.style.outlineOffset = '2px';
                             });
                             
@@ -28431,7 +28431,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-qiktns4J.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BiDRTxGX.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);

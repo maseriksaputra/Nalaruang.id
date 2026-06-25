@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-CUKCb13H.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$2, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-BX0AJyuK.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-C24mZBlR.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$2, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-Dvewt5F7.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -160,7 +160,7 @@ var CanvasArea = () => {
 						pointerEvents: "auto"
 					},
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "absolute top-0 left-0 z-50 px-3 py-1.5 text-[10px] font-bold tracking-wider rounded-br-lg shadow-sm border-b border-r bg-indigo-600 text-white border-indigo-700",
+						className: "absolute top-0 left-0 z-50 px-3 py-1.5 text-[10px] font-bold tracking-wider rounded-br-lg shadow-sm border-b border-r bg-primary-600 text-white border-primary-700",
 						children: "🖥️ KANVAS DESKTOP (16:9)"
 					}), global_settings?.desktop_layers?.map((layer) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						style: {
@@ -197,7 +197,7 @@ var CanvasArea = () => {
 						if (global_settings?.custom_code) return;
 						setActiveSection(section.id);
 					},
-					className: `relative group ${activeSectionId === section.id ? "ring-2 ring-inset ring-indigo-500 z-10" : "z-0"} ${index > 0 ? "border-t border-dashed border-gray-300" : ""}`,
+					className: `relative group ${activeSectionId === section.id ? "ring-2 ring-inset ring-primary-500 z-10" : "z-0"} ${index > 0 ? "border-t border-dashed border-gray-300" : ""}`,
 					style: {
 						minHeight: (() => {
 							if (section.layout?.minHeight && section.layout.minHeight !== "844px" && section.layout.minHeight !== "100vh") return section.layout.minHeight;
@@ -243,7 +243,7 @@ var CanvasArea = () => {
 							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: `absolute top-0 left-0 z-50 px-3 py-1.5 text-[10px] font-bold tracking-wider rounded-br-lg shadow-sm border-b border-r bg-indigo-600 text-white border-indigo-700`,
+							className: `absolute top-0 left-0 z-50 px-3 py-1.5 text-[10px] font-bold tracking-wider rounded-br-lg shadow-sm border-b border-r bg-primary-600 text-white border-primary-700`,
 							children: index === 0 ? "📄 HALAMAN SAMPUL (COVER)" : "📄 HALAMAN ISI"
 						}),
 						index > 0 && activeCanvasMode !== "desktop" && showGridLines && (() => {
@@ -263,12 +263,12 @@ var CanvasArea = () => {
 								className: "absolute w-full z-[9999] flex items-center pointer-events-none",
 								style: { top: `${i}px` },
 								children: [
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex-1 border-t border-dashed border-indigo-400/60" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex-1 border-t border-dashed border-primary-400/60" }),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "px-2 py-0.5 bg-indigo-50 text-indigo-500 text-[10px] font-bold rounded-full mx-2 border border-indigo-300/50 shadow-sm",
+										className: "px-2 py-0.5 bg-primary-50 text-primary-500 text-[10px] font-bold rounded-full mx-2 border border-primary-300/50 shadow-sm",
 										children: ["Batas Layar ", Math.floor(i / 844) + 1]
 									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex-1 border-t border-dashed border-indigo-400/60" })
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "flex-1 border-t border-dashed border-primary-400/60" })
 								]
 							}, `grid-${i}`));
 							return grids;
@@ -294,7 +294,7 @@ var CanvasArea = () => {
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(SnapLinesOverlay, { sectionId: section.id }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PathVisualizerOverlay, {}),
 						index > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "absolute bottom-0 left-0 w-full h-4 bg-indigo-100 hover:bg-indigo-200 cursor-ns-resize flex items-center justify-center border-t border-indigo-200 z-50 transition-colors",
+							className: "absolute bottom-0 left-0 w-full h-4 bg-primary-100 hover:bg-primary-200 cursor-ns-resize flex items-center justify-center border-t border-primary-200 z-50 transition-colors",
 							onMouseDown: (e) => {
 								e.stopPropagation();
 								e.preventDefault();
@@ -318,7 +318,7 @@ var CanvasArea = () => {
 								document.addEventListener("mousemove", handleMouseMove);
 								document.addEventListener("mouseup", handleMouseUp);
 							},
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-12 h-1 bg-indigo-400 rounded-full" })
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-12 h-1 bg-primary-400 rounded-full" })
 						})
 					]
 				}, section.id))), !hideEmptySections && activeCanvasMode !== "desktop" && sections.length < 2 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -329,7 +329,7 @@ var CanvasArea = () => {
 							e.preventDefault();
 							useCanvasStore.getState().addSection();
 						},
-						className: "flex items-center gap-2 px-6 py-3 bg-white hover:bg-indigo-50 border-2 border-dashed border-indigo-300 hover:border-indigo-500 rounded-xl text-indigo-600 font-bold shadow-sm transition-all",
+						className: "flex items-center gap-2 px-6 py-3 bg-white hover:bg-primary-50 border-2 border-dashed border-primary-300 hover:border-primary-500 rounded-xl text-primary-600 font-bold shadow-sm transition-all",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 							className: "w-5 h-5",
 							fill: "none",
@@ -458,9 +458,9 @@ var LeftSidebar = () => {
 			}
 		].map((tab) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 			onClick: () => setActiveTab(activeTab === tab.id ? null : tab.id),
-			className: `flex flex-col items-center justify-center w-16 h-16 rounded-2xl transition-all duration-300 relative group ${activeTab === tab.id ? "bg-indigo-50 text-indigo-600" : "text-gray-500 hover:bg-indigo-50 hover:text-indigo-500 hover:-translate-y-1"}`,
+			className: `flex flex-col items-center justify-center w-16 h-16 rounded-2xl transition-all duration-300 relative group ${activeTab === tab.id ? "bg-primary-50 text-primary-600" : "text-gray-500 hover:bg-primary-50 hover:text-primary-500 hover:-translate-y-1"}`,
 			children: [
-				activeTab === tab.id && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-indigo-600 rounded-r-full shadow-sm" }),
+				activeTab === tab.id && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-8 bg-primary-600 rounded-r-full shadow-sm" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 					className: `w-5 h-5 mb-1 transition-transform duration-300 ${activeTab === tab.id ? "scale-110" : "group-hover:scale-110"}`,
 					fill: "none",
@@ -5348,7 +5348,7 @@ var AudioWaveformEditor = ({ audioUrl, audioStart, audioEnd, onSetStart, onSetEn
 		wavesurfer.current = E.create({
 			container: waveformRef.current,
 			waveColor: "#a5b4fc",
-			progressColor: "#4f46e5",
+			progressColor: "#db2777",
 			cursorColor: "#312e81",
 			barWidth: 2,
 			barGap: 1,
@@ -5492,7 +5492,7 @@ var AudioWaveformEditor = ({ audioUrl, audioStart, audioEnd, onSetStart, onSetEn
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 					className: "text-[10px] font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-						className: "w-3 h-3 text-indigo-500",
+						className: "w-3 h-3 text-primary-500",
 						fill: "none",
 						stroke: "currentColor",
 						viewBox: "0 0 24 24",
@@ -5504,7 +5504,7 @@ var AudioWaveformEditor = ({ audioUrl, audioStart, audioEnd, onSetStart, onSetEn
 						})
 					}), "Pemotong Pintar"]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-					className: "text-[10px] font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded",
+					className: "text-[10px] font-mono font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded",
 					children: [
 						formatTime(currentTime),
 						" / ",
@@ -5518,7 +5518,7 @@ var AudioWaveformEditor = ({ audioUrl, audioStart, audioEnd, onSetStart, onSetEn
 					ref: waveformRef,
 					className: "w-full h-[60px] bg-gray-50 rounded-lg border border-gray-100 overflow-hidden cursor-pointer"
 				}), !isReady && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-10 text-[10px] text-indigo-500 font-bold animate-pulse pointer-events-none",
+					className: "absolute inset-0 flex items-center justify-center bg-white/80 backdrop-blur-sm z-10 text-[10px] text-primary-500 font-bold animate-pulse pointer-events-none",
 					children: "Memuat Gelombang..."
 				})]
 			}),
@@ -5527,7 +5527,7 @@ var AudioWaveformEditor = ({ audioUrl, audioStart, audioEnd, onSetStart, onSetEn
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					onClick: handlePlayPause,
 					disabled: !isReady,
-					className: "flex shrink-0 items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition shadow disabled:opacity-50",
+					className: "flex shrink-0 items-center justify-center w-8 h-8 rounded-full bg-primary-600 text-white hover:bg-primary-700 transition shadow disabled:opacity-50",
 					children: isPlaying ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 						className: "w-4 h-4",
 						fill: "currentColor",
@@ -5544,12 +5544,12 @@ var AudioWaveformEditor = ({ audioUrl, audioStart, audioEnd, onSetStart, onSetEn
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: handleSetStart,
 						disabled: !isReady,
-						className: "flex-1 px-2 py-1.5 text-[9px] font-bold bg-white border border-gray-300 text-gray-700 rounded-lg hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50 transition disabled:opacity-50",
+						className: "flex-1 px-2 py-1.5 text-[9px] font-bold bg-white border border-gray-300 text-gray-700 rounded-lg hover:border-primary-500 hover:text-primary-600 hover:bg-primary-50 transition disabled:opacity-50",
 						children: "Jadikan Mulai"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: handleSetEnd,
 						disabled: !isReady,
-						className: "flex-1 px-2 py-1.5 text-[9px] font-bold bg-white border border-gray-300 text-gray-700 rounded-lg hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50 transition disabled:opacity-50",
+						className: "flex-1 px-2 py-1.5 text-[9px] font-bold bg-white border border-gray-300 text-gray-700 rounded-lg hover:border-primary-500 hover:text-primary-600 hover:bg-primary-50 transition disabled:opacity-50",
 						children: "Jadikan Selesai"
 					})]
 				})]
@@ -5653,7 +5653,7 @@ var FontsPanel = () => {
 					placeholder: "Cari font...",
 					value: search,
 					onChange: (e) => setSearch(e.target.value),
-					className: "w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-colors"
+					className: "w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white transition-colors"
 				})]
 			})
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -5666,13 +5666,13 @@ var FontsPanel = () => {
 						className: "px-2 py-1 text-xs font-semibold tracking-wider text-gray-500 uppercase",
 						children: "Font Saat Ini"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-						className: "w-full flex items-center justify-between px-3 py-3 mt-1 bg-indigo-50 border border-indigo-100 rounded-lg",
+						className: "w-full flex items-center justify-between px-3 py-3 mt-1 bg-primary-50 border border-primary-100 rounded-lg",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-lg text-indigo-900",
+							className: "text-lg text-primary-900",
 							style: { fontFamily: currentFont },
 							children: currentFont
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-							className: "w-5 h-5 text-indigo-600",
+							className: "w-5 h-5 text-primary-600",
 							fill: "none",
 							stroke: "currentColor",
 							viewBox: "0 0 24 24",
@@ -5693,13 +5693,13 @@ var FontsPanel = () => {
 						const isActive = currentFont === font;
 						return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 							onClick: () => handleSelectFont(font),
-							className: `w-full flex items-center justify-between px-3 py-3 rounded-lg transition-colors ${isActive ? "bg-indigo-50 text-indigo-900" : "hover:bg-gray-50 text-gray-800"}`,
+							className: `w-full flex items-center justify-between px-3 py-3 rounded-lg transition-colors ${isActive ? "bg-primary-50 text-primary-900" : "hover:bg-gray-50 text-gray-800"}`,
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "text-lg truncate",
 								style: { fontFamily: font },
 								children: font
 							}), isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-								className: "w-4 h-4 text-indigo-600",
+								className: "w-4 h-4 text-primary-600",
 								fill: "none",
 								stroke: "currentColor",
 								viewBox: "0 0 24 24",
@@ -5735,8 +5735,8 @@ var TAILWIND_COLORS = [
 	"#14b8a6",
 	"#06b6d4",
 	"#0ea5e9",
-	"#3b82f6",
-	"#6366f1",
+	"#ec4899",
+	"#ec4899",
 	"#8b5cf6",
 	"#a855f7",
 	"#d946ef",
@@ -5867,7 +5867,7 @@ var ColorsPanel = () => {
 									})
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "w-10 h-10 rounded-full border-2 border-indigo-500 flex items-center justify-center p-0.5",
+									className: "w-10 h-10 rounded-full border-2 border-primary-500 flex items-center justify-center p-0.5",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "w-full h-full rounded-full border border-gray-200",
 										style: { backgroundColor: currentBackgroundType === "solid" ? currentColor : "#ffffff" }
@@ -5898,7 +5898,7 @@ var ColorsPanel = () => {
 							const isActive = currentBackgroundType === "solid" && currentColor.toLowerCase() === color;
 							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								onClick: () => handleSelectColor(color),
-								className: `w-full aspect-square rounded-md border shadow-sm transition-transform hover:scale-110 flex items-center justify-center ${isActive ? "ring-2 ring-indigo-500 ring-offset-2" : "border-gray-200"}`,
+								className: `w-full aspect-square rounded-md border shadow-sm transition-transform hover:scale-110 flex items-center justify-center ${isActive ? "ring-2 ring-primary-500 ring-offset-2" : "border-gray-200"}`,
 								style: { backgroundColor: color },
 								title: color,
 								children: isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
@@ -5978,7 +5978,7 @@ var ImageEditorPanel = () => {
 						className: "font-bold text-gray-800 text-xs uppercase tracking-wider",
 						children: "Potong (Crop) Langsung"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-						className: "text-[11px] text-gray-500 bg-blue-50 p-3 rounded-lg border border-blue-100 leading-relaxed",
+						className: "text-[11px] text-gray-500 bg-primary-50 p-3 rounded-lg border border-primary-100 leading-relaxed",
 						children: [
 							"Anda sekarang berada dalam ",
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", { children: "Mode Editor Foto" }),
@@ -6049,7 +6049,7 @@ var ImageEditorPanel = () => {
 							step: "1",
 							value: activeLayer.style?.rotation ?? 0,
 							onChange: (e) => updateLayerStyle(activeLayer.id, { rotation: parseInt(e.target.value) }),
-							className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+							className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 						})] })
 					]
 				}),
@@ -6070,7 +6070,7 @@ var ImageEditorPanel = () => {
 							step: "0.05",
 							value: activeLayer.style?.brightness ?? 1,
 							onChange: (e) => updateLayerStyle(activeLayer.id, { brightness: parseFloat(e.target.value) }),
-							className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+							className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 						})] }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex justify-between text-[10px] text-gray-500 mb-1",
@@ -6082,7 +6082,7 @@ var ImageEditorPanel = () => {
 							step: "0.05",
 							value: activeLayer.style?.contrast ?? 1,
 							onChange: (e) => updateLayerStyle(activeLayer.id, { contrast: parseFloat(e.target.value) }),
-							className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+							className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 						})] }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex justify-between text-[10px] text-gray-500 mb-1",
@@ -6094,7 +6094,7 @@ var ImageEditorPanel = () => {
 							step: "0.05",
 							value: activeLayer.style?.saturate ?? 1,
 							onChange: (e) => updateLayerStyle(activeLayer.id, { saturate: parseFloat(e.target.value) }),
-							className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+							className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 						})] }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex justify-between text-[10px] text-gray-500 mb-1",
@@ -6106,7 +6106,7 @@ var ImageEditorPanel = () => {
 							step: "0.5",
 							value: activeLayer.style?.blur ?? 0,
 							onChange: (e) => updateLayerStyle(activeLayer.id, { blur: parseFloat(e.target.value) }),
-							className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+							className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 						})] }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							onClick: () => updateLayerStyle(activeLayer.id, {
@@ -6457,7 +6457,7 @@ var DesktopThumbnailPanel = () => {
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
 					className: "font-bold text-gray-800 flex items-center gap-2",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-						className: "w-5 h-5 text-indigo-500",
+						className: "w-5 h-5 text-primary-500",
 						fill: "none",
 						stroke: "currentColor",
 						viewBox: "0 0 24 24",
@@ -6475,14 +6475,14 @@ var DesktopThumbnailPanel = () => {
 						className: "sr-only peer",
 						checked: settings.enabled || false,
 						onChange: (e) => handleChange("enabled", e.target.checked)
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600" })]
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-600" })]
 				})]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: `p-4 flex-1 flex flex-col items-center justify-center text-center ${!settings.enabled ? "opacity-50 pointer-events-none" : ""}`,
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mb-4",
+						className: "w-16 h-16 bg-primary-50 text-primary-600 rounded-2xl flex items-center justify-center mb-4",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 							className: "w-8 h-8",
 							fill: "none",
@@ -6521,7 +6521,7 @@ var DesktopThumbnailPanel = () => {
 						}), "Tutup Editor Desktop"]
 					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 						onClick: () => setActiveCanvasMode("desktop"),
-						className: "px-6 py-3 bg-indigo-600 text-white hover:bg-indigo-700 font-bold rounded-xl shadow-lg shadow-indigo-200 transition-all hover:-translate-y-1 flex items-center gap-2",
+						className: "px-6 py-3 bg-primary-600 text-white hover:bg-primary-700 font-bold rounded-xl shadow-lg shadow-primary-200 transition-all hover:-translate-y-1 flex items-center gap-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 							className: "w-5 h-5",
 							fill: "none",
@@ -6600,7 +6600,7 @@ var ClientAssetsPanel = () => {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
 					className: "text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between",
 					children: ["Aset Klien", isLoading && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-[10px] text-indigo-500 normal-case animate-pulse",
+						className: "text-[10px] text-primary-500 normal-case animate-pulse",
 						children: "Memuat..."
 					})]
 				}),
@@ -6632,7 +6632,7 @@ var ClientAssetsPanel = () => {
 				children: "Klien belum mengisi form atau form tidak memiliki input."
 			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
 				imageAssets.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
-					className: "text-[10px] font-bold text-indigo-700 uppercase mb-3 border-b border-indigo-100 pb-1 flex items-center gap-1",
+					className: "text-[10px] font-bold text-primary-700 uppercase mb-3 border-b border-primary-100 pb-1 flex items-center gap-1",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 						className: "w-3 h-3",
 						fill: "none",
@@ -6661,7 +6661,7 @@ var ClientAssetsPanel = () => {
 									height: 200
 								}
 							}),
-							className: "relative group flex flex-col items-center justify-center p-1 bg-gray-100 border border-gray-200 rounded-xl hover:border-indigo-500 cursor-pointer aspect-square overflow-hidden shadow-sm",
+							className: "relative group flex flex-col items-center justify-center p-1 bg-gray-100 border border-gray-200 rounded-xl hover:border-primary-500 cursor-pointer aspect-square overflow-hidden shadow-sm",
 							title: `Klik untuk menambahkan: ${asset.field_name}`,
 							children: [
 								isVideo ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("video", {
@@ -6691,7 +6691,7 @@ var ClientAssetsPanel = () => {
 					})
 				})] }),
 				textAssets.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
-					className: "text-[10px] font-bold text-indigo-700 uppercase mb-3 border-b border-indigo-100 pb-1 flex items-center gap-1 mt-4",
+					className: "text-[10px] font-bold text-primary-700 uppercase mb-3 border-b border-primary-100 pb-1 flex items-center gap-1 mt-4",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 						className: "w-3 h-3",
 						fill: "none",
@@ -6707,19 +6707,19 @@ var ClientAssetsPanel = () => {
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					className: "space-y-3",
 					children: textAssets.map((asset) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "p-3 bg-indigo-50/50 border border-indigo-100 rounded-xl shadow-sm",
+						className: "p-3 bg-primary-50/50 border border-primary-100 rounded-xl shadow-sm",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "flex items-center justify-between mb-1.5",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-[9px] text-indigo-600 uppercase font-bold",
+									className: "text-[9px] text-primary-600 uppercase font-bold",
 									children: asset.field_name
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 									onClick: (e) => {
 										e.stopPropagation();
 										copyToClipboard(asset.id, asset.content);
 									},
-									className: "text-xs flex items-center gap-1 px-1.5 py-0.5 rounded text-indigo-500 hover:bg-indigo-100 transition-colors font-medium",
+									className: "text-xs flex items-center gap-1 px-1.5 py-0.5 rounded text-primary-500 hover:bg-primary-100 transition-colors font-medium",
 									children: copiedId === asset.id ? "Tersalin!" : "Salin"
 								})]
 							}),
@@ -6741,14 +6741,14 @@ var ClientAssetsPanel = () => {
 										color: "#1f2937"
 									}
 								}),
-								className: "mt-2 w-full text-[10px] py-1 text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-indigo-600 transition-colors font-semibold",
+								className: "mt-2 w-full text-[10px] py-1 text-gray-500 border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-primary-600 transition-colors font-semibold",
 								children: "Tambah sebagai Elemen Teks"
 							})
 						]
 					}, asset.id))
 				})] }),
 				audioAssets.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h4", {
-					className: "text-[10px] font-bold text-indigo-700 uppercase mb-3 border-b border-indigo-100 pb-1 flex items-center gap-1 mt-4",
+					className: "text-[10px] font-bold text-primary-700 uppercase mb-3 border-b border-primary-100 pb-1 flex items-center gap-1 mt-4",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 						className: "w-3 h-3",
 						fill: "none",
@@ -6810,7 +6810,7 @@ var DraggableChildItem = ({ childId, child, parentId, isActive }) => {
 		ref: setNodeRef,
 		style,
 		onClick: () => useCanvasStore.getState().setActiveLayer(child.id),
-		className: `flex items-center justify-between h-8 px-2 border cursor-pointer ${isActive ? "bg-indigo-50 border-indigo-200" : "bg-white border-gray-100 hover:bg-gray-50"}`,
+		className: `flex items-center justify-between h-8 px-2 border cursor-pointer ${isActive ? "bg-primary-50 border-primary-200" : "bg-white border-gray-100 hover:bg-gray-50"}`,
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "flex items-center gap-2 overflow-hidden flex-1",
@@ -6839,7 +6839,7 @@ var DraggableChildItem = ({ childId, child, parentId, isActive }) => {
 							src: child.url,
 							alt: "",
 							className: "w-full h-full object-cover"
-						}) : child.type === "shape" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-3 h-3 bg-indigo-500 rounded-sm" }) : child.type === "text" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						}) : child.type === "shape" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-3 h-3 bg-primary-500 rounded-sm" }) : child.type === "text" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							className: "text-[10px] font-bold text-gray-700 font-serif",
 							children: "T"
 						}) : child.type === "lottie" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
@@ -6859,7 +6859,7 @@ var DraggableChildItem = ({ childId, child, parentId, isActive }) => {
 								d: "M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
 							})]
 						}) : child.type === "canvas_group" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-							className: "w-3 h-3 text-indigo-500",
+							className: "w-3 h-3 text-primary-500",
 							fill: "none",
 							stroke: "currentColor",
 							viewBox: "0 0 24 24",
@@ -7006,12 +7006,12 @@ var SortableLayerItem = ({ layer }) => {
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			ref: setNodeRef,
 			style,
-			className: `w-full flex items-center h-8 px-2 border-b-2 border-t-2 mt-4 mb-2 first:mt-0 shadow-sm rounded-sm cursor-pointer transition ${isActiveSection ? "bg-indigo-100 border-indigo-300" : "bg-indigo-50 border-indigo-100 hover:bg-indigo-100/70"}`,
+			className: `w-full flex items-center h-8 px-2 border-b-2 border-t-2 mt-4 mb-2 first:mt-0 shadow-sm rounded-sm cursor-pointer transition ${isActiveSection ? "bg-primary-100 border-primary-300" : "bg-primary-50 border-primary-100 hover:bg-primary-100/70"}`,
 			onClick: () => useCanvasStore.getState().setActiveSection(sectionId),
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 				...attributes,
 				...listeners,
-				className: `p-1 mr-2 rounded cursor-grab flex-shrink-0 transition ${isActiveSection ? "text-indigo-600" : "text-indigo-400 hover:text-indigo-600"}`,
+				className: `p-1 mr-2 rounded cursor-grab flex-shrink-0 transition ${isActiveSection ? "text-primary-600" : "text-primary-400 hover:text-primary-600"}`,
 				title: "Geser urutan halaman",
 				onClick: (e) => e.stopPropagation(),
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
@@ -7027,7 +7027,7 @@ var SortableLayerItem = ({ layer }) => {
 					})
 				})
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-				className: `text-[10px] font-bold uppercase tracking-widest ${isActiveSection ? "text-indigo-900" : "text-indigo-700"}`,
+				className: `text-[10px] font-bold uppercase tracking-widest ${isActiveSection ? "text-primary-900" : "text-primary-700"}`,
 				children: layer.title
 			})]
 		});
@@ -7038,7 +7038,7 @@ var SortableLayerItem = ({ layer }) => {
 		className: "mb-2",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			onClick: () => useCanvasStore.getState().setActiveLayer(layer.id),
-			className: `flex items-center justify-between h-10 px-2 border cursor-pointer ${activeLayerId === layer.id ? "bg-indigo-50 border-indigo-500" : "bg-white border-gray-200 hover:bg-gray-50"}`,
+			className: `flex items-center justify-between h-10 px-2 border cursor-pointer ${activeLayerId === layer.id ? "bg-primary-50 border-primary-500" : "bg-white border-gray-200 hover:bg-gray-50"}`,
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "flex items-center gap-2 overflow-hidden flex-1",
 				children: [
@@ -7061,7 +7061,7 @@ var SortableLayerItem = ({ layer }) => {
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-5 h-5 bg-indigo-100 rounded flex items-center justify-center shrink-0 text-indigo-600",
+						className: "w-5 h-5 bg-primary-100 rounded flex items-center justify-center shrink-0 text-primary-600",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 							className: "w-3 h-3",
 							fill: "none",
@@ -7394,7 +7394,7 @@ var LeftDrawer = () => {
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: () => updateGlobalSettings({ particleEffect: "none" }),
-								className: `flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${!global_settings?.particleEffect || global_settings.particleEffect === "none" ? "bg-indigo-50 border-indigo-500 text-indigo-600" : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300"}`,
+								className: `flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${!global_settings?.particleEffect || global_settings.particleEffect === "none" ? "bg-primary-50 border-primary-500 text-primary-600" : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300"}`,
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 									className: "w-5 h-5 mb-1",
 									fill: "none",
@@ -7413,7 +7413,7 @@ var LeftDrawer = () => {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: () => updateGlobalSettings({ particleEffect: "firefly" }),
-								className: `flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${global_settings?.particleEffect === "firefly" ? "bg-indigo-50 border-indigo-500 text-indigo-600" : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300"}`,
+								className: `flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${global_settings?.particleEffect === "firefly" ? "bg-primary-50 border-primary-500 text-primary-600" : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300"}`,
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 									className: "w-5 h-5 mb-1",
 									fill: "none",
@@ -7436,7 +7436,7 @@ var LeftDrawer = () => {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								onClick: () => updateGlobalSettings({ particleEffect: "snow" }),
-								className: `flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${global_settings?.particleEffect === "snow" ? "bg-indigo-50 border-indigo-500 text-indigo-600" : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300"}`,
+								className: `flex flex-col items-center justify-center p-2 rounded-lg border transition-all ${global_settings?.particleEffect === "snow" ? "bg-primary-50 border-primary-500 text-primary-600" : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50 hover:border-gray-300"}`,
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 									className: "w-5 h-5 mb-1",
 									fill: "none",
@@ -7518,7 +7518,7 @@ var LeftDrawer = () => {
 						})
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: !global_settings?.audioUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "border-2 border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:border-indigo-500 hover:bg-indigo-50 transition-colors group cursor-pointer relative",
+						className: "border-2 border-dashed border-gray-300 rounded-xl p-6 flex flex-col items-center justify-center text-center hover:border-primary-500 hover:bg-primary-50 transition-colors group cursor-pointer relative",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 								type: "file",
@@ -7528,9 +7528,9 @@ var LeftDrawer = () => {
 								disabled: isUploadingAudio
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform",
+								className: "w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-									className: "w-5 h-5 text-indigo-600",
+									className: "w-5 h-5 text-primary-600",
 									fill: "none",
 									stroke: "currentColor",
 									viewBox: "0 0 24 24",
@@ -7572,7 +7572,7 @@ var LeftDrawer = () => {
 										className: "text-[9px] text-red-600 font-bold hover:text-red-800 flex items-center gap-1 bg-red-50 px-2 py-1 rounded-md border border-red-100 transition-colors hover:bg-red-100",
 										children: "Hapus"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-										className: "cursor-pointer text-[9px] text-indigo-600 font-bold hover:text-indigo-800 flex items-center gap-1 bg-indigo-50 px-2 py-1 rounded-md border border-indigo-100 transition-colors hover:bg-indigo-100",
+										className: "cursor-pointer text-[9px] text-primary-600 font-bold hover:text-primary-800 flex items-center gap-1 bg-primary-50 px-2 py-1 rounded-md border border-primary-100 transition-colors hover:bg-primary-100",
 										children: [isUploadingAudio ? "Mengunggah..." : "Ganti Lagu", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 											type: "file",
 											accept: "audio/mpeg, audio/wav, audio/ogg",
@@ -7588,7 +7588,7 @@ var LeftDrawer = () => {
 								placeholder: "Atau tempel https://contoh.com/lagu.mp3",
 								value: global_settings?.audioUrl || "",
 								onChange: (e) => updateGlobalSettings({ audioUrl: e.target.value }),
-								className: "w-full border border-gray-200 bg-gray-50 rounded-lg p-2 text-xs text-gray-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow"
+								className: "w-full border border-gray-200 bg-gray-50 rounded-lg p-2 text-xs text-gray-500 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-shadow"
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AudioWaveformEditor, {
 								audioUrl: global_settings.audioUrl,
@@ -7612,11 +7612,11 @@ var LeftDrawer = () => {
 									audioStart: null,
 									audioEnd: null
 								}),
-								className: "w-full text-left p-2 rounded-lg border hover:bg-indigo-50 border-gray-200 hover:border-indigo-300 transition text-xs flex items-center justify-between group",
+								className: "w-full text-left p-2 rounded-lg border hover:bg-primary-50 border-gray-200 hover:border-primary-300 transition text-xs flex items-center justify-between group",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "flex items-center gap-2 overflow-hidden",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "w-6 h-6 bg-indigo-100 text-indigo-500 rounded flex items-center justify-center shrink-0",
+										className: "w-6 h-6 bg-primary-100 text-primary-500 rounded flex items-center justify-center shrink-0",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 											className: "w-3 h-3",
 											fill: "none",
@@ -7634,7 +7634,7 @@ var LeftDrawer = () => {
 										children: asset.field_name || "Audio Klien"
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded text-[9px] font-bold shrink-0 opacity-0 group-hover:opacity-100 transition-opacity",
+									className: "text-primary-600 bg-primary-100 px-2 py-0.5 rounded text-[9px] font-bold shrink-0 opacity-0 group-hover:opacity-100 transition-opacity",
 									children: "Pakai"
 								})]
 							}, asset.id))
@@ -7646,7 +7646,7 @@ var LeftDrawer = () => {
 							className: "text-[10px] font-semibold text-gray-500",
 							children: "Volume Suara"
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-							className: "text-[10px] font-bold text-indigo-600",
+							className: "text-[10px] font-bold text-primary-600",
 							children: [global_settings?.audioVolume ?? 100, "%"]
 						})]
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -7655,7 +7655,7 @@ var LeftDrawer = () => {
 						max: "100",
 						value: global_settings?.audioVolume ?? 100,
 						onChange: (e) => updateGlobalSettings({ audioVolume: parseInt(e.target.value) }),
-						className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+						className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-500"
 					})] }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "grid grid-cols-2 gap-3 pt-2",
@@ -7671,7 +7671,7 @@ var LeftDrawer = () => {
 								step: "0.5",
 								value: global_settings?.audioFadeIn || 0,
 								onChange: (e) => updateGlobalSettings({ audioFadeIn: parseFloat(e.target.value) }),
-								className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+								className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-500"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 								className: "text-[10px] font-bold text-gray-600 w-6 text-right",
 								children: [global_settings?.audioFadeIn || 0, "s"]
@@ -7688,7 +7688,7 @@ var LeftDrawer = () => {
 								step: "0.5",
 								value: global_settings?.audioFadeOut || 0,
 								onChange: (e) => updateGlobalSettings({ audioFadeOut: parseFloat(e.target.value) }),
-								className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+								className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-500"
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 								className: "text-[10px] font-bold text-gray-600 w-6 text-right",
 								children: [global_settings?.audioFadeOut || 0, "s"]
@@ -7738,7 +7738,7 @@ var LeftDrawer = () => {
 							].map((effect) => {
 								return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 									onClick: () => updateGlobalSettings({ audioEffect: effect.id }),
-									className: `py-2 px-1 rounded-xl text-[9px] font-bold transition-all border ${(global_settings?.audioEffect || "none") === effect.id ? "bg-indigo-50 border-indigo-500 text-indigo-700 shadow-[0_2px_10px_-3px_rgba(79,70,229,0.3)] ring-1 ring-indigo-500" : "bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300"}`,
+									className: `py-2 px-1 rounded-xl text-[9px] font-bold transition-all border ${(global_settings?.audioEffect || "none") === effect.id ? "bg-primary-50 border-primary-500 text-primary-700 shadow-[0_2px_10px_-3px_rgba(79,70,229,0.3)] ring-1 ring-primary-500" : "bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-300"}`,
 									children: effect.label
 								}, effect.id);
 							})
@@ -7756,7 +7756,7 @@ var LeftDrawer = () => {
 							step: "0.5",
 							value: global_settings?.audioStart || 0,
 							onChange: (e) => updateGlobalSettings({ audioStart: parseFloat(e.target.value) || 0 }),
-							className: "w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none"
+							className: "w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-800 focus:ring-2 focus:ring-primary-500 outline-none"
 						})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 							className: "text-[10px] font-semibold text-gray-500 mb-1 block",
 							title: "Waktu selesai lagu",
@@ -7767,7 +7767,7 @@ var LeftDrawer = () => {
 							step: "0.5",
 							value: global_settings?.audioEnd || 0,
 							onChange: (e) => updateGlobalSettings({ audioEnd: parseFloat(e.target.value) || 0 }),
-							className: "w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none"
+							className: "w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-800 focus:ring-2 focus:ring-primary-500 outline-none"
 						})] })]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -7778,7 +7778,7 @@ var LeftDrawer = () => {
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
 							value: global_settings?.audioTrigger || "onclick",
 							onChange: (e) => updateGlobalSettings({ audioTrigger: e.target.value }),
-							className: "w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-800 focus:ring-2 focus:ring-indigo-500 outline-none",
+							className: "w-full border border-gray-300 rounded-lg p-2 text-sm text-gray-800 focus:ring-2 focus:ring-primary-500 outline-none",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 								value: "autoplay",
 								children: "Dari Halaman Pertama (Cover)"
@@ -7806,7 +7806,7 @@ var LeftDrawer = () => {
 										setActiveFolder(null);
 										setSearchGlobal("");
 									},
-									className: "p-1 hover:bg-gray-100 rounded text-gray-500 hover:text-indigo-600 transition",
+									className: "p-1 hover:bg-gray-100 rounded text-gray-500 hover:text-primary-600 transition",
 									title: "Kembali ke Folder",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 										className: "w-4 h-4",
@@ -7832,7 +7832,7 @@ var LeftDrawer = () => {
 									placeholder: `Cari di ${activeFolder}...`,
 									value: searchGlobal,
 									onChange: (e) => setSearchGlobal(e.target.value),
-									className: "w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none"
+									className: "w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary-500 outline-none"
 								})
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -7844,14 +7844,14 @@ var LeftDrawer = () => {
 											id: "layer_" + Date.now(),
 											...el.payload
 										}),
-										className: "w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-indigo-500 hover:shadow-sm transition aspect-square",
+										className: "w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-primary-500 hover:shadow-sm transition aspect-square",
 										title: el.name,
 										children: [el.type === "image" && el.thumbnail_url ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 											src: el.thumbnail_url,
 											alt: el.name,
 											className: "w-8 h-8 object-contain mb-1"
 										}) : el.type === "lottie" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "w-8 h-8 bg-indigo-50 text-indigo-400 flex items-center justify-center rounded mb-1",
+											className: "w-8 h-8 bg-primary-50 text-primary-400 flex items-center justify-center rounded mb-1",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
 												className: "w-5 h-5",
 												fill: "none",
@@ -7915,7 +7915,7 @@ var LeftDrawer = () => {
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
 									className: "text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2",
 									children: ["Koleksi Permanen", isLoadingElements && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "text-[10px] text-indigo-500 normal-case animate-pulse",
+										className: "text-[10px] text-primary-500 normal-case animate-pulse",
 										children: "Memuat..."
 									})]
 								})
@@ -7927,7 +7927,7 @@ var LeftDrawer = () => {
 									placeholder: "Cari semua koleksi...",
 									value: searchGlobal,
 									onChange: (e) => setSearchGlobal(e.target.value),
-									className: "w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none"
+									className: "w-full border border-gray-200 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-primary-500 outline-none"
 								})
 							}),
 							globalElements.length === 0 && !isLoadingElements ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -7942,14 +7942,14 @@ var LeftDrawer = () => {
 											id: "layer_" + Date.now(),
 											...el.payload
 										}),
-										className: "w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-indigo-500 hover:shadow-sm transition aspect-square",
+										className: "w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-primary-500 hover:shadow-sm transition aspect-square",
 										title: el.name,
 										children: [el.type === "image" && el.thumbnail_url ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 											src: el.thumbnail_url,
 											alt: el.name,
 											className: "w-8 h-8 object-contain mb-1"
 										}) : el.type === "lottie" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "w-8 h-8 bg-indigo-50 text-indigo-400 flex items-center justify-center rounded mb-1",
+											className: "w-8 h-8 bg-primary-50 text-primary-400 flex items-center justify-center rounded mb-1",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
 												className: "w-5 h-5",
 												fill: "none",
@@ -8009,9 +8009,9 @@ var LeftDrawer = () => {
 									const itemsInFolder = globalElements.filter((el) => (el.category || "Umum") === folder);
 									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										onClick: () => setActiveFolder(folder),
-										className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2",
+										className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "w-10 h-10 bg-indigo-50 flex items-center justify-center rounded-lg text-indigo-500",
+											className: "w-10 h-10 bg-primary-50 flex items-center justify-center rounded-lg text-primary-500",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-6 h-6",
 												fill: "none",
@@ -8048,7 +8048,7 @@ var LeftDrawer = () => {
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "space-y-2",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-							className: "w-full flex items-center justify-center gap-2 p-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 hover:shadow-md transition cursor-pointer",
+							className: "w-full flex items-center justify-center gap-2 p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 hover:shadow-md transition cursor-pointer",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 									className: "w-4 h-4",
@@ -8077,7 +8077,7 @@ var LeftDrawer = () => {
 								})
 							]
 						}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-							className: "w-full flex items-center justify-center gap-2 p-2.5 bg-white text-indigo-600 border border-indigo-200 rounded-lg hover:bg-indigo-50 hover:shadow-md transition cursor-pointer",
+							className: "w-full flex items-center justify-center gap-2 p-2.5 bg-white text-primary-600 border border-primary-200 rounded-lg hover:bg-primary-50 hover:shadow-md transition cursor-pointer",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 									className: "w-4 h-4",
@@ -8130,8 +8130,8 @@ var LeftDrawer = () => {
 										borderRadius: "0px"
 									}
 								}),
-								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-8 bg-indigo-100 border-2 border-indigo-500" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-8 bg-primary-100 border-2 border-primary-500" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-[10px] font-semibold text-gray-700",
 									children: "Persegi"
 								})]
@@ -8150,7 +8150,7 @@ var LeftDrawer = () => {
 										borderRadius: "50%"
 									}
 								}),
-								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2",
+								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-8 bg-pink-100 border-2 border-pink-500 rounded-full" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-[10px] font-semibold text-gray-700",
 									children: "Lingkaran"
@@ -8170,7 +8170,7 @@ var LeftDrawer = () => {
 										borderRadius: "9999px"
 									}
 								}),
-								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2",
+								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-10 h-5 bg-green-100 border-2 border-green-500 rounded-full" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-[10px] font-semibold text-gray-700",
 									children: "Kapsul"
@@ -8190,7 +8190,7 @@ var LeftDrawer = () => {
 										borderRadius: "2px"
 									}
 								}),
-								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2",
+								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-10 h-1 bg-gray-400 rounded-full" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-[10px] font-semibold text-gray-700",
 									children: "Garis"
@@ -8224,7 +8224,7 @@ var LeftDrawer = () => {
 										borderStyle: "dashed"
 									}
 								}),
-								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2",
+								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "w-8 h-8 bg-gray-100 border-2 border-dashed border-gray-400 flex items-center justify-center",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
@@ -8261,7 +8261,7 @@ var LeftDrawer = () => {
 										borderStyle: "dashed"
 									}
 								}),
-								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2",
+								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "w-8 h-8 bg-gray-100 border-2 border-dashed border-gray-400 rounded-full flex items-center justify-center",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
@@ -8299,7 +8299,7 @@ var LeftDrawer = () => {
 										borderStyle: "dashed"
 									}
 								}),
-								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2",
+								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-6 h-8 bg-gray-100 border-2 border-dashed border-gray-400 rounded-t-full flex items-center justify-center" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-[10px] font-semibold text-gray-700",
 									children: "Kubah (Arch)"
@@ -8322,7 +8322,7 @@ var LeftDrawer = () => {
 										borderStyle: "dashed"
 									}
 								}),
-								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2",
+								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-6 bg-gray-100 border-2 border-dashed border-gray-400 rounded-md flex items-center justify-center" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-[10px] font-semibold text-gray-700",
 									children: "Lengkung"
@@ -8353,9 +8353,9 @@ var LeftDrawer = () => {
 							fontFamily: "serif"
 						}
 					}),
-					className: "w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition",
+					className: "w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-10 h-10 bg-indigo-50 rounded flex items-center justify-center text-indigo-600 font-bold text-lg",
+						className: "w-10 h-10 bg-primary-50 rounded flex items-center justify-center text-primary-600 font-bold text-lg",
 						children: "T"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "text-left flex-1",
@@ -8384,9 +8384,9 @@ var LeftDrawer = () => {
 							textAlign: "center"
 						}
 					}),
-					className: "w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition",
+					className: "w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-10 h-10 bg-indigo-50 rounded flex items-center justify-center text-indigo-600 font-medium",
+						className: "w-10 h-10 bg-primary-50 rounded flex items-center justify-center text-primary-600 font-medium",
 						children: "T"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "text-left flex-1",
@@ -8414,9 +8414,9 @@ var LeftDrawer = () => {
 							textAlign: "left"
 						}
 					}),
-					className: "w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition",
+					className: "w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-10 h-10 bg-indigo-50 rounded flex items-center justify-center text-indigo-600 text-sm",
+						className: "w-10 h-10 bg-primary-50 rounded flex items-center justify-center text-primary-600 text-sm",
 						children: "t"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "text-left flex-1",
@@ -8446,9 +8446,9 @@ var LeftDrawer = () => {
 							fontFamily: "serif"
 						}
 					}),
-					className: "w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-purple-500 hover:shadow-md transition",
+					className: "w-full flex items-center gap-3 p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-10 h-10 bg-purple-50 rounded flex items-center justify-center text-purple-600 text-sm font-bold border border-purple-200",
+						className: "w-10 h-10 bg-primary-50 rounded flex items-center justify-center text-primary-600 text-sm font-bold border border-primary-200",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 							className: "w-5 h-5",
 							fill: "none",
@@ -8583,7 +8583,7 @@ var LeftDrawer = () => {
 							type: "group",
 							name: `Layer Baru`
 						}),
-						className: "w-full py-2 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded-lg text-[10px] font-bold hover:bg-indigo-100 transition shadow-sm flex flex-col items-center justify-center gap-1",
+						className: "w-full py-2 bg-primary-50 text-primary-600 border border-primary-200 rounded-lg text-[10px] font-bold hover:bg-primary-100 transition shadow-sm flex flex-col items-center justify-center gap-1",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 							className: "w-4 h-4",
 							fill: "none",
@@ -8642,7 +8642,7 @@ var LeftDrawer = () => {
 			return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "p-4 space-y-6",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-					className: "border-2 border-dashed border-indigo-300 rounded-xl p-6 flex flex-col items-center justify-center bg-indigo-50 hover:bg-indigo-100 transition cursor-pointer",
+					className: "border-2 border-dashed border-primary-300 rounded-xl p-6 flex flex-col items-center justify-center bg-primary-50 hover:bg-primary-100 transition cursor-pointer",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 							type: "file",
@@ -8651,7 +8651,7 @@ var LeftDrawer = () => {
 							onChange: handleFileUpload
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-							className: "w-8 h-8 text-indigo-500 mb-2",
+							className: "w-8 h-8 text-primary-500 mb-2",
 							fill: "none",
 							stroke: "currentColor",
 							viewBox: "0 0 24 24",
@@ -8663,18 +8663,18 @@ var LeftDrawer = () => {
 							})
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-sm font-bold text-indigo-700",
+							className: "text-sm font-bold text-primary-700",
 							children: "Pilih File Media"
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-							className: "text-xs text-indigo-400 mt-1",
+							className: "text-xs text-primary-400 mt-1",
 							children: "PNG, JPG, SVG, MP4"
 						})
 					]
 				}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h3", {
 					className: "text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center justify-between mb-3",
 					children: ["Pustaka Media Anda", isLoadingAssets && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "text-[10px] text-indigo-500 normal-case animate-pulse",
+						className: "text-[10px] text-primary-500 normal-case animate-pulse",
 						children: "Memuat..."
 					})]
 				}), userAssets.length === 0 && !isLoadingAssets ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -8694,7 +8694,7 @@ var LeftDrawer = () => {
 								height: 200
 							}
 						}),
-						className: "relative group flex flex-col items-center justify-center p-1 bg-gray-50 border border-gray-200 rounded hover:border-indigo-500 cursor-pointer aspect-square overflow-hidden",
+						className: "relative group flex flex-col items-center justify-center p-1 bg-gray-50 border border-gray-200 rounded hover:border-primary-500 cursor-pointer aspect-square overflow-hidden",
 						title: asset.name,
 						children: [asset.type === "video" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "w-full h-full bg-black flex items-center justify-center relative",
@@ -8751,7 +8751,7 @@ var LeftDrawer = () => {
 							fontFamily: "serif"
 						}
 					}),
-					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center",
+					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center text-pink-600 shrink-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
@@ -8787,9 +8787,9 @@ var LeftDrawer = () => {
 							height: 100
 						}
 					}),
-					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center",
+					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 shrink-0",
+						className: "w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 shrink-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 							className: "w-5 h-5",
 							fill: "none",
@@ -8823,7 +8823,7 @@ var LeftDrawer = () => {
 							height: 400
 						}
 					}),
-					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center",
+					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 shrink-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
@@ -8862,9 +8862,9 @@ var LeftDrawer = () => {
 							padding: "1rem"
 						}
 					}),
-					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center",
+					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 shrink-0",
+						className: "w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 shrink-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 							className: "w-5 h-5",
 							fill: "none",
@@ -8898,7 +8898,7 @@ var LeftDrawer = () => {
 							height: 60
 						}
 					}),
-					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center",
+					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center text-yellow-600 shrink-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
@@ -8934,7 +8934,7 @@ var LeftDrawer = () => {
 							height: 250
 						}
 					}),
-					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center",
+					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center text-red-600 shrink-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
@@ -8980,16 +8980,16 @@ var LeftDrawer = () => {
 							y: 50,
 							width: 250,
 							height: 50,
-							backgroundColor: "#4f46e5",
+							backgroundColor: "#db2777",
 							textColor: "#ffffff",
 							borderRadius: 8,
 							opacity: 1,
 							showIcon: true
 						}
 					}),
-					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center",
+					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 shrink-0",
+						className: "w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 shrink-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 							className: "w-5 h-5",
 							fill: "none",
@@ -9029,9 +9029,9 @@ var LeftDrawer = () => {
 							}
 						}
 					}),
-					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center",
+					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 shrink-0",
+						className: "w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center text-primary-600 shrink-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 							className: "w-5 h-5",
 							fill: "none",
@@ -9078,7 +9078,7 @@ var LeftDrawer = () => {
 							}
 						}
 					}),
-					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-indigo-500 hover:shadow-md transition gap-2 text-center",
+					className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2 text-center",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center text-orange-600 shrink-0",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
@@ -9124,7 +9124,7 @@ var LeftDrawer = () => {
 					children: "Masukkan HTML, CSS, atau Javascript yang akan diterapkan secara global pada seluruh halaman undangan. Kode ini otomatis dirender di kanvas utama."
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
-					className: "w-full flex-1 border border-gray-300 rounded-lg p-3 text-sm font-mono bg-gray-50 text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 resize-none outline-none",
+					className: "w-full flex-1 border border-gray-300 rounded-lg p-3 text-sm font-mono bg-gray-50 text-gray-800 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 resize-none outline-none",
 					placeholder: "<!-- Ketik HTML/CSS di sini... -->",
 					value: global_settings?.custom_code || "",
 					onChange: (e) => updateGlobalSettings({ custom_code: e.target.value })
@@ -9172,7 +9172,7 @@ var LeftDrawer = () => {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 				onClick: () => useCanvasStore.getState().setActiveTab(null),
-				className: "absolute top-1/2 -right-4 -translate-y-1/2 w-8 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:bg-gray-50 shadow-md z-40 transition-all hover:scale-105",
+				className: "absolute top-1/2 -right-4 -translate-y-1/2 w-8 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:text-primary-600 hover:bg-gray-50 shadow-md z-40 transition-all hover:scale-105",
 				title: "Tutup Panel",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 					className: "w-4 h-4 pr-0.5",
@@ -13934,11 +13934,11 @@ var AnimatedIcon = ({ anim, isText = false, isActive = false }) => {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "w-full h-14 mb-2 flex items-center justify-center overflow-hidden border border-gray-100 bg-gray-50 rounded-lg group-hover:shadow-sm transition-shadow",
 		children: isText ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: `font-bold text-[20px] tracking-widest transition-colors ${isActive ? "text-indigo-600" : "text-purple-600 group-hover:text-purple-500"}`,
+			className: `font-bold text-[20px] tracking-widest transition-colors ${isActive ? "text-primary-600" : "text-primary-600 group-hover:text-primary-500"}`,
 			style: { animation: anim.anim },
 			children: "ABC"
 		}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: `w-8 h-8 rounded transition-colors ${isActive ? "bg-indigo-600" : "bg-purple-500 group-hover:bg-purple-400"}`,
+			className: `w-8 h-8 rounded transition-colors ${isActive ? "bg-primary-600" : "bg-primary-500 group-hover:bg-primary-400"}`,
 			style: { animation: anim.anim }
 		})
 	});
@@ -14012,7 +14012,7 @@ var RightInspector = () => {
 	};
 	const renderToggleButton = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 		onClick: () => setIsRightSidebarOpen(!isRightSidebarOpen),
-		className: "absolute top-1/2 -left-4 -translate-y-1/2 w-8 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:bg-gray-50 shadow-md z-[60] transition-all hover:scale-105",
+		className: "absolute top-1/2 -left-4 -translate-y-1/2 w-8 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-500 hover:text-primary-600 hover:bg-gray-50 shadow-md z-[60] transition-all hover:scale-105",
 		title: isRightSidebarOpen ? "Tutup Panel" : "Buka Panel",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 			className: `w-4 h-4 mr-1 transition-transform ${isRightSidebarOpen ? "" : "rotate-180"}`,
@@ -14055,7 +14055,7 @@ var RightInspector = () => {
 					className: "p-4 space-y-6 overflow-y-auto",
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-							className: "bg-indigo-50 border border-indigo-100 p-3 rounded-lg text-xs text-indigo-800",
+							className: "bg-primary-50 border border-primary-100 p-3 rounded-lg text-xs text-primary-800",
 							children: "Tidak ada elemen yang dipilih. Anda sedang mengatur properti halaman (Section) secara keseluruhan."
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
@@ -14069,7 +14069,7 @@ var RightInspector = () => {
 									type: "text",
 									value: activeSection.layout?.minHeight || "",
 									onChange: (e) => useCanvasStore.getState().updateSectionLayout(activeSectionId, { minHeight: e.target.value }),
-									className: "w-full border border-gray-300 rounded p-2 text-sm focus:ring-1 focus:ring-indigo-500",
+									className: "w-full border border-gray-300 rounded p-2 text-sm focus:ring-1 focus:ring-primary-500",
 									placeholder: "contoh: 844px atau 100vh"
 								})
 							}),
@@ -14098,7 +14098,7 @@ var RightInspector = () => {
 								type: "text",
 								value: activeSection.layout?.background_value || "#ffffff",
 								onChange: (e) => useCanvasStore.getState().updateSectionLayout(activeSectionId, { background_value: e.target.value }),
-								className: "flex-1 border border-gray-300 rounded p-1 text-sm focus:ring-1 focus:ring-indigo-500 uppercase"
+								className: "flex-1 border border-gray-300 rounded p-1 text-sm focus:ring-1 focus:ring-primary-500 uppercase"
 							})]
 						})] })
 					]
@@ -14173,52 +14173,52 @@ var RightInspector = () => {
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => setInspectorTab("design"),
-						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "design" ? "bg-white shadow-sm text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
+						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "design" ? "bg-white shadow-sm text-primary-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
 						children: "Desain"
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => setInspectorTab("animation"),
-						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "animation" ? "bg-white shadow-sm text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
+						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "animation" ? "bg-white shadow-sm text-primary-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
 						children: "Animasi"
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => setInspectorTab("interaction"),
-						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "interaction" ? "bg-white shadow-sm text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
+						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "interaction" ? "bg-white shadow-sm text-primary-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
 						children: "Interaksi"
 					}),
 					activeLayer.type === "photo_album" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => setInspectorTab("album"),
-						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "album" ? "bg-white shadow-sm text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
+						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "album" ? "bg-white shadow-sm text-primary-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
 						children: "Album"
 					}),
 					(activeLayer.type === "interactive_rsvp" || activeLayer.type === "interactive_comments") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => setInspectorTab("rsvp"),
-						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "rsvp" ? "bg-white shadow-sm text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
+						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "rsvp" ? "bg-white shadow-sm text-primary-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
 						children: activeLayer.type === "interactive_comments" ? "Desain" : "Form"
 					}),
 					activeLayer.type === "image" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => setInspectorTab("effects"),
-						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "effects" ? "bg-white shadow-sm text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
+						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "effects" ? "bg-white shadow-sm text-primary-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
 						children: "Efek"
 					}),
 					activeLayer.type === "interactive_map" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => setInspectorTab("map"),
-						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "map" ? "bg-white shadow-sm text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
+						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "map" ? "bg-white shadow-sm text-primary-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
 						children: "Map"
 					}),
 					activeLayer.type === "interactive_countdown" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => setInspectorTab("countdown"),
-						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "countdown" ? "bg-white shadow-sm text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
+						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "countdown" ? "bg-white shadow-sm text-primary-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
 						children: "Waktu"
 					}),
 					activeLayer.type === "interactive_copy" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => setInspectorTab("copy"),
-						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "copy" ? "bg-white shadow-sm text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
+						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "copy" ? "bg-white shadow-sm text-primary-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
 						children: "Salin"
 					}),
 					activeLayer.type === "interactive_calendar" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => setInspectorTab("calendar"),
-						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "calendar" ? "bg-white shadow-sm text-indigo-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
+						className: `flex-1 py-2 text-sm font-semibold rounded-md transition ${inspectorTab === "calendar" ? "bg-white shadow-sm text-primary-600" : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"}`,
 						children: "Kalender"
 					})
 				]
@@ -14234,13 +14234,13 @@ var RightInspector = () => {
 									type: "checkbox",
 									checked: activeLayer.isLocked || false,
 									onChange: (e) => useCanvasStore.getState().toggleLayerLock(activeLayer.id),
-									className: "rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+									className: "rounded border-gray-300 text-primary-600 focus:ring-primary-500"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-gray-700",
 									children: "Kunci Posisi"
 								})]
 							}), useCanvasStore.getState().activeCanvasMode !== "desktop" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
-								className: "border border-gray-200 rounded p-1.5 text-[10px] text-gray-700 font-medium focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none cursor-pointer max-w-[140px] bg-gray-50 hover:bg-white transition-colors",
+								className: "border border-gray-200 rounded p-1.5 text-[10px] text-gray-700 font-medium focus:border-primary-500 focus:ring-1 focus:ring-primary-500 outline-none cursor-pointer max-w-[140px] bg-gray-50 hover:bg-white transition-colors",
 								value: currentValueStr,
 								title: "Pindahkan elemen ini ke layar lain",
 								onChange: (e) => {
@@ -14270,7 +14270,7 @@ var RightInspector = () => {
 									type: "number",
 									value: activeLayer.style?.width || "",
 									onChange: (e) => updateLayerSize(activeLayer.id, parseFloat(e.target.value), activeLayer.style.height),
-									className: "w-full border border-gray-200 rounded p-1.5 text-xs text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all outline-none"
+									className: "w-full border border-gray-200 rounded p-1.5 text-xs text-gray-800 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all outline-none"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-[10px] text-gray-500 block mb-1",
@@ -14279,7 +14279,7 @@ var RightInspector = () => {
 									type: "number",
 									value: activeLayer.style?.height || "",
 									onChange: (e) => updateLayerSize(activeLayer.id, activeLayer.style.width, parseFloat(e.target.value)),
-									className: "w-full border border-gray-200 rounded p-1.5 text-xs text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all outline-none"
+									className: "w-full border border-gray-200 rounded p-1.5 text-xs text-gray-800 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all outline-none"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-[10px] text-gray-500 block mb-1",
@@ -14288,7 +14288,7 @@ var RightInspector = () => {
 									type: "number",
 									value: activeLayer.style?.x || 0,
 									onChange: (e) => updateLayerPosition(activeLayer.id, parseFloat(e.target.value), activeLayer.style.y),
-									className: "w-full border border-gray-200 rounded p-1.5 text-xs text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all outline-none"
+									className: "w-full border border-gray-200 rounded p-1.5 text-xs text-gray-800 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all outline-none"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-[10px] text-gray-500 block mb-1",
@@ -14297,7 +14297,7 @@ var RightInspector = () => {
 									type: "number",
 									value: activeLayer.style?.y || 0,
 									onChange: (e) => updateLayerPosition(activeLayer.id, activeLayer.style.x, parseFloat(e.target.value)),
-									className: "w-full border border-gray-200 rounded p-1.5 text-xs text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all outline-none"
+									className: "w-full border border-gray-200 rounded p-1.5 text-xs text-gray-800 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all outline-none"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-[10px] text-gray-500 block mb-1",
@@ -14306,7 +14306,7 @@ var RightInspector = () => {
 									type: "number",
 									value: activeLayer.style?.rotation || 0,
 									onChange: (e) => updateLayerStyle(activeLayer.id, { rotation: parseFloat(e.target.value) }),
-									className: "w-full border border-gray-200 rounded p-1.5 text-xs text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all outline-none"
+									className: "w-full border border-gray-200 rounded p-1.5 text-xs text-gray-800 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all outline-none"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-[10px] text-gray-500 block mb-1",
@@ -14318,7 +14318,7 @@ var RightInspector = () => {
 									max: "1",
 									value: activeLayer.style?.opacity !== void 0 ? activeLayer.style.opacity : 1,
 									onChange: (e) => updateLayerStyle(activeLayer.id, { opacity: parseFloat(e.target.value) }),
-									className: "w-full border border-gray-200 rounded p-1.5 text-xs text-gray-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all outline-none"
+									className: "w-full border border-gray-200 rounded p-1.5 text-xs text-gray-800 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all outline-none"
 								})] })
 							]
 						}),
@@ -14334,9 +14334,9 @@ var RightInspector = () => {
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => alignLayer(activeLayer.id, "left"),
-											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs(activeLayer.style?.x || 0) < 2 ? "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
+											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs(activeLayer.style?.x || 0) < 2 ? "bg-primary-50 text-primary-700 border-primary-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-												className: `w-5 h-5 ${Math.abs(activeLayer.style?.x || 0) < 2 ? "text-indigo-600" : "text-gray-500"}`,
+												className: `w-5 h-5 ${Math.abs(activeLayer.style?.x || 0) < 2 ? "text-primary-600" : "text-gray-500"}`,
 												viewBox: "0 0 24 24",
 												fill: "none",
 												stroke: "currentColor",
@@ -14369,9 +14369,9 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => alignLayer(activeLayer.id, "center"),
-											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs((activeLayer.style?.x || 0) - (375 - (parseInt(activeLayer.style?.width) || 100)) / 2) < 2 ? "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
+											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs((activeLayer.style?.x || 0) - (375 - (parseInt(activeLayer.style?.width) || 100)) / 2) < 2 ? "bg-primary-50 text-primary-700 border-primary-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-												className: `w-5 h-5 ${Math.abs((activeLayer.style?.x || 0) - (375 - (parseInt(activeLayer.style?.width) || 100)) / 2) < 2 ? "text-indigo-600" : "text-gray-500"}`,
+												className: `w-5 h-5 ${Math.abs((activeLayer.style?.x || 0) - (375 - (parseInt(activeLayer.style?.width) || 100)) / 2) < 2 ? "text-primary-600" : "text-gray-500"}`,
 												viewBox: "0 0 24 24",
 												fill: "none",
 												stroke: "currentColor",
@@ -14404,9 +14404,9 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => alignLayer(activeLayer.id, "right"),
-											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs((activeLayer.style?.x || 0) - (375 - (parseInt(activeLayer.style?.width) || 100))) < 2 ? "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
+											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs((activeLayer.style?.x || 0) - (375 - (parseInt(activeLayer.style?.width) || 100))) < 2 ? "bg-primary-50 text-primary-700 border-primary-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-												className: `w-5 h-5 ${Math.abs((activeLayer.style?.x || 0) - (375 - (parseInt(activeLayer.style?.width) || 100))) < 2 ? "text-indigo-600" : "text-gray-500"}`,
+												className: `w-5 h-5 ${Math.abs((activeLayer.style?.x || 0) - (375 - (parseInt(activeLayer.style?.width) || 100))) < 2 ? "text-primary-600" : "text-gray-500"}`,
 												viewBox: "0 0 24 24",
 												fill: "none",
 												stroke: "currentColor",
@@ -14448,9 +14448,9 @@ var RightInspector = () => {
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => alignLayer(activeLayer.id, "top"),
-											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs(activeLayer.style?.y || 0) < 2 ? "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
+											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs(activeLayer.style?.y || 0) < 2 ? "bg-primary-50 text-primary-700 border-primary-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-												className: `w-5 h-5 ${Math.abs(activeLayer.style?.y || 0) < 2 ? "text-indigo-600" : "text-gray-500"}`,
+												className: `w-5 h-5 ${Math.abs(activeLayer.style?.y || 0) < 2 ? "text-primary-600" : "text-gray-500"}`,
 												viewBox: "0 0 24 24",
 												fill: "none",
 												stroke: "currentColor",
@@ -14483,9 +14483,9 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => alignLayer(activeLayer.id, "middle"),
-											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs((activeLayer.style?.y || 0) - (844 - (parseInt(activeLayer.style?.height) || 100)) / 2) < 2 ? "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
+											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs((activeLayer.style?.y || 0) - (844 - (parseInt(activeLayer.style?.height) || 100)) / 2) < 2 ? "bg-primary-50 text-primary-700 border-primary-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-												className: `w-5 h-5 ${Math.abs((activeLayer.style?.y || 0) - (844 - (parseInt(activeLayer.style?.height) || 100)) / 2) < 2 ? "text-indigo-600" : "text-gray-500"}`,
+												className: `w-5 h-5 ${Math.abs((activeLayer.style?.y || 0) - (844 - (parseInt(activeLayer.style?.height) || 100)) / 2) < 2 ? "text-primary-600" : "text-gray-500"}`,
 												viewBox: "0 0 24 24",
 												fill: "none",
 												stroke: "currentColor",
@@ -14518,9 +14518,9 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => alignLayer(activeLayer.id, "bottom"),
-											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs((activeLayer.style?.y || 0) - (844 - (parseInt(activeLayer.style?.height) || 100))) < 2 ? "bg-indigo-50 text-indigo-700 border-indigo-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
+											className: `flex flex-col items-center gap-1 p-2 border border-gray-200 rounded text-[10px] transition-colors ${Math.abs((activeLayer.style?.y || 0) - (844 - (parseInt(activeLayer.style?.height) || 100))) < 2 ? "bg-primary-50 text-primary-700 border-primary-200 shadow-sm" : "hover:bg-gray-50 text-gray-600"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-												className: `w-5 h-5 ${Math.abs((activeLayer.style?.y || 0) - (844 - (parseInt(activeLayer.style?.height) || 100))) < 2 ? "text-indigo-600" : "text-gray-500"}`,
+												className: `w-5 h-5 ${Math.abs((activeLayer.style?.y || 0) - (844 - (parseInt(activeLayer.style?.height) || 100))) < 2 ? "text-primary-600" : "text-gray-500"}`,
 												viewBox: "0 0 24 24",
 												fill: "none",
 												stroke: "currentColor",
@@ -14646,7 +14646,7 @@ var RightInspector = () => {
 											};
 											input.click();
 										},
-										className: "w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded transition text-sm flex items-center justify-center gap-2",
+										className: "w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2 px-4 rounded transition text-sm flex items-center justify-center gap-2",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 											className: "w-4 h-4",
 											fill: "none",
@@ -14737,7 +14737,7 @@ var RightInspector = () => {
 									children: "Teks Caption"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 									type: "text",
-									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500",
+									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-primary-500",
 									placeholder: "Kenangan Indah",
 									value: activeLayer.style?.polaroidData?.caption || "",
 									onChange: (e) => {
@@ -14762,7 +14762,7 @@ var RightInspector = () => {
 													type: "classic"
 												} });
 											},
-											className: `flex flex-col items-center justify-center py-2 border rounded-lg transition-colors ${(activeLayer.style?.polaroidData?.type || "classic") === "classic" ? "border-indigo-500 bg-indigo-50 text-indigo-600 shadow-sm" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center py-2 border rounded-lg transition-colors ${(activeLayer.style?.polaroidData?.type || "classic") === "classic" ? "border-primary-500 bg-primary-50 text-primary-600 shadow-sm" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-[10px] font-bold",
 												children: "Klasik Lurus"
@@ -14776,7 +14776,7 @@ var RightInspector = () => {
 													type: "tilted"
 												} });
 											},
-											className: `flex flex-col items-center justify-center py-2 border rounded-lg transition-colors ${(activeLayer.style?.polaroidData?.type || "classic") === "tilted" ? "border-indigo-500 bg-indigo-50 text-indigo-600 shadow-sm" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center py-2 border rounded-lg transition-colors ${(activeLayer.style?.polaroidData?.type || "classic") === "tilted" ? "border-primary-500 bg-primary-50 text-primary-600 shadow-sm" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-[10px] font-bold",
 												children: "Miring Natural"
@@ -14790,7 +14790,7 @@ var RightInspector = () => {
 													type: "taped"
 												} });
 											},
-											className: `col-span-2 flex flex-col items-center justify-center py-2 border rounded-lg transition-colors ${(activeLayer.style?.polaroidData?.type || "classic") === "taped" ? "border-indigo-500 bg-indigo-50 text-indigo-600 shadow-sm" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `col-span-2 flex flex-col items-center justify-center py-2 border rounded-lg transition-colors ${(activeLayer.style?.polaroidData?.type || "classic") === "taped" ? "border-primary-500 bg-primary-50 text-primary-600 shadow-sm" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-[10px] font-bold",
 												children: "Miring dgn Selotip"
@@ -14810,7 +14810,7 @@ var RightInspector = () => {
 											filterId: e.target.value
 										} });
 									},
-									className: "w-full text-xs font-bold text-gray-700 border border-gray-300 rounded-lg p-2 focus:ring-1 focus:ring-indigo-500 bg-white",
+									className: "w-full text-xs font-bold text-gray-700 border border-gray-300 rounded-lg p-2 focus:ring-1 focus:ring-primary-500 bg-white",
 									children: IMAGE_FILTERS.map((filter) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 										value: filter.id,
 										children: filter.name
@@ -14825,7 +14825,7 @@ var RightInspector = () => {
 									className: "text-xs text-gray-500 block mb-1",
 									children: "Teks Utama"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
-									className: "w-full text-sm border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500",
+									className: "w-full text-sm border-gray-300 rounded p-2 focus:ring-1 focus:ring-primary-500",
 									rows: "3",
 									value: activeLayer.content,
 									onChange: (e) => updateLayerContent(activeLayer.id, e.target.value)
@@ -14835,7 +14835,7 @@ var RightInspector = () => {
 									children: "Font Family"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 									onClick: () => setActiveTab("fonts"),
-									className: "w-full flex items-center justify-between text-sm border border-gray-300 rounded p-2 focus:border-indigo-500 bg-white hover:bg-gray-50 transition-colors text-left",
+									className: "w-full flex items-center justify-between text-sm border border-gray-300 rounded p-2 focus:border-primary-500 bg-white hover:bg-gray-50 transition-colors text-left",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										style: { fontFamily: activeLayer.style.fontFamily || "Inter" },
 										children: activeLayer.style.fontFamily || "Inter"
@@ -14883,17 +14883,17 @@ var RightInspector = () => {
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { fontWeight: activeLayer.style.fontWeight === "bold" ? "normal" : "bold" }),
-											className: `flex-1 py-1.5 font-bold transition-colors ${activeLayer.style.fontWeight === "bold" ? "bg-indigo-100 text-indigo-700" : "hover:bg-gray-200 text-gray-700"}`,
+											className: `flex-1 py-1.5 font-bold transition-colors ${activeLayer.style.fontWeight === "bold" ? "bg-primary-100 text-primary-700" : "hover:bg-gray-200 text-gray-700"}`,
 											children: "B"
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { fontStyle: activeLayer.style.fontStyle === "italic" ? "normal" : "italic" }),
-											className: `flex-1 py-1.5 italic border-l border-r border-gray-200 transition-colors ${activeLayer.style.fontStyle === "italic" ? "bg-indigo-100 text-indigo-700" : "hover:bg-gray-200 text-gray-700"}`,
+											className: `flex-1 py-1.5 italic border-l border-r border-gray-200 transition-colors ${activeLayer.style.fontStyle === "italic" ? "bg-primary-100 text-primary-700" : "hover:bg-gray-200 text-gray-700"}`,
 											children: "I"
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { textDecoration: activeLayer.style.textDecoration === "underline" ? "none" : "underline" }),
-											className: `flex-1 py-1.5 underline transition-colors ${activeLayer.style.textDecoration === "underline" ? "bg-indigo-100 text-indigo-700" : "hover:bg-gray-200 text-gray-700"}`,
+											className: `flex-1 py-1.5 underline transition-colors ${activeLayer.style.textDecoration === "underline" ? "bg-primary-100 text-primary-700" : "hover:bg-gray-200 text-gray-700"}`,
 											children: "U"
 										})
 									]
@@ -14906,7 +14906,7 @@ var RightInspector = () => {
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { textAlign: "left" }),
-											className: `flex-1 py-1.5 flex justify-center transition-colors ${activeLayer.style.textAlign === "left" || !activeLayer.style.textAlign ? "bg-indigo-100 text-indigo-700" : "hover:bg-gray-200 text-gray-700"}`,
+											className: `flex-1 py-1.5 flex justify-center transition-colors ${activeLayer.style.textAlign === "left" || !activeLayer.style.textAlign ? "bg-primary-100 text-primary-700" : "hover:bg-gray-200 text-gray-700"}`,
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-4 h-4",
 												fill: "none",
@@ -14922,7 +14922,7 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { textAlign: "center" }),
-											className: `flex-1 py-1.5 border-l border-r border-gray-200 flex justify-center transition-colors ${activeLayer.style.textAlign === "center" ? "bg-indigo-100 text-indigo-700" : "hover:bg-gray-200 text-gray-700"}`,
+											className: `flex-1 py-1.5 border-l border-r border-gray-200 flex justify-center transition-colors ${activeLayer.style.textAlign === "center" ? "bg-primary-100 text-primary-700" : "hover:bg-gray-200 text-gray-700"}`,
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-4 h-4",
 												fill: "none",
@@ -14938,7 +14938,7 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { textAlign: "right" }),
-											className: `flex-1 py-1.5 flex justify-center transition-colors ${activeLayer.style.textAlign === "right" ? "bg-indigo-100 text-indigo-700" : "hover:bg-gray-200 text-gray-700"}`,
+											className: `flex-1 py-1.5 flex justify-center transition-colors ${activeLayer.style.textAlign === "right" ? "bg-primary-100 text-primary-700" : "hover:bg-gray-200 text-gray-700"}`,
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-4 h-4",
 												fill: "none",
@@ -14999,7 +14999,7 @@ var RightInspector = () => {
 										step: "0.05",
 										value: activeLayer.style.opacity ?? 1,
 										onChange: (e) => updateLayerStyle(activeLayer.id, { opacity: parseFloat(e.target.value) }),
-										className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+										className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 									})]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -15009,7 +15009,7 @@ var RightInspector = () => {
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
 											className: "text-xs font-bold text-gray-700 flex items-center gap-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-4 h-4 text-indigo-500",
+												className: "w-4 h-4 text-primary-500",
 												fill: "none",
 												stroke: "currentColor",
 												viewBox: "0 0 24 24",
@@ -15028,7 +15028,7 @@ var RightInspector = () => {
 												borderRadius: activeLayer.style.borderRadius !== void 0 ? void 0 : 0,
 												borderRadiusType: activeLayer.style.borderRadiusType || "all"
 											}),
-											className: `w-8 h-4 rounded-full relative transition-colors ${activeLayer.style.borderRadius !== void 0 ? "bg-indigo-600" : "bg-gray-300"}`,
+											className: `w-8 h-4 rounded-full relative transition-colors ${activeLayer.style.borderRadius !== void 0 ? "bg-primary-600" : "bg-gray-300"}`,
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: `w-3 h-3 bg-white rounded-full absolute top-0.5 transition-transform ${activeLayer.style.borderRadius !== void 0 ? "translate-x-4" : "translate-x-0.5"}` })
 										})]
 									}), activeLayer.style.borderRadius !== void 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -15044,7 +15044,7 @@ var RightInspector = () => {
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 														title: "Semua Sudut",
 														onClick: () => updateLayerStyle(activeLayer.id, { borderRadiusType: "all" }),
-														className: `flex justify-center items-center py-1.5 rounded transition-colors ${!activeLayer.style.borderRadiusType || activeLayer.style.borderRadiusType === "all" ? "bg-white shadow-sm text-indigo-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
+														className: `flex justify-center items-center py-1.5 rounded transition-colors ${!activeLayer.style.borderRadiusType || activeLayer.style.borderRadiusType === "all" ? "bg-white shadow-sm text-primary-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 															className: "w-4 h-4",
 															fill: "none",
@@ -15066,7 +15066,7 @@ var RightInspector = () => {
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 														title: "Sudut Atas",
 														onClick: () => updateLayerStyle(activeLayer.id, { borderRadiusType: "top" }),
-														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "top" ? "bg-white shadow-sm text-indigo-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
+														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "top" ? "bg-white shadow-sm text-primary-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 															className: "w-4 h-4",
 															fill: "none",
@@ -15081,7 +15081,7 @@ var RightInspector = () => {
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 														title: "Sudut Bawah",
 														onClick: () => updateLayerStyle(activeLayer.id, { borderRadiusType: "bottom" }),
-														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "bottom" ? "bg-white shadow-sm text-indigo-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
+														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "bottom" ? "bg-white shadow-sm text-primary-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 															className: "w-4 h-4",
 															fill: "none",
@@ -15096,7 +15096,7 @@ var RightInspector = () => {
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 														title: "Sudut Kiri",
 														onClick: () => updateLayerStyle(activeLayer.id, { borderRadiusType: "left" }),
-														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "left" ? "bg-white shadow-sm text-indigo-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
+														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "left" ? "bg-white shadow-sm text-primary-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 															className: "w-4 h-4",
 															fill: "none",
@@ -15111,7 +15111,7 @@ var RightInspector = () => {
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 														title: "Sudut Kanan",
 														onClick: () => updateLayerStyle(activeLayer.id, { borderRadiusType: "right" }),
-														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "right" ? "bg-white shadow-sm text-indigo-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
+														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "right" ? "bg-white shadow-sm text-primary-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 															className: "w-4 h-4",
 															fill: "none",
@@ -15131,7 +15131,7 @@ var RightInspector = () => {
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 														title: "Sudut Kiri Atas",
 														onClick: () => updateLayerStyle(activeLayer.id, { borderRadiusType: "top-left" }),
-														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "top-left" ? "bg-white shadow-sm text-indigo-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
+														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "top-left" ? "bg-white shadow-sm text-primary-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
 															className: "w-4 h-4",
 															fill: "none",
@@ -15151,7 +15151,7 @@ var RightInspector = () => {
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 														title: "Sudut Kanan Atas",
 														onClick: () => updateLayerStyle(activeLayer.id, { borderRadiusType: "top-right" }),
-														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "top-right" ? "bg-white shadow-sm text-indigo-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
+														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "top-right" ? "bg-white shadow-sm text-primary-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
 															className: "w-4 h-4",
 															fill: "none",
@@ -15171,7 +15171,7 @@ var RightInspector = () => {
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 														title: "Sudut Kanan Bawah",
 														onClick: () => updateLayerStyle(activeLayer.id, { borderRadiusType: "bottom-right" }),
-														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "bottom-right" ? "bg-white shadow-sm text-indigo-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
+														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "bottom-right" ? "bg-white shadow-sm text-primary-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
 															className: "w-4 h-4",
 															fill: "none",
@@ -15191,7 +15191,7 @@ var RightInspector = () => {
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 														title: "Sudut Kiri Bawah",
 														onClick: () => updateLayerStyle(activeLayer.id, { borderRadiusType: "bottom-left" }),
-														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "bottom-left" ? "bg-white shadow-sm text-indigo-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
+														className: `flex justify-center items-center py-1.5 rounded transition-colors ${activeLayer.style.borderRadiusType === "bottom-left" ? "bg-white shadow-sm text-primary-600 font-bold" : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`,
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
 															className: "w-4 h-4",
 															fill: "none",
@@ -15220,7 +15220,7 @@ var RightInspector = () => {
 											step: "1",
 											value: activeLayer.style.borderRadius || 0,
 											onChange: (e) => updateLayerStyle(activeLayer.id, { borderRadius: parseInt(e.target.value) || 0 }),
-											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 										})] })]
 									})]
 								}),
@@ -15231,7 +15231,7 @@ var RightInspector = () => {
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
 											className: "text-xs font-bold text-gray-700 flex items-center gap-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-4 h-4 text-indigo-500",
+												className: "w-4 h-4 text-primary-500",
 												fill: "none",
 												stroke: "currentColor",
 												viewBox: "0 0 24 24",
@@ -15248,7 +15248,7 @@ var RightInspector = () => {
 												borderStyle: activeLayer.style.borderStyle || "solid",
 												borderColor: activeLayer.style.borderColor || "#000000"
 											}),
-											className: `w-8 h-4 rounded-full relative transition-colors ${activeLayer.style.borderWidth ? "bg-indigo-600" : "bg-gray-300"}`,
+											className: `w-8 h-4 rounded-full relative transition-colors ${activeLayer.style.borderWidth ? "bg-primary-600" : "bg-gray-300"}`,
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: `w-3 h-3 bg-white rounded-full absolute top-0.5 transition-transform ${activeLayer.style.borderWidth ? "translate-x-4" : "translate-x-0.5"}` })
 										})]
 									}), !!activeLayer.style.borderWidth && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -15263,7 +15263,7 @@ var RightInspector = () => {
 											step: "0.1",
 											value: parseFloat(activeLayer.style.borderWidth) || 0,
 											onChange: (e) => updateLayerStyle(activeLayer.id, { borderWidth: parseFloat(e.target.value) || 0 }),
-											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "grid grid-cols-2 gap-3",
 											children: [
@@ -15310,7 +15310,7 @@ var RightInspector = () => {
 														step: "0.05",
 														value: activeLayer.style.borderOpacity ?? 1,
 														onChange: (e) => updateLayerStyle(activeLayer.id, { borderOpacity: parseFloat(e.target.value) }),
-														className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+														className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 														className: "text-[10px] text-gray-500 w-8",
 														children: [Math.round((activeLayer.style.borderOpacity ?? 1) * 100), "%"]
@@ -15327,7 +15327,7 @@ var RightInspector = () => {
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
 											className: "text-xs font-bold text-gray-700 flex items-center gap-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-4 h-4 text-indigo-500",
+												className: "w-4 h-4 text-primary-500",
 												fill: "none",
 												stroke: "currentColor",
 												viewBox: "0 0 24 24",
@@ -15343,7 +15343,7 @@ var RightInspector = () => {
 												const isActive = activeLayer.style.backgroundType === "linear-gradient" || activeLayer.style.backgroundType === "radial-gradient";
 												updateLayerStyle(activeLayer.id, { backgroundType: isActive ? "transparent" : "linear-gradient" });
 											},
-											className: `w-8 h-4 rounded-full relative transition-colors ${activeLayer.style.backgroundType === "linear-gradient" || activeLayer.style.backgroundType === "radial-gradient" ? "bg-indigo-600" : "bg-gray-300"}`,
+											className: `w-8 h-4 rounded-full relative transition-colors ${activeLayer.style.backgroundType === "linear-gradient" || activeLayer.style.backgroundType === "radial-gradient" ? "bg-primary-600" : "bg-gray-300"}`,
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: `w-3 h-3 bg-white rounded-full absolute top-0.5 transition-transform ${activeLayer.style.backgroundType === "linear-gradient" || activeLayer.style.backgroundType === "radial-gradient" ? "translate-x-4" : "translate-x-0.5"}` })
 										})]
 									}), (activeLayer.style.backgroundType === "linear-gradient" || activeLayer.style.backgroundType === "radial-gradient") && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -15356,11 +15356,11 @@ var RightInspector = () => {
 												className: "flex border border-gray-200 rounded text-xs overflow-hidden",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 													onClick: () => updateLayerStyle(activeLayer.id, { backgroundType: "linear-gradient" }),
-													className: `flex-1 py-1.5 ${activeLayer.style.backgroundType === "linear-gradient" ? "bg-indigo-50 text-indigo-700 font-bold" : "hover:bg-gray-50"}`,
+													className: `flex-1 py-1.5 ${activeLayer.style.backgroundType === "linear-gradient" ? "bg-primary-50 text-primary-700 font-bold" : "hover:bg-gray-50"}`,
 													children: "Linear"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 													onClick: () => updateLayerStyle(activeLayer.id, { backgroundType: "radial-gradient" }),
-													className: `flex-1 py-1.5 border-l border-gray-200 ${activeLayer.style.backgroundType === "radial-gradient" ? "bg-indigo-50 text-indigo-700 font-bold" : "hover:bg-gray-50"}`,
+													className: `flex-1 py-1.5 border-l border-gray-200 ${activeLayer.style.backgroundType === "radial-gradient" ? "bg-primary-50 text-primary-700 font-bold" : "hover:bg-gray-50"}`,
 													children: "Radial"
 												})]
 											})] }),
@@ -15389,7 +15389,7 @@ var RightInspector = () => {
 																max: "100",
 																value: activeLayer.style.gradientStartOpacity ?? 100,
 																onChange: (e) => updateLayerStyle(activeLayer.id, { gradientStartOpacity: parseInt(e.target.value) }),
-																className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+																className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 															})]
 														})]
 													})]
@@ -15416,7 +15416,7 @@ var RightInspector = () => {
 																max: "100",
 																value: activeLayer.style.gradientEndOpacity ?? 100,
 																onChange: (e) => updateLayerStyle(activeLayer.id, { gradientEndOpacity: parseInt(e.target.value) }),
-																className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+																className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 															})]
 														})]
 													})]
@@ -15431,7 +15431,7 @@ var RightInspector = () => {
 												max: "360",
 												value: activeLayer.style.gradientAngle ?? 90,
 												onChange: (e) => updateLayerStyle(activeLayer.id, { gradientAngle: parseInt(e.target.value) }),
-												className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+												className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 											})] })
 										]
 									})]
@@ -15443,7 +15443,7 @@ var RightInspector = () => {
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
 											className: "text-xs font-bold text-gray-700 flex items-center gap-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-4 h-4 text-indigo-500",
+												className: "w-4 h-4 text-primary-500",
 												fill: "none",
 												stroke: "currentColor",
 												viewBox: "0 0 24 24",
@@ -15456,7 +15456,7 @@ var RightInspector = () => {
 											}), "Drop Shadow"]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { isShadowActive: !activeLayer.style.isShadowActive }),
-											className: `w-8 h-4 rounded-full relative transition-colors ${activeLayer.style.isShadowActive ? "bg-indigo-600" : "bg-gray-300"}`,
+											className: `w-8 h-4 rounded-full relative transition-colors ${activeLayer.style.isShadowActive ? "bg-primary-600" : "bg-gray-300"}`,
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: `w-3 h-3 bg-white rounded-full absolute top-0.5 transition-transform ${activeLayer.style.isShadowActive ? "translate-x-4" : "translate-x-0.5"}` })
 										})]
 									}), activeLayer.style.isShadowActive && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -15500,7 +15500,7 @@ var RightInspector = () => {
 															shadowBlur: 15,
 															shadowAngle: 0,
 															shadowOpacity: .5,
-															shadowColor: "#4f46e5",
+															shadowColor: "#db2777",
 															shadowSpread: 5
 														}
 													},
@@ -15518,7 +15518,7 @@ var RightInspector = () => {
 													}
 												].map((preset) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 													onClick: () => updateLayerStyle(activeLayer.id, preset.values),
-													className: "flex flex-col items-center gap-1 p-2 border border-gray-100 rounded hover:bg-indigo-50 hover:border-indigo-200 transition-colors",
+													className: "flex flex-col items-center gap-1 p-2 border border-gray-100 rounded hover:bg-primary-50 hover:border-primary-200 transition-colors",
 													title: preset.name,
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 														className: "w-5 h-5 bg-gray-200 rounded border border-gray-300",
@@ -15546,7 +15546,7 @@ var RightInspector = () => {
 													step: "0.05",
 													value: activeLayer.style.shadowOpacity ?? .5,
 													onChange: (e) => updateLayerStyle(activeLayer.id, { shadowOpacity: parseFloat(e.target.value) }),
-													className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 mt-3"
+													className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600 mt-3"
 												})]
 											})] }),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -15561,7 +15561,7 @@ var RightInspector = () => {
 														max: "360",
 														value: activeLayer.style.shadowAngle ?? 90,
 														onChange: (e) => updateLayerStyle(activeLayer.id, { shadowAngle: parseInt(e.target.value) }),
-														className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+														className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 													})] }),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "flex justify-between text-[10px] text-gray-500 mb-1",
@@ -15572,7 +15572,7 @@ var RightInspector = () => {
 														max: "100",
 														value: activeLayer.style.shadowDistance ?? 0,
 														onChange: (e) => updateLayerStyle(activeLayer.id, { shadowDistance: parseInt(e.target.value) }),
-														className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+														className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 													})] }),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "flex justify-between text-[10px] text-gray-500 mb-1",
@@ -15583,7 +15583,7 @@ var RightInspector = () => {
 														max: "100",
 														value: activeLayer.style.shadowBlur ?? 0,
 														onChange: (e) => updateLayerStyle(activeLayer.id, { shadowBlur: parseInt(e.target.value) }),
-														className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+														className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 													})] }),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "flex justify-between text-[10px] text-gray-500 mb-1",
@@ -15594,7 +15594,7 @@ var RightInspector = () => {
 														max: "100",
 														value: activeLayer.style.shadowSpread ?? 0,
 														onChange: (e) => updateLayerStyle(activeLayer.id, { shadowSpread: parseInt(e.target.value) }),
-														className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+														className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 													})] })
 												]
 											})
@@ -15611,7 +15611,7 @@ var RightInspector = () => {
 								className: "px-1 flex bg-gray-100 p-1 rounded-lg gap-1 mb-4",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 									onClick: () => setAnimationMode("entry"),
-									className: `flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${animationMode === "entry" ? "bg-white shadow-sm text-indigo-700" : "text-gray-500 hover:bg-gray-200"}`,
+									className: `flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${animationMode === "entry" ? "bg-white shadow-sm text-primary-700" : "text-gray-500 hover:bg-gray-200"}`,
 									children: "Masuk (Entry)"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 									onClick: () => setAnimationMode("exit"),
@@ -15733,13 +15733,13 @@ var RightInspector = () => {
 													},
 													className: "group flex flex-col items-center cursor-pointer outline-none",
 													children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-														className: `w-full rounded-xl transition-all p-1 ${isActive ? "bg-indigo-50 border-indigo-500 ring-1 ring-indigo-500" : "border-transparent hover:bg-gray-50"}`,
+														className: `w-full rounded-xl transition-all p-1 ${isActive ? "bg-primary-50 border-primary-500 ring-1 ring-primary-500" : "border-transparent hover:bg-gray-50"}`,
 														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(AnimatedIcon, {
 															anim,
 															isText: activeLayer.type === "text" || activeLayer.type === "dynamic_guest_name",
 															isActive
 														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-															className: `text-[10px] text-center leading-tight block pb-1 ${isActive ? "text-indigo-700 font-semibold" : "text-gray-600 group-hover:text-gray-800"}`,
+															className: `text-[10px] text-center leading-tight block pb-1 ${isActive ? "text-primary-700 font-semibold" : "text-gray-600 group-hover:text-gray-800"}`,
 															children: anim.label
 														})]
 													})
@@ -15747,7 +15747,7 @@ var RightInspector = () => {
 											})]
 										}),
 										!category.isContinuous && hasActiveAnimation && (animationMode === "entry" ? activeLayer.animation?.entry : activeLayer.animation?.exit) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "mt-4 p-4 bg-gray-50/80 border border-indigo-100 rounded-xl space-y-4",
+											className: "mt-4 p-4 bg-gray-50/80 border border-primary-100 rounded-xl space-y-4",
 											children: [
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex justify-between items-center mb-1",
@@ -15755,7 +15755,7 @@ var RightInspector = () => {
 														className: "text-[10px] font-bold text-gray-700",
 														children: "Waktu Jeda (Delay)"
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-														className: "text-[10px] font-bold text-indigo-600",
+														className: "text-[10px] font-bold text-primary-600",
 														children: [(animationMode === "entry" ? activeLayer.animation.config?.delay : activeLayer.animation.configExit?.delay) || 0, "s"]
 													})]
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -15787,7 +15787,7 @@ var RightInspector = () => {
 															} });
 														}
 													},
-													className: "w-full accent-indigo-600"
+													className: "w-full accent-primary-600"
 												})] }),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex justify-between items-center mb-1",
@@ -15795,7 +15795,7 @@ var RightInspector = () => {
 														className: "text-[10px] font-bold text-gray-700",
 														children: "Durasi (Kecepatan)"
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-														className: "text-[10px] font-bold text-indigo-600",
+														className: "text-[10px] font-bold text-primary-600",
 														children: [(animationMode === "entry" ? activeLayer.animation.config?.speed : activeLayer.animation.configExit?.speed) || 1.5, "s"]
 													})]
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -15827,7 +15827,7 @@ var RightInspector = () => {
 															} });
 														}
 													},
-													className: "w-full accent-indigo-600"
+													className: "w-full accent-primary-600"
 												})] }),
 												[
 													"slide-up",
@@ -15887,7 +15887,7 @@ var RightInspector = () => {
 																	if (activeLayer.animation.exit?.startsWith("slide-")) updateLayerAnimation(activeLayer.id, { exit: dir.mapTo });
 																}
 															},
-															className: `p-2 text-sm font-bold border rounded-lg flex items-center justify-center transition ${(animationMode === "entry" ? activeLayer.animation.config?.direction : activeLayer.animation.configExit?.direction) === dir.id ? "border-indigo-500 bg-indigo-50 text-indigo-700" : "border-gray-200 text-gray-400 hover:border-indigo-200 hover:bg-white"}`,
+															className: `p-2 text-sm font-bold border rounded-lg flex items-center justify-center transition ${(animationMode === "entry" ? activeLayer.animation.config?.direction : activeLayer.animation.configExit?.direction) === dir.id ? "border-primary-500 bg-primary-50 text-primary-700" : "border-gray-200 text-gray-400 hover:border-primary-200 hover:bg-white"}`,
 															children: dir.icon
 														}, dir.id);
 													})
@@ -15906,7 +15906,7 @@ var RightInspector = () => {
 																previewKey: Date.now()
 															} });
 														},
-														className: `flex-1 py-1.5 text-[10px] font-medium rounded-md transition ${(activeLayer.animation.config?.trigger || "onScroll") === trigger ? "bg-indigo-100 text-indigo-700" : "text-gray-500 hover:bg-gray-50"}`,
+														className: `flex-1 py-1.5 text-[10px] font-medium rounded-md transition ${(activeLayer.animation.config?.trigger || "onScroll") === trigger ? "bg-primary-100 text-primary-700" : "text-gray-500 hover:bg-gray-50"}`,
 														children: trigger === "onLoad" ? "Saat Dimuat" : "Saat Scroll"
 													}, trigger))
 												})] }),
@@ -15925,13 +15925,13 @@ var RightInspector = () => {
 															className: "sr-only peer",
 															checked: activeLayer.animation?.isLooping || false,
 															onChange: (e) => updateLayerAnimation(activeLayer.id, { isLooping: e.target.checked })
-														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600" })]
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary-600" })]
 													})]
 												})
 											]
 										}),
 										category.isContinuous && activeLayer.animation?.idle && hasActiveAnimation && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "mt-4 p-4 bg-gray-50/80 border border-indigo-100 rounded-xl space-y-4",
+											className: "mt-4 p-4 bg-gray-50/80 border border-primary-100 rounded-xl space-y-4",
 											children: [activeLayer.animation.idle === "wind-sway" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex justify-between items-center mb-1",
@@ -15939,7 +15939,7 @@ var RightInspector = () => {
 														className: "text-[10px] font-bold text-gray-700",
 														children: "Kekuatan Angin"
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-														className: "text-[10px] font-bold text-indigo-600",
+														className: "text-[10px] font-bold text-primary-600",
 														children: [activeLayer.animation.configIdle?.windStrength ?? 70, "%"]
 													})]
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -15961,7 +15961,7 @@ var RightInspector = () => {
 															previewKey: Date.now()
 														} });
 													},
-													className: "w-full accent-indigo-600"
+													className: "w-full accent-primary-600"
 												})] }),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex justify-between items-center mb-1",
@@ -15969,7 +15969,7 @@ var RightInspector = () => {
 														className: "text-[10px] font-bold text-gray-700",
 														children: "Kelenturan"
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-														className: "text-[10px] font-bold text-indigo-600",
+														className: "text-[10px] font-bold text-primary-600",
 														children: [activeLayer.animation.configIdle?.stiffness ?? 60, "%"]
 													})]
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -15991,7 +15991,7 @@ var RightInspector = () => {
 															previewKey: Date.now()
 														} });
 													},
-													className: "w-full accent-indigo-600"
+													className: "w-full accent-primary-600"
 												})] }),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "flex justify-between items-center mb-1",
@@ -15999,7 +15999,7 @@ var RightInspector = () => {
 														className: "text-[10px] font-bold text-gray-700",
 														children: "Hambatan Udara"
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-														className: "text-[10px] font-bold text-indigo-600",
+														className: "text-[10px] font-bold text-primary-600",
 														children: [activeLayer.animation.configIdle?.damping ?? 40, "%"]
 													})]
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -16021,7 +16021,7 @@ var RightInspector = () => {
 															previewKey: Date.now()
 														} });
 													},
-													className: "w-full accent-indigo-600"
+													className: "w-full accent-primary-600"
 												})] }),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 													className: "pt-2 flex items-center justify-between",
@@ -16050,7 +16050,7 @@ var RightInspector = () => {
 																	previewKey: Date.now()
 																} });
 															}
-														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600" })]
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary-600" })]
 													})]
 												})
 											] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -16059,7 +16059,7 @@ var RightInspector = () => {
 													className: "text-[10px] font-bold text-gray-700",
 													children: "Durasi (Kecepatan)"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-													className: "text-[10px] font-bold text-indigo-600",
+													className: "text-[10px] font-bold text-primary-600",
 													children: [activeLayer.animation.configIdle?.speed || 1, "s"]
 												})]
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -16076,7 +16076,7 @@ var RightInspector = () => {
 														previewKey: Date.now()
 													} });
 												},
-												className: "w-full accent-indigo-600"
+												className: "w-full accent-primary-600"
 											})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												onClick: () => updateLayerAnimation(activeLayer.id, {
 													idle: null,
@@ -16096,7 +16096,7 @@ var RightInspector = () => {
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "flex gap-2 items-center",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-											className: "w-5 h-5 text-indigo-600",
+											className: "w-5 h-5 text-primary-600",
 											fill: "none",
 											stroke: "currentColor",
 											viewBox: "0 0 24 24",
@@ -16135,7 +16135,7 @@ var RightInspector = () => {
 													setIsDrawingPath(false);
 												}
 											}
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600" })]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-primary-600" })]
 									})]
 								}), ["custom_timeline", "custom_path"].includes(activeLayer.animation?.idle) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "space-y-4",
@@ -16148,22 +16148,22 @@ var RightInspector = () => {
 													updateLayerAnimation(activeLayer.id, { idle: "custom_timeline" });
 													setIsDrawingPath(false);
 												},
-												className: `flex-1 py-1.5 text-[10px] font-bold rounded-md transition-all ${customMotionTab === "keyframes" ? "bg-white shadow-sm text-indigo-700" : "text-gray-500 hover:bg-gray-200"}`,
+												className: `flex-1 py-1.5 text-[10px] font-bold rounded-md transition-all ${customMotionTab === "keyframes" ? "bg-white shadow-sm text-primary-700" : "text-gray-500 hover:bg-gray-200"}`,
 												children: "Titik Bertahap"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												onClick: () => {
 													setCustomMotionTab("path");
 													updateLayerAnimation(activeLayer.id, { idle: "custom_path" });
 												},
-												className: `flex-1 py-1.5 text-[10px] font-bold rounded-md transition-all ${customMotionTab === "path" ? "bg-white shadow-sm text-indigo-700" : "text-gray-500 hover:bg-gray-200"}`,
+												className: `flex-1 py-1.5 text-[10px] font-bold rounded-md transition-all ${customMotionTab === "path" ? "bg-white shadow-sm text-primary-700" : "text-gray-500 hover:bg-gray-200"}`,
 												children: "Jalur Bebas"
 											})]
 										}),
 										customMotionTab === "keyframes" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "flex items-center justify-between bg-indigo-50 p-3 rounded-lg border border-indigo-100 mb-2",
+												className: "flex items-center justify-between bg-primary-50 p-3 rounded-lg border border-primary-100 mb-2",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "text-xs text-indigo-800",
+													className: "text-xs text-primary-800",
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 														className: "font-bold block",
 														children: "Animasi Keyframe"
@@ -16182,22 +16182,22 @@ var RightInspector = () => {
 														className: "sr-only peer",
 														checked: activeLayer.animation?.isLooping ?? true,
 														onChange: (e) => updateLayerAnimation(activeLayer.id, { isLooping: e.target.checked })
-													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600" })]
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-600" })]
 												})]
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 												className: "space-y-2",
 												children: (activeLayer.animation?.custom_keyframes || []).map((kf, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "p-4 bg-white border border-gray-200 rounded-xl shadow-sm hover:border-indigo-300 transition-all mb-3 relative overflow-hidden group",
+													className: "p-4 bg-white border border-gray-200 rounded-xl shadow-sm hover:border-primary-300 transition-all mb-3 relative overflow-hidden group",
 													children: [
-														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-0 left-0 w-1 h-full bg-indigo-500 rounded-l-xl" }),
+														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-0 left-0 w-1 h-full bg-primary-500 rounded-l-xl" }),
 														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 															className: "flex items-center justify-between mb-3 pl-2",
 															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 																className: "text-xs font-bold text-gray-800 flex items-center gap-2",
 																children: [
 																	/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-																		className: "w-5 h-5 rounded-md bg-indigo-100 text-indigo-700 flex items-center justify-center text-[10px] shadow-inner",
+																		className: "w-5 h-5 rounded-md bg-primary-100 text-primary-700 flex items-center justify-center text-[10px] shadow-inner",
 																		children: index + 1
 																	}),
 																	"Titik ",
@@ -16221,7 +16221,7 @@ var RightInspector = () => {
 																		updateLayerAnimation(activeLayer.id, { custom_keyframes: keyframes });
 																		alert("Titik " + (index + 1) + " telah diperbarui dengan posisi elemen saat ini di kanvas!");
 																	},
-																	className: "flex items-center gap-1 text-[9px] font-semibold text-indigo-600 hover:text-white hover:bg-indigo-500 px-2 py-1 bg-indigo-50 rounded-md transition-colors",
+																	className: "flex items-center gap-1 text-[9px] font-semibold text-primary-600 hover:text-white hover:bg-primary-500 px-2 py-1 bg-primary-50 rounded-md transition-colors",
 																	title: "Timpa dengan posisi elemen saat ini",
 																	children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 																		className: "w-3 h-3",
@@ -16264,7 +16264,7 @@ var RightInspector = () => {
 																	type: "number",
 																	value: Math.round(kf.x),
 																	onChange: (e) => handleUpdateKeyframe(index, "x", parseFloat(e.target.value) || 0),
-																	className: "w-full text-xs p-1.5 border border-gray-200 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
+																	className: "w-full text-xs p-1.5 border border-gray-200 rounded-md focus:ring-1 focus:ring-primary-500 focus:border-primary-500 bg-gray-50"
 																})] }),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 																	className: "text-[9px] font-semibold text-gray-500 mb-1 block",
@@ -16273,7 +16273,7 @@ var RightInspector = () => {
 																	type: "number",
 																	value: Math.round(kf.y),
 																	onChange: (e) => handleUpdateKeyframe(index, "y", parseFloat(e.target.value) || 0),
-																	className: "w-full text-xs p-1.5 border border-gray-200 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
+																	className: "w-full text-xs p-1.5 border border-gray-200 rounded-md focus:ring-1 focus:ring-primary-500 focus:border-primary-500 bg-gray-50"
 																})] }),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 																	className: "text-[9px] font-semibold text-gray-500 mb-1 block",
@@ -16285,7 +16285,7 @@ var RightInspector = () => {
 																	step: "0.1",
 																	value: kf.opacity ?? 1,
 																	onChange: (e) => handleUpdateKeyframe(index, "opacity", parseFloat(e.target.value) ?? 1),
-																	className: "w-full text-xs p-1.5 border border-gray-200 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
+																	className: "w-full text-xs p-1.5 border border-gray-200 rounded-md focus:ring-1 focus:ring-primary-500 focus:border-primary-500 bg-gray-50"
 																})] }),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 																	className: "text-[9px] font-semibold text-gray-500 mb-1 block",
@@ -16296,7 +16296,7 @@ var RightInspector = () => {
 																	step: "0.1",
 																	value: kf.scale ?? 1,
 																	onChange: (e) => handleUpdateKeyframe(index, "scale", parseFloat(e.target.value) ?? 1),
-																	className: "w-full text-xs p-1.5 border border-gray-200 rounded-md focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50"
+																	className: "w-full text-xs p-1.5 border border-gray-200 rounded-md focus:ring-1 focus:ring-primary-500 focus:border-primary-500 bg-gray-50"
 																})] })
 															]
 														}),
@@ -16308,7 +16308,7 @@ var RightInspector = () => {
 																	className: "text-[10px] font-semibold text-gray-600 block",
 																	children: "Waktu Tempuh (s)"
 																}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-																	className: "text-[10px] font-bold text-indigo-600",
+																	className: "text-[10px] font-bold text-primary-600",
 																	children: [kf.duration || 1, "s"]
 																})]
 															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -16318,7 +16318,7 @@ var RightInspector = () => {
 																step: "0.05",
 																value: kf.duration || 1,
 																onChange: (e) => handleUpdateKeyframe(index, "duration", parseFloat(e.target.value)),
-																className: "w-full accent-indigo-600 cursor-pointer"
+																className: "w-full accent-primary-600 cursor-pointer"
 															})]
 														}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 															className: "mt-3 pl-2",
@@ -16330,7 +16330,7 @@ var RightInspector = () => {
 																children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
 																	value: kf.ease,
 																	onChange: (e) => handleUpdateKeyframe(index, "ease", e.target.value),
-																	className: "appearance-none w-full text-[11px] font-medium text-gray-700 bg-gray-50 border border-gray-200 hover:border-indigo-400 hover:bg-white rounded-lg py-2 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all cursor-pointer shadow-sm",
+																	className: "appearance-none w-full text-[11px] font-medium text-gray-700 bg-gray-50 border border-gray-200 hover:border-primary-400 hover:bg-white rounded-lg py-2 pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all cursor-pointer shadow-sm",
 																	style: {
 																		backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`,
 																		backgroundPosition: "right 0.5rem center",
@@ -16382,7 +16382,7 @@ var RightInspector = () => {
 																	className: "text-[10px] font-semibold text-gray-600 block",
 																	children: "Jeda Tunggu (s)"
 																}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-																	className: "text-[10px] font-bold text-indigo-600",
+																	className: "text-[10px] font-bold text-primary-600",
 																	children: [kf.delay || 0, "s"]
 																})]
 															}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -16392,7 +16392,7 @@ var RightInspector = () => {
 																step: "0.1",
 																value: kf.delay || 0,
 																onChange: (e) => handleUpdateKeyframe(index, "delay", parseFloat(e.target.value)),
-																className: "w-full accent-indigo-600 cursor-pointer"
+																className: "w-full accent-primary-600 cursor-pointer"
 															})]
 														}),
 														index === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
@@ -16409,7 +16409,7 @@ var RightInspector = () => {
 												className: "flex flex-col gap-2 mt-4",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 													onClick: handleAddKeyframe,
-													className: "w-full py-3 border-2 border-dashed border-indigo-300 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 hover:border-indigo-400 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2",
+													className: "w-full py-3 border-2 border-dashed border-primary-300 text-primary-600 bg-primary-50 hover:bg-primary-100 hover:border-primary-400 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2",
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 														className: "w-4 h-4",
 														fill: "none",
@@ -16430,7 +16430,7 @@ var RightInspector = () => {
 															previewKey: Date.now()
 														} });
 													},
-													className: "w-full py-2 bg-indigo-600 text-white hover:bg-indigo-700 font-bold text-xs rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm",
+													className: "w-full py-2 bg-primary-600 text-white hover:bg-primary-700 font-bold text-xs rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm",
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
 														className: "w-4 h-4",
 														fill: "none",
@@ -16463,11 +16463,11 @@ var RightInspector = () => {
 											className: "space-y-4",
 											children: [
 												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-													className: "flex gap-3 bg-indigo-50/80 p-3.5 rounded-xl border border-indigo-100/50",
+													className: "flex gap-3 bg-primary-50/80 p-3.5 rounded-xl border border-primary-100/50",
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 														className: "shrink-0 mt-0.5",
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-															className: "w-4 h-4 text-indigo-500",
+															className: "w-4 h-4 text-primary-500",
 															fill: "none",
 															stroke: "currentColor",
 															viewBox: "0 0 24 24",
@@ -16479,16 +16479,16 @@ var RightInspector = () => {
 															})
 														})
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-														className: "text-[11px] text-indigo-900/80 leading-relaxed",
+														className: "text-[11px] text-primary-900/80 leading-relaxed",
 														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-															className: "font-bold block text-indigo-900 mb-0.5",
+															className: "font-bold block text-primary-900 mb-0.5",
 															children: "Animasi Jalur (Freehand)"
 														}), "Pilih tombol rekam di bawah, lalu seret langsung elemen ini di kanvas untuk menggambar rute kemanapun Anda mau."]
 													})]
 												}),
 												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 													onClick: () => setIsDrawingPath(!isDrawingPath),
-													className: `w-full py-3 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm ${isDrawingPath ? "bg-red-500 text-white shadow-red-500/20 hover:bg-red-600" : "bg-indigo-600 text-white shadow-indigo-600/20 hover:bg-indigo-700 hover:shadow-md hover:-translate-y-0.5"}`,
+													className: `w-full py-3 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm ${isDrawingPath ? "bg-red-500 text-white shadow-red-500/20 hover:bg-red-600" : "bg-primary-600 text-white shadow-primary-600/20 hover:bg-primary-700 hover:shadow-md hover:-translate-y-0.5"}`,
 													children: isDrawingPath ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 														className: "w-4 h-4 animate-pulse",
 														fill: "currentColor",
@@ -16520,7 +16520,7 @@ var RightInspector = () => {
 																className: "text-[11px] font-bold text-gray-700",
 																children: "Waktu Tempuh"
 															}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-																className: "bg-indigo-50 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-md border border-indigo-100",
+																className: "bg-primary-50 text-primary-700 text-[10px] font-bold px-2 py-0.5 rounded-md border border-primary-100",
 																children: [activeLayer.animation.custom_path_data.duration || 5, "s"]
 															})]
 														}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -16546,7 +16546,7 @@ var RightInspector = () => {
 																			previewKey: Date.now()
 																		}
 																	}),
-																	className: "flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+																	className: "flex-1 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500/30"
 																}),
 																/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 																	className: "text-[9px] text-gray-400 font-medium",
@@ -16581,7 +16581,7 @@ var RightInspector = () => {
 																			previewKey: Date.now()
 																		}
 																	})
-																}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600" })]
+																}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-600" })]
 															})]
 														}),
 														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -16665,12 +16665,12 @@ var RightInspector = () => {
 																				previewKey: Date.now()
 																			}
 																		}),
-																		className: `relative flex flex-col items-center justify-center p-2.5 rounded-xl border-2 transition-all group ${isActive ? "border-indigo-500 bg-indigo-50/50 shadow-[0_2px_8px_rgba(99,102,241,0.15)]" : "border-transparent bg-gray-50 hover:bg-gray-100"}`,
+																		className: `relative flex flex-col items-center justify-center p-2.5 rounded-xl border-2 transition-all group ${isActive ? "border-primary-500 bg-primary-50/50 shadow-[0_2px_8px_rgba(99,102,241,0.15)]" : "border-transparent bg-gray-50 hover:bg-gray-100"}`,
 																		children: [
 																			isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 																				className: "absolute top-1.5 right-1.5",
 																				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-																					className: "w-3 h-3 text-indigo-600",
+																					className: "w-3 h-3 text-primary-600",
 																					fill: "currentColor",
 																					viewBox: "0 0 20 20",
 																					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
@@ -16681,7 +16681,7 @@ var RightInspector = () => {
 																				})
 																			}),
 																			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-																				className: `w-8 h-8 mb-1.5 flex items-center justify-center rounded-lg transition-colors ${isActive ? "bg-indigo-100 text-indigo-600" : "bg-white text-gray-400 shadow-sm group-hover:text-gray-600"}`,
+																				className: `w-8 h-8 mb-1.5 flex items-center justify-center rounded-lg transition-colors ${isActive ? "bg-primary-100 text-primary-600" : "bg-white text-gray-400 shadow-sm group-hover:text-gray-600"}`,
 																				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 																					className: "w-5 h-5",
 																					fill: "none",
@@ -16692,7 +16692,7 @@ var RightInspector = () => {
 																				})
 																			}),
 																			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-																				className: `text-[9px] font-bold text-center leading-tight ${isActive ? "text-indigo-700" : "text-gray-500 group-hover:text-gray-700"}`,
+																				className: `text-[9px] font-bold text-center leading-tight ${isActive ? "text-primary-700" : "text-gray-500 group-hover:text-gray-700"}`,
 																				children: easeOption.label
 																			})
 																		]
@@ -16719,7 +16719,7 @@ var RightInspector = () => {
 									className: "text-xs font-bold text-gray-800 flex items-center gap-2",
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-											className: "w-4 h-4 text-indigo-500",
+											className: "w-4 h-4 text-primary-500",
 											fill: "none",
 											stroke: "currentColor",
 											viewBox: "0 0 24 24",
@@ -16783,7 +16783,7 @@ var RightInspector = () => {
 												},
 												className: "flex flex-col items-center gap-2 cursor-pointer group",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-													className: `w-full aspect-square rounded-xl overflow-hidden border-2 transition-all ${isSelected ? "border-indigo-600 ring-2 ring-indigo-200 shadow-md" : "border-transparent group-hover:border-gray-300 bg-gray-50"}`,
+													className: `w-full aspect-square rounded-xl overflow-hidden border-2 transition-all ${isSelected ? "border-primary-600 ring-2 ring-primary-200 shadow-md" : "border-transparent group-hover:border-gray-300 bg-gray-50"}`,
 													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 														src: currentImage.url,
 														alt: filter.name,
@@ -16791,7 +16791,7 @@ var RightInspector = () => {
 														style: { filter: filter.getCss(100) }
 													})
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-													className: `text-[10px] text-center font-medium leading-tight ${isSelected ? "text-indigo-600 font-bold" : "text-gray-600"}`,
+													className: `text-[10px] text-center font-medium leading-tight ${isSelected ? "text-primary-600 font-bold" : "text-gray-600"}`,
 													children: filter.name
 												})]
 											}, filter.id);
@@ -16824,7 +16824,7 @@ var RightInspector = () => {
 													animationStyle: "slide"
 												} });
 											},
-											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.animationStyle || "slide") === "slide" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.animationStyle || "slide") === "slide" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-6 h-6 mb-1",
 												fill: "none",
@@ -16853,7 +16853,7 @@ var RightInspector = () => {
 													animationStyle: "coverflow"
 												} });
 											},
-											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.animationStyle || "slide") === "coverflow" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.animationStyle || "slide") === "coverflow" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-6 h-6 mb-1",
 												fill: "none",
@@ -16882,7 +16882,7 @@ var RightInspector = () => {
 													animationStyle: "cards"
 												} });
 											},
-											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.animationStyle || "slide") === "cards" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.animationStyle || "slide") === "cards" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-6 h-6 mb-1",
 												fill: "none",
@@ -16911,7 +16911,7 @@ var RightInspector = () => {
 													animationStyle: "fade"
 												} });
 											},
-											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.animationStyle || "slide") === "fade" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.animationStyle || "slide") === "fade" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-6 h-6 mb-1",
 												fill: "none",
@@ -16955,7 +16955,7 @@ var RightInspector = () => {
 														direction: e.target.value
 													} });
 												},
-												className: "text-[10px] border border-gray-300 rounded p-1 outline-none focus:border-indigo-500 text-gray-700 bg-white",
+												className: "text-[10px] border border-gray-300 rounded p-1 outline-none focus:border-primary-500 text-gray-700 bg-white",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 													value: "horizontal",
 													children: "Horizontal (Kiri-Kanan)"
@@ -16971,7 +16971,7 @@ var RightInspector = () => {
 												className: "text-[10px] font-bold text-gray-500",
 												children: "Kecepatan Transisi"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "text-[10px] font-bold text-indigo-600",
+												className: "text-[10px] font-bold text-primary-600",
 												children: [activeLayer.style?.albumData?.speed || 500, "ms"]
 											})]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -16991,7 +16991,7 @@ var RightInspector = () => {
 													speed: parseInt(e.target.value)
 												} });
 											},
-											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 										})] }),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "flex justify-between items-center mb-1",
@@ -16999,7 +16999,7 @@ var RightInspector = () => {
 												className: "text-[10px] font-bold text-gray-500",
 												children: "Jeda Autoplay"
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-												className: "text-[10px] font-bold text-indigo-600",
+												className: "text-[10px] font-bold text-primary-600",
 												children: [(activeLayer.style?.albumData?.autoplayDelay || 2500) / 1e3, "s"]
 											})]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
@@ -17019,7 +17019,7 @@ var RightInspector = () => {
 													autoplayDelay: parseInt(e.target.value)
 												} });
 											},
-											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 										})] })
 									]
 								}),
@@ -17041,7 +17041,7 @@ var RightInspector = () => {
 													shape: "square"
 												} });
 											},
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.shape || "square") === "square" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.shape || "square") === "square" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-6 h-6 mb-1",
 												fill: "none",
@@ -17071,7 +17071,7 @@ var RightInspector = () => {
 													shape: "rounded"
 												} });
 											},
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.shape || "square") === "rounded" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.shape || "square") === "rounded" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-6 h-6 mb-1",
 												fill: "none",
@@ -17103,7 +17103,7 @@ var RightInspector = () => {
 													shape: "circle"
 												} });
 											},
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.shape || "square") === "circle" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.shape || "square") === "circle" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-6 h-6 mb-1",
 												fill: "none",
@@ -17132,7 +17132,7 @@ var RightInspector = () => {
 													shape: "pill"
 												} });
 											},
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.shape || "square") === "pill" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.shape || "square") === "pill" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-6 h-6 mb-1",
 												fill: "none",
@@ -17164,7 +17164,7 @@ var RightInspector = () => {
 													shape: "arch"
 												} });
 											},
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.shape || "square") === "arch" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.albumData?.shape || "square") === "arch" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-6 h-6 mb-1",
 												fill: "none",
@@ -17208,7 +17208,7 @@ var RightInspector = () => {
 															polaroidTheme: "none"
 														} });
 													},
-													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${!activeLayer.style?.albumData?.polaroidTheme || activeLayer.style.albumData.polaroidTheme === "none" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${!activeLayer.style?.albumData?.polaroidTheme || activeLayer.style.albumData.polaroidTheme === "none" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 														className: "w-8 h-10 border border-gray-300 rounded mb-2 flex items-center justify-center bg-gray-100",
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
@@ -17240,7 +17240,7 @@ var RightInspector = () => {
 															polaroidTheme: "classic"
 														} });
 													},
-													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "classic" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "classic" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "w-8 h-10 bg-white border border-gray-200 shadow-sm p-1 pb-3 flex flex-col mb-2 items-center",
 														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-full h-full bg-gray-300" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-4 h-[2px] bg-gray-300 rounded-full mt-1" })]
@@ -17261,7 +17261,7 @@ var RightInspector = () => {
 															polaroidTheme: "classic-notext"
 														} });
 													},
-													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "classic-notext" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "classic-notext" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 														className: "w-8 h-10 bg-white border border-gray-200 shadow-sm p-1 pb-1 flex flex-col mb-2 items-center",
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-full h-full bg-gray-300" })
@@ -17282,7 +17282,7 @@ var RightInspector = () => {
 															polaroidTheme: "vintage"
 														} });
 													},
-													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "vintage" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "vintage" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "w-8 h-10 bg-[#f4f1ea] border border-gray-300 shadow-sm p-1 pb-3 flex flex-col mb-2 transform rotate-[-3deg] items-center",
 														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-full h-full bg-orange-200/50" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-5 h-[2px] bg-orange-900/50 rounded-full mt-1 transform rotate-2" })]
@@ -17303,7 +17303,7 @@ var RightInspector = () => {
 															polaroidTheme: "toptext"
 														} });
 													},
-													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "toptext" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "toptext" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "w-8 h-10 bg-white border border-gray-200 shadow-sm p-1 pt-3 flex flex-col mb-2 items-center",
 														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-5 h-[2px] bg-gray-400 rounded-full mb-1" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-full h-full bg-gray-300" })]
@@ -17324,10 +17324,10 @@ var RightInspector = () => {
 															polaroidTheme: "modern"
 														} });
 													},
-													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "modern" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "modern" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "w-8 h-10 bg-white shadow p-1 rounded-md flex flex-col mb-2 items-center",
-														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-full h-full bg-blue-100 rounded-sm" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-3 h-[2px] bg-gray-800 rounded-full mt-[3px]" })]
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-full h-full bg-primary-100 rounded-sm" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-3 h-[2px] bg-gray-800 rounded-full mt-[3px]" })]
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 														className: "text-[10px] font-bold text-center",
 														children: "Modern Bawah"
@@ -17345,10 +17345,10 @@ var RightInspector = () => {
 															polaroidTheme: "modern-notext"
 														} });
 													},
-													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "modern-notext" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "modern-notext" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 														className: "w-8 h-10 bg-white shadow p-1 rounded-md flex flex-col mb-2 items-center",
-														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-full h-full bg-blue-100 rounded-sm" })
+														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-full h-full bg-primary-100 rounded-sm" })
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 														className: "text-[10px] font-bold text-center",
 														children: "Modern (No Teks)"
@@ -17366,7 +17366,7 @@ var RightInspector = () => {
 															polaroidTheme: "film"
 														} });
 													},
-													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "film" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "film" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "w-8 h-10 bg-gray-900 p-[2px] py-1 flex flex-col mb-2 items-center border-x-[3px] border-dotted border-gray-600 relative",
 														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-full h-full bg-gray-300" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-4 h-[2px] bg-gray-400 rounded-full mt-1" })]
@@ -17387,7 +17387,7 @@ var RightInspector = () => {
 															polaroidTheme: "tape"
 														} });
 													},
-													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "tape" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+													className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.albumData?.polaroidTheme === "tape" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 														className: "w-8 h-10 bg-[#fafafa] border border-gray-200 shadow-sm p-1 flex flex-col mb-2 relative items-center",
 														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-[-4px] left-1/2 transform -translate-x-1/2 rotate-[-4deg] w-6 h-2 bg-yellow-100/80 border border-yellow-200/50 z-10" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-full h-full bg-gray-300 mt-1" })]
@@ -17441,7 +17441,7 @@ var RightInspector = () => {
 												};
 												input.click();
 											},
-											className: "w-full py-2 bg-indigo-50 text-indigo-600 border border-indigo-200 rounded-lg text-xs font-bold hover:bg-indigo-100 transition shadow-sm mb-3 flex items-center justify-center gap-1",
+											className: "w-full py-2 bg-primary-50 text-primary-600 border border-primary-200 rounded-lg text-xs font-bold hover:bg-primary-100 transition shadow-sm mb-3 flex items-center justify-center gap-1",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-4 h-4",
 												fill: "none",
@@ -17485,7 +17485,7 @@ var RightInspector = () => {
 																		images: newImages
 																	} });
 																},
-																className: "flex-1 text-[10px] border border-gray-300 rounded p-1 outline-none focus:border-indigo-500"
+																className: "flex-1 text-[10px] border border-gray-300 rounded p-1 outline-none focus:border-primary-500"
 															}),
 															/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 																onClick: () => {
@@ -17520,7 +17520,7 @@ var RightInspector = () => {
 														className: "flex items-center gap-2 mt-1",
 														children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 															onClick: () => setEditingAlbumPhotoIdx(idx),
-															className: "flex items-center justify-center gap-1 flex-1 py-1.5 px-2 bg-white border border-gray-200 rounded text-[10px] font-bold text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 transition-colors shadow-sm",
+															className: "flex items-center justify-center gap-1 flex-1 py-1.5 px-2 bg-white border border-gray-200 rounded text-[10px] font-bold text-gray-700 hover:bg-primary-50 hover:text-primary-600 hover:border-primary-200 transition-colors shadow-sm",
 															children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 																className: "w-3.5 h-3.5",
 																fill: "none",
@@ -17564,7 +17564,7 @@ var RightInspector = () => {
 																	images: newImages
 																} });
 															},
-															className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+															className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 														})] }),
 														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 															className: "flex justify-between text-[10px] text-gray-500 mb-1",
@@ -17583,7 +17583,7 @@ var RightInspector = () => {
 																	images: newImages
 																} });
 															},
-															className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+															className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 														})] }),
 														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 															className: "flex justify-between text-[10px] text-gray-500 mb-1",
@@ -17602,7 +17602,7 @@ var RightInspector = () => {
 																	images: newImages
 																} });
 															},
-															className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+															className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 														})] }),
 														/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 															className: "flex justify-between text-[10px] text-gray-500 mb-1",
@@ -17621,7 +17621,7 @@ var RightInspector = () => {
 																	images: newImages
 																} });
 															},
-															className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+															className: "w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 														})] })
 													]
 												})
@@ -17649,7 +17649,7 @@ var RightInspector = () => {
 									className: "sr-only peer",
 									checked: activeLayer.interaction?.isButton || false,
 									onChange: (e) => updateLayerInteraction(activeLayer.id, { isButton: e.target.checked })
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600" })]
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-600" })]
 							})]
 						}), activeLayer.interaction?.isButton && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "space-y-4 pt-4 border-t border-gray-100",
@@ -17662,9 +17662,9 @@ var RightInspector = () => {
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerInteraction(activeLayer.id, { action: "open_invitation" }),
-											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-all ${activeLayer.interaction?.action === "open_invitation" ? "border-indigo-500 bg-indigo-50 shadow-sm" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-all ${activeLayer.interaction?.action === "open_invitation" ? "border-primary-500 bg-primary-50 shadow-sm" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: `w-5 h-5 mb-1 ${activeLayer.interaction?.action === "open_invitation" ? "text-indigo-600" : "text-gray-500"}`,
+												className: `w-5 h-5 mb-1 ${activeLayer.interaction?.action === "open_invitation" ? "text-primary-600" : "text-gray-500"}`,
 												fill: "none",
 												stroke: "currentColor",
 												viewBox: "0 0 24 24",
@@ -17675,15 +17675,15 @@ var RightInspector = () => {
 													d: "M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M14 16a2 2 0 11-4 0 2 2 0 014 0z"
 												})
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: `text-[10px] text-center leading-tight ${activeLayer.interaction?.action === "open_invitation" ? "text-indigo-700 font-bold" : "text-gray-600"}`,
+												className: `text-[10px] text-center leading-tight ${activeLayer.interaction?.action === "open_invitation" ? "text-primary-700 font-bold" : "text-gray-600"}`,
 												children: "Buka Undangan"
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerInteraction(activeLayer.id, { action: "navigate" }),
-											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-all ${activeLayer.interaction?.action === "navigate" ? "border-indigo-500 bg-indigo-50 shadow-sm" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-all ${activeLayer.interaction?.action === "navigate" ? "border-primary-500 bg-primary-50 shadow-sm" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: `w-5 h-5 mb-1 ${activeLayer.interaction?.action === "navigate" ? "text-indigo-600" : "text-gray-500"}`,
+												className: `w-5 h-5 mb-1 ${activeLayer.interaction?.action === "navigate" ? "text-primary-600" : "text-gray-500"}`,
 												fill: "none",
 												stroke: "currentColor",
 												viewBox: "0 0 24 24",
@@ -17694,15 +17694,15 @@ var RightInspector = () => {
 													d: "M19 14l-7 7m0 0l-7-7m7 7V3"
 												})
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: `text-[10px] text-center leading-tight ${activeLayer.interaction?.action === "navigate" ? "text-indigo-700 font-bold" : "text-gray-600"}`,
+												className: `text-[10px] text-center leading-tight ${activeLayer.interaction?.action === "navigate" ? "text-primary-700 font-bold" : "text-gray-600"}`,
 												children: "Navigasi Scroll"
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerInteraction(activeLayer.id, { action: "trigger_animation" }),
-											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-all ${activeLayer.interaction?.action === "trigger_animation" ? "border-indigo-500 bg-indigo-50 shadow-sm" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-all ${activeLayer.interaction?.action === "trigger_animation" ? "border-primary-500 bg-primary-50 shadow-sm" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: `w-5 h-5 mb-1 ${activeLayer.interaction?.action === "trigger_animation" ? "text-indigo-600" : "text-gray-500"}`,
+												className: `w-5 h-5 mb-1 ${activeLayer.interaction?.action === "trigger_animation" ? "text-primary-600" : "text-gray-500"}`,
 												fill: "none",
 												stroke: "currentColor",
 												viewBox: "0 0 24 24",
@@ -17713,15 +17713,15 @@ var RightInspector = () => {
 													d: "M13 10V3L4 14h7v7l9-11h-7z"
 												})
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: `text-[10px] text-center leading-tight ${activeLayer.interaction?.action === "trigger_animation" ? "text-indigo-700 font-bold" : "text-gray-600"}`,
+												className: `text-[10px] text-center leading-tight ${activeLayer.interaction?.action === "trigger_animation" ? "text-primary-700 font-bold" : "text-gray-600"}`,
 												children: "Picu Elemen"
 											})]
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerInteraction(activeLayer.id, { action: "open_link" }),
-											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-all ${activeLayer.interaction?.action === "open_link" ? "border-indigo-500 bg-indigo-50 shadow-sm" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-3 border rounded-lg transition-all ${activeLayer.interaction?.action === "open_link" ? "border-primary-500 bg-primary-50 shadow-sm" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: `w-5 h-5 mb-1 ${activeLayer.interaction?.action === "open_link" ? "text-indigo-600" : "text-gray-500"}`,
+												className: `w-5 h-5 mb-1 ${activeLayer.interaction?.action === "open_link" ? "text-primary-600" : "text-gray-500"}`,
 												fill: "none",
 												stroke: "currentColor",
 												viewBox: "0 0 24 24",
@@ -17732,7 +17732,7 @@ var RightInspector = () => {
 													d: "M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
 												})
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: `text-[10px] text-center leading-tight ${activeLayer.interaction?.action === "open_link" ? "text-indigo-700 font-bold" : "text-gray-600"}`,
+												className: `text-[10px] text-center leading-tight ${activeLayer.interaction?.action === "open_link" ? "text-primary-700 font-bold" : "text-gray-600"}`,
 												children: "Buka Tautan"
 											})]
 										})
@@ -17892,12 +17892,12 @@ var RightInspector = () => {
 										const isActive = (activeLayer.interaction?.transition || "slide_up") === transition.id;
 										return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerInteraction(activeLayer.id, { transition: transition.id }),
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-all ${isActive ? "border-indigo-500 bg-indigo-50 shadow-sm" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-all ${isActive ? "border-primary-500 bg-primary-50 shadow-sm" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: isActive ? "text-indigo-600" : "text-gray-500",
+												className: isActive ? "text-primary-600" : "text-gray-500",
 												children: transition.icon
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: `text-[9px] text-center leading-tight mt-1 ${isActive ? "text-indigo-700 font-bold" : "text-gray-600"}`,
+												className: `text-[9px] text-center leading-tight mt-1 ${isActive ? "text-primary-700 font-bold" : "text-gray-600"}`,
 												children: transition.label
 											})]
 										}, transition.id);
@@ -17956,13 +17956,13 @@ var RightInspector = () => {
 												checked: activeLayer.style?.removeBg || false,
 												onChange: (e) => handleToggleRemoveBg(e.target.checked, activeLayer),
 												disabled: isRemovingBg
-											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: `w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all ${isRemovingBg ? "opacity-50" : "peer-checked:bg-indigo-600"}` })]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: `w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all ${isRemovingBg ? "opacity-50" : "peer-checked:bg-primary-600"}` })]
 										})]
 									}),
 									isRemovingBg && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex flex-col items-center justify-center space-y-3 shadow-inner",
+										className: "bg-primary-50 border border-primary-100 rounded-xl p-4 flex flex-col items-center justify-center space-y-3 shadow-inner",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-											className: "animate-spin h-6 w-6 text-indigo-600",
+											className: "animate-spin h-6 w-6 text-primary-600",
 											xmlns: "http://www.w3.org/2000/svg",
 											fill: "none",
 											viewBox: "0 0 24 24",
@@ -17981,10 +17981,10 @@ var RightInspector = () => {
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "text-center",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "text-xs font-bold text-indigo-800",
+												className: "text-xs font-bold text-primary-800",
 												children: "Sedang Menghapus Latar..."
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-												className: "text-[9px] text-indigo-600 mt-1",
+												className: "text-[9px] text-primary-600 mt-1",
 												children: "AI sedang memproses gambar Anda. Proses ini memakan waktu beberapa detik."
 											})]
 										})]
@@ -18017,19 +18017,19 @@ var RightInspector = () => {
 										},
 										className: "flex flex-col items-center gap-2 cursor-pointer group",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: `w-full aspect-square rounded-xl overflow-hidden border-2 transition-all ${activeLayer.style?.imageFilter === filter.id ? "border-indigo-600 ring-2 ring-indigo-200 shadow-md" : "border-transparent group-hover:border-gray-300 bg-gray-50"}`,
+											className: `w-full aspect-square rounded-xl overflow-hidden border-2 transition-all ${activeLayer.style?.imageFilter === filter.id ? "border-primary-600 ring-2 ring-primary-200 shadow-md" : "border-transparent group-hover:border-gray-300 bg-gray-50"}`,
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-												src: activeLayer.url,
+												src: activeLayer.style?.url || activeLayer.url,
 												alt: filter.name,
 												className: "w-full h-full object-cover",
 												style: { filter: filter.getCss(100) }
 											})
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-											className: `text-[10px] text-center font-medium leading-tight ${activeLayer.style?.imageFilter === filter.id ? "text-indigo-600 font-bold" : "text-gray-600"}`,
+											className: `text-[10px] text-center font-medium leading-tight ${activeLayer.style?.imageFilter === filter.id ? "text-primary-600 font-bold" : "text-gray-600"}`,
 											children: filter.name
 										})]
 									}), activeLayer.style?.imageFilter === filter.id && filter.id !== "none" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "col-span-3 bg-gray-50 p-4 rounded-xl border border-indigo-100 shadow-inner mt-1 mb-2 relative",
+										className: "col-span-3 bg-gray-50 p-4 rounded-xl border border-primary-100 shadow-inner mt-1 mb-2 relative",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "relative z-10 flex justify-between items-center mb-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
@@ -18045,7 +18045,7 @@ var RightInspector = () => {
 											max: "100",
 											value: activeLayer.style?.imageFilterIntensity ?? 100,
 											onChange: (e) => updateLayerStyle(activeLayer.id, { imageFilterIntensity: parseInt(e.target.value) }),
-											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 relative z-10"
+											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600 relative z-10"
 										})]
 									})] }, filter.id))
 								})]
@@ -18069,7 +18069,7 @@ var RightInspector = () => {
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { rsvpTheme: "solid" }),
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.rsvpTheme || "solid") === "solid" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${(activeLayer.style?.rsvpTheme || "solid") === "solid" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-10 h-8 bg-white border border-gray-300 rounded shadow-sm mb-1" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-[9px] font-bold",
 												children: "Solid"
@@ -18077,9 +18077,9 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { rsvpTheme: "glass" }),
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === "glass" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === "glass" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-												className: "w-10 h-8 bg-blue-100/30 border border-blue-200/50 rounded backdrop-blur-sm mb-1 relative overflow-hidden",
+												className: "w-10 h-8 bg-primary-100/30 border border-primary-200/50 rounded backdrop-blur-sm mb-1 relative overflow-hidden",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-tr from-white/40 to-transparent" })
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-[9px] font-bold",
@@ -18088,7 +18088,7 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { rsvpTheme: "romance" }),
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === "romance" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === "romance" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 												className: "w-10 h-8 bg-rose-50 border border-rose-200 rounded-2xl shadow-sm mb-1 flex items-center justify-center",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-4 h-0.5 bg-rose-300 rounded-full" })
@@ -18099,7 +18099,7 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { rsvpTheme: "classic" }),
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === "classic" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === "classic" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-10 h-8 bg-[#fdfbf7] border-2 border-double border-amber-600 rounded mb-1" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-[9px] font-bold",
 												children: "Klasik (Double)"
@@ -18107,7 +18107,7 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { rsvpTheme: "adat" }),
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === "adat" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === "adat" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-10 h-8 bg-[#faf4ec] border border-[#8b5a2b] rounded-t-full mb-1" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-[9px] font-bold",
 												children: "Adat / Tradisional"
@@ -18115,7 +18115,7 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { rsvpTheme: "minimalist" }),
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === "minimalist" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === "minimalist" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-10 h-8 bg-transparent border border-gray-300 border-dashed rounded mb-1" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 												className: "text-[9px] font-bold",
 												children: "Minimalis"
@@ -18123,7 +18123,7 @@ var RightInspector = () => {
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { rsvpTheme: "rustic" }),
-											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === "rustic" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 hover:border-indigo-300 text-gray-500 hover:bg-gray-50"}`,
+											className: `flex flex-col items-center justify-center p-2 border rounded-lg transition-colors ${activeLayer.style?.rsvpTheme === "rustic" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 hover:border-primary-300 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 												className: "w-10 h-8 bg-[#f3efe6] border-2 border-stone-400 rounded-lg mb-1 relative",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-1 border border-stone-300 border-dashed" })
@@ -18160,7 +18160,7 @@ var RightInspector = () => {
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 												onClick: () => document.getElementById("rsvp-bg-upload").click(),
-												className: "w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-semibold py-2 px-4 rounded transition text-sm flex items-center justify-center gap-2 border border-indigo-200",
+												className: "w-full bg-primary-50 hover:bg-primary-100 text-primary-600 font-semibold py-2 px-4 rounded transition text-sm flex items-center justify-center gap-2 border border-primary-200",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 													className: "w-4 h-4",
 													fill: "none",
@@ -18253,7 +18253,7 @@ var RightInspector = () => {
 											step: "0.05",
 											value: activeLayer.style?.inputBackgroundOpacity ?? 1,
 											onChange: (e) => updateLayerStyle(activeLayer.id, { inputBackgroundOpacity: parseFloat(e.target.value) }),
-											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-indigo-600"
+											className: "w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary-600"
 										})]
 									})]
 								})] }),
@@ -18264,7 +18264,7 @@ var RightInspector = () => {
 									className: "flex items-center gap-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 										type: "color",
-										value: activeLayer.style?.buttonColor || "#4f46e5",
+										value: activeLayer.style?.buttonColor || "#db2777",
 										onChange: (e) => updateLayerStyle(activeLayer.id, { buttonColor: e.target.value }),
 										className: "w-8 h-8 rounded cursor-pointer border-0 p-0"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -18294,12 +18294,12 @@ var RightInspector = () => {
 						className: "space-y-4",
 						children: [
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "bg-blue-50 border border-blue-100 p-3 rounded-lg mb-4",
+								className: "bg-primary-50 border border-primary-100 p-3 rounded-lg mb-4",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-									className: "text-[11px] font-bold text-blue-800 uppercase tracking-wider mb-1",
+									className: "text-[11px] font-bold text-primary-800 uppercase tracking-wider mb-1",
 									children: "Pengaturan Peta"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-									className: "text-[10px] text-blue-600",
+									className: "text-[10px] text-primary-600",
 									children: "Sesuaikan lokasi dan tampilan Google Maps Anda."
 								})]
 							}),
@@ -18310,7 +18310,7 @@ var RightInspector = () => {
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
 									id: `map_input_${activeLayer.id}`,
-									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500",
+									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-primary-500 focus:border-primary-500",
 									rows: "4",
 									placeholder: "https://maps.google.com/...",
 									defaultValue: activeLayer.content === "Google Maps" ? "" : activeLayer.content || "",
@@ -18322,7 +18322,7 @@ var RightInspector = () => {
 										const val = document.getElementById(`map_input_${activeLayer.id}`).value;
 										updateLayerContent(activeLayer.id, val);
 									},
-									className: "w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-2.5 px-4 rounded-lg shadow-sm transition flex items-center justify-center gap-2",
+									className: "w-full mt-2 bg-primary-600 hover:bg-primary-700 text-white text-xs font-bold py-2.5 px-4 rounded-lg shadow-sm transition flex items-center justify-center gap-2",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 										className: "w-4 h-4",
 										fill: "none",
@@ -18359,7 +18359,7 @@ var RightInspector = () => {
 										className: "grid grid-cols-2 gap-2 mb-4",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { mapDisplayType: "full" }),
-											className: `py-2 px-3 text-[11px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType !== "button_only" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 text-gray-500 hover:bg-gray-50"}`,
+											className: `py-2 px-3 text-[11px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType !== "button_only" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-5 h-5",
 												fill: "none",
@@ -18374,7 +18374,7 @@ var RightInspector = () => {
 											}), "Peta + Tombol"]
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => updateLayerStyle(activeLayer.id, { mapDisplayType: "button_only" }),
-											className: `py-2 px-3 text-[11px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType === "button_only" ? "border-indigo-500 bg-indigo-50 text-indigo-600" : "border-gray-200 text-gray-500 hover:bg-gray-50"}`,
+											className: `py-2 px-3 text-[11px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType === "button_only" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 text-gray-500 hover:bg-gray-50"}`,
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-5 h-5",
 												fill: "none",
@@ -18409,7 +18409,7 @@ var RightInspector = () => {
 												step: "0.05",
 												value: activeLayer.style?.mapOpacity ?? 1,
 												onChange: (e) => updateLayerStyle(activeLayer.id, { mapOpacity: parseFloat(e.target.value) }),
-												className: "w-full accent-indigo-600 cursor-pointer"
+												className: "w-full accent-primary-600 cursor-pointer"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 												className: "text-[9px] text-gray-400 mt-1",
@@ -18426,7 +18426,7 @@ var RightInspector = () => {
 											type: "text",
 											value: activeLayer.style?.mapButtonText || "Buka Google Maps",
 											onChange: (e) => updateLayerStyle(activeLayer.id, { mapButtonText: e.target.value }),
-											className: "w-full text-xs p-1.5 border border-gray-200 rounded focus:border-indigo-500 outline-none"
+											className: "w-full text-xs p-1.5 border border-gray-200 rounded focus:border-primary-500 outline-none"
 										})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "grid grid-cols-2 gap-2",
 											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
@@ -18480,14 +18480,14 @@ var RightInspector = () => {
 									type: "datetime-local",
 									value: activeLayer.style?.countdownTarget || "",
 									onChange: (e) => updateLayerStyle(activeLayer.id, { countdownTarget: e.target.value }),
-									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 outline-none"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 									className: "text-[11px] font-bold text-gray-800 block mb-2",
 									children: "Pilihan Font"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 									onClick: () => setActiveTab("fonts"),
-									className: "w-full flex items-center justify-between text-sm border border-gray-300 rounded p-2 focus:border-indigo-500 bg-white hover:bg-gray-50 transition-colors text-left",
+									className: "w-full flex items-center justify-between text-sm border border-gray-300 rounded p-2 focus:border-primary-500 bg-white hover:bg-gray-50 transition-colors text-left",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										style: { fontFamily: activeLayer.style?.fontFamily || "monospace" },
 										children: activeLayer.style?.fontFamily || "Monospace Default"
@@ -18518,7 +18518,7 @@ var RightInspector = () => {
 										type: "text",
 										value: activeLayer.style?.countdownColor || "#ffffff",
 										onChange: (e) => updateLayerStyle(activeLayer.id, { countdownColor: e.target.value }),
-										className: "flex-1 border border-gray-300 rounded p-1.5 text-[10px] focus:ring-1 focus:ring-indigo-500 outline-none uppercase w-full min-w-0"
+										className: "flex-1 border border-gray-300 rounded p-1.5 text-[10px] focus:ring-1 focus:ring-primary-500 outline-none uppercase w-full min-w-0"
 									})]
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -18529,7 +18529,7 @@ var RightInspector = () => {
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
 										value: activeLayer.style?.countdownBgStyle || "glass",
 										onChange: (e) => updateLayerStyle(activeLayer.id, { countdownBgStyle: e.target.value }),
-										className: "w-full text-[11px] border border-gray-300 rounded p-1.5 focus:ring-1 focus:ring-indigo-500 outline-none h-8",
+										className: "w-full text-[11px] border border-gray-300 rounded p-1.5 focus:ring-1 focus:ring-primary-500 outline-none h-8",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 											value: "glass",
 											children: "Efek Kaca"
@@ -18551,7 +18551,7 @@ var RightInspector = () => {
 											type: "text",
 											value: activeLayer.style?.countdownBgColor || "#111827",
 											onChange: (e) => updateLayerStyle(activeLayer.id, { countdownBgColor: e.target.value }),
-											className: "flex-1 border border-gray-300 rounded p-1.5 text-[10px] focus:ring-1 focus:ring-indigo-500 outline-none uppercase w-full min-w-0"
+											className: "flex-1 border border-gray-300 rounded p-1.5 text-[10px] focus:ring-1 focus:ring-primary-500 outline-none uppercase w-full min-w-0"
 										})]
 									})] })]
 								}),
@@ -18571,7 +18571,7 @@ var RightInspector = () => {
 									step: "0.01",
 									value: activeLayer.style?.countdownBgOpacity ?? .8,
 									onChange: (e) => updateLayerStyle(activeLayer.id, { countdownBgOpacity: parseFloat(e.target.value) }),
-									className: "w-full accent-indigo-600"
+									className: "w-full accent-primary-600"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "flex items-center justify-between mb-2",
@@ -18589,7 +18589,7 @@ var RightInspector = () => {
 									step: "1",
 									value: activeLayer.style?.countdownGap ?? 16,
 									onChange: (e) => updateLayerStyle(activeLayer.id, { countdownGap: parseInt(e.target.value) }),
-									className: "w-full accent-indigo-600"
+									className: "w-full accent-primary-600"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
 									className: "flex items-center gap-2 cursor-pointer mt-2",
@@ -18597,7 +18597,7 @@ var RightInspector = () => {
 										type: "checkbox",
 										checked: activeLayer.style?.countdownShowSeconds || false,
 										onChange: (e) => updateLayerStyle(activeLayer.id, { countdownShowSeconds: e.target.checked }),
-										className: "w-4 h-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
+										className: "w-4 h-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "text-[11px] font-bold text-gray-800",
 										children: "Tampilkan Detik"
@@ -18683,7 +18683,7 @@ var RightInspector = () => {
 									value: activeLayer.content || "",
 									placeholder: "Cth: Simpan Tanggal",
 									onChange: (e) => updateLayerContent(activeLayer.id, e.target.value),
-									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-primary-500 outline-none"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 									className: "text-[11px] font-bold text-gray-800 block mb-2",
@@ -18698,7 +18698,7 @@ var RightInspector = () => {
 											title: e.target.value
 										} });
 									},
-									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-primary-500 outline-none"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "grid grid-cols-2 gap-2",
@@ -18714,7 +18714,7 @@ var RightInspector = () => {
 												startDate: e.target.value
 											} });
 										},
-										className: "w-full text-xs border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+										className: "w-full text-xs border border-gray-300 rounded p-2 focus:ring-1 focus:ring-primary-500 outline-none"
 									})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 										className: "text-[11px] font-bold text-gray-800 block mb-2",
 										children: "Selesai"
@@ -18727,7 +18727,7 @@ var RightInspector = () => {
 												endDate: e.target.value
 											} });
 										},
-										className: "w-full text-xs border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+										className: "w-full text-xs border border-gray-300 rounded p-2 focus:ring-1 focus:ring-primary-500 outline-none"
 									})] })]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
@@ -18743,7 +18743,7 @@ var RightInspector = () => {
 											location: e.target.value
 										} });
 									},
-									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 outline-none"
+									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-primary-500 outline-none"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 									className: "text-[11px] font-bold text-gray-800 block mb-2",
@@ -18757,7 +18757,7 @@ var RightInspector = () => {
 											description: e.target.value
 										} });
 									},
-									className: "w-full text-sm border border-gray-300 rounded p-2 h-20 focus:ring-1 focus:ring-indigo-500 outline-none resize-none"
+									className: "w-full text-sm border border-gray-300 rounded p-2 h-20 focus:ring-1 focus:ring-primary-500 outline-none resize-none"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 									className: "font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded mt-6",
@@ -18786,12 +18786,12 @@ var RightInspector = () => {
 										className: "flex items-center gap-2",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 											type: "color",
-											value: activeLayer.style?.backgroundColor || "#4f46e5",
+											value: activeLayer.style?.backgroundColor || "#db2777",
 											onChange: (e) => updateLayerStyle(activeLayer.id, { backgroundColor: e.target.value }),
 											className: "w-8 h-8 rounded cursor-pointer border-0 p-0"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-[10px] font-mono text-gray-500",
-											children: activeLayer.style?.backgroundColor || "#4f46e5"
+											children: activeLayer.style?.backgroundColor || "#db2777"
 										})]
 									})] })]
 								}),
@@ -18813,7 +18813,7 @@ var RightInspector = () => {
 										step: "0.05",
 										value: activeLayer.style?.opacity ?? 1,
 										onChange: (e) => updateLayerStyle(activeLayer.id, { opacity: parseFloat(e.target.value) }),
-										className: "w-full accent-indigo-600 cursor-pointer"
+										className: "w-full accent-primary-600 cursor-pointer"
 									})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 										className: "text-[11px] font-bold text-gray-800 block mb-2",
 										children: "Tampilkan Ikon"
@@ -18824,7 +18824,7 @@ var RightInspector = () => {
 											className: "sr-only peer",
 											checked: activeLayer.style?.showIcon !== false,
 											onChange: (e) => updateLayerStyle(activeLayer.id, { showIcon: e.target.checked })
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600" })]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-9 h-5 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-600" })]
 									})] })]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
@@ -18839,7 +18839,7 @@ var RightInspector = () => {
 										step: "1",
 										value: activeLayer.style?.borderRadius ?? 8,
 										onChange: (e) => updateLayerStyle(activeLayer.id, { borderRadius: parseInt(e.target.value) }),
-										className: "flex-1 accent-indigo-600 cursor-pointer"
+										className: "flex-1 accent-primary-600 cursor-pointer"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 										className: "text-xs font-mono text-gray-500 w-8 text-right",
 										children: [activeLayer.style?.borderRadius ?? 8, "px"]
@@ -18865,14 +18865,14 @@ var RightInspector = () => {
 									value: activeLayer.style?.bankName || "",
 									placeholder: "Cth: BCA, Mandiri, DANA, OVO",
 									onChange: (e) => updateLayerStyle(activeLayer.id, { bankName: e.target.value }),
-									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none mb-4"
+									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 outline-none mb-4"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 									className: "text-[11px] font-bold text-gray-800 block mb-2",
 									children: "Pilihan Font"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 									onClick: () => setActiveTab("fonts"),
-									className: "w-full flex items-center justify-between text-sm border border-gray-300 rounded p-2 focus:border-indigo-500 bg-white hover:bg-gray-50 transition-colors text-left mb-4",
+									className: "w-full flex items-center justify-between text-sm border border-gray-300 rounded p-2 focus:border-primary-500 bg-white hover:bg-gray-50 transition-colors text-left mb-4",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										style: { fontFamily: activeLayer.style?.fontFamily || "monospace" },
 										children: activeLayer.style?.fontFamily || "Default Font"
@@ -18905,7 +18905,7 @@ var RightInspector = () => {
 									step: "1",
 									value: activeLayer.style?.fontSize ?? 16,
 									onChange: (e) => updateLayerStyle(activeLayer.id, { fontSize: parseInt(e.target.value) }),
-									className: "w-full accent-indigo-600 mb-4"
+									className: "w-full accent-primary-600 mb-4"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 									className: "text-[11px] font-bold text-gray-800 block mb-2",
@@ -18915,7 +18915,7 @@ var RightInspector = () => {
 									value: activeLayer.content || "",
 									placeholder: "Cth: 1234567890 (Budi)",
 									onChange: (e) => updateLayerContent(activeLayer.id, e.target.value),
-									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+									className: "w-full text-sm border border-gray-300 rounded p-2 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 outline-none"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "grid grid-cols-2 gap-4",
@@ -18949,7 +18949,7 @@ var RightInspector = () => {
 										step: "0.05",
 										value: activeLayer.style?.textOpacity ?? 1,
 										onChange: (e) => updateLayerStyle(activeLayer.id, { textOpacity: parseFloat(e.target.value) }),
-										className: "w-full accent-indigo-600 cursor-pointer"
+										className: "w-full accent-primary-600 cursor-pointer"
 									})] })]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -18984,7 +18984,7 @@ var RightInspector = () => {
 										step: "0.05",
 										value: activeLayer.style?.bgOpacity ?? 1,
 										onChange: (e) => updateLayerStyle(activeLayer.id, { bgOpacity: parseFloat(e.target.value) }),
-										className: "w-full accent-indigo-600 cursor-pointer"
+										className: "w-full accent-primary-600 cursor-pointer"
 									})] })]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -18996,12 +18996,12 @@ var RightInspector = () => {
 										className: "flex items-center gap-2",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 											type: "color",
-											value: activeLayer.style?.iconColor || "#4f46e5",
+											value: activeLayer.style?.iconColor || "#db2777",
 											onChange: (e) => updateLayerStyle(activeLayer.id, { iconColor: e.target.value }),
 											className: "w-8 h-8 rounded cursor-pointer border-0 p-0"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 											className: "text-[10px] font-mono text-gray-500",
-											children: activeLayer.style?.iconColor || "#4f46e5"
+											children: activeLayer.style?.iconColor || "#db2777"
 										})]
 									})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 										className: "text-[11px] font-bold text-gray-800 block mb-2",
@@ -19125,7 +19125,7 @@ var TopToolbar = () => {
 	(sections.find((s) => s.id === activeSectionId) || sections[0])?.layers?.find((l) => l.id === activeLayerId);
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {
-			className: "h-14 bg-gradient-to-r from-blue-600 to-indigo-600 flex items-center justify-between px-4 z-50 text-white shadow",
+			className: "h-14 bg-primary-600 flex items-center justify-between px-4 z-50 text-white shadow",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex items-center gap-4",
@@ -19162,7 +19162,7 @@ var TopToolbar = () => {
 							className: "flex bg-white/10 p-0.5 rounded-md hidden md:flex",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								onClick: () => setWorkspaceView("desktop"),
-								className: `p-1.5 text-sm font-semibold rounded transition flex items-center justify-center ${workspaceView === "desktop" ? "bg-white shadow-sm text-indigo-600" : "text-white/70 hover:text-white hover:bg-white/10"}`,
+								className: `p-1.5 text-sm font-semibold rounded transition flex items-center justify-center ${workspaceView === "desktop" ? "bg-white shadow-sm text-primary-600" : "text-white/70 hover:text-white hover:bg-white/10"}`,
 								title: "Tampilan Desktop",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 									className: "w-4 h-4",
@@ -19178,7 +19178,7 @@ var TopToolbar = () => {
 								})
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								onClick: () => setWorkspaceView("mobile"),
-								className: `p-1.5 text-sm font-semibold rounded transition flex items-center justify-center ${workspaceView === "mobile" ? "bg-white shadow-sm text-indigo-600" : "text-white/70 hover:text-white hover:bg-white/10"}`,
+								className: `p-1.5 text-sm font-semibold rounded transition flex items-center justify-center ${workspaceView === "mobile" ? "bg-white shadow-sm text-primary-600" : "text-white/70 hover:text-white hover:bg-white/10"}`,
 								title: "Tampilan Mobile",
 								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 									className: "w-4 h-4",
@@ -19270,7 +19270,7 @@ var TopToolbar = () => {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 							onClick: () => setShowMockup(!showMockup),
-							className: `flex items-center gap-2 px-3 py-1.5 rounded-md transition border shadow-sm ${showMockup ? "bg-white text-indigo-600 border-white" : "text-white bg-white/10 hover:bg-white/20 border-transparent hover:border-white/20"}`,
+							className: `flex items-center gap-2 px-3 py-1.5 rounded-md transition border shadow-sm ${showMockup ? "bg-white text-primary-600 border-white" : "text-white bg-white/10 hover:bg-white/20 border-transparent hover:border-white/20"}`,
 							title: "Tampilkan Mockup HP",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 								className: "w-4 h-4",
@@ -19290,7 +19290,7 @@ var TopToolbar = () => {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 							onClick: () => setShowGridLines(!showGridLines),
-							className: `flex items-center gap-2 px-3 py-1.5 rounded-md transition border shadow-sm ${showGridLines ? "bg-white text-indigo-600 border-white" : "text-white bg-white/10 hover:bg-white/20 border-transparent hover:border-white/20"}`,
+							className: `flex items-center gap-2 px-3 py-1.5 rounded-md transition border shadow-sm ${showGridLines ? "bg-white text-primary-600 border-white" : "text-white bg-white/10 hover:bg-white/20 border-transparent hover:border-white/20"}`,
 							title: "Tampilkan Kisi-kisi Batas Layar",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 								className: "w-4 h-4",
@@ -19359,7 +19359,7 @@ var TopToolbar = () => {
 						}),
 						window.__IS_TEMPLATE__ ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 							onClick: () => setIsTemplateModalOpen(true),
-							className: "flex items-center gap-2 px-3 py-1.5 rounded-md transition text-white bg-indigo-500 hover:bg-indigo-600 shadow-sm hidden xl:flex",
+							className: "flex items-center gap-2 px-3 py-1.5 rounded-md transition text-white bg-primary-500 hover:bg-primary-600 shadow-sm hidden xl:flex",
 							title: "Update Metadata Template",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 								className: "w-4 h-4",
@@ -19398,8 +19398,8 @@ var TopToolbar = () => {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 							onClick: handlePublishSubmit,
-							className: "px-4 py-1.5 text-sm bg-white text-indigo-600 hover:bg-indigo-50 rounded-md font-semibold transition shadow-sm flex items-center gap-2 ml-1",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-2 h-2 rounded-full bg-blue-500 animate-pulse" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "px-4 py-1.5 text-sm bg-white text-primary-600 hover:bg-primary-50 rounded-md font-semibold transition shadow-sm flex items-center gap-2 ml-1",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-2 h-2 rounded-full bg-primary-500 animate-pulse" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 								className: "hidden sm:inline",
 								children: "Publish & Bagikan"
 							})]
@@ -19456,7 +19456,7 @@ var TopToolbar = () => {
 										title: e.target.value
 									}),
 									placeholder: "Contoh: Template Pernikahan Elegan",
-									className: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm"
+									className: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
@@ -19472,7 +19472,7 @@ var TopToolbar = () => {
 											category: e.target.value
 										}),
 										placeholder: "Contoh: Premium, Pernikahan, Khitanan",
-										className: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm"
+										className: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("datalist", {
 										id: "folder-options",
@@ -19495,7 +19495,7 @@ var TopToolbar = () => {
 										price: e.target.value
 									}),
 									placeholder: "0 untuk gratis",
-									className: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm"
+									className: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 									className: "block text-sm font-semibold text-gray-700 mb-1.5",
@@ -19508,7 +19508,7 @@ var TopToolbar = () => {
 										description: e.target.value
 									}),
 									placeholder: "Deskripsi template ini...",
-									className: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-sm resize-none"
+									className: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm resize-none"
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "pt-4 border-t border-gray-100",
@@ -19538,7 +19538,7 @@ var TopToolbar = () => {
 																photo: e.target.checked
 															}
 														}),
-														className: "w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+														className: "w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 														htmlFor: "feat_photo",
 														className: "text-sm font-semibold text-gray-700 cursor-pointer",
@@ -19563,7 +19563,7 @@ var TopToolbar = () => {
 																}
 															}),
 															placeholder: "∞",
-															className: "w-16 text-xs bg-white border border-gray-300 rounded px-2 py-1 outline-none focus:border-indigo-500",
+															className: "w-16 text-xs bg-white border border-gray-300 rounded px-2 py-1 outline-none focus:border-primary-500",
 															title: "Kosongkan untuk tak terbatas"
 														}),
 														/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
@@ -19612,7 +19612,7 @@ var TopToolbar = () => {
 																[feat.id]: e.target.checked
 															}
 														}),
-														className: "w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500"
+														className: "w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
 													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 														htmlFor: `feat_${feat.id}`,
 														className: "text-sm font-medium text-gray-700 cursor-pointer flex-1 line-clamp-1",
@@ -19634,7 +19634,7 @@ var TopToolbar = () => {
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								type: "submit",
 								disabled: isSavingTemplate,
-								className: "flex-1 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold transition-colors shadow-lg shadow-indigo-200 text-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center",
+								className: "flex-1 px-4 py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-bold transition-colors shadow-lg shadow-primary-200 text-sm disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center",
 								children: isSavingTemplate ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
 									className: "animate-spin -ml-1 mr-2 h-4 w-4 text-white",
 									fill: "none",
@@ -19712,16 +19712,16 @@ var ContextualToolbar = () => {
 	const allSections = [...sections, { layers: global_settings?.desktop_layers || [] }];
 	const activeLayer = activeLayerId ? findElement(allSections, activeLayerId) : null;
 	if (activeLayerIds.length > 1) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: "absolute top-6 left-1/2 -translate-x-1/2 h-12 bg-indigo-50 border border-indigo-100 rounded-xl flex items-center px-4 z-50 shadow-lg gap-3 w-max transition-all duration-200",
+		className: "absolute top-6 left-1/2 -translate-x-1/2 h-12 bg-primary-50 border border-primary-100 rounded-xl flex items-center px-4 z-50 shadow-lg gap-3 w-max transition-all duration-200",
 		onMouseDown: (e) => e.stopPropagation(),
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "text-sm font-semibold text-indigo-700",
+			className: "text-sm font-semibold text-primary-700",
 			children: [activeLayerIds.length, " Elemen Terseleksi"]
 		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "flex items-center gap-2",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 				onClick: () => useCanvasStore.getState().groupElements(),
-				className: "px-4 py-1.5 text-sm bg-indigo-600 text-white rounded font-medium shadow-sm hover:bg-indigo-700 transition flex items-center gap-2",
+				className: "px-4 py-1.5 text-sm bg-primary-600 text-white rounded font-medium shadow-sm hover:bg-primary-700 transition flex items-center gap-2",
 				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 					className: "w-4 h-4",
 					fill: "none",
@@ -19764,7 +19764,7 @@ var ContextualToolbar = () => {
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 						onClick: () => setActiveTab("fonts"),
-						className: "flex items-center bg-white border border-gray-300 text-gray-700 py-1.5 px-3 rounded hover:border-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm font-medium min-w-[120px] justify-between cursor-pointer transition-colors",
+						className: "flex items-center bg-white border border-gray-300 text-gray-700 py-1.5 px-3 rounded hover:border-gray-400 focus:outline-none focus:ring-1 focus:ring-primary-500 text-sm font-medium min-w-[120px] justify-between cursor-pointer transition-colors",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							style: { fontFamily: activeLayer.style?.fontFamily || "Inter" },
 							children: activeLayer.style?.fontFamily || "Inter"
@@ -19794,7 +19794,7 @@ var ContextualToolbar = () => {
 								type: "number",
 								value: currentFontSize,
 								onChange: (e) => updateLayerStyle(activeLayer.id, { fontSize: parseInt(e.target.value) || 16 }),
-								className: "w-12 text-center text-sm font-medium border-x border-gray-300 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 appearance-none m-0",
+								className: "w-12 text-center text-sm font-medium border-x border-gray-300 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary-500 appearance-none m-0",
 								style: { MozAppearance: "textfield" }
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
@@ -19901,7 +19901,7 @@ var ContextualToolbar = () => {
 							setInspectorTab("effects");
 							setIsRightSidebarOpen(true);
 						},
-						className: `flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors border ${activeLayer.style?.removeBg ? "bg-indigo-50 text-indigo-700 border-indigo-200" : "text-gray-700 hover:bg-gray-100 border-transparent hover:border-gray-200"}`,
+						className: `flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors border ${activeLayer.style?.removeBg ? "bg-primary-50 text-primary-700 border-primary-200" : "text-gray-700 hover:bg-gray-100 border-transparent hover:border-gray-200"}`,
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 							className: "w-4 h-4",
 							fill: "none",
@@ -20022,7 +20022,7 @@ var ContextualToolbar = () => {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-px h-6 bg-gray-300 mx-2" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => useCanvasStore.getState().toggleLayerLock(activeLayer.id),
-						className: `w-8 h-8 flex items-center justify-center rounded transition-colors ${isLocked ? "bg-indigo-50 text-indigo-600" : "text-gray-500 hover:bg-gray-100"}`,
+						className: `w-8 h-8 flex items-center justify-center rounded transition-colors ${isLocked ? "bg-primary-50 text-primary-600" : "text-gray-500 hover:bg-gray-100"}`,
 						title: isLocked ? "Buka Kunci" : "Kunci Posisi",
 						children: isLocked ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 							className: "w-4 h-4",
@@ -20201,7 +20201,7 @@ var AssetSelectionModal = () => {
 						className: "flex gap-4 mb-6",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 							onClick: () => fileInputRef.current?.click(),
-							className: "flex-1 py-3 px-4 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors",
+							className: "flex-1 py-3 px-4 bg-primary-50 hover:bg-primary-100 text-primary-700 border border-primary-200 rounded-xl font-semibold flex items-center justify-center gap-2 transition-colors",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 								className: "w-5 h-5",
 								fill: "none",
@@ -20240,7 +20240,7 @@ var AssetSelectionModal = () => {
 								const isVideo = asset.url.match(/\.(mp4|mov|webm|ogg)$/i);
 								return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									onClick: () => handleSelectAsset(asset.url),
-									className: `relative group aspect-square rounded-xl overflow-hidden border-2 cursor-pointer transition-all ${isSelected ? "border-indigo-500 shadow-md ring-2 ring-indigo-200" : "border-gray-200 hover:border-indigo-300"}`,
+									className: `relative group aspect-square rounded-xl overflow-hidden border-2 cursor-pointer transition-all ${isSelected ? "border-primary-500 shadow-md ring-2 ring-primary-200" : "border-gray-200 hover:border-primary-300"}`,
 									children: [
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 											className: "w-full h-full bg-gray-100 flex items-center justify-center",
@@ -20254,7 +20254,7 @@ var AssetSelectionModal = () => {
 											})
 										}),
 										assetSelectionTarget.multiple && isSelected && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "absolute top-2 right-2 bg-indigo-500 text-white rounded-full p-0.5 shadow-sm",
+											className: "absolute top-2 right-2 bg-primary-500 text-white rounded-full p-0.5 shadow-sm",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-4 h-4",
 												fill: "none",
@@ -20285,7 +20285,7 @@ var AssetSelectionModal = () => {
 					className: "p-4 border-t border-gray-100 bg-gray-50 flex justify-end",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 						onClick: () => applySelection(selectedAssets),
-						className: "px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-sm transition-colors",
+						className: "px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white font-bold rounded-xl shadow-sm transition-colors",
 						children: [
 							"Terapkan (",
 							selectedAssets.length,
@@ -20444,7 +20444,7 @@ var TimelinePanel = () => {
 		children: [
 			isOpen && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				ref: resizerRef,
-				className: "absolute top-0 left-0 right-0 h-2 -translate-y-1 cursor-row-resize z-50 hover:bg-indigo-500/20",
+				className: "absolute top-0 left-0 right-0 h-2 -translate-y-1 cursor-row-resize z-50 hover:bg-primary-500/20",
 				onMouseDown: () => {
 					isResizing.current = true;
 					setIsDraggingResizer(true);
@@ -20458,7 +20458,7 @@ var TimelinePanel = () => {
 					children: [
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							onClick: () => setIsOpen(!isOpen),
-							className: "p-1 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded transition",
+							className: "p-1 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded transition",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 								className: `w-5 h-5 transform transition-transform ${isOpen ? "rotate-180" : ""}`,
 								fill: "none",
@@ -20475,7 +20475,7 @@ var TimelinePanel = () => {
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 							className: "font-bold text-sm text-gray-700 flex items-center gap-2",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-								className: "w-4 h-4 text-indigo-500",
+								className: "w-4 h-4 text-primary-500",
 								fill: "none",
 								stroke: "currentColor",
 								viewBox: "0 0 24 24",
@@ -20497,7 +20497,7 @@ var TimelinePanel = () => {
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 									onClick: () => setPlayheadPos(0),
-									className: "p-1.5 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded transition",
+									className: "p-1.5 text-gray-500 hover:text-primary-600 hover:bg-primary-50 rounded transition",
 									title: "Kembali ke Awal",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 										className: "w-4 h-4",
@@ -20519,7 +20519,7 @@ var TimelinePanel = () => {
 										if (newIsPlaying) window.dispatchEvent(new Event("builder:play_all_animations"));
 										else window.dispatchEvent(new Event("builder:stop_all_animations"));
 									},
-									className: "p-1.5 bg-indigo-600 text-white hover:bg-indigo-700 rounded transition flex items-center justify-center w-8 h-8",
+									className: "p-1.5 bg-primary-600 text-white hover:bg-primary-700 rounded transition flex items-center justify-center w-8 h-8",
 									children: isPlaying ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 										className: "w-4 h-4",
 										fill: "none",
@@ -20550,14 +20550,14 @@ var TimelinePanel = () => {
 									children: [playheadPos.toFixed(1), "s"]
 								}),
 								sections.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex items-center ml-2 border border-indigo-200 rounded-lg overflow-hidden shrink-0",
+									className: "flex items-center ml-2 border border-primary-200 rounded-lg overflow-hidden shrink-0",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 										onClick: () => useCanvasStore.getState().setActiveSection(sections[0].id),
-										className: `px-3 py-1.5 text-[10px] font-bold transition-colors ${activeSectionId === sections[0].id ? "bg-indigo-600 text-white" : "bg-indigo-50 text-indigo-600 hover:bg-indigo-100"}`,
+										className: `px-3 py-1.5 text-[10px] font-bold transition-colors ${activeSectionId === sections[0].id ? "bg-primary-600 text-white" : "bg-primary-50 text-primary-600 hover:bg-primary-100"}`,
 										children: "Halaman Cover"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 										onClick: () => useCanvasStore.getState().setActiveSection(sections[1].id),
-										className: `px-3 py-1.5 text-[10px] font-bold transition-colors border-l border-indigo-200 ${activeSectionId === sections[1].id ? "bg-indigo-600 text-white border-l-indigo-600" : "bg-indigo-50 text-indigo-600 hover:bg-indigo-100"}`,
+										className: `px-3 py-1.5 text-[10px] font-bold transition-colors border-l border-primary-200 ${activeSectionId === sections[1].id ? "bg-primary-600 text-white border-l-primary-600" : "bg-primary-50 text-primary-600 hover:bg-primary-100"}`,
 										children: "Halaman Isi"
 									})]
 								})
@@ -20575,7 +20575,7 @@ var TimelinePanel = () => {
 						max: "300",
 						value: timeScale,
 						onChange: (e) => setTimeScale(parseInt(e.target.value)),
-						className: "w-32 accent-indigo-600 h-1.5 bg-gray-200 rounded-lg appearance-none"
+						className: "w-32 accent-primary-600 h-1.5 bg-gray-200 rounded-lg appearance-none"
 					})]
 				})]
 			}),
@@ -20642,7 +20642,7 @@ var TimelinePanel = () => {
 										return c.animation?.exit ? c.animation?.configExit?.delay || s + 5 : s + 5;
 									}));
 									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_react.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: `h-12 border-b border-gray-200 flex items-center relative w-full mb-1 ${isRealGroup && isExpanded ? "bg-indigo-50/50" : "hover:bg-gray-100/50"}`,
+										className: `h-12 border-b border-gray-200 flex items-center relative w-full mb-1 ${isRealGroup && isExpanded ? "bg-primary-50/50" : "hover:bg-gray-100/50"}`,
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 											className: "absolute left-0 top-0 bottom-0 w-24 bg-white/50 border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] backdrop-blur-sm pointer-events-none",
 											children: [isRealGroup && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
@@ -20929,7 +20929,7 @@ var TimeBlock = ({ layer, parentTrackId, startTime, endTime, timeScale, updateAn
 	const entryAnimName = layer.animation?.entry || "";
 	const exitAnimName = layer.animation?.exit || "";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: `timeline-block absolute top-1.5 bottom-1.5 rounded shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-hidden transition-all ${active ? "bg-indigo-500 ring-2 ring-white z-30 shadow-[0_4px_15px_rgba(0,0,0,0.3)] opacity-100" : "bg-indigo-500 hover:ring-1 hover:ring-white/50 z-10 opacity-40 hover:opacity-70"}`,
+		className: `timeline-block absolute top-1.5 bottom-1.5 rounded shadow-sm flex items-center cursor-grab active:cursor-grabbing overflow-hidden transition-all ${active ? "bg-primary-500 ring-2 ring-white z-30 shadow-[0_4px_15px_rgba(0,0,0,0.3)] opacity-100" : "bg-primary-500 hover:ring-1 hover:ring-white/50 z-10 opacity-40 hover:opacity-70"}`,
 		style: {
 			left: `${tempStart * timeScale}px`,
 			width: `${(tempEnd - tempStart) * timeScale}px`,
@@ -20949,7 +20949,7 @@ var TimeBlock = ({ layer, parentTrackId, startTime, endTime, timeScale, updateAn
 					backgroundPosition: "left center"
 				}
 			}),
-			!thumbUrl && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-r from-indigo-500 to-indigo-600 pointer-events-none" }),
+			!thumbUrl && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-r from-primary-500 to-primary-600 pointer-events-none" }),
 			!isGroupParent && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "absolute left-0 top-0 bottom-0 w-4 md:w-6 flex items-center justify-start group cursor-col-resize z-40 hover:bg-white/20",
 				onMouseDown: (e) => handleMouseDown(e, "start"),
@@ -22795,7 +22795,7 @@ var ZoomControls = ({ zoomIn, zoomOut, setTransform, centerView, scale, position
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 					onClick: () => centerView(1, 300),
-					className: "flex items-center gap-1 p-1.5 mr-2 text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded transition font-medium text-xs shadow-sm",
+					className: "flex items-center gap-1 p-1.5 mr-2 text-primary-600 bg-primary-50 hover:bg-primary-100 rounded transition font-medium text-xs shadow-sm",
 					title: "Kembalikan Layar 100% ke Tengah",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 						className: "w-4 h-4",
@@ -22816,7 +22816,7 @@ var ZoomControls = ({ zoomIn, zoomOut, setTransform, centerView, scale, position
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					onClick: () => zoomOut(),
-					className: "p-1 text-gray-500 hover:text-indigo-600 transition",
+					className: "p-1 text-gray-500 hover:text-primary-600 transition",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 						className: "w-4 h-4",
 						fill: "none",
@@ -22837,11 +22837,11 @@ var ZoomControls = ({ zoomIn, zoomOut, setTransform, centerView, scale, position
 					onChange: (val) => {
 						setTransform(positionX, positionY, val / 100, 0);
 					},
-					className: "w-24 accent-indigo-600 cursor-ew-resize h-1.5 bg-gray-200 rounded-lg appearance-none"
+					className: "w-24 accent-primary-600 cursor-ew-resize h-1.5 bg-gray-200 rounded-lg appearance-none"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					onClick: () => zoomIn(),
-					className: "p-1 text-gray-500 hover:text-indigo-600 transition",
+					className: "p-1 text-gray-500 hover:text-primary-600 transition",
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 						className: "w-4 h-4",
 						fill: "none",
