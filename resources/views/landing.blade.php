@@ -9,8 +9,7 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Alpine.js CDN -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Alpine.js (Bundled with Livewire 3) -->
     
     <!-- AOS Animation CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -784,6 +783,9 @@
             </div>
         </div>
     </section>
+
+    <!-- AI Chatbot Widget -->
+    @livewire('chatbot')
 
     <!-- Floating Help Button -->
     <div class="fixed bottom-6 right-6 z-50 flex items-end gap-3">
