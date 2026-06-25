@@ -52,6 +52,39 @@ class CashflowStats extends BaseWidget
         $incomeDigital = $stats->income_digital ?? 0;
         $incomeSouvenir = $stats->income_souvenir ?? 0;
         $totalCount = $stats->total_count ?? 0;
+        
+        // Calculate Today's Stats for Badge
+        $todayQuery = clone $query;
+        $todayStats = $todayQuery->whereDate('created_at', \Carbon\Carbon::today())
+            ->selectRaw("
+                SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as total_income,
+                SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as total_expense,
+                SUM(CASE WHEN type = 'income' AND category = 'F&B' THEN amount ELSE 0 END) as income_fnb,
+                SUM(CASE WHEN type = 'income' AND category = 'ATK' THEN amount ELSE 0 END) as income_atk,
+                SUM(CASE WHEN type = 'income' AND category = 'Printing' THEN amount ELSE 0 END) as income_print,
+                SUM(CASE WHEN type = 'income' AND category = 'Digital' THEN amount ELSE 0 END) as income_digital,
+                SUM(CASE WHEN type = 'income' AND category = 'Souvenir' THEN amount ELSE 0 END) as income_souvenir,
+                COUNT(*) as total_count
+            ")->first();
+
+        $todayTotalIncome = $todayStats->total_income ?? 0;
+        $todayTotalExpense = $todayStats->total_expense ?? 0;
+        $todayTotalNet = $todayTotalIncome + $todayTotalExpense;
+        $todayFnB = $todayStats->income_fnb ?? 0;
+        $todayAtk = $todayStats->income_atk ?? 0;
+        $todayPrint = $todayStats->income_print ?? 0;
+        $todayDigital = $todayStats->income_digital ?? 0;
+        $todaySouvenir = $todayStats->income_souvenir ?? 0;
+        $todayCount = $todayStats->total_count ?? 0;
+        $totalExpense = $stats->total_expense ?? 0;
+        $totalNet = $totalIncome + $totalExpense; // Add them because expense is already negative
+
+        $incomeFnB = $stats->income_fnb ?? 0;
+        $incomeAtk = $stats->income_atk ?? 0;
+        $incomePrint = $stats->income_print ?? 0;
+        $incomeDigital = $stats->income_digital ?? 0;
+        $incomeSouvenir = $stats->income_souvenir ?? 0;
+        $totalCount = $stats->total_count ?? 0;
 
         $formatValue = function ($amount) {
             $formattedTarget = 'Rp ' . number_format($amount, 0, ',', '.');
@@ -140,55 +173,55 @@ class CashflowStats extends BaseWidget
         };
 
         return [
-            $this->makeTrackedStat($boldTitle('Total Pemasukan'), $totalIncome, 'cashflow_income', $formatValue($totalIncome), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Total Pemasukan'), $formatValue($totalIncome), $todayTotalIncome)
                 ->description('Dari data yang sedang disaring')
                 ->descriptionIcon('heroicon-m-arrow-trending-up', \Filament\Support\Enums\IconPosition::Before)
                 ->color('success')
                 ->extraAttributes(['style' => 'background-color: #f0fdf4; border: 1px solid #bbf7d0;']),
 
-            $this->makeTrackedStat($boldTitle('Total Pengeluaran'), abs($totalExpense), 'cashflow_expense', $formatValue(abs($totalExpense)), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Total Pengeluaran'), $formatValue(abs($totalExpense)), abs($todayTotalExpense))
                 ->description('Dari data yang sedang disaring')
                 ->descriptionIcon('heroicon-m-arrow-trending-down', \Filament\Support\Enums\IconPosition::Before)
                 ->color('danger')
                 ->extraAttributes(['style' => 'background-color: #fef2f2; border: 1px solid #fecaca;']),
                 
-            $this->makeTrackedStat($boldTitle('Laba Bersih (Nett)'), $totalNet, 'cashflow_net', $formatValue($totalNet), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Laba Bersih (Nett)'), $formatValue($totalNet), $todayTotalNet)
                 ->description('Pemasukan - Pengeluaran')
                 ->descriptionIcon($totalNet >= 0 ? 'heroicon-m-arrow-up-circle' : 'heroicon-m-exclamation-triangle', \Filament\Support\Enums\IconPosition::Before)
                 ->color($totalNet >= 0 ? 'success' : 'danger')
                 ->extraAttributes(['style' => 'background-color: #eff6ff; border: 1px solid #bfdbfe;']),
 
-            $this->makeTrackedStat($boldTitle('Omzet F&B'), $incomeFnB, 'cashflow_omzet_fnb', $formatValue($incomeFnB), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Omzet F&B'), $formatValue($incomeFnB), $todayFnB)
                 ->description('Pemasukan kategori F&B')
                 ->descriptionIcon('heroicon-m-cake', \Filament\Support\Enums\IconPosition::Before)
                 ->color('warning')
                 ->extraAttributes(['style' => 'background-color: #fffbeb; border: 1px solid #fde68a;']),
 
-            $this->makeTrackedStat($boldTitle('Omzet ATK'), $incomeAtk, 'cashflow_omzet_atk', $formatValue($incomeAtk), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Omzet ATK'), $formatValue($incomeAtk), $todayAtk)
                 ->description('Pemasukan kategori ATK')
                 ->descriptionIcon('heroicon-m-pencil-square', \Filament\Support\Enums\IconPosition::Before)
                 ->color('info')
                 ->extraAttributes(['style' => 'background-color: #f0f9ff; border: 1px solid #bae6fd;']),
 
-            $this->makeTrackedStat($boldTitle('Omzet Printing'), $incomePrint, 'cashflow_omzet_print', $formatValue($incomePrint), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Omzet Printing'), $formatValue($incomePrint), $todayPrint)
                 ->description('Pemasukan kategori Printing')
                 ->descriptionIcon('heroicon-m-printer', \Filament\Support\Enums\IconPosition::Before)
                 ->color('success')
                 ->extraAttributes(['style' => 'background-color: #ecfdf5; border: 1px solid #a7f3d0;']),
 
-            $this->makeTrackedStat($boldTitle('Omzet Digital'), $incomeDigital, 'cashflow_omzet_digital', $formatValue($incomeDigital), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Omzet Digital'), $formatValue($incomeDigital), $todayDigital)
                 ->description('Pemasukan kategori Digital')
                 ->descriptionIcon('heroicon-m-device-phone-mobile', \Filament\Support\Enums\IconPosition::Before)
                 ->color('primary')
                 ->extraAttributes(['style' => 'background-color: #eef2ff; border: 1px solid #c7d2fe;']),
 
-            $this->makeTrackedStat($boldTitle('Omzet Souvenir'), $incomeSouvenir, 'cashflow_omzet_souvenir', $formatValue($incomeSouvenir), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Omzet Souvenir'), $formatValue($incomeSouvenir), $todaySouvenir)
                 ->description('Pemasukan kategori Souvenir')
                 ->descriptionIcon('heroicon-m-gift', \Filament\Support\Enums\IconPosition::Before)
                 ->color('danger')
                 ->extraAttributes(['style' => 'background-color: #fff1f2; border: 1px solid #fecdd3;']),
 
-            $this->makeTrackedStat($boldTitle('Jumlah Transaksi'), $totalCount, 'cashflow_total_tx', $formatString($totalCount, 'Transaksi'), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Jumlah Transaksi'), $formatString($totalCount, 'Transaksi'), $todayCount)
                 ->description('Total aktivitas tercatat')
                 ->descriptionIcon('heroicon-m-document-text', \Filament\Support\Enums\IconPosition::Before)
                 ->color('gray')

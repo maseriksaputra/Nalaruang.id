@@ -42,6 +42,28 @@ class StatsOverview extends BaseWidget
         
         $totalAset = $kasLaci + $totalBep;
 
+        // Calculate Today's Stats for Badge
+        $todayQuery = clone $query;
+        $todayQuery->whereDate('created_at', Carbon::today());
+        
+        $incomeToday = (clone $todayQuery)->where('type', 'income')->sum('amount');
+        $expenseToday = (clone $todayQuery)->where('type', 'expense')->sum('amount');
+        $kasLaciToday = $incomeToday + $expenseToday;
+        
+        $realIncomeToday = (clone $todayQuery)->where('type', 'income')
+            ->where(function($q) { $q->where('category', '!=', 'Tabungan BEP')->orWhereNull('category'); })
+            ->sum('amount');
+        $realExpenseToday = (clone $todayQuery)->where('type', 'expense')
+            ->where(function($q) { $q->where('category', '!=', 'Tabungan BEP')->orWhereNull('category'); })
+            ->sum('amount');
+        $labaBersihToday = $realIncomeToday + $realExpenseToday;
+
+        $autoCollectedToday = abs((clone $todayQuery)->where('reference_type', 'AUTO_BEP')->sum('amount'));
+        $manualCollectedToday = abs((clone $todayQuery)->where('category', 'Tabungan BEP')->where('type', 'expense')->where('reference_type', '!=', 'AUTO_BEP')->sum('amount'));
+        $totalBepToday = $autoCollectedToday + $manualCollectedToday;
+        
+        $totalAsetToday = $kasLaciToday + $totalBepToday;
+
         $formatValue = function ($amount) {
             $formattedTarget = 'Rp ' . number_format($amount, 0, ',', '.');
             return new \Illuminate\Support\HtmlString("
@@ -89,31 +111,31 @@ class StatsOverview extends BaseWidget
         };
 
         return [
-            $this->makeTrackedStat($boldTitle('Total Pendapatan'), $income, 'dashboard_income', $formatValue($income), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Total Pendapatan'), $formatValue($income), $incomeToday)
                 ->description('Seluruh kas masuk')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success')
                 ->url(\App\Filament\Resources\CashflowResource::getUrl('index'))
                 ->extraAttributes(['style' => 'background-color: rgba(16, 185, 129, 0.05);']),
-            $this->makeTrackedStat($boldTitle('Total Pengeluaran'), $expense, 'dashboard_expense', $formatValue($expense), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Total Pengeluaran'), $formatValue($expense), $expenseToday)
                 ->description('Termasuk tabungan BEP')
                 ->descriptionIcon('heroicon-m-arrow-trending-down')
                 ->color('danger')
                 ->url(\App\Filament\Resources\CashflowResource::getUrl('index'))
                 ->extraAttributes(['style' => 'background-color: rgba(239, 68, 68, 0.05);']),
-            $this->makeTrackedStat($boldTitle('Laba Bersih Murni'), $labaBersih, 'dashboard_net_profit', $formatValue($labaBersih), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Laba Bersih Murni'), $formatValue($labaBersih), $labaBersihToday)
                 ->description('Dari operasional (tanpa hitung BEP)')
                 ->color($labaBersih >= 0 ? 'success' : 'danger')
                 ->extraAttributes(['style' => $labaBersih >= 0 ? 'background-color: rgba(16, 185, 129, 0.05);' : 'background-color: rgba(239, 68, 68, 0.05);']),
-            $this->makeTrackedStat($boldTitle('Sisa Kas (Di Laci)'), $kasLaci, 'dashboard_cash_drawer', $formatValue($kasLaci), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Sisa Kas (Di Laci)'), $formatValue($kasLaci), $kasLaciToday)
                 ->description('Uang operasional yang siap dipakai')
                 ->color($kasLaci >= 0 ? 'warning' : 'danger')
                 ->extraAttributes(['style' => 'background-color: rgba(245, 158, 11, 0.05);']),
-            $this->makeTrackedStat($boldTitle('Tabungan BEP'), $totalBep, 'dashboard_bep_savings', $formatValue($totalBep), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Tabungan BEP'), $formatValue($totalBep), $totalBepToday)
                 ->description('Tersimpan di kotak BEP')
                 ->color('success')
                 ->extraAttributes(['style' => 'background-color: rgba(16, 185, 129, 0.05);']),
-            $this->makeTrackedStat($boldTitle('Total Aset Keseluruhan'), $totalAset, 'dashboard_total_assets', $formatValue($totalAset), 'daily')
+            $this->makeBackendTrackedStat($boldTitle('Total Aset Keseluruhan'), $formatValue($totalAset), $totalAsetToday)
                 ->description('Laci Kasir + Tabungan BEP')
                 ->color('primary')
                 ->extraAttributes(['style' => 'background-color: rgba(59, 130, 246, 0.05);']),
