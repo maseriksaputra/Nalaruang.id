@@ -131,10 +131,10 @@
                 
                 <!-- Desktop CTA -->
                 <div class="hidden lg:flex items-center gap-6">
-                    <button @click="$dispatch('open-chat')" id="nav-btn" class="bg-white/20 hover:bg-white hover:text-brand-900 backdrop-blur-sm text-white px-6 py-2.5 rounded-full text-sm font-medium transition duration-300 flex items-center gap-2 transform">
+                    <a href="#kontak" id="nav-btn" class="bg-white/20 hover:bg-white hover:text-brand-900 backdrop-blur-sm text-white px-6 py-2.5 rounded-full text-sm font-medium transition duration-300 flex items-center gap-2 transform">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                         Hubungi Kami
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Mobile Menu Button -->
@@ -166,10 +166,10 @@
                 <a @click="mobileMenuOpen = false" href="#portofolio" class="block px-4 py-3 rounded-xl text-base font-bold text-gray-800 hover:text-brand-600 hover:bg-brand-50 transition">PORTOFOLIO</a>
                 <a @click="mobileMenuOpen = false" href="#review" class="block px-4 py-3 rounded-xl text-base font-bold text-gray-800 hover:text-brand-600 hover:bg-brand-50 transition">CERITA KLIEN</a>
                 <div class="mt-4 px-2 pt-2">
-                    <button @click="mobileMenuOpen = false; $dispatch('open-chat')" class="w-full bg-brand-800 text-white px-6 py-3.5 rounded-full text-sm font-bold text-center shadow-md hover:bg-brand-900 transition block flex items-center justify-center gap-2">
+                    <a @click="mobileMenuOpen = false" href="#kontak" class="w-full bg-brand-800 text-white px-6 py-3.5 rounded-full text-sm font-bold text-center shadow-md hover:bg-brand-900 transition block flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                         Hubungi Kami
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
