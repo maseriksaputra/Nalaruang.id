@@ -970,7 +970,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                 );
             })()}
             
-            {layer.type === 'canvas_group' && (
+            {(layer.type === 'canvas_group' || layer.type === 'group') && (
                 <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                     {layer.children?.map(child => (
                         <PublicLayer key={child.id} layer={child} isOpened={isOpened} isCoverPage={isCoverPage} isChildOfGroup={true} />
