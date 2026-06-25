@@ -398,17 +398,16 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                 toProps.paused = true;
             }
 
-            // Gunakan fromTo agar start state dan end state TERKUNCI secara absolut
-            // Ini akan kebal terhadap re-render React atau gangguan style inline
-            const tween = gsap.fromTo(elementRef, 
-                { ...fromProps, force3D: true, immediateRender: true },
-                {
-                    ...toProps,
-                    ...repeatConfig,
-                    force3D: true,
-                    autoRound: false
-                }
-            );
+            // Set start state immediately (kebal terhadap render berulang)
+            gsap.set(elementRef, { ...fromProps, force3D: true });
+
+            // Animate ke tujuan setelah delay
+            const tween = gsap.to(elementRef, {
+                ...toProps,
+                ...repeatConfig,
+                force3D: true,
+                autoRound: false
+            });
             activeTweens.push(tween);
 
             if (isScrollTriggered) {
