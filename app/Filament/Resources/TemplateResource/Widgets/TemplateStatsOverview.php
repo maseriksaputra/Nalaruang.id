@@ -17,7 +17,7 @@ class TemplateStatsOverview extends BaseWidget
         $query = Template::query();
         
         if ($this->activeTab === 'cetak_fisik') {
-            $query->whereHas('service', fn ($q) => $q->where('slug', 'cetak-fisik'));
+            $query->whereHas('service', fn ($q) => $q->whereIn('slug', ['cetak-fisik', 'cetak-fisik-premium']));
         } elseif ($this->activeTab === 'event_digital') {
             $query->whereHas('service', fn ($q) => $q->where('slug', 'event-digital'));
         } elseif ($this->activeTab === 'souvenir') {
