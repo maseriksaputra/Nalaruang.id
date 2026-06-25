@@ -68,8 +68,8 @@ class Chatbot extends Component
         }
 
         try {
-            // Gunakan v1beta untuk fitur system_instruction
-            $response = Http::post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}", [
+            // Gunakan v1beta untuk fitur system_instruction dengan timeout 15 detik
+            $response = Http::timeout(15)->post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}", [
                 'system_instruction' => [
                     'parts' => [['text' => $contextString]]
                 ],
@@ -78,7 +78,13 @@ class Chatbot extends Component
 
             if ($response->successful()) {
                 $data = $response->json();
-                $reply = $data['candidates'][0]['content']['parts'][0]['text'] ?? 'Maaf, saya tidak mengerti maksud Kakak.';
+                
+                if (isset($data['candidates'][0]['content']['parts'][0]['text'])) {
+                    $reply = $data['candidates'][0]['content']['parts'][0]['text'];
+                } else {
+                    Log::error('Gemini Unexpected Format: ' . $response->body());
+                    $reply = 'Maaf Kak, saya tidak bisa memproses balasan dari sistem saat ini.';
+                }
                 
                 $this->messages[] = [
                     'role' => 'model',
@@ -88,7 +94,7 @@ class Chatbot extends Component
                 Log::error('Gemini API Error: ' . $response->body());
                 $this->messages[] = [
                     'role' => 'model',
-                    'content' => 'Maaf Kak, server AI sedang sibuk atau mengalami gangguan sesaat. Mohon coba beberapa saat lagi.'
+                    'content' => 'Maaf Kak, API Key mungkin tidak valid atau server AI sedang sibuk. (Error ' . $response->status() . ')'
                 ];
             }
         } catch (\Exception $e) {
