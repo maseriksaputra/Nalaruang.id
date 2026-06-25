@@ -230,7 +230,10 @@ const PublicCanvas = ({ config }) => {
                             return section.layout.height;
                         }
                         if (index === 0) {
-                            return '844px';
+                            // Hitung tinggi layar secara dinamis agar background cover selalu full 100vh tanpa sela putih
+                            const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 844;
+                            const targetHeight = Math.max(844, viewportHeight / scale);
+                            return `${targetHeight}px`;
                         }
                         if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
                             return section.layout.minHeight;
