@@ -127,6 +127,12 @@ const getShadowCss = (style) => {
 
 const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup = false }) => {
     if (layer.isHidden) return null;
+    
+    // Sembunyikan otomatis elemen teks yang berisi peringatan dari sistem agar tidak merusak pratinjau/produksi
+    if (layer.type === 'text' && layer.content && typeof layer.content === 'string' && layer.content.includes('DIHAPUS OTOMATIS OLEH SISTEM')) {
+        return null;
+    }
+    
     const elementRef = useRef(null);
     const [rsvpForm, setRsvpForm] = useState({ name: '', status: 'Hadir', message: '' });
     const [rsvpStatus, setRsvpStatus] = useState(null);
