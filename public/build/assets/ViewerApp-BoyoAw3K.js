@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DRsF_Sxu.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-CzZJwROo.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-D8G3rjFU.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-BRwSKD19.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -20097,32 +20097,22 @@ _getGSAP() && gsap.registerPlugin(TextPlugin);
 //#region resources/js/Builder/utils/engineGSAP.js
 gsapWithCSS.registerPlugin(ScrollTrigger, MotionPathPlugin, TextPlugin);
 var getAnimationProps = (type, isExit = false, config = {}, layerStyle = null) => {
-	const duration = config.speed || 1.5;
+	const duration = parseFloat(config.speed) || 1.5;
 	const direction = config.direction || "default";
-	let props = {
-		opacity: 0,
+	const delay = parseFloat(config.delay) || 0;
+	let fromProps = { opacity: 0 };
+	let toProps = {
+		opacity: layerStyle?.opacity !== void 0 ? parseFloat(layerStyle.opacity) : 1,
 		duration,
-		delay: config.delay || 0,
+		delay,
 		ease: "power2.out"
 	};
 	const dirVal = (val) => {
-		if (direction === "up") return {
-			y: isExit ? -val : val,
-			x: 0
-		};
-		if (direction === "down") return {
-			y: isExit ? val : -val,
-			x: 0
-		};
-		if (direction === "left") return {
-			x: isExit ? -val : val,
-			y: 0
-		};
-		if (direction === "right") return {
-			x: isExit ? val : -val,
-			y: 0
-		};
-		return null;
+		if (direction === "top") return { y: isExit ? -val : val };
+		if (direction === "bottom") return { y: isExit ? val : -val };
+		if (direction === "left") return { x: isExit ? -val : val };
+		if (direction === "right") return { x: isExit ? val : -val };
+		return { y: val };
 	};
 	switch (type) {
 		case "fade-in":
@@ -20131,119 +20121,174 @@ var getAnimationProps = (type, isExit = false, config = {}, layerStyle = null) =
 		case "slide-down":
 		case "slide-left":
 		case "slide-right":
-			if (direction !== "default") Object.assign(props, dirVal(30));
-			else {
-				if (type === "slide-up") props.y = isExit ? -30 : 30;
-				if (type === "slide-down") props.y = isExit ? 30 : -30;
-				if (type === "slide-left") props.x = isExit ? -50 : 50;
-				if (type === "slide-right") props.x = isExit ? 50 : -50;
+			if (direction !== "default") {
+				Object.assign(fromProps, dirVal(30));
+				toProps.x = 0;
+				toProps.y = 0;
+			} else {
+				if (type === "slide-up") {
+					fromProps.y = isExit ? -30 : 30;
+					toProps.y = 0;
+				}
+				if (type === "slide-down") {
+					fromProps.y = isExit ? 30 : -30;
+					toProps.y = 0;
+				}
+				if (type === "slide-left") {
+					fromProps.x = isExit ? -50 : 50;
+					toProps.x = 0;
+				}
+				if (type === "slide-right") {
+					fromProps.x = isExit ? 50 : -50;
+					toProps.x = 0;
+				}
 			}
 			break;
 		case "pop":
-			props.scale = .5;
-			props.ease = "back.out(1.7)";
+			fromProps.scale = .5;
+			toProps.scale = 1;
+			toProps.ease = "back.out(1.7)";
 			break;
 		case "zoom-in":
-			props.scale = .5;
+			fromProps.scale = .5;
+			toProps.scale = 1;
 			break;
 		case "zoom-out":
-			props.scale = 1.2;
+			fromProps.scale = 1.2;
+			toProps.scale = 1;
 			break;
 		case "ascend":
-			Object.assign(props, direction !== "default" ? dirVal(30) : { y: 30 });
-			props.rotation = 3;
-			props.ease = "back.out(1.2)";
+			Object.assign(fromProps, direction !== "default" ? dirVal(30) : { y: 30 });
+			toProps.y = 0;
+			toProps.x = 0;
+			fromProps.rotation = 3;
+			toProps.rotation = 0;
+			toProps.ease = "back.out(1.2)";
 			break;
 		case "shift":
-			Object.assign(props, direction !== "default" ? dirVal(20) : { x: 20 });
-			props.skewX = -10;
+			Object.assign(fromProps, direction !== "default" ? dirVal(20) : { x: 20 });
+			toProps.x = 0;
+			toProps.y = 0;
+			fromProps.skewX = -10;
+			toProps.skewX = 0;
 			break;
 		case "bounce-text":
-			Object.assign(props, direction !== "default" ? dirVal(20) : { y: -20 });
-			props.ease = "bounce.out";
+			Object.assign(fromProps, direction !== "default" ? dirVal(20) : { y: -20 });
+			toProps.y = 0;
+			toProps.x = 0;
+			toProps.ease = "bounce.out";
 			break;
 		case "merge":
-			props.letterSpacing = "15px";
+			fromProps.letterSpacing = "15px";
+			toProps.letterSpacing = "normal";
 			break;
 		case "tracking-out":
-			props.letterSpacing = "15px";
-			props.opacity = 0;
+			fromProps.letterSpacing = "15px";
+			fromProps.opacity = 0;
+			toProps.letterSpacing = "normal";
+			toProps.opacity = 1;
 			break;
 		case "typewriter":
 		case "block-reveal":
 		case "wipe":
-			if (direction === "right" || direction === "default") props.clipPath = "inset(0 100% 0 0)";
-			if (direction === "left") props.clipPath = "inset(0 0 0 100%)";
-			if (direction === "down") props.clipPath = "inset(0 0 100% 0)";
-			if (direction === "up") props.clipPath = "inset(100% 0 0 0)";
-			props.ease = "power1.inOut";
+			if (direction === "right" || direction === "default") fromProps.clipPath = "inset(0 100% 0 0)";
+			if (direction === "left") fromProps.clipPath = "inset(0 0 0 100%)";
+			if (direction === "down") fromProps.clipPath = "inset(0 0 100% 0)";
+			if (direction === "up") fromProps.clipPath = "inset(100% 0 0 0)";
+			toProps.clipPath = "inset(0% 0% 0% 0%)";
+			toProps.ease = "power1.inOut";
 			break;
 		case "roll":
-			props.rotationX = -90;
-			props.x = -50;
+			fromProps.rotationX = -90;
+			fromProps.x = -50;
+			toProps.rotationX = 0;
+			toProps.x = 0;
 			break;
 		case "skate":
-			props.skewX = 20;
-			props.x = -50;
+			fromProps.skewX = 20;
+			fromProps.x = -50;
+			toProps.skewX = 0;
+			toProps.x = 0;
 			break;
 		case "stretch":
-			props.scaleX = .2;
+			fromProps.scaleX = .2;
+			toProps.scaleX = 1;
 			break;
 		case "clarify":
 		case "blur":
-			props.filter = "blur(10px)";
+			fromProps.filter = "blur(10px)";
+			toProps.filter = "blur(0px)";
 			break;
 		case "breathe":
-			props.scale = .95;
-			props.opacity = .7;
+			fromProps.scale = .95;
+			fromProps.opacity = .7;
+			toProps.scale = 1;
+			toProps.opacity = 1;
 			break;
 		case "drift":
-			if (direction !== "default") Object.assign(props, dirVal(20));
+			if (direction !== "default") Object.assign(fromProps, dirVal(20));
 			else {
-				props.x = -15;
-				props.y = 15;
+				fromProps.x = -15;
+				fromProps.y = 15;
 			}
+			toProps.x = 0;
+			toProps.y = 0;
 			break;
 		case "tumble":
-			props.rotationX = -45;
-			props.transformPerspective = 400;
+			fromProps.rotationX = -45;
+			fromProps.transformPerspective = 400;
+			toProps.rotationX = 0;
 			break;
 		case "stomp":
-			props.scale = 1.2;
-			props.ease = "power3.in";
+			fromProps.scale = 1.2;
+			toProps.scale = 1;
+			toProps.ease = "power3.in";
 			break;
 		case "neon":
-			props.textShadow = "0 0 10px #e11d48, 0 0 20px #e11d48";
+			fromProps.textShadow = "0 0 10px #e11d48, 0 0 20px #e11d48";
+			toProps.textShadow = "none";
 			break;
 		case "scrapbook":
-			props.rotation = 5;
-			props.scale = .9;
+			fromProps.rotation = 5;
+			fromProps.scale = .9;
+			toProps.rotation = 0;
+			toProps.scale = 1;
 			break;
 		case "drop":
-			props.y = -30;
-			props.ease = "bounce.out";
+			fromProps.y = -30;
+			toProps.y = 0;
+			toProps.ease = "bounce.out";
 			break;
 		case "plant-grow":
-			props.scale = .2;
-			props.rotation = -10;
-			props.transformOrigin = "bottom center";
-			props.ease = "back.out(1.5)";
+			fromProps.scale = .2;
+			toProps.scale = 1;
+			fromProps.rotation = -10;
+			toProps.rotation = 0;
+			toProps.transformOrigin = "bottom center";
+			toProps.ease = "back.out(1.5)";
 			break;
 		case "custom_keyframe":
-			delete props.opacity;
+			delete fromProps.opacity;
 			if (layerStyle && config.startX !== void 0 && config.startY !== void 0) {
-				props.x = isExit ? -(config.startX - layerStyle.x) : config.startX - layerStyle.x;
-				props.y = isExit ? -(config.startY - layerStyle.y) : config.startY - layerStyle.y;
-				if (config.startWidth !== void 0) props.width = config.startWidth;
-				if (config.startHeight !== void 0) props.height = config.startHeight;
+				fromProps.x = isExit ? -(config.startX - layerStyle.x) : config.startX - layerStyle.x;
+				fromProps.y = isExit ? -(config.startY - layerStyle.y) : config.startY - layerStyle.y;
+				if (config.startWidth !== void 0) fromProps.width = config.startWidth;
+				if (config.startHeight !== void 0) fromProps.height = config.startHeight;
+				toProps.x = 0;
+				toProps.y = 0;
 			} else {
-				props.x = isExit ? -(config.offsetX || 0) : config.offsetX || 0;
-				props.y = isExit ? -(config.offsetY || 0) : config.offsetY || 0;
+				fromProps.x = isExit ? -(config.offsetX || 0) : config.offsetX || 0;
+				fromProps.y = isExit ? -(config.offsetY || 0) : config.offsetY || 0;
+				toProps.x = 0;
+				toProps.y = 0;
 			}
 			break;
 		default: break;
 	}
-	return props;
+	return {
+		fromProps,
+		toProps
+	};
 };
 var getIdleProps = (type, config = {}) => {
 	const speed = config.speed || 1;
@@ -20539,17 +20584,24 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, styleParams
 	if (hasEntryAnimation) {
 		const hasEntry = config.mode === "enter" || config.mode === "both" || !config.mode;
 		const hasExit = config.mode === "exit" || config.mode === "both";
-		const entryProps = getAnimationProps(layerAnimation.entry, false, config, styleParams);
+		const { fromProps, toProps } = getAnimationProps(layerAnimation.entry, false, config, styleParams);
 		if (hasEntry) {
-			if (config.scale !== void 0 && config.scale !== 1) entryProps.scale = config.scale;
+			if (config.scale !== void 0 && config.scale !== 1) {
+				fromProps.scale = config.scale;
+				toProps.scale = 1;
+			}
 			const isOnce = !(hasExit || config.autoReverse);
 			const toggleActionStr = hasExit || config.autoReverse ? "play reverse play reverse" : "play none none none";
 			const triggerElement = elementRef;
-			entryProps.delay = globalDelay;
+			toProps.delay = globalDelay;
 			const isScrollTriggered = !isBuilder && trigger === "onScroll" && trigger !== "onLoad";
-			if (isScrollTriggered) entryProps.paused = true;
-			const tween = gsapWithCSS.from(elementRef, {
-				...entryProps,
+			if (isScrollTriggered) toProps.paused = true;
+			const tween = gsapWithCSS.fromTo(elementRef, {
+				...fromProps,
+				force3D: true,
+				immediateRender: true
+			}, {
+				...toProps,
 				...repeatConfig,
 				force3D: true,
 				autoRound: false
@@ -28432,7 +28484,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DRsF_Sxu.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-CzZJwROo.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -30278,16 +30330,15 @@ var PublicCanvas = ({ config }) => {
 		return () => window.removeEventListener("builder:open_invitation", handleOpenInvitation);
 	}, [sections]);
 	(0, import_react.useEffect)(() => {
-		let hasOpenButton = false;
 		sections.forEach((s) => {
 			s.layers?.forEach((l) => {
-				if (l.interaction?.action === "open_invitation") hasOpenButton = true;
+				if (l.interaction?.action === "open_invitation");
 				if (l.children) l.children.forEach((c) => {
-					if (c.interaction?.action === "open_invitation") hasOpenButton = true;
+					if (c.interaction?.action === "open_invitation");
 				});
 			});
 		});
-		if (hasOpenButton && !isOpened) {
+		if (!isOpened) {
 			const styleId = "lock-scroll-style";
 			let styleEl = document.getElementById(styleId);
 			if (!styleEl) {

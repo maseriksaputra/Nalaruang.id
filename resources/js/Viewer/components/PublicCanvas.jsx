@@ -76,7 +76,8 @@ const PublicCanvas = ({ config }) => {
             });
         });
 
-        if (hasOpenButton && !isOpened) {
+        // Selalu kunci scroll jika belum dibuka (masih di cover)
+        if (!isOpened) {
             // Inject a global style to lock scroll, bypassing React's style reconciliation
             const styleId = 'lock-scroll-style';
             let styleEl = document.getElementById(styleId);

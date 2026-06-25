@@ -6,18 +6,19 @@ import { TextPlugin } from 'gsap/TextPlugin';
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, TextPlugin);
 
 const getAnimationProps = (type, isExit = false, config = {}, layerStyle = null) => {
-    const duration = config.speed || 1.5;
+    const duration = parseFloat(config.speed) || 1.5;
     const direction = config.direction || 'default';
-    const delay = config.delay || 0;
+    const delay = parseFloat(config.delay) || 0;
     
-    let props = { opacity: 0, duration, delay, ease: "power2.out" };
+    let fromProps = { opacity: 0 };
+    let toProps = { opacity: layerStyle?.opacity !== undefined ? parseFloat(layerStyle.opacity) : 1, duration, delay, ease: "power2.out" };
 
     const dirVal = (val) => {
-        if (direction === 'up') return { y: isExit ? -val : val, x: 0 };
-        if (direction === 'down') return { y: isExit ? val : -val, x: 0 };
-        if (direction === 'left') return { x: isExit ? -val : val, y: 0 };
-        if (direction === 'right') return { x: isExit ? val : -val, y: 0 };
-        return null;
+        if (direction === 'top') return { y: isExit ? -val : val };
+        if (direction === 'bottom') return { y: isExit ? val : -val };
+        if (direction === 'left') return { x: isExit ? -val : val };
+        if (direction === 'right') return { x: isExit ? val : -val };
+        return { y: val };
     };
 
     switch (type) {
@@ -29,77 +30,85 @@ const getAnimationProps = (type, isExit = false, config = {}, layerStyle = null)
         case 'slide-left':
         case 'slide-right':
             if (direction !== 'default') {
-                Object.assign(props, dirVal(30));
+                Object.assign(fromProps, dirVal(30));
+                toProps.x = 0; toProps.y = 0;
             } else {
-                if (type === 'slide-up') props.y = isExit ? -30 : 30;
-                if (type === 'slide-down') props.y = isExit ? 30 : -30;
-                if (type === 'slide-left') props.x = isExit ? -50 : 50;
-                if (type === 'slide-right') props.x = isExit ? 50 : -50;
+                if (type === 'slide-up') { fromProps.y = isExit ? -30 : 30; toProps.y = 0; }
+                if (type === 'slide-down') { fromProps.y = isExit ? 30 : -30; toProps.y = 0; }
+                if (type === 'slide-left') { fromProps.x = isExit ? -50 : 50; toProps.x = 0; }
+                if (type === 'slide-right') { fromProps.x = isExit ? 50 : -50; toProps.x = 0; }
             }
             break;
-        case 'pop': props.scale = 0.5; props.ease = "back.out(1.7)"; break;
-        case 'zoom-in': props.scale = 0.5; break;
-        case 'zoom-out': props.scale = 1.2; break;
+        case 'pop': fromProps.scale = 0.5; toProps.scale = 1; toProps.ease = "back.out(1.7)"; break;
+        case 'zoom-in': fromProps.scale = 0.5; toProps.scale = 1; break;
+        case 'zoom-out': fromProps.scale = 1.2; toProps.scale = 1; break;
         case 'ascend': 
-            Object.assign(props, direction !== 'default' ? dirVal(30) : { y: 30 });
-            props.rotation = 3;
-            props.ease = "back.out(1.2)"; 
+            Object.assign(fromProps, direction !== 'default' ? dirVal(30) : { y: 30 });
+            toProps.y = 0; toProps.x = 0;
+            fromProps.rotation = 3; toProps.rotation = 0;
+            toProps.ease = "back.out(1.2)"; 
             break;
         case 'shift': 
-            Object.assign(props, direction !== 'default' ? dirVal(20) : { x: 20 });
-            props.skewX = -10;
+            Object.assign(fromProps, direction !== 'default' ? dirVal(20) : { x: 20 });
+            toProps.x = 0; toProps.y = 0;
+            fromProps.skewX = -10; toProps.skewX = 0;
             break;
         case 'bounce-text': 
-            Object.assign(props, direction !== 'default' ? dirVal(20) : { y: -20 });
-            props.ease = "bounce.out"; 
+            Object.assign(fromProps, direction !== 'default' ? dirVal(20) : { y: -20 });
+            toProps.y = 0; toProps.x = 0;
+            toProps.ease = "bounce.out"; 
             break;
-        case 'merge': props.letterSpacing = "15px"; break;
-        case 'tracking-out': props.letterSpacing = "15px"; props.opacity = 0; break;
+        case 'merge': fromProps.letterSpacing = "15px"; toProps.letterSpacing = "normal"; break;
+        case 'tracking-out': fromProps.letterSpacing = "15px"; fromProps.opacity = 0; toProps.letterSpacing = "normal"; toProps.opacity = 1; break;
         case 'typewriter':
         case 'block-reveal': 
         case 'wipe':
-            if (direction === 'right' || direction === 'default') props.clipPath = "inset(0 100% 0 0)";
-            if (direction === 'left') props.clipPath = "inset(0 0 0 100%)";
-            if (direction === 'down') props.clipPath = "inset(0 0 100% 0)";
-            if (direction === 'up') props.clipPath = "inset(100% 0 0 0)";
-            props.ease = "power1.inOut"; 
+            if (direction === 'right' || direction === 'default') fromProps.clipPath = "inset(0 100% 0 0)";
+            if (direction === 'left') fromProps.clipPath = "inset(0 0 0 100%)";
+            if (direction === 'down') fromProps.clipPath = "inset(0 0 100% 0)";
+            if (direction === 'up') fromProps.clipPath = "inset(100% 0 0 0)";
+            toProps.clipPath = "inset(0% 0% 0% 0%)";
+            toProps.ease = "power1.inOut"; 
             break;
-        case 'roll': props.rotationX = -90; props.x = -50; break;
-        case 'skate': props.skewX = 20; props.x = -50; break;
-        case 'stretch': props.scaleX = 0.2; break;
+        case 'roll': fromProps.rotationX = -90; fromProps.x = -50; toProps.rotationX = 0; toProps.x = 0; break;
+        case 'skate': fromProps.skewX = 20; fromProps.x = -50; toProps.skewX = 0; toProps.x = 0; break;
+        case 'stretch': fromProps.scaleX = 0.2; toProps.scaleX = 1; break;
         case 'clarify':
-        case 'blur': props.filter = "blur(10px)"; break;
-        case 'breathe': props.scale = 0.95; props.opacity = 0.7; break;
+        case 'blur': fromProps.filter = "blur(10px)"; toProps.filter = "blur(0px)"; break;
+        case 'breathe': fromProps.scale = 0.95; fromProps.opacity = 0.7; toProps.scale = 1; toProps.opacity = 1; break;
         case 'drift': 
-            if (direction !== 'default') Object.assign(props, dirVal(20));
-            else { props.x = -15; props.y = 15; }
+            if (direction !== 'default') Object.assign(fromProps, dirVal(20));
+            else { fromProps.x = -15; fromProps.y = 15; }
+            toProps.x = 0; toProps.y = 0;
             break;
-        case 'tumble': props.rotationX = -45; props.transformPerspective = 400; break;
-        case 'stomp': props.scale = 1.2; props.ease = "power3.in"; break;
-        case 'neon': props.textShadow = "0 0 10px #e11d48, 0 0 20px #e11d48"; break;
-        case 'scrapbook': props.rotation = 5; props.scale = 0.9; break;
-        case 'drop': props.y = -30; props.ease = "bounce.out"; break;
+        case 'tumble': fromProps.rotationX = -45; fromProps.transformPerspective = 400; toProps.rotationX = 0; break;
+        case 'stomp': fromProps.scale = 1.2; toProps.scale = 1; toProps.ease = "power3.in"; break;
+        case 'neon': fromProps.textShadow = "0 0 10px #e11d48, 0 0 20px #e11d48"; toProps.textShadow = "none"; break;
+        case 'scrapbook': fromProps.rotation = 5; fromProps.scale = 0.9; toProps.rotation = 0; toProps.scale = 1; break;
+        case 'drop': fromProps.y = -30; toProps.y = 0; toProps.ease = "bounce.out"; break;
         case 'plant-grow': 
-            props.scale = 0.2; 
-            props.rotation = -10; 
-            props.transformOrigin = "bottom center"; 
-            props.ease = "back.out(1.5)"; 
+            fromProps.scale = 0.2; toProps.scale = 1;
+            fromProps.rotation = -10; toProps.rotation = 0;
+            toProps.transformOrigin = "bottom center"; 
+            toProps.ease = "back.out(1.5)"; 
             break;
         case 'custom_keyframe':
-            delete props.opacity;
+            delete fromProps.opacity;
             if (layerStyle && config.startX !== undefined && config.startY !== undefined) {
-                props.x = isExit ? -(config.startX - layerStyle.x) : (config.startX - layerStyle.x);
-                props.y = isExit ? -(config.startY - layerStyle.y) : (config.startY - layerStyle.y);
-                if (config.startWidth !== undefined) props.width = config.startWidth;
-                if (config.startHeight !== undefined) props.height = config.startHeight;
+                fromProps.x = isExit ? -(config.startX - layerStyle.x) : (config.startX - layerStyle.x);
+                fromProps.y = isExit ? -(config.startY - layerStyle.y) : (config.startY - layerStyle.y);
+                if (config.startWidth !== undefined) fromProps.width = config.startWidth;
+                if (config.startHeight !== undefined) fromProps.height = config.startHeight;
+                toProps.x = 0; toProps.y = 0;
             } else {
-                props.x = isExit ? -(config.offsetX || 0) : (config.offsetX || 0);
-                props.y = isExit ? -(config.offsetY || 0) : (config.offsetY || 0);
+                fromProps.x = isExit ? -(config.offsetX || 0) : (config.offsetX || 0);
+                fromProps.y = isExit ? -(config.offsetY || 0) : (config.offsetY || 0);
+                toProps.x = 0; toProps.y = 0;
             }
             break;
         default: break;
     }
-    return props;
+    return { fromProps, toProps };
 };
 
 const getIdleProps = (type, config = {}) => {
@@ -370,30 +379,36 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
     if (hasEntryAnimation) {
         const hasEntry = config.mode === 'enter' || config.mode === 'both' || !config.mode;
         const hasExit = config.mode === 'exit' || config.mode === 'both';
-        const entryProps = getAnimationProps(layerAnimation.entry, false, config, styleParams);
+        const { fromProps, toProps } = getAnimationProps(layerAnimation.entry, false, config, styleParams);
             
         if (hasEntry) {
             if (config.scale !== undefined && config.scale !== 1) {
-                entryProps.scale = config.scale;
+                fromProps.scale = config.scale;
+                toProps.scale = 1;
             }
             const isOnce = !(hasExit || config.autoReverse);
             const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none none";
             const triggerElement = elementRef;
 
-            // Pastikan delay diterapkan secara eksplisit
-            entryProps.delay = globalDelay;
+            // Pastikan delay diterapkan secara eksplisit pada toProps (tujuan akhir)
+            toProps.delay = globalDelay;
 
             const isScrollTriggered = (!isBuilder && trigger === 'onScroll' && trigger !== 'onLoad');
             if (isScrollTriggered) {
-                entryProps.paused = true;
+                toProps.paused = true;
             }
 
-            const tween = gsap.from(elementRef, {
-                ...entryProps,
-                ...repeatConfig,
-                force3D: true,
-                autoRound: false
-            });
+            // Gunakan fromTo agar start state dan end state TERKUNCI secara absolut
+            // Ini akan kebal terhadap re-render React atau gangguan style inline
+            const tween = gsap.fromTo(elementRef, 
+                { ...fromProps, force3D: true, immediateRender: true },
+                {
+                    ...toProps,
+                    ...repeatConfig,
+                    force3D: true,
+                    autoRound: false
+                }
+            );
             activeTweens.push(tween);
 
             if (isScrollTriggered) {
