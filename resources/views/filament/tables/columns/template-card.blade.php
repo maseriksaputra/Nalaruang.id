@@ -133,7 +133,7 @@
                             x-transition:enter="transition ease-out duration-300"
                             x-transition:enter-start="opacity-0 transform scale-75 -translate-y-1"
                             x-transition:enter-end="opacity-100 transform scale-100 translate-y-0"
-                            style="display: none; align-items: center; background: #ecfdf5; color: #10b981; font-size: 9px; font-weight: 800; padding: 1px 3px; border-radius: 4px; line-height: 1;">
+                            style="display: inline-flex; align-items: center; background: #ecfdf5; color: #10b981; font-size: 9px; font-weight: 800; padding: 1px 3px; border-radius: 4px; line-height: 1;">
                             <svg style="width: 8px; height: 8px;" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
                             </svg>
@@ -167,7 +167,7 @@
                             x-transition:enter="transition ease-out duration-300"
                             x-transition:enter-start="opacity-0 transform scale-75 -translate-y-1"
                             x-transition:enter-end="opacity-100 transform scale-100 translate-y-0"
-                            style="display: none; align-items: center; background: #ecfdf5; color: #10b981; font-size: 9px; font-weight: 800; padding: 1px 3px; border-radius: 4px; line-height: 1;">
+                            style="display: inline-flex; align-items: center; background: #ecfdf5; color: #10b981; font-size: 9px; font-weight: 800; padding: 1px 3px; border-radius: 4px; line-height: 1;">
                             <svg style="width: 8px; height: 8px;" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
                             </svg>
