@@ -1,5 +1,5 @@
-<div x-data="{ isOpen: @entangle('isOpen') }" 
-     @open-chat.window="isOpen = true; setTimeout(() => { $refs.chatInput.focus(); document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight; }, 100);"
+<div x-data="{ isOpen: false }" 
+     @open-chat.window="isOpen = true; setTimeout(() => { $refs.chatInput.focus(); let msgs = document.getElementById('chat-messages'); if(msgs) msgs.scrollTop = msgs.scrollHeight; }, 100);"
      class="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
      
     <!-- Chat Window -->
