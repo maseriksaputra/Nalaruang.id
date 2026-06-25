@@ -80,10 +80,13 @@ const PublicCanvas = ({ config }) => {
             document.body.style.overflow = 'hidden';
             document.documentElement.style.overflow = 'hidden';
             
+            const viewerContainer = document.getElementById('viewer-scroll-container');
+            if (viewerContainer) viewerContainer.style.overflowY = 'hidden';
+            
             // Prevent touch scrolling on iOS Safari
             const preventScroll = (e) => {
                 // Allow scrolling if target is inside a scrollable element, but generally for cover we lock it
-                if (e.target.closest('.overflow-y-auto')) return;
+                if (e.target.closest('.overflow-y-auto') && e.target.closest('.overflow-y-auto').id !== 'viewer-scroll-container') return;
                 e.preventDefault();
             };
             window.addEventListener('touchmove', preventScroll, { passive: false });
@@ -91,11 +94,14 @@ const PublicCanvas = ({ config }) => {
             return () => {
                 document.body.style.overflow = '';
                 document.documentElement.style.overflow = '';
+                if (viewerContainer) viewerContainer.style.overflowY = '';
                 window.removeEventListener('touchmove', preventScroll);
             };
         } else {
             document.body.style.overflow = '';
             document.documentElement.style.overflow = '';
+            const viewerContainer = document.getElementById('viewer-scroll-container');
+            if (viewerContainer) viewerContainer.style.overflowY = '';
         }
     }, [sections, isOpened]);
 
