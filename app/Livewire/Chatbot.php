@@ -6,6 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Http;
 use App\Models\Template;
 use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\On;
 
 class Chatbot extends Component
 {
@@ -31,9 +32,15 @@ class Chatbot extends Component
             'content' => $this->newMessage
         ];
 
-        $userMessage = $this->newMessage;
         $this->newMessage = '';
 
+        // Panggil API di request terpisah agar UI pesan user langsung muncul
+        $this->dispatch('fetch-ai');
+    }
+
+    #[On('fetch-ai')]
+    public function fetchAiResponse()
+    {
         // Siapkan konteks produk
         $products = Template::where('is_active', true)->get();
         $contextString = "Kamu adalah Customer Service cerdas, ramah, dan solutif dari Nalaruang.id. Jawab dengan bahasa Indonesia santai tapi profesional (gunakan sapaan 'Kak' atau 'Mas/Mbak').\n";
