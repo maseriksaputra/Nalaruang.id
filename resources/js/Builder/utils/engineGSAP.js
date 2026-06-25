@@ -394,8 +394,6 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none none";
             const triggerElement = elementRef;
 
-            // Pastikan delay diterapkan secara eksplisit pada toProps (tujuan akhir)
-            toProps.delay = globalDelay;
 
             const isScrollTriggered = (!isBuilder && trigger === 'onScroll' && trigger !== 'onLoad');
 
