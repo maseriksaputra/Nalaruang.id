@@ -170,7 +170,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
     const isScrollTriggered = (!isBuilder && trigger === 'onScroll' && trigger !== 'onLoad');
     
     // Disable entry animation if element is a child of a canvas_group (parent will animate it)
-    const hasEntryAnimation = !!layerAnimation.entry && !isChildOfGroup;
+    const hasEntryAnimation = !!layerAnimation.entry;
     
     // PERF FIX: Beri nafas (jeda) 800ms khusus untuk halaman cover agar:
     // 1. Browser selesai melakukan Initial Paint (merender gambar & font).
@@ -402,29 +402,41 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                 toProps.paused = true;
             }
 
-            // Set start state immediately (kebal terhadap render berulang)
-            gsap.set(elementRef, { ...fromProps, force3D: true });
-
-            // Animate ke tujuan setelah delay
-            const tween = gsap.to(elementRef, {
+            // Set start state immediately and animate ke tujuan setelah delay
+            // Menggunakan timeline menjamin konsistensi mutlak selama delay
+            const tl = gsap.timeline({ paused: isScrollTriggered });
+            
+            // Set starting values
+            tl.set(elementRef, { ...fromProps, force3D: true });
+            
+            // Animate to end values after delay
+            tl.to(elementRef, {
                 ...toProps,
                 ...repeatConfig,
+                duration: toProps.duration || 1.5,
                 force3D: true,
-                autoRound: false
-            });
-            activeTweens.push(tween);
+                autoRound: false,
+                ease: toProps.ease || "power2.out"
+            }, globalDelay > 0 ? `+=${globalDelay}` : "<");
+
+            activeTweens.push(tl);
             
-            // FORCE GSAP to immediately record the starting values and render the first frame.
-            // This guarantees the element holds its initial state during the delay, even if React re-renders.
-            tween.totalTime(0);
+            // PENTING: Paksa timeline untuk render frame ke-0 secara instan.
+            // Ini mencegah efek lompat (flashing) akibat React me-render elemen pada opacity 1 sebelum GSAP sempat menindihnya.
+            tl.progress(0);
 
             if (isScrollTriggered) {
                 const stTimer = setTimeout(() => {
+                    if (!elementRef) return;
+                    
+                    const toggleActionStr = isLooping ? "play pause resume pause" : "play none none none";
+                    const isOnce = !isLooping;
+
                     ScrollTrigger.create({
                         trigger: triggerElement,
                         start: "top 75%",
                         scroller: scrollScroller,
-                        animation: tween,
+                        animation: tl,
                         toggleActions: toggleActionStr,
                         once: isOnce
                     });
