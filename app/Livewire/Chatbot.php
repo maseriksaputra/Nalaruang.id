@@ -58,6 +58,7 @@ class Chatbot extends Component
         }
 
         $apiKey = env('GEMINI_API_KEY');
+        $model = env('GEMINI_MODEL', 'gemini-1.5-flash'); // Bisa diganti ke gemini-1.5-flash-8b untuk lebih hemat
         if (!$apiKey) {
             $this->messages[] = [
                 'role' => 'model',
@@ -68,7 +69,7 @@ class Chatbot extends Component
 
         try {
             // Gunakan v1beta untuk fitur system_instruction
-            $response = Http::post("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}", [
+            $response = Http::post("https://generativelanguage.googleapis.com/v1beta/models/{$model}:generateContent?key={$apiKey}", [
                 'system_instruction' => [
                     'parts' => [['text' => $contextString]]
                 ],
