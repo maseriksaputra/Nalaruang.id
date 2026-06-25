@@ -101,12 +101,10 @@
                     @endforeach
                 </div>
                 <button x-on:click="isDeleteMode = !isDeleteMode" 
-                        style="padding: 8px 16px; border-radius: 99px; font-size: 13px; font-weight: bold; border: 1px solid; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s; white-space: nowrap; height: 38px;"
-                        x-bind:style="isDeleteMode ? 'background-color: #fee2e2; color: #dc2626; border-color: #fca5a5; box-shadow: 0 0 0 2px rgba(220,38,38,0.2);' : 'background-color: white; color: #4b5563; border-color: #d1d5db; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'"
-                        onmouseover="if(!isDeleteMode) this.style.backgroundColor='#f9fafb'"
-                        onmouseout="if(!isDeleteMode) this.style.backgroundColor='white'">
+                        class="edit-mode-btn"
+                        x-bind:class="isDeleteMode ? 'edit-mode-active' : 'edit-mode-inactive'">
                     <svg style="width: 16px; height: 16px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                    <span x-text="isDeleteMode ? 'Selesai Mode Edit' : 'Mode Edit / Hapus'"></span>
+                    <span x-text="isDeleteMode ? 'Selesai Edit' : 'Edit / Hapus'"></span>
                 </button>
             </div>
 
@@ -410,6 +408,40 @@ Contoh Output:
             border-color: #fbcfe8;
             background-color: #fdf2f8;
             color: #be185d;
+        }
+
+        .edit-mode-btn {
+            padding: 10px 20px;
+            border-radius: 99px;
+            font-weight: bold;
+            font-size: 14px;
+            white-space: nowrap;
+            border: 1px solid;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .edit-mode-inactive {
+            border-color: #e5e7eb;
+            background-color: #ffffff;
+            color: #4b5563;
+        }
+        
+        .edit-mode-inactive:hover {
+            border-color: #fca5a5;
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+        
+        .edit-mode-active {
+            border-color: #fca5a5;
+            background-color: #fee2e2;
+            color: #dc2626;
+            box-shadow: 0 0 0 2px rgba(220,38,38,0.2);
         }
         
         /* Make sure the grid works properly on mobile */
