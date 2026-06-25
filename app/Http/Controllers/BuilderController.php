@@ -21,12 +21,9 @@ class BuilderController extends Controller
                     foreach ($section['layers'] as $layerIndex => &$layer) {
                         $layerSize = strlen(json_encode($layer));
                         if ($layerSize > 5000000) {
-                            $section['layers'][$layerIndex] = [
-                                'id' => $layer['id'] ?? 'layer_' . uniqid(),
-                                'type' => 'text',
-                                'content' => '<div style="color:red; font-size:12px; border:1px dashed red; padding:5px;">[ELEMEN DIHAPUS OTOMATIS OLEH SISTEM KARENA UKURAN > 5MB]</div>',
-                                'style' => $layer['style'] ?? ['width' => 200, 'height' => 100, 'x' => 0, 'y' => 0]
-                            ];
+                            if (isset($layer['content']) && is_string($layer['content']) && strlen($layer['content']) > 5000000) { 
+                                $layer['content'] = ''; 
+                            }
                             $modified = true;
                         }
                     }
