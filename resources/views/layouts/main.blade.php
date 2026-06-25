@@ -11,8 +11,7 @@
     <!-- AOS Animation CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
-    <!-- Alpine JS (Bundled with Livewire 3) -->
-    
+    @livewireStyles
     <!-- Google Fonts: Playfair Display (Serif) & Plus Jakarta Sans (Sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -337,5 +336,6 @@
             setInterval(nextSlide, 5000);
         });
     </script>
+@livewireScripts
 </body>
 </html>

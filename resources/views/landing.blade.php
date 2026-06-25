@@ -5,11 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nalaruang.id - Solusi Cetak, Undangan & Digital Kreatif</title>
-    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Alpine.js (Bundled with Livewire 3) -->
+    @livewireStyles
     
     <!-- AOS Animation CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -929,5 +928,6 @@
         // GSAP Marquee (dihapus dan diganti dengan pure CSS)
     </script>
 @include('components.lightbox')
+@livewireScripts
 </body>
 
