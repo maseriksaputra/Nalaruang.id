@@ -101,10 +101,12 @@
                     @endforeach
                 </div>
                 <button x-on:click="isDeleteMode = !isDeleteMode" 
-                        style="padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; border: 1px solid; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s;"
-                        x-bind:style="isDeleteMode ? 'background-color: #fee2e2; color: #dc2626; border-color: #fca5a5;' : 'background-color: white; color: #6b7280; border-color: #e5e7eb;'">
-                    <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    <span x-text="isDeleteMode ? 'Selesai Hapus' : 'Edit / Hapus'"></span>
+                        style="padding: 8px 16px; border-radius: 99px; font-size: 13px; font-weight: bold; border: 1px solid; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s; white-space: nowrap; height: 38px;"
+                        x-bind:style="isDeleteMode ? 'background-color: #fee2e2; color: #dc2626; border-color: #fca5a5; box-shadow: 0 0 0 2px rgba(220,38,38,0.2);' : 'background-color: white; color: #4b5563; border-color: #d1d5db; box-shadow: 0 1px 2px rgba(0,0,0,0.05);'"
+                        onmouseover="if(!isDeleteMode) this.style.backgroundColor='#f9fafb'"
+                        onmouseout="if(!isDeleteMode) this.style.backgroundColor='white'">
+                    <svg style="width: 16px; height: 16px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    <span x-text="isDeleteMode ? 'Selesai Mode Edit' : 'Mode Edit / Hapus'"></span>
                 </button>
             </div>
 
@@ -138,13 +140,24 @@
                             <span style="color: #db2777; font-weight: bold; font-size: 11px; margin-top: 4px;">Rp {{ number_format($product->default_price, 0, ',', '.') }}</span>
                         </button>
                         <template x-if="isDeleteMode">
-                            <button type="button" 
-                                    x-on:click.stop="if(confirm('Yakin ingin menghapus template produk ini?')) { $wire.deleteProduct({{ $product->id }}) }"
-                                    style="position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; background-color: #fee2e2; color: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border: 1px solid #fecaca; box-shadow: 0 1px 2px rgba(0,0,0,0.05); z-index: 10; cursor: pointer; transition: all 0.2s; line-height: 1;"
-                                    onmouseover="this.style.backgroundColor='#dc2626'; this.style.color='white'; this.style.transform='scale(1.1)'"
-                                    onmouseout="this.style.backgroundColor='#fee2e2'; this.style.color='#dc2626'; this.style.transform='scale(1)'">
-                                ✕
-                            </button>
+                            <div style="position: absolute; top: -10px; right: -10px; display: flex; gap: 4px; z-index: 10;">
+                                <!-- Edit Button -->
+                                <button type="button" 
+                                        x-on:click.stop="$wire.editProduct({{ $product->id }})"
+                                        style="width: 24px; height: 24px; background-color: #dbeafe; color: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #bfdbfe; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.1s;"
+                                        onmouseover="this.style.transform='scale(1.1)'; this.style.backgroundColor='#2563eb'; this.style.color='white';"
+                                        onmouseout="this.style.transform='scale(1)'; this.style.backgroundColor='#dbeafe'; this.style.color='#2563eb';">
+                                    <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                                <!-- Delete Button -->
+                                <button type="button" 
+                                        x-on:click.stop="if(confirm('Yakin ingin menghapus template produk ini?')) { $wire.deleteProduct({{ $product->id }}) }"
+                                        style="width: 24px; height: 24px; background-color: #fee2e2; color: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border: 1px solid #fecaca; box-shadow: 0 2px 4px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.1s; line-height: 1;"
+                                        onmouseover="this.style.transform='scale(1.1)'; this.style.backgroundColor='#dc2626'; this.style.color='white';"
+                                        onmouseout="this.style.transform='scale(1)'; this.style.backgroundColor='#fee2e2'; this.style.color='#dc2626';">
+                                    ✕
+                                </button>
+                            </div>
                         </template>
                     </div>
                 @empty
@@ -177,30 +190,43 @@
                                onblur="this.style.borderColor='#d1d5db'; this.style.boxShadow='none'">
                     </div>
                     <div style="display: flex; gap: 8px; align-items: stretch;" x-data="{ qty: @entangle('manualQty') }">
-                        <div style="display: flex; align-items: stretch; border: 1px solid #d1d5db; border-radius: 8px; overflow: hidden; background-color: white; flex-shrink: 0; height: 42px;">
-                            <button type="button" @click="qty > 1 ? qty-- : qty = 1" 
-                                    style="width: 36px; display: flex; align-items: center; justify-content: center; background-color: #f3f4f6; color: #4b5563; font-weight: bold; border-right: 1px solid #d1d5db; transition: all 0.1s; cursor: pointer; user-select: none;"
-                                    onmousedown="this.style.backgroundColor='#e5e7eb'; this.style.transform='scale(0.95)'" 
-                                    onmouseup="this.style.backgroundColor='#f3f4f6'; this.style.transform='scale(1)'"
-                                    onmouseleave="this.style.backgroundColor='#f3f4f6'; this.style.transform='scale(1)'">
-                                −
+                        @if($editingProductId)
+                            <button x-on:click="$wire.updateProduct()" 
+                                    style="background-color: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; padding: 0 16px; cursor: pointer; box-shadow: 0 2px 4px rgba(59,130,246,0.3); transition: background-color 0.2s; white-space: nowrap; height: 42px;"
+                                    onmouseover="this.style.backgroundColor='#2563eb'" onmouseout="this.style.backgroundColor='#3b82f6'">
+                                💾 Update Template
                             </button>
-                            <input type="number" x-model="qty" min="1" 
-                                   style="width: 48px; border: none; font-size: 14px; text-align: center; outline: none; -moz-appearance: textfield; margin: 0; padding: 0;"
-                                   class="no-spinners">
-                            <button type="button" @click="qty++" 
-                                    style="width: 36px; display: flex; align-items: center; justify-content: center; background-color: #f3f4f6; color: #4b5563; font-weight: bold; border-left: 1px solid #d1d5db; transition: all 0.1s; cursor: pointer; user-select: none;"
-                                    onmousedown="this.style.backgroundColor='#e5e7eb'; this.style.transform='scale(0.95)'" 
-                                    onmouseup="this.style.backgroundColor='#f3f4f6'; this.style.transform='scale(1)'"
-                                    onmouseleave="this.style.backgroundColor='#f3f4f6'; this.style.transform='scale(1)'">
-                                +
+                            <button x-on:click="$wire.cancelEdit()" 
+                                    style="background-color: #9ca3af; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; padding: 0 16px; cursor: pointer; box-shadow: 0 2px 4px rgba(156,163,175,0.3); transition: background-color 0.2s; white-space: nowrap; height: 42px;"
+                                    onmouseover="this.style.backgroundColor='#6b7280'" onmouseout="this.style.backgroundColor='#9ca3af'">
+                                Batal
                             </button>
-                        </div>
-                        <button x-on:click="$wire.addManual(tab)" 
-                                style="background-color: #db2777; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; padding: 0 16px; cursor: pointer; box-shadow: 0 2px 4px rgba(219,39,119,0.3); transition: background-color 0.2s; white-space: nowrap; height: 42px;"
-                                onmouseover="this.style.backgroundColor='#be185d'" onmouseout="this.style.backgroundColor='#db2777'" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
-                            🛒 Tambah ke Keranjang
-                        </button>
+                        @else
+                            <div style="display: flex; align-items: stretch; border: 1px solid #d1d5db; border-radius: 8px; overflow: hidden; background-color: white; flex-shrink: 0; height: 42px;">
+                                <button type="button" @click="qty > 1 ? qty-- : qty = 1" 
+                                        style="width: 36px; display: flex; align-items: center; justify-content: center; background-color: #f3f4f6; color: #4b5563; font-weight: bold; border-right: 1px solid #d1d5db; transition: all 0.1s; cursor: pointer; user-select: none;"
+                                        onmousedown="this.style.backgroundColor='#e5e7eb'; this.style.transform='scale(0.95)'" 
+                                        onmouseup="this.style.backgroundColor='#f3f4f6'; this.style.transform='scale(1)'"
+                                        onmouseleave="this.style.backgroundColor='#f3f4f6'; this.style.transform='scale(1)'">
+                                    −
+                                </button>
+                                <input type="number" x-model="qty" min="1" 
+                                       style="width: 48px; border: none; font-size: 14px; text-align: center; outline: none; -moz-appearance: textfield; margin: 0; padding: 0;"
+                                       class="no-spinners">
+                                <button type="button" @click="qty++" 
+                                        style="width: 36px; display: flex; align-items: center; justify-content: center; background-color: #f3f4f6; color: #4b5563; font-weight: bold; border-left: 1px solid #d1d5db; transition: all 0.1s; cursor: pointer; user-select: none;"
+                                        onmousedown="this.style.backgroundColor='#e5e7eb'; this.style.transform='scale(0.95)'" 
+                                        onmouseup="this.style.backgroundColor='#f3f4f6'; this.style.transform='scale(1)'"
+                                        onmouseleave="this.style.backgroundColor='#f3f4f6'; this.style.transform='scale(1)'">
+                                    +
+                                </button>
+                            </div>
+                            <button x-on:click="$wire.addManual(tab)" 
+                                    style="background-color: #db2777; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; padding: 0 16px; cursor: pointer; box-shadow: 0 2px 4px rgba(219,39,119,0.3); transition: background-color 0.2s; white-space: nowrap; height: 42px;"
+                                    onmouseover="this.style.backgroundColor='#be185d'" onmouseout="this.style.backgroundColor='#db2777'" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'">
+                                🛒 Tambah ke Keranjang
+                            </button>
+                        @endif
                     </div>
                 </div>
             </div>

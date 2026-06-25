@@ -26,6 +26,8 @@ class Kasir extends Page implements HasTable
     public string $transactionType = 'income';
     public string $transactionDate;
     
+    public ?int $editingProductId = null;
+    
     public array $cart = [];
     public array $categories = ['F&B', 'ATK', 'Printing', 'Digital', 'Souvenir'];
 
@@ -367,5 +369,52 @@ class Kasir extends Page implements HasTable
                 ->body('Template produk berhasil dihapus.')
                 ->send();
         }
+    }
+
+    public function editProduct($id)
+    {
+        $product = CashierProduct::find($id);
+        if ($product) {
+            $this->editingProductId = $product->id;
+            $this->manualName = $product->name;
+            $this->manualPrice = $product->default_price;
+            $this->transactionType = $product->type ?? 'income';
+            
+            Notification::make()
+                ->info()
+                ->title('Mode Edit')
+                ->body('Silakan ubah nama atau harga di kolom Ketikan Manual di bawah, lalu klik Simpan Perubahan.')
+                ->send();
+        }
+    }
+
+    public function updateProduct()
+    {
+        if (!$this->editingProductId) return;
+
+        if (empty($this->manualName) || $this->manualPrice === '') {
+            Notification::make()->warning()->title('Lengkapi Data')->body('Nama dan harga tidak boleh kosong.')->send();
+            return;
+        }
+
+        $product = CashierProduct::find($this->editingProductId);
+        if ($product) {
+            $product->name = $this->manualName;
+            $product->default_price = (float) $this->manualPrice;
+            $product->type = $this->transactionType;
+            $product->save();
+
+            Notification::make()->success()->title('Berhasil')->body('Template produk diperbarui.')->send();
+        }
+
+        $this->cancelEdit();
+    }
+
+    public function cancelEdit()
+    {
+        $this->editingProductId = null;
+        $this->manualName = '';
+        $this->manualPrice = '';
+        $this->manualQty = 1;
     }
 }
