@@ -164,9 +164,10 @@ const PublicCanvas = ({ config }) => {
 
     return (
         <div ref={containerRef} style={{ width: '100%', height: (!isOpened && hasAnyLayers) ? '100%' : (scaledHeight === 'auto' ? 'auto' : `${scaledHeight}px`), overflow: 'hidden', position: 'relative', background: coverBackground }}>
-            <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 99999, background: 'rgba(255,0,0,0.8)', color: 'white', fontSize: '10px', padding: '10px', maxHeight: '50%', overflowY: 'auto', width: '100%', pointerEvents: 'none' }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 99999, background: 'rgba(255,0,0,0.8)', color: 'white', fontSize: '10px', padding: '10px', maxHeight: '100%', overflowY: 'auto', width: '100%', pointerEvents: 'none' }}>
                 DEBUG: sections length = {sections?.length}<br/>
-                first section layers = {JSON.stringify(sections?.[0]?.layers?.map(l => ({ id: l.id, type: l.type, hidden: l.isHidden, children: l.children?.length })), null, 2)}
+                layer 0 style = {JSON.stringify(sections?.[0]?.layers?.[0]?.style, null, 2)}<br/>
+                children = {JSON.stringify(sections?.[0]?.layers?.[0]?.children?.map(c => ({id: c.id, type: c.type, style: c.style})), null, 2)}
             </div>
             <div ref={innerRef} style={{ 
                 width: '414px', 
