@@ -63,27 +63,27 @@ class TemplateStatsOverview extends BaseWidget
         }
 
         return [
-            $this->makeTrackedStat('Total View Produk', $totalViews, 'template_total_views', number_format($totalViews, 0, ',', '.'))
+            $this->makeTrackedStat('Total View Produk', $totalViews, 'template_total_views', number_format($totalViews, 0, ',', '.'), 'daily')
                 ->description('Berdasarkan filter aktif')
                 ->descriptionIcon('heroicon-m-eye')
                 ->color('info'),
-            $this->makeTrackedStat('Total Produk', $total, 'template_total_products', number_format($total, 0, ',', '.'))
+            $this->makeTrackedStat('Total Produk', $total, 'template_total_products', number_format($total, 0, ',', '.'), 'daily')
                 ->description('Semua produk')
                 ->descriptionIcon('heroicon-m-shopping-bag')
                 ->color('primary'),
-            $this->makeTrackedStat('Produk Aktif', $active, 'template_active_products', number_format($active, 0, ',', '.'))
+            $this->makeTrackedStat('Produk Aktif', $active, 'template_active_products', number_format($active, 0, ',', '.'), 'daily')
                 ->description('Ditampilkan di web')
                 ->descriptionIcon('heroicon-m-check-circle')
                 ->color('success'),
-            $this->makeTrackedStat('Stok Rendah', $lowStock, 'template_low_stock')
+            $this->makeTrackedStat('Stok Rendah', $lowStock, 'template_low_stock', null, 'daily')
                 ->description('< 10 stok tersisa')
                 ->descriptionIcon('heroicon-m-exclamation-triangle')
                 ->color('warning'),
-            $this->makeTrackedStat('Habis Stok', $outOfStock, 'template_out_stock')
+            $this->makeTrackedStat('Habis Stok', $outOfStock, 'template_out_stock', null, 'daily')
                 ->description('Kosong')
                 ->descriptionIcon('heroicon-m-x-circle')
                 ->color('danger'),
-            $this->makeTrackedStat('Produk Terjual', $totalSold, 'template_total_sold', number_format($totalSold, 0, ',', '.'))
+            $this->makeTrackedStat('Produk Terjual', $totalSold, 'template_total_sold', number_format($totalSold, 0, ',', '.'), 'daily')
                 ->description('Trend penjualan 7 hari terakhir')
                 ->descriptionIcon('heroicon-m-currency-dollar')
                 ->chart($chartData)

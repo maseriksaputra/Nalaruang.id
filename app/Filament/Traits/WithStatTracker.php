@@ -30,7 +30,25 @@ trait WithStatTracker
             <div x-data=\"{
                 current: {$numericValue},
                 diff: 0,
+                animatedDiff: '0',
                 mode: '{$mode}',
+                animateDiff(target) {
+                    let start = null;
+                    const duration = 2000;
+                    const step = (timestamp) => {
+                        if (!start) start = timestamp;
+                        let progress = Math.min((timestamp - start) / duration, 1);
+                        let ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                        let val = 0 + (target - 0) * ease;
+                        this.animatedDiff = new Intl.NumberFormat('id-ID').format(Math.round(val));
+                        if (progress < 1) {
+                            window.requestAnimationFrame(step);
+                        } else {
+                            this.animatedDiff = new Intl.NumberFormat('id-ID').format(Math.round(target));
+                        }
+                    };
+                    window.requestAnimationFrame(step);
+                },
                 init() {
                     let key = 'stat_tracker_{$storageKey}';
                     let dateKey = 'stat_date_{$storageKey}';
@@ -61,6 +79,10 @@ trait WithStatTracker
                         }
                         localStorage.setItem(key, this.current);
                     }
+                    
+                    if (this.diff !== 0) {
+                        this.animateDiff(Math.abs(this.diff));
+                    }
                 }
             }\" style=\"display: flex; align-items: center; gap: 0.5rem;\">
                 <span>{$displayValue}</span>
@@ -73,7 +95,7 @@ trait WithStatTracker
                     <svg style=\"width: 12px; height: 12px;\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"3\" stroke=\"currentColor\">
                         <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18\" />
                     </svg>
-                    +<span x-text=\"diff\"></span>
+                    +<span x-text=\"animatedDiff\"></span>
                 </span>
                 
                 <span x-show=\"diff < 0\" x-cloak
@@ -84,7 +106,7 @@ trait WithStatTracker
                     <svg style=\"width: 12px; height: 12px;\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"3\" stroke=\"currentColor\">
                         <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3\" />
                     </svg>
-                    <span x-text=\"Math.abs(diff)\"></span>
+                    <span x-text=\"animatedDiff\"></span>
                 </span>
             </div>
         ");
