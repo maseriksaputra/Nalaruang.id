@@ -13,6 +13,15 @@ class ProductController extends Controller
         
         // Track views (always track as requested so it updates in real time even for admin)
         $product->increment('demo_views');
+        
+        // Add visitor log so it counts towards Total Server Visits and syncs with Top Invitations
+        \Illuminate\Support\Facades\DB::table('invitation_visitors')->insert([
+            'invitation_id' => $product->invitation_id, // Null if template not linked
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         return view('product-detail', compact('product'));
     }
