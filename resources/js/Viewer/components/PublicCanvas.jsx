@@ -243,8 +243,23 @@ const PublicCanvas = ({ config }) => {
                             zIndex: index === 0 ? 50 : 1,
                             ...(index === 0 ? (() => {
                                 let isSlideUp = transitionType === 'slide_up' || !transitionType;
+                                
+                                let transitionSpeed = '1.2s';
+                                let transitionCurve = 'cubic-bezier(0.85, 0, 0.15, 1)'; // Default cinematic slide
+                                
+                                if (transitionType === 'fade_out') {
+                                    transitionSpeed = '0.8s';
+                                    transitionCurve = 'ease-in-out';
+                                } else if (transitionType === 'zoom_out' || transitionType === 'zoom_in') {
+                                    transitionSpeed = '1s';
+                                    transitionCurve = 'cubic-bezier(0.25, 1, 0.5, 1)'; // smooth ease out
+                                } else if (transitionType === 'blur_out') {
+                                    transitionSpeed = '1s';
+                                    transitionCurve = 'ease-in-out';
+                                }
+                                
                                 let transStyle = {
-                                    transition: 'all 1.2s cubic-bezier(0.85, 0, 0.15, 1)',
+                                    transition: `all ${transitionSpeed} ${transitionCurve}`,
                                     pointerEvents: isOpened ? 'none' : 'auto',
                                     willChange: 'transform, opacity, filter'
                                 };
