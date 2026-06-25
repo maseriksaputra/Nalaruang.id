@@ -22,6 +22,7 @@ class ListTemplates extends ListRecords
     {
         return [
             TemplateResource\Widgets\TemplateStatsOverview::class,
+            TemplateResource\Widgets\TopProductsChart::class,
         ];
     }
 
