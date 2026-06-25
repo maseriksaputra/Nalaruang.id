@@ -89,31 +89,31 @@ class StatsOverview extends BaseWidget
         };
 
         return [
-            $this->makeTrackedStat($boldTitle('Total Pendapatan'), $income, 'dashboard_income', $formatValue($income))
+            $this->makeTrackedStat($boldTitle('Total Pendapatan'), $income, 'dashboard_income', $formatValue($income), 'daily')
                 ->description('Seluruh kas masuk')
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->color('success')
                 ->url(\App\Filament\Resources\CashflowResource::getUrl('index'))
                 ->extraAttributes(['style' => 'background-color: rgba(16, 185, 129, 0.05);']),
-            $this->makeTrackedStat($boldTitle('Total Pengeluaran'), $expense, 'dashboard_expense', $formatValue($expense))
+            $this->makeTrackedStat($boldTitle('Total Pengeluaran'), $expense, 'dashboard_expense', $formatValue($expense), 'daily')
                 ->description('Termasuk tabungan BEP')
                 ->descriptionIcon('heroicon-m-arrow-trending-down')
                 ->color('danger')
                 ->url(\App\Filament\Resources\CashflowResource::getUrl('index'))
                 ->extraAttributes(['style' => 'background-color: rgba(239, 68, 68, 0.05);']),
-            $this->makeTrackedStat($boldTitle('Laba Bersih Murni'), $labaBersih, 'dashboard_net_profit', $formatValue($labaBersih))
+            $this->makeTrackedStat($boldTitle('Laba Bersih Murni'), $labaBersih, 'dashboard_net_profit', $formatValue($labaBersih), 'daily')
                 ->description('Dari operasional (tanpa hitung BEP)')
                 ->color($labaBersih >= 0 ? 'success' : 'danger')
                 ->extraAttributes(['style' => $labaBersih >= 0 ? 'background-color: rgba(16, 185, 129, 0.05);' : 'background-color: rgba(239, 68, 68, 0.05);']),
-            $this->makeTrackedStat($boldTitle('Sisa Kas (Di Laci)'), $kasLaci, 'dashboard_cash_drawer', $formatValue($kasLaci))
+            $this->makeTrackedStat($boldTitle('Sisa Kas (Di Laci)'), $kasLaci, 'dashboard_cash_drawer', $formatValue($kasLaci), 'daily')
                 ->description('Uang operasional yang siap dipakai')
                 ->color($kasLaci >= 0 ? 'warning' : 'danger')
                 ->extraAttributes(['style' => 'background-color: rgba(245, 158, 11, 0.05);']),
-            $this->makeTrackedStat($boldTitle('Tabungan BEP'), $totalBep, 'dashboard_bep_savings', $formatValue($totalBep))
+            $this->makeTrackedStat($boldTitle('Tabungan BEP'), $totalBep, 'dashboard_bep_savings', $formatValue($totalBep), 'daily')
                 ->description('Tersimpan di kotak BEP')
                 ->color('success')
                 ->extraAttributes(['style' => 'background-color: rgba(16, 185, 129, 0.05);']),
-            $this->makeTrackedStat($boldTitle('Total Aset Keseluruhan'), $totalAset, 'dashboard_total_assets', $formatValue($totalAset))
+            $this->makeTrackedStat($boldTitle('Total Aset Keseluruhan'), $totalAset, 'dashboard_total_assets', $formatValue($totalAset), 'daily')
                 ->description('Laci Kasir + Tabungan BEP')
                 ->color('primary')
                 ->extraAttributes(['style' => 'background-color: rgba(59, 130, 246, 0.05);']),

@@ -14,9 +14,10 @@ trait WithStatTracker
      * @param mixed $value The raw numeric value (for tracking)
      * @param string $storageKey Unique key for LocalStorage
      * @param string|null $formattedValue The formatted display value (optional)
+     * @param string $mode Mode tracker ('refresh' atau 'daily')
      * @return Stat
      */
-    protected function makeTrackedStat($label, $value, string $storageKey, string $formattedValue = null): Stat
+    protected function makeTrackedStat($label, $value, string $storageKey, string $formattedValue = null, string $mode = 'refresh'): Stat
     {
         $displayValue = $formattedValue ?? (string) $value;
         $numericValue = is_numeric($value) ? $value : preg_replace('/[^0-9\-]/', '', $value);
@@ -29,16 +30,37 @@ trait WithStatTracker
             <div x-data=\"{
                 current: {$numericValue},
                 diff: 0,
+                mode: '{$mode}',
                 init() {
                     let key = 'stat_tracker_{$storageKey}';
-                    let stored = localStorage.getItem(key);
-                    if (stored !== null) {
-                        let prev = parseInt(stored);
-                        if (!isNaN(prev)) {
-                            this.diff = this.current - prev;
+                    let dateKey = 'stat_date_{$storageKey}';
+                    let today = new Date().toDateString();
+                    
+                    let storedVal = localStorage.getItem(key);
+                    let storedDate = localStorage.getItem(dateKey);
+                    
+                    if (this.mode === 'daily') {
+                        // Mode Harian: Reset hanya jika ganti hari
+                        if (storedDate !== today || storedVal === null) {
+                            localStorage.setItem(dateKey, today);
+                            localStorage.setItem(key, this.current);
+                            this.diff = 0;
+                        } else {
+                            let prev = parseInt(storedVal);
+                            if (!isNaN(prev)) {
+                                this.diff = this.current - prev;
+                            }
                         }
+                    } else {
+                        // Mode Refresh: Hilang setiap kali halaman di-refresh
+                        if (storedVal !== null) {
+                            let prev = parseInt(storedVal);
+                            if (!isNaN(prev)) {
+                                this.diff = this.current - prev;
+                            }
+                        }
+                        localStorage.setItem(key, this.current);
                     }
-                    localStorage.setItem(key, this.current);
                 }
             }\" style=\"display: flex; align-items: center; gap: 0.5rem;\">
                 <span>{$displayValue}</span>
