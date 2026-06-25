@@ -178,6 +178,10 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
     const baseDelay = (!isBuilder && isCoverPage) ? 0.8 : 0;
     const globalDelay = (parseFloat(config.delay) || 0) + baseDelay;
 
+    console.log(`[engineGSAP] Applying to element`, elementRef, {
+        isBuilder, trigger, isScrollTriggered, hasEntryAnimation, globalDelay, config
+    });
+
     // Custom GSAP Code
     if (layerAnimation.custom) {
         try {
@@ -409,6 +413,10 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                 autoRound: false
             });
             activeTweens.push(tween);
+            
+            // FORCE GSAP to immediately record the starting values and render the first frame.
+            // This guarantees the element holds its initial state during the delay, even if React re-renders.
+            tween.totalTime(0);
 
             if (isScrollTriggered) {
                 const stTimer = setTimeout(() => {

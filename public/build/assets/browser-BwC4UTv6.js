@@ -1,4 +1,4 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Container-7Gzl78dY.js","assets/ViewerApp-DgHZCT2S.js","assets/bootstrap-Pg3-MOZN.js","assets/LogUtils-CjrGbVDZ.js","assets/jsx-runtime-CXf6Pf6r.js","assets/ViewerApp-DQ4XEBu1.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/Container-DVieNbdc.js","assets/ViewerApp-BC57uudP.js","assets/bootstrap-Pg3-MOZN.js","assets/LogUtils-CjrGbVDZ.js","assets/jsx-runtime-CXf6Pf6r.js","assets/ViewerApp-DQ4XEBu1.css"])))=>i.map(i=>d[i]);
 import { R as getRandom, _ as safeDocument, at as generatedAttribute, c as getItemMapFromInitializer, h as itemFromSingleOrMultiple, l as getItemsFromInitializer, n as EventType, ot as generatedFalse, st as generatedTrue, t as getLogger, tt as canvasTag } from "./LogUtils-CjrGbVDZ.js";
 //#region \0vite/preload-helper.js
 var scriptRel = "modulepreload";
@@ -306,7 +306,7 @@ var Engine = class {
 		let domSourceElement;
 		if (typeof HTMLElement !== "undefined" && params.element instanceof HTMLElement) domSourceElement = params.element;
 		const { Container } = await __vitePreload(async () => {
-			const { Container } = await import("./Container-7Gzl78dY.js");
+			const { Container } = await import("./Container-DVieNbdc.js");
 			return { Container };
 		}, __vite__mapDeps([0,1,2,3,4,5])), id = params.id ?? domSourceElement?.id ?? `tsparticles${Math.floor(getRandom() * 1e4).toString()}`, { index, url } = params, currentOptions = itemFromSingleOrMultiple(url ? await getDataFromUrl({
 			fallback: params.options,
