@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-dqCw_gJl.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$2, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-Cs-4snTH.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DEvayuSW.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$2, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-DDD2vo4v.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -16091,12 +16091,12 @@ var RightInspector = () => {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "mt-2 p-4 bg-white border border-gray-200 rounded-xl space-y-4 shadow-sm",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex items-center justify-between border-b border-gray-100 pb-3 mb-3",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+									className: "flex items-center justify-between border-b border-gray-100 pb-3 mb-3 cursor-pointer group",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "flex gap-2 items-center",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-											className: "w-5 h-5 text-primary-600",
+											className: "w-5 h-5 text-primary-600 group-hover:text-primary-500 transition-colors",
 											fill: "none",
 											stroke: "currentColor",
 											viewBox: "0 0 24 24",
@@ -16113,8 +16113,8 @@ var RightInspector = () => {
 											className: "text-[10px] text-gray-500 mt-0.5",
 											children: "Atur Keyframe dan animasi lanjutan"
 										})] })]
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
-										className: "relative inline-flex items-center cursor-pointer",
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "relative inline-flex items-center",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 											type: "checkbox",
 											className: "sr-only peer",

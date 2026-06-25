@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DNC7Nc2J.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BxGzBs2i.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-dqCw_gJl.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DEvayuSW.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -20425,7 +20425,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, styleParams
 			y: getValidNum(firstKf.y, baseY) - baseY,
 			scale: getValidNum(firstKf.scale, styleParams?.scale ?? 1),
 			rotation: getValidNum(firstKf.rotation, styleParams?.rotation ?? 0),
-			opacity: globalDelay > 0 ? 0 : getValidNum(firstKf.opacity, styleParams?.opacity ?? 1),
+			opacity: getValidNum(firstKf.opacity, styleParams?.opacity ?? 1),
 			...firstKf.width !== void 0 && { width: firstKf.width },
 			...firstKf.height !== void 0 && { height: firstKf.height }
 		});
@@ -28432,7 +28432,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DNC7Nc2J.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BxGzBs2i.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -30278,21 +30278,30 @@ var PublicCanvas = ({ config }) => {
 			});
 		});
 		if (hasOpenButton && !isOpened) {
-			document.body.style.overflow = "hidden";
-			document.documentElement.style.overflow = "hidden";
+			const styleId = "lock-scroll-style";
+			let styleEl = document.getElementById(styleId);
+			if (!styleEl) {
+				styleEl = document.createElement("style");
+				styleEl.id = styleId;
+				document.head.appendChild(styleEl);
+			}
+			styleEl.innerHTML = `
+                body, html { overflow: hidden !important; }
+                #viewer-scroll-container { overflow-y: hidden !important; touch-action: none; }
+            `;
 			const preventScroll = (e) => {
-				if (e.target.closest(".overflow-y-auto")) return;
+				if (e.target.closest(".overflow-y-auto") && e.target.closest(".overflow-y-auto").id !== "viewer-scroll-container") return;
 				e.preventDefault();
 			};
 			window.addEventListener("touchmove", preventScroll, { passive: false });
 			return () => {
-				document.body.style.overflow = "";
-				document.documentElement.style.overflow = "";
+				const styleEl = document.getElementById("lock-scroll-style");
+				if (styleEl) styleEl.remove();
 				window.removeEventListener("touchmove", preventScroll);
 			};
 		} else {
-			document.body.style.overflow = "";
-			document.documentElement.style.overflow = "";
+			const styleEl = document.getElementById("lock-scroll-style");
+			if (styleEl) styleEl.remove();
 		}
 	}, [sections, isOpened]);
 	(0, import_react.useEffect)(() => {
@@ -30403,7 +30412,10 @@ var PublicCanvas = ({ config }) => {
 					section.layers?.forEach((l) => checkLayer(l, 0));
 					const sectionHeight = (() => {
 						if (section.layout?.height && section.layout.height !== "auto" && section.layout.height !== "100vh") return section.layout.height;
-						if (index === 0) return "844px";
+						if (index === 0) {
+							const viewportHeight = typeof window !== "undefined" ? window.innerHeight : 844;
+							return `${Math.max(844, viewportHeight / scale)}px`;
+						}
 						if (section.layout?.minHeight && section.layout.minHeight !== "844px" && section.layout.minHeight !== "100vh") return section.layout.minHeight;
 						return maxY > 0 ? `${maxY}px` : section.layout?.height || "844px";
 					})();
