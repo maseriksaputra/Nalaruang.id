@@ -47,6 +47,21 @@ class TemplateStatsOverview extends BaseWidget
         $outOfStock = $stats->out_of_stock ?? 0;
         $totalViews = $stats->total_views ?? 0;
 
+        // Get invitation IDs for the current filtered templates
+        $invitationIds = $this->getBaseQuery()->whereNotNull('invitation_id')->pluck('invitation_id')->toArray();
+        
+        // Calculate chart data for the last 7 days
+        $chartData = [];
+        $totalViews7Days = 0;
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $count = \App\Models\InvitationVisitor::whereIn('invitation_id', $invitationIds)
+                ->whereDate('created_at', $date)
+                ->count();
+            $chartData[] = $count;
+            $totalViews7Days += $count;
+        }
+
         return [
             Stat::make('Total View Produk', number_format($totalViews, 0, ',', '.'))
                 ->description('Berdasarkan filter aktif')
@@ -68,6 +83,11 @@ class TemplateStatsOverview extends BaseWidget
                 ->description('Kosong')
                 ->descriptionIcon('heroicon-m-x-circle')
                 ->color('danger'),
+            Stat::make('View Harian (7 Hari)', number_format($totalViews7Days, 0, ',', '.'))
+                ->description('Trend 7 hari terakhir')
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                ->chart($chartData)
+                ->color($totalViews7Days > 0 ? 'success' : 'gray'),
         ];
     }
 }
