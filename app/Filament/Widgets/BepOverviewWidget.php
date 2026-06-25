@@ -54,7 +54,7 @@ class BepOverviewWidget extends Widget implements HasActions, HasForms
             ->pluck('net', 'date');
 
         $existingAutoBeps = \Illuminate\Support\Facades\DB::table('cashflows')
-            ->where('reference_type', 'AUTO_BEP')
+            ->whereIn('reference_type', ['AUTO_BEP', 'AUTO_BEP_EDITED'])
             ->where('transaction_date', '>=', $startDateStr)
             ->get()
             ->keyBy(function($item) {
@@ -76,7 +76,7 @@ class BepOverviewWidget extends Widget implements HasActions, HasForms
 
             if ($autoBepTarget > 0) {
                 if ($existing) {
-                    if ($existing->amount != -$autoBepTarget) {
+                    if ($existing->reference_type !== 'AUTO_BEP_EDITED' && $existing->amount != -$autoBepTarget) {
                         $updates[] = ['id' => $existing->id, 'amount' => -$autoBepTarget];
                     }
                 } else {
@@ -92,7 +92,7 @@ class BepOverviewWidget extends Widget implements HasActions, HasForms
                     ];
                 }
             } else {
-                if ($existing) {
+                if ($existing && $existing->reference_type !== 'AUTO_BEP_EDITED') {
                     $deletes[] = $existing->id;
                 }
             }

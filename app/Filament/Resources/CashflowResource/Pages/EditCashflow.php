@@ -16,4 +16,15 @@ class EditCashflow extends EditRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        // Jika user secara manual mengedit potongan otomatis, ubah reference-nya
+        // agar tidak ditimpa lagi oleh sistem sinkronisasi otomatis
+        if ($this->record->reference_type === 'AUTO_BEP') {
+            $data['reference_type'] = 'AUTO_BEP_EDITED';
+        }
+
+        return $data;
+    }
 }
