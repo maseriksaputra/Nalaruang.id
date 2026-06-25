@@ -398,9 +398,6 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             toProps.delay = globalDelay;
 
             const isScrollTriggered = (!isBuilder && trigger === 'onScroll' && trigger !== 'onLoad');
-            if (isScrollTriggered) {
-                toProps.paused = true;
-            }
 
             // Set start state immediately and animate ke tujuan setelah delay
             // Menggunakan timeline menjamin konsistensi mutlak selama delay
