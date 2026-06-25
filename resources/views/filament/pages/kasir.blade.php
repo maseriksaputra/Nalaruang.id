@@ -130,7 +130,9 @@
                         </button>
                         <button type="button" 
                                 x-on:click.stop="if(confirm('Yakin ingin menghapus template produk ini?')) { $wire.deleteProduct({{ $product->id }}) }"
-                                class="absolute -top-2 -right-2 w-5 h-5 bg-red-100 text-red-600 hover:bg-red-500 hover:text-white rounded-full flex items-center justify-center text-[10px] shadow-sm z-10 font-bold border border-red-200 opacity-100">
+                                style="position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; background-color: #fee2e2; color: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border: 1px solid #fecaca; box-shadow: 0 1px 2px rgba(0,0,0,0.05); z-index: 10; cursor: pointer; transition: all 0.2s; line-height: 1;"
+                                onmouseover="this.style.backgroundColor='#dc2626'; this.style.color='white'; this.style.transform='scale(1.1)'"
+                                onmouseout="this.style.backgroundColor='#fee2e2'; this.style.color='#dc2626'; this.style.transform='scale(1)'">
                             ✕
                         </button>
                     </div>
