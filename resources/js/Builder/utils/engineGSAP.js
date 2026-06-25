@@ -402,7 +402,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             const tl = gsap.timeline({ paused: isScrollTriggered });
             
             // Set starting values
-            tl.set(elementRef, { ...fromProps, force3D: true });
+            tl.set(elementRef, { ...fromProps, force3D: true, immediateRender: true });
             
             // Animate to end values after delay
             tl.to(elementRef, {
