@@ -163,8 +163,10 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
     // Disable entry animation if element is a child of a canvas_group (parent will animate it)
     const hasEntryAnimation = !!layerAnimation.entry && !isChildOfGroup;
     
-    // PERF FIX: Beri nafas (jeda) 250ms khusus untuk halaman cover agar browser selesai melakukan Initial Paint (merender gambar & font) sebelum GPU disiksa oleh GSAP
-    const baseDelay = (!isBuilder && isCoverPage) ? 0.25 : 0;
+    // PERF FIX: Beri nafas (jeda) 800ms khusus untuk halaman cover agar:
+    // 1. Browser selesai melakukan Initial Paint (merender gambar & font).
+    // 2. Animasi modal Preview/Demo selesai (transisi fade/slide in), sehingga user bisa melihat animasinya dari awal.
+    const baseDelay = (!isBuilder && isCoverPage) ? 0.8 : 0;
     const globalDelay = (parseFloat(config.delay) || 0) + baseDelay;
 
     // Custom GSAP Code
