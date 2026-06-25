@@ -38,6 +38,10 @@ class InvitationVisitorResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['invitation' => function($q) {
+                // Hanya ambil id dan title untuk menghindari memory exhaustion akibat canvas_config yang sangat besar
+                $q->select('id', 'title');
+            }]))
             ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('invitation_id')
