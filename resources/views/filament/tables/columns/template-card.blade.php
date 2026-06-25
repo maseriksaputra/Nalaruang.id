@@ -132,12 +132,13 @@
                         <span x-show="diff > 0" x-cloak
                             x-transition:enter="transition ease-out duration-300"
                             x-transition:enter-start="opacity-0 transform scale-75 -translate-y-1"
-                            x-transition:enter-end="opacity-100 transform scale-100 translate-y-0"
-                            style="display: inline-flex; flex-direction: row; flex-wrap: nowrap; white-space: nowrap; align-items: center; background: #ecfdf5; color: #10b981; font-size: 9px; font-weight: 800; padding: 1px 3px; border-radius: 4px; line-height: 1;">
-                            <svg style="width: 8px; height: 8px;" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
-                            </svg>
-                            <span x-text="diff"></span>
+                            x-transition:enter-end="opacity-100 transform scale-100 translate-y-0">
+                            <span style="display: inline-flex; align-items: center; background: #ecfdf5; color: #10b981; font-size: 9px; font-weight: 800; padding: 1px 3px; border-radius: 4px; line-height: 1;">
+                                <svg style="width: 8px; height: 8px;" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
+                                </svg>
+                                <span x-text="diff"></span>
+                            </span>
                         </span>
                     </div>
                     <span style="font-size: 11px; color: #6b7280; margin-top: 4px;">Terjual</span>
@@ -166,12 +167,13 @@
                         <span x-show="diff > 0" x-cloak
                             x-transition:enter="transition ease-out duration-300"
                             x-transition:enter-start="opacity-0 transform scale-75 -translate-y-1"
-                            x-transition:enter-end="opacity-100 transform scale-100 translate-y-0"
-                            style="display: inline-flex; flex-direction: row; flex-wrap: nowrap; white-space: nowrap; align-items: center; background: #ecfdf5; color: #10b981; font-size: 9px; font-weight: 800; padding: 1px 3px; border-radius: 4px; line-height: 1;">
-                            <svg style="width: 8px; height: 8px;" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
-                            </svg>
-                            <span x-text="diff"></span>
+                            x-transition:enter-end="opacity-100 transform scale-100 translate-y-0">
+                            <span style="display: inline-flex; align-items: center; background: #ecfdf5; color: #10b981; font-size: 9px; font-weight: 800; padding: 1px 3px; border-radius: 4px; line-height: 1;">
+                                <svg style="width: 8px; height: 8px;" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
+                                </svg>
+                                <span x-text="diff"></span>
+                            </span>
                         </span>
                     </div>
                     <span style="font-size: 11px; color: #6b7280; margin-top: 4px;">Views</span>
