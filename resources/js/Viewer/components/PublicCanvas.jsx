@@ -77,11 +77,18 @@ const PublicCanvas = ({ config }) => {
         });
 
         if (hasOpenButton && !isOpened) {
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.overflow = 'hidden';
-            
-            const viewerContainer = document.getElementById('viewer-scroll-container');
-            if (viewerContainer) viewerContainer.style.overflowY = 'hidden';
+            // Inject a global style to lock scroll, bypassing React's style reconciliation
+            const styleId = 'lock-scroll-style';
+            let styleEl = document.getElementById(styleId);
+            if (!styleEl) {
+                styleEl = document.createElement('style');
+                styleEl.id = styleId;
+                document.head.appendChild(styleEl);
+            }
+            styleEl.innerHTML = `
+                body, html { overflow: hidden !important; }
+                #viewer-scroll-container { overflow-y: hidden !important; touch-action: none; }
+            `;
             
             // Prevent touch scrolling on iOS Safari
             const preventScroll = (e) => {
@@ -92,16 +99,13 @@ const PublicCanvas = ({ config }) => {
             window.addEventListener('touchmove', preventScroll, { passive: false });
             
             return () => {
-                document.body.style.overflow = '';
-                document.documentElement.style.overflow = '';
-                if (viewerContainer) viewerContainer.style.overflowY = '';
+                const styleEl = document.getElementById('lock-scroll-style');
+                if (styleEl) styleEl.remove();
                 window.removeEventListener('touchmove', preventScroll);
             };
         } else {
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
-            const viewerContainer = document.getElementById('viewer-scroll-container');
-            if (viewerContainer) viewerContainer.style.overflowY = '';
+            const styleEl = document.getElementById('lock-scroll-style');
+            if (styleEl) styleEl.remove();
         }
     }, [sections, isOpened]);
 
