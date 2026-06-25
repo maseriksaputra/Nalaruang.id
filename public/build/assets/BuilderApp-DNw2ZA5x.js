@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-C1ZO5gOV.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$2, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-D_09fg3o.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-BQDTv-Qc.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$2, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-DRNbr20c.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -5770,6 +5770,9 @@ var ColorsPanel = () => {
 	const activeLayerId = useCanvasStore((state) => state.activeLayerId);
 	const sections = useCanvasStore((state) => state.sections);
 	const updateLayerStyle = useCanvasStore((state) => state.updateLayerStyle);
+	const customPalette = useCanvasStore((state) => state.global_settings?.custom_palette || []);
+	const addCustomColor = useCanvasStore((state) => state.addCustomColor);
+	const removeCustomColor = useCanvasStore((state) => state.removeCustomColor);
 	const findLayer = (sections, id) => {
 		for (const section of sections) {
 			const layer = section.layers.find((l) => l.id === id);
@@ -5889,6 +5892,81 @@ var ColorsPanel = () => {
 							})] })]
 						})
 					] }),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "flex items-center justify-between mb-3",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+							className: "text-xs font-semibold tracking-wider text-gray-500 uppercase",
+							children: "Palet Warna Dokumen"
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							onClick: () => addCustomColor(currentBackgroundType === "solid" ? currentColor : "#ffffff"),
+							className: "text-xs flex items-center gap-1 text-primary-600 hover:text-primary-700 font-medium",
+							title: "Simpan warna aktif ke palet",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+								className: "w-4 h-4",
+								fill: "none",
+								stroke: "currentColor",
+								viewBox: "0 0 24 24",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+									strokeLinecap: "round",
+									strokeLinejoin: "round",
+									strokeWidth: "2",
+									d: "M12 4v16m8-8H4"
+								})
+							}), "Simpan"]
+						})]
+					}), customPalette.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "text-xs text-gray-400 p-3 bg-gray-50 rounded border border-dashed border-gray-200 text-center",
+						children: "Belum ada warna tersimpan. Klik \"Simpan\" untuk menambahkan warna aktif."
+					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						className: "grid grid-cols-5 gap-2",
+						children: customPalette.map((color, index) => {
+							const isActive = currentBackgroundType === "solid" && currentColor.toLowerCase() === color.toLowerCase();
+							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "relative group w-full aspect-square",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									onClick: () => handleSelectColor(color),
+									className: `w-full h-full rounded-md border shadow-sm transition-transform hover:scale-105 flex items-center justify-center ${isActive ? "ring-2 ring-primary-500 ring-offset-2" : "border-gray-200"}`,
+									style: { backgroundColor: color },
+									title: color,
+									children: isActive && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+										className: `w-5 h-5 ${[
+											"#ffffff",
+											"#fff",
+											"#ffffffff"
+										].includes(color.toLowerCase()) ? "text-gray-900" : "text-white"}`,
+										fill: "none",
+										stroke: "currentColor",
+										viewBox: "0 0 24 24",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+											strokeLinecap: "round",
+											strokeLinejoin: "round",
+											strokeWidth: "2",
+											d: "M5 13l4 4L19 7"
+										})
+									})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									onClick: (e) => {
+										e.stopPropagation();
+										removeCustomColor(color);
+									},
+									className: "absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-red-600",
+									title: "Hapus warna",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+										className: "w-2.5 h-2.5",
+										fill: "none",
+										stroke: "currentColor",
+										viewBox: "0 0 24 24",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+											strokeLinecap: "round",
+											strokeLinejoin: "round",
+											strokeWidth: "2",
+											d: "M6 18L18 6M6 6l12 12"
+										})
+									})
+								})]
+							}, index);
+						})
+					})] }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 						className: "text-xs font-semibold tracking-wider text-gray-500 uppercase mb-3",
 						children: "Warna Solid Default"

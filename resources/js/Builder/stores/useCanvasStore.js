@@ -270,6 +270,28 @@ const useCanvasStore = create(temporal((set, get) => ({
     },
 
     setActiveTab: (tab) => set({ activeTab: tab }),
+    
+    addCustomColor: (color) => {
+        set(produce((state) => {
+            if (!state.global_settings.custom_palette) {
+                state.global_settings.custom_palette = [];
+            }
+            if (!state.global_settings.custom_palette.includes(color)) {
+                state.global_settings.custom_palette.push(color);
+            }
+        }));
+        get().triggerAutoSave();
+    },
+
+    removeCustomColor: (color) => {
+        set(produce((state) => {
+            if (state.global_settings.custom_palette) {
+                state.global_settings.custom_palette = state.global_settings.custom_palette.filter(c => c !== color);
+            }
+        }));
+        get().triggerAutoSave();
+    },
+
     setZoom: (zoomLevel) => set({ zoom: zoomLevel }),
     setActiveLayer: (layerId, multi = false) => set(produce(state => {
         if (!layerId) {

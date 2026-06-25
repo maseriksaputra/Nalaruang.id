@@ -30,6 +30,9 @@ const ColorsPanel = () => {
     const activeLayerId = useCanvasStore(state => state.activeLayerId);
     const sections = useCanvasStore(state => state.sections);
     const updateLayerStyle = useCanvasStore(state => state.updateLayerStyle);
+    const customPalette = useCanvasStore(state => state.global_settings?.custom_palette || []);
+    const addCustomColor = useCanvasStore(state => state.addCustomColor);
+    const removeCustomColor = useCanvasStore(state => state.removeCustomColor);
 
     const findLayer = (sections, id) => {
         for (const section of sections) {
@@ -135,6 +138,53 @@ const ColorsPanel = () => {
                                 <p className="text-xs text-gray-500 uppercase">{currentBackgroundType === 'solid' ? currentColor : 'Gradasi'}</p>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Palet Warna Tersimpan */}
+                    <div>
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-xs font-semibold tracking-wider text-gray-500 uppercase">Palet Warna Dokumen</h3>
+                            <button 
+                                onClick={() => addCustomColor(currentBackgroundType === 'solid' ? currentColor : '#ffffff')}
+                                className="text-xs flex items-center gap-1 text-primary-600 hover:text-primary-700 font-medium"
+                                title="Simpan warna aktif ke palet"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
+                                Simpan
+                            </button>
+                        </div>
+                        
+                        {customPalette.length === 0 ? (
+                            <div className="text-xs text-gray-400 p-3 bg-gray-50 rounded border border-dashed border-gray-200 text-center">
+                                Belum ada warna tersimpan. Klik "Simpan" untuk menambahkan warna aktif.
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-5 gap-2">
+                                {customPalette.map((color, index) => {
+                                    const isActive = currentBackgroundType === 'solid' && currentColor.toLowerCase() === color.toLowerCase();
+                                    return (
+                                        <div key={index} className="relative group w-full aspect-square">
+                                            <button
+                                                onClick={() => handleSelectColor(color)}
+                                                className={`w-full h-full rounded-md border shadow-sm transition-transform hover:scale-105 flex items-center justify-center ${isActive ? 'ring-2 ring-primary-500 ring-offset-2' : 'border-gray-200'}`}
+                                                style={{ backgroundColor: color }}
+                                                title={color}
+                                            >
+                                                {isActive && <svg className={`w-5 h-5 ${['#ffffff', '#fff', '#ffffffff'].includes(color.toLowerCase()) ? 'text-gray-900' : 'text-white'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>}
+                                            </button>
+                                            
+                                            <button 
+                                                onClick={(e) => { e.stopPropagation(); removeCustomColor(color); }}
+                                                className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-red-600"
+                                                title="Hapus warna"
+                                            >
+                                                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                            </button>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     {/* Warna Solid Default */}
