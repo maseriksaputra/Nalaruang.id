@@ -36,7 +36,8 @@ class TemplateStatsOverview extends BaseWidget
                 COUNT(*) as total,
                 SUM(CASE WHEN is_active = 1 THEN 1 ELSE 0 END) as active_count,
                 SUM(CASE WHEN stok < 10 AND stok > 0 THEN 1 ELSE 0 END) as low_stock,
-                SUM(CASE WHEN stok <= 0 THEN 1 ELSE 0 END) as out_of_stock
+                SUM(CASE WHEN stok <= 0 THEN 1 ELSE 0 END) as out_of_stock,
+                SUM(COALESCE(demo_views, 0)) + SUM(COALESCE(total_invitation_views, 0)) as total_views
             ')
             ->first();
         
@@ -44,8 +45,13 @@ class TemplateStatsOverview extends BaseWidget
         $active = $stats->active_count ?? 0;
         $lowStock = $stats->low_stock ?? 0;
         $outOfStock = $stats->out_of_stock ?? 0;
+        $totalViews = $stats->total_views ?? 0;
 
         return [
+            Stat::make('Total View Produk', number_format($totalViews, 0, ',', '.'))
+                ->description('Berdasarkan filter aktif')
+                ->descriptionIcon('heroicon-m-eye')
+                ->color('info'),
             Stat::make('Total Produk', number_format($total, 0, ',', '.'))
                 ->description('Semua produk')
                 ->descriptionIcon('heroicon-m-shopping-bag')
