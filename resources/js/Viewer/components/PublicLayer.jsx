@@ -277,7 +277,6 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
         height: layer.style?.height !== undefined ? getPx(layer.style.height) : '100px',
         zIndex: layer.style?.zIndex || 1,
         pointerEvents: layer.interaction ? 'auto' : 'none',
-        border: '2px solid red', // DEBUG: Show border
         filter: isChildOfGroup ? 'none' : getFilterById(layer.style?.filterId),
         opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
     };

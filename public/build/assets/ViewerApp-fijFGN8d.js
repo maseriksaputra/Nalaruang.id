@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-C268AuKg.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-CDah0fjw.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BhPwB4BR.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-BxCKR1k3.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -28432,7 +28432,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-C268AuKg.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-CDah0fjw.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -29365,7 +29365,6 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 		height: layer.style?.height !== void 0 ? getPx(layer.style.height) : "100px",
 		zIndex: layer.style?.zIndex || 1,
 		pointerEvents: layer.interaction ? "auto" : "none",
-		border: "2px solid red",
 		filter: isChildOfGroup ? "none" : getFilterById(layer.style?.filterId),
 		opacity: layer.style?.opacity !== void 0 ? layer.style.opacity : 1
 	};
@@ -30336,45 +30335,16 @@ var PublicCanvas = ({ config }) => {
 	const hasAnyLayers = sections.some((s) => s.layers && s.layers.length > 0);
 	const hideEmptySections = global_settings?.custom_code && !hasAnyLayers;
 	const coverBackground = sections[0]?.layout?.background_value || "#ffffff";
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		ref: containerRef,
 		style: {
 			width: "100%",
-			height: !isOpened && hasAnyLayers ? "100%" : scaledHeight === "auto" ? "auto" : `${scaledHeight}px`,
+			height: scaledHeight === "auto" ? "auto" : `${scaledHeight}px`,
 			overflow: "hidden",
 			position: "relative",
 			background: coverBackground
 		},
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			style: {
-				position: "absolute",
-				top: 0,
-				left: 0,
-				zIndex: 99999,
-				background: "rgba(255,0,0,0.8)",
-				color: "white",
-				fontSize: "10px",
-				padding: "10px",
-				maxHeight: "100%",
-				overflowY: "auto",
-				width: "100%",
-				pointerEvents: "none"
-			},
-			children: [
-				"DEBUG: sections length = ",
-				sections?.length,
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("br", {}),
-				"layer 0 style = ",
-				JSON.stringify(sections?.[0]?.layers?.[0]?.style, null, 2),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("br", {}),
-				"children = ",
-				JSON.stringify(sections?.[0]?.layers?.[0]?.children?.map((c) => ({
-					id: c.id,
-					type: c.type,
-					style: c.style
-				})), null, 2)
-			]
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			ref: innerRef,
 			style: {
 				width: "414px",
@@ -30385,7 +30355,7 @@ var PublicCanvas = ({ config }) => {
 				transform: `translateX(-50%) scale(${scale})`,
 				transformOrigin: "top center",
 				backgroundColor: "transparent",
-				height: "100%"
+				minHeight: "844px"
 			},
 			children: [
 				global_settings?.custom_code && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IframePreview, {
@@ -30505,7 +30475,7 @@ var PublicCanvas = ({ config }) => {
 								return transStyle;
 							})() : {}
 						},
-						children: section.layers?.map((layer) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						children: section.layers?.map((layer) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							style: {
 								zIndex: layer.style?.zIndex || 1,
 								position: "absolute",
@@ -30515,26 +30485,16 @@ var PublicCanvas = ({ config }) => {
 								height: "100%",
 								pointerEvents: "none"
 							},
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-								style: {
-									position: "absolute",
-									top: "100px",
-									left: "100px",
-									color: "blue",
-									fontSize: "50px",
-									zIndex: 999999
-								},
-								children: ["LOOP RUNNING ", layer.id]
-							}), !layer.isHidden && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PublicLayer, {
+							children: !layer.isHidden && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PublicLayer, {
 								layer,
 								isOpened,
 								isCoverPage: index === 0
-							}, layer.id)]
+							}, layer.id)
 						}, layer.id))
 					}, section.id);
 				})
 			]
-		})]
+		})
 	});
 };
 //#endregion

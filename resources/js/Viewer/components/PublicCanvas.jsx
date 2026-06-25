@@ -163,12 +163,8 @@ const PublicCanvas = ({ config }) => {
     const coverBackground = sections[0]?.layout?.background_value || '#ffffff';
 
     return (
-        <div ref={containerRef} style={{ width: '100%', height: (!isOpened && hasAnyLayers) ? '100%' : (scaledHeight === 'auto' ? 'auto' : `${scaledHeight}px`), overflow: 'hidden', position: 'relative', background: coverBackground }}>
-            <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 99999, background: 'rgba(255,0,0,0.8)', color: 'white', fontSize: '10px', padding: '10px', maxHeight: '100%', overflowY: 'auto', width: '100%', pointerEvents: 'none' }}>
-                DEBUG: sections length = {sections?.length}<br/>
-                layer 0 style = {JSON.stringify(sections?.[0]?.layers?.[0]?.style, null, 2)}<br/>
-                children = {JSON.stringify(sections?.[0]?.layers?.[0]?.children?.map(c => ({id: c.id, type: c.type, style: c.style})), null, 2)}
-            </div>
+        <div ref={containerRef} style={{ width: '100%', height: scaledHeight === 'auto' ? 'auto' : `${scaledHeight}px`, overflow: 'hidden', position: 'relative', background: coverBackground }}>
+            {/* Removed debug overlay */}
             <div ref={innerRef} style={{ 
                 width: '414px', 
                 maxWidth: '414px', 
@@ -178,7 +174,7 @@ const PublicCanvas = ({ config }) => {
                 transform: `translateX(-50%) scale(${scale})`,
                 transformOrigin: 'top center',
                 backgroundColor: 'transparent',
-                height: '100%'
+                minHeight: '844px'
             }}>
                 {global_settings?.custom_code && (
                     <IframePreview 
@@ -291,7 +287,6 @@ const PublicCanvas = ({ config }) => {
                     >
                         {section.layers?.map((layer) => (
                             <div key={layer.id} style={{ zIndex: layer.style?.zIndex || 1, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-                                <h1 style={{ position: 'absolute', top: '100px', left: '100px', color: 'blue', fontSize: '50px', zIndex: 999999 }}>LOOP RUNNING {layer.id}</h1>
                                 {!layer.isHidden && (
                                     <PublicLayer key={layer.id} layer={layer} isOpened={isOpened} isCoverPage={index === 0} />
                                 )}
