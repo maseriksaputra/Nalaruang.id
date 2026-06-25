@@ -197,7 +197,7 @@
     @livewire('chatbot')
 
     <!-- Floating Help Button -->
-    <div class="fixed bottom-6 right-6 z-50 flex items-end gap-3">
+    <div x-data class="fixed bottom-6 right-6 z-50 flex items-end gap-3">
         <button @click="$dispatch('open-chat')" aria-label="Tanya AI Assistant" class="bg-brand-600 text-white text-left text-xs px-4 py-2.5 rounded-lg shadow-lg shadow-brand-900/20 mb-1 hidden md:block animate-bounce hover:bg-brand-700 transition cursor-pointer">
             Punya pertanyaan?<br><span class="font-bold">Tanya AI Assistant 🤖</span>
         </button>
