@@ -3,6 +3,7 @@
         tab: 'F&B', 
         type: @entangle('transactionType'),
         cart: @entangle('cart'),
+        isDeleteMode: false,
         
         addToCartLocal(productId, name, price, category) {
             let found = false;
@@ -88,15 +89,23 @@
             </div>
 
             @if(!$isBulkMode)
-            <!-- Categories -->
-            <div class="flex overflow-x-auto pb-2 hide-scrollbar custom-categories-wrapper" style="gap: 12px; margin-bottom: 1rem;">
-                @foreach($categories as $cat)
-                    <button x-on:click="tab = '{{ $cat }}'" 
-                            class="category-tab-btn"
-                            x-bind:class="tab === '{{ $cat }}' ? 'active-tab' : 'inactive-tab'">
-                        {{ $cat }}
-                    </button>
-                @endforeach
+            <!-- Categories and Edit Mode -->
+            <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 12px; flex-wrap: wrap;">
+                <div class="flex overflow-x-auto pb-2 hide-scrollbar custom-categories-wrapper" style="gap: 12px; flex: 1;">
+                    @foreach($categories as $cat)
+                        <button x-on:click="tab = '{{ $cat }}'" 
+                                class="category-tab-btn"
+                                x-bind:class="tab === '{{ $cat }}' ? 'active-tab' : 'inactive-tab'">
+                            {{ $cat }}
+                        </button>
+                    @endforeach
+                </div>
+                <button x-on:click="isDeleteMode = !isDeleteMode" 
+                        style="padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; border: 1px solid; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s;"
+                        x-bind:style="isDeleteMode ? 'background-color: #fee2e2; color: #dc2626; border-color: #fca5a5;' : 'background-color: white; color: #6b7280; border-color: #e5e7eb;'">
+                    <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    <span x-text="isDeleteMode ? 'Selesai Hapus' : 'Edit / Hapus'"></span>
+                </button>
             </div>
 
             <!-- Type & Date -->
@@ -128,13 +137,15 @@
                             <span style="font-weight: 600; color: #1f2937; font-size: 12px; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $product->name }}</span>
                             <span style="color: #db2777; font-weight: bold; font-size: 11px; margin-top: 4px;">Rp {{ number_format($product->default_price, 0, ',', '.') }}</span>
                         </button>
-                        <button type="button" 
-                                x-on:click.stop="if(confirm('Yakin ingin menghapus template produk ini?')) { $wire.deleteProduct({{ $product->id }}) }"
-                                style="position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; background-color: #fee2e2; color: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border: 1px solid #fecaca; box-shadow: 0 1px 2px rgba(0,0,0,0.05); z-index: 10; cursor: pointer; transition: all 0.2s; line-height: 1;"
-                                onmouseover="this.style.backgroundColor='#dc2626'; this.style.color='white'; this.style.transform='scale(1.1)'"
-                                onmouseout="this.style.backgroundColor='#fee2e2'; this.style.color='#dc2626'; this.style.transform='scale(1)'">
-                            ✕
-                        </button>
+                        <template x-if="isDeleteMode">
+                            <button type="button" 
+                                    x-on:click.stop="if(confirm('Yakin ingin menghapus template produk ini?')) { $wire.deleteProduct({{ $product->id }}) }"
+                                    style="position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; background-color: #fee2e2; color: #dc2626; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; border: 1px solid #fecaca; box-shadow: 0 1px 2px rgba(0,0,0,0.05); z-index: 10; cursor: pointer; transition: all 0.2s; line-height: 1;"
+                                    onmouseover="this.style.backgroundColor='#dc2626'; this.style.color='white'; this.style.transform='scale(1.1)'"
+                                    onmouseout="this.style.backgroundColor='#fee2e2'; this.style.color='#dc2626'; this.style.transform='scale(1)'">
+                                ✕
+                            </button>
+                        </template>
                     </div>
                 @empty
                 @endforelse
