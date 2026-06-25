@@ -40,6 +40,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(fn () => asset('logo.png'))
             ->brandLogoHeight('6rem')
             ->favicon('/logo1.png?v=2')
+            ->databaseNotifications()
             ->sidebarCollapsibleOnDesktop()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

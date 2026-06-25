@@ -59,6 +59,19 @@ class OrderController extends Controller
             'transaction_date' => now()->toDateString(),
         ]);
 
+        try {
+            $admins = \App\Models\User::all();
+            foreach ($admins as $admin) {
+                \Filament\Notifications\Notification::make()
+                    ->title('Pesanan Baru: ' . $template->name)
+                    ->body('Pesanan masuk dari ' . $order->customer_name . ' (' . $order->customer_phone . ')')
+                    ->success()
+                    ->sendToDatabase($admin);
+            }
+        } catch (\Exception $e) {
+            // Abaikan jika notifikasi gagal agar order tidak terganggu
+        }
+
         // Generate WA Link
         $phone = '6285196811112'; // Admin Phone
         $text = "Halo Nalaruang.id, saya telah melakukan pemesanan via website.\n\n";
