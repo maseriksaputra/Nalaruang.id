@@ -107,19 +107,67 @@ trait WithStatTracker
                 <span>{$displayValue}</span>
                 
                 " . ($diff > 0 ? "
-                <span style=\"display: inline-flex; align-items: center; gap: 2px; padding: 2px 6px; border-radius: 9999px; background-color: rgba(16, 185, 129, 0.1); color: #10b981; font-size: 0.75rem; font-weight: bold; border: 1px solid rgba(16, 185, 129, 0.2);\">
+                <span 
+                    x-data=\"{
+                        target: " . abs($diff) . ",
+                        current: 0,
+                        formatted: '0',
+                        animate() {
+                            let start = null;
+                            const duration = 2000;
+                            const step = (timestamp) => {
+                                if (!start) start = timestamp;
+                                let progress = Math.min((timestamp - start) / duration, 1);
+                                let ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                                let val = this.current + (this.target - this.current) * ease;
+                                this.formatted = new Intl.NumberFormat('id-ID').format(Math.round(val));
+                                if (progress < 1) {
+                                    window.requestAnimationFrame(step);
+                                } else {
+                                    this.formatted = new Intl.NumberFormat('id-ID').format(Math.round(this.target));
+                                }
+                            };
+                            window.requestAnimationFrame(step);
+                        }
+                    }\"
+                    x-init=\"animate()\"
+                    style=\"display: inline-flex; align-items: center; gap: 2px; padding: 2px 6px; border-radius: 9999px; background-color: rgba(16, 185, 129, 0.1); color: #10b981; font-size: 0.75rem; font-weight: bold; border: 1px solid rgba(16, 185, 129, 0.2);\">
                     <svg style=\"width: 12px; height: 12px;\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"3\" stroke=\"currentColor\">
                         <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18\" />
                     </svg>
-                    +" . number_format($diff, 0, ',', '.') . "
+                    +<span x-text=\"formatted\"></span>
                 </span>" : "") . "
                 
                 " . ($diff < 0 ? "
-                <span style=\"display: inline-flex; align-items: center; gap: 2px; padding: 2px 6px; border-radius: 9999px; background-color: rgba(244, 63, 94, 0.1); color: #f43f5e; font-size: 0.75rem; font-weight: bold; border: 1px solid rgba(244, 63, 94, 0.2);\">
+                <span 
+                    x-data=\"{
+                        target: " . abs($diff) . ",
+                        current: 0,
+                        formatted: '0',
+                        animate() {
+                            let start = null;
+                            const duration = 2000;
+                            const step = (timestamp) => {
+                                if (!start) start = timestamp;
+                                let progress = Math.min((timestamp - start) / duration, 1);
+                                let ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                                let val = this.current + (this.target - this.current) * ease;
+                                this.formatted = new Intl.NumberFormat('id-ID').format(Math.round(val));
+                                if (progress < 1) {
+                                    window.requestAnimationFrame(step);
+                                } else {
+                                    this.formatted = new Intl.NumberFormat('id-ID').format(Math.round(this.target));
+                                }
+                            };
+                            window.requestAnimationFrame(step);
+                        }
+                    }\"
+                    x-init=\"animate()\"
+                    style=\"display: inline-flex; align-items: center; gap: 2px; padding: 2px 6px; border-radius: 9999px; background-color: rgba(244, 63, 94, 0.1); color: #f43f5e; font-size: 0.75rem; font-weight: bold; border: 1px solid rgba(244, 63, 94, 0.2);\">
                     <svg style=\"width: 12px; height: 12px;\" fill=\"none\" viewBox=\"0 0 24 24\" stroke-width=\"3\" stroke=\"currentColor\">
                         <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3\" />
                     </svg>
-                    " . number_format(abs($diff), 0, ',', '.') . "
+                    <span x-text=\"formatted\"></span>
                 </span>" : "") . "
             </div>
         ");
