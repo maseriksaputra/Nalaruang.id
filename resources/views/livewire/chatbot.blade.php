@@ -56,14 +56,14 @@
             @endforeach
             
             <!-- Loading Indicator -->
-            <div wire:loading wire:target="sendMessage" class="flex items-start gap-2 max-w-[85%] self-start">
+            <div wire:loading.flex wire:target="sendMessage" class="items-start gap-2 max-w-[85%] self-start" style="display: none;">
                 <div class="w-7 h-7 bg-brand-100 rounded-full flex-shrink-0 flex items-center justify-center mt-1">
                     <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 </div>
-                <div class="bg-white border border-gray-100 text-gray-800 p-4 rounded-2xl rounded-tl-sm shadow-sm flex items-center gap-1.5">
-                    <div class="w-1.5 h-1.5 bg-brand-400 rounded-full animate-bounce"></div>
-                    <div class="w-1.5 h-1.5 bg-brand-400 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
-                    <div class="w-1.5 h-1.5 bg-brand-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                <div class="bg-white border border-gray-100 text-gray-800 p-3 rounded-2xl rounded-tl-sm shadow-sm flex items-center gap-1.5 h-10">
+                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.15s"></div>
+                    <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.3s"></div>
                 </div>
             </div>
         </div>
@@ -88,11 +88,46 @@
 </div>
 
 <script>
+    // Audio Context Setup
+    const playPopSound = () => {
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            if(!AudioContext) return;
+            const ctx = new AudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            
+            // Pop sound config
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(600, ctx.currentTime + 0.05);
+            
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+            
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.1);
+        } catch(e) {
+            console.error('Audio not supported', e);
+        }
+    };
+
     document.addEventListener('livewire:initialized', () => {
+        let lastMessageCount = 1;
+
         Livewire.hook('morph.updated', (el, component) => {
             if (component.name === 'chatbot') {
                 let chatMessages = document.getElementById('chat-messages');
                 if (chatMessages) {
+                    // Check if new message added
+                    const currentCount = chatMessages.querySelectorAll('.self-start, .self-end').length;
+                    if(currentCount > lastMessageCount) {
+                        playPopSound();
+                        lastMessageCount = currentCount;
+                    }
+                    
                     setTimeout(() => {
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                     }, 50);
