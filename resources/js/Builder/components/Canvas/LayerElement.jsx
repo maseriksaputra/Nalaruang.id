@@ -394,7 +394,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                 borderRadius: computedBorderRadius,
                                 overflow: layer.style?.borderRadius ? 'hidden' : 'visible',
                                 filter: getShadowCss(layer.style),
-                                background: (layer.type === 'image' || layer.type === 'text' || layer.type === 'dynamic_guest_name') ? 'transparent' : getGradientCss(layer.style),
+                                background: (layer.type === 'image' || layer.type === 'text' || layer.type === 'dynamic_guest_name' || layer.type === 'shape') ? 'transparent' : getGradientCss(layer.style),
                                 opacity: layer.style?.opacity ?? 1,
                                 boxSizing: 'border-box'
                             }}
@@ -455,9 +455,24 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                             overflow: 'visible'
                                         }}
                                     >
+                                        {(layer.style?.backgroundType === 'linear-gradient' || layer.style?.backgroundType === 'radial-gradient') && (
+                                            <defs>
+                                                {layer.style.backgroundType === 'linear-gradient' ? (
+                                                    <linearGradient id={`grad-${layer.id}`} x1="0%" y1="0%" x2="100%" y2="0%" gradientTransform={`rotate(${layer.style.gradientAngle || 90} 0.5 0.5)`}>
+                                                        <stop offset="0%" stopColor={hexToRgba(layer.style.gradientStart || '#ffffff', layer.style.gradientStartOpacity ?? 100)} />
+                                                        <stop offset="100%" stopColor={hexToRgba(layer.style.gradientEnd || '#000000', layer.style.gradientEndOpacity ?? 100)} />
+                                                    </linearGradient>
+                                                ) : (
+                                                    <radialGradient id={`grad-${layer.id}`}>
+                                                        <stop offset="0%" stopColor={hexToRgba(layer.style.gradientStart || '#ffffff', layer.style.gradientStartOpacity ?? 100)} />
+                                                        <stop offset="100%" stopColor={hexToRgba(layer.style.gradientEnd || '#000000', layer.style.gradientEndOpacity ?? 100)} />
+                                                    </radialGradient>
+                                                )}
+                                            </defs>
+                                        )}
                                         <path 
                                             d={ShapePaths[layer.content].path} 
-                                            fill="currentColor" 
+                                            fill={(layer.style?.backgroundType === 'linear-gradient' || layer.style?.backgroundType === 'radial-gradient') ? `url(#grad-${layer.id})` : "currentColor"} 
                                             fillRule={ShapePaths[layer.content].fillRule || 'nonzero'} 
                                             stroke={layer.style?.borderWidth > 0 ? hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100) : undefined}
                                             strokeWidth={layer.style?.borderWidth > 0 ? layer.style.borderWidth : undefined}
@@ -469,7 +484,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                     <div 
                                         className="w-full h-full relative pointer-events-none"
                                         style={{
-                                            backgroundColor: layer.style?.backgroundColor || '#e0e7ff',
+                                            background: getGradientCss(layer.style),
                                             borderRadius: layer.style?.borderRadius || '0px'
                                         }}
                                     ></div>

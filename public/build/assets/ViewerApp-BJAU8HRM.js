@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-EgTkHSFT.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DBqoxJ94.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BdO8waZ3.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-BbGaXR3X.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -25898,7 +25898,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 								borderRadius: computedBorderRadius,
 								overflow: layer.style?.borderRadius ? "hidden" : "visible",
 								filter: getShadowCss$1(layer.style),
-								background: layer.type === "image" || layer.type === "text" || layer.type === "dynamic_guest_name" ? "transparent" : getGradientCss$1(layer.style),
+								background: layer.type === "image" || layer.type === "text" || layer.type === "dynamic_guest_name" || layer.type === "shape" ? "transparent" : getGradientCss$1(layer.style),
 								opacity: layer.style?.opacity ?? 1,
 								boxSizing: "border-box"
 							},
@@ -25943,7 +25943,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 									},
 									children: layer.content
 								}),
-								layer.type === "shape" && (ShapePaths[layer.content] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+								layer.type === "shape" && (ShapePaths[layer.content] ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
 									viewBox: ShapePaths[layer.content].viewBox,
 									className: "w-full h-full pointer-events-none",
 									preserveAspectRatio: "none",
@@ -25951,19 +25951,42 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 										color: layer.style?.backgroundColor || "#cbd5e1",
 										overflow: "visible"
 									},
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+									children: [(layer.style?.backgroundType === "linear-gradient" || layer.style?.backgroundType === "radial-gradient") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: layer.style.backgroundType === "linear-gradient" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", {
+										id: `grad-${layer.id}`,
+										x1: "0%",
+										y1: "0%",
+										x2: "100%",
+										y2: "0%",
+										gradientTransform: `rotate(${layer.style.gradientAngle || 90} 0.5 0.5)`,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
+											offset: "0%",
+											stopColor: hexToRgba$1(layer.style.gradientStart || "#ffffff", layer.style.gradientStartOpacity ?? 100)
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
+											offset: "100%",
+											stopColor: hexToRgba$1(layer.style.gradientEnd || "#000000", layer.style.gradientEndOpacity ?? 100)
+										})]
+									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("radialGradient", {
+										id: `grad-${layer.id}`,
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
+											offset: "0%",
+											stopColor: hexToRgba$1(layer.style.gradientStart || "#ffffff", layer.style.gradientStartOpacity ?? 100)
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
+											offset: "100%",
+											stopColor: hexToRgba$1(layer.style.gradientEnd || "#000000", layer.style.gradientEndOpacity ?? 100)
+										})]
+									}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
 										d: ShapePaths[layer.content].path,
-										fill: "currentColor",
+										fill: layer.style?.backgroundType === "linear-gradient" || layer.style?.backgroundType === "radial-gradient" ? `url(#grad-${layer.id})` : "currentColor",
 										fillRule: ShapePaths[layer.content].fillRule || "nonzero",
 										stroke: layer.style?.borderWidth > 0 ? hexToRgba$1(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100) : void 0,
 										strokeWidth: layer.style?.borderWidth > 0 ? layer.style.borderWidth : void 0,
 										strokeDasharray: layer.style?.borderStyle === "dashed" ? "8 8" : layer.style?.borderStyle === "dotted" ? "2 4" : void 0,
 										vectorEffect: "non-scaling-stroke"
-									})
+									})]
 								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "w-full h-full relative pointer-events-none",
 									style: {
-										backgroundColor: layer.style?.backgroundColor || "#e0e7ff",
+										background: getGradientCss$1(layer.style),
 										borderRadius: layer.style?.borderRadius || "0px"
 									}
 								})),
@@ -28577,7 +28600,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-EgTkHSFT.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DBqoxJ94.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
