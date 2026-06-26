@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { applyAnimation, applyExitAnimation } from '../../Builder/utils/engineGSAP';
+import { ShapePaths } from '../../Builder/utils/ShapePaths';
 import axios from 'axios';
 import gsap from 'gsap';
 
@@ -337,7 +338,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                     })(),
                     overflow: layer.style?.borderRadius ? 'hidden' : 'visible',
                     filter: getShadowCss(layer.style),
-                    background: (layer.type === 'image' || layer.type === 'text' || layer.type === 'dynamic_guest_name') ? 'transparent' : getGradientCss(layer.style),
+                    background: (layer.type === 'image' || layer.type === 'text' || layer.type === 'dynamic_guest_name' || layer.type === 'shape') ? 'transparent' : getGradientCss(layer.style),
                     borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : undefined,
                     borderStyle: layer.style?.borderStyle || (layer.style?.borderWidth ? 'solid' : undefined),
                     borderColor: layer.style?.borderColor,
@@ -373,17 +374,33 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
             )}
             
             {layer.type === 'shape' && (
-                <div 
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: layer.style?.backgroundColor || '#e0e7ff',
-                        borderRadius: layer.style?.borderRadius || '0px',
-                        borderWidth: layer.style?.borderWidth,
-                        borderColor: layer.style?.borderColor,
-                        borderStyle: layer.style?.borderWidth ? 'solid' : 'none',
-                    }}
-                ></div>
+                ShapePaths[layer.content] ? (
+                    <svg 
+                        viewBox={ShapePaths[layer.content].viewBox} 
+                        className="w-full h-full pointer-events-none" 
+                        preserveAspectRatio="none"
+                        style={{ 
+                            color: layer.style?.backgroundColor || '#cbd5e1'
+                        }}
+                    >
+                        <path 
+                            d={ShapePaths[layer.content].path} 
+                            fill="currentColor" 
+                            fillRule={ShapePaths[layer.content].fillRule || 'nonzero'} 
+                        />
+                    </svg>
+                ) : (
+                    <div 
+                        className="w-full h-full relative pointer-events-none"
+                        style={{
+                            backgroundColor: layer.style?.backgroundColor || '#e0e7ff',
+                            borderRadius: layer.style?.borderRadius || '0px',
+                            borderWidth: layer.style?.borderWidth,
+                            borderColor: layer.style?.borderColor,
+                            borderStyle: layer.style?.borderWidth ? 'solid' : 'none',
+                        }}
+                    ></div>
+                )
             )}
 
             {layer.type === 'image' && (

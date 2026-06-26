@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Rnd } from 'react-rnd';
 import { Player } from '@lottiefiles/react-lottie-player';
+import { ShapePaths } from '../../utils/ShapePaths';
 import useCanvasStore from '../../stores/useCanvasStore';
 import useUIStore from '../../stores/useUIStore';
 import { pointsToSmoothedSvgPath } from '../../utils/pathSmoothing';
@@ -444,13 +445,30 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                             )}
                             
                             {layer.type === 'shape' && (
-                                <div 
-                                    className="w-full h-full relative pointer-events-none"
-                                    style={{
-                                        backgroundColor: layer.style?.backgroundColor || '#e0e7ff',
-                                        borderRadius: layer.style?.borderRadius || '0px'
-                                    }}
-                                ></div>
+                                ShapePaths[layer.content] ? (
+                                    <svg 
+                                        viewBox={ShapePaths[layer.content].viewBox} 
+                                        className="w-full h-full pointer-events-none" 
+                                        preserveAspectRatio="none"
+                                        style={{ 
+                                            color: layer.style?.backgroundColor || '#cbd5e1'
+                                        }}
+                                    >
+                                        <path 
+                                            d={ShapePaths[layer.content].path} 
+                                            fill="currentColor" 
+                                            fillRule={ShapePaths[layer.content].fillRule || 'nonzero'} 
+                                        />
+                                    </svg>
+                                ) : (
+                                    <div 
+                                        className="w-full h-full relative pointer-events-none"
+                                        style={{
+                                            backgroundColor: layer.style?.backgroundColor || '#e0e7ff',
+                                            borderRadius: layer.style?.borderRadius || '0px'
+                                        }}
+                                    ></div>
+                                )
                             )}
 
                             {/* Lottie Upload Fix */}

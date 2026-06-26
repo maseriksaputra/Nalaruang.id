@@ -13,6 +13,7 @@ import ColorsPanel from './ColorsPanel';
 import ImageEditorPanel from './ImageEditorPanel';
 import DesktopThumbnailPanel from './DesktopThumbnailPanel';
 import ClientAssetsPanel from './ClientAssetsPanel';
+import { ShapePaths } from '../../utils/ShapePaths';
 
 const DraggableChildItem = ({ childId, child, parentId, isActive }) => {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
@@ -941,6 +942,25 @@ const LeftDrawer = () => {
                                 <div className="w-10 h-1 bg-gray-400 rounded-full"></div>
                                 <span className="text-[10px] font-semibold text-gray-700">Garis</span>
                             </button>
+                            {Object.entries(ShapePaths).map(([shapeId, shapeData]) => (
+                                <button 
+                                    key={shapeId}
+                                    onClick={() => addLayer({
+                                        id: 'layer_' + Date.now(),
+                                        type: 'shape',
+                                        content: shapeId,
+                                        style: { x: 50, y: 50, width: 100, height: shapeId.includes('classic') || shapeId.includes('frame') ? 140 : 100, backgroundColor: '#cbd5e1' }
+                                    })}
+                                    className="flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2"
+                                >
+                                    <svg viewBox={shapeData.viewBox} className="w-8 h-8" preserveAspectRatio="none">
+                                        <path d={shapeData.path} fill="currentColor" className="text-gray-400" fillRule={shapeData.fillRule || 'nonzero'} />
+                                    </svg>
+                                    <span className="text-[10px] font-semibold text-gray-700 capitalize text-center leading-tight">
+                                        {shapeId.replace(/-/g, ' ')}
+                                    </span>
+                                </button>
+                            ))}
                         </div>
                     </div>
 
