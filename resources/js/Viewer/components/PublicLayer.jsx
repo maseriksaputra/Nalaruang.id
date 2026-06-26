@@ -292,7 +292,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
         // Apply initial opacity & filter manually ONCE. GSAP will take over from here.
         // If React's style prop had these, it would overwrite GSAP's inline styles during re-renders (e.g. when isOpened changes).
         if (!hasAnimatedRef.current) {
-            elementRef.current.style.opacity = layer.style?.opacity !== undefined ? layer.style.opacity : 1;
+            elementRef.current.style.opacity = layer.type === 'shape' ? 1 : (layer.style?.opacity !== undefined ? layer.style.opacity : 1);
             elementRef.current.style.filter = isChildOfGroup ? 'none' : getFilterById(layer.style?.filterId);
         }
     }, [layer.style?.opacity, layer.style?.filterId, isChildOfGroup]);
@@ -309,7 +309,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                     width: '100%',
                     height: '100%',
                     transform: `rotate(${layer.style?.rotation || 0}deg)`,
-                    opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
+                    opacity: layer.type === 'shape' ? 1 : (layer.style?.opacity !== undefined ? layer.style.opacity : 1),
                 }}
             >
                 <div ref={elementRef} className="w-full h-full relative">
@@ -383,21 +383,39 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                             color: layer.style?.backgroundColor || '#cbd5e1'
                         }}
                     >
+                        {(layer.style?.backgroundType === 'linear-gradient' || layer.style?.backgroundType === 'radial-gradient') && (
+                            <defs>
+                                {layer.style.backgroundType === 'linear-gradient' ? (
+                                    <linearGradient id={`grad-${layer.id}`} x1="0%" y1="0%" x2={layer.style?.gradientAngle === 180 ? '0%' : '100%'} y2={layer.style?.gradientAngle === 180 ? '100%' : '0%'}>
+                                        <stop offset="0%" stopColor={hexToRgba(layer.style.gradientStart || '#ffffff', layer.style.gradientStartOpacity ?? 100)} />
+                                        <stop offset="100%" stopColor={hexToRgba(layer.style.gradientEnd || '#000000', layer.style.gradientEndOpacity ?? 100)} />
+                                    </linearGradient>
+                                ) : (
+                                    <radialGradient id={`grad-${layer.id}`} cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stopColor={hexToRgba(layer.style.gradientStart || '#ffffff', layer.style.gradientStartOpacity ?? 100)} />
+                                        <stop offset="100%" stopColor={hexToRgba(layer.style.gradientEnd || '#000000', layer.style.gradientEndOpacity ?? 100)} />
+                                    </radialGradient>
+                                )}
+                            </defs>
+                        )}
                         <path 
                             d={ShapePaths[layer.content].path} 
-                            fill="currentColor" 
+                            fill={(layer.style?.backgroundType === 'linear-gradient' || layer.style?.backgroundType === 'radial-gradient') ? `url(#grad-${layer.id})` : "currentColor"} 
+                            fillOpacity={layer.style?.opacity ?? 1}
                             fillRule={ShapePaths[layer.content].fillRule || 'nonzero'} 
+                            stroke={layer.style?.borderWidth > 0 ? hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100) : undefined}
+                            strokeWidth={layer.style?.borderWidth > 0 ? layer.style.borderWidth : undefined}
+                            strokeDasharray={layer.style?.borderStyle === 'dashed' ? '8 8' : layer.style?.borderStyle === 'dotted' ? '2 4' : undefined}
+                            strokeLinejoin="round"
                         />
                     </svg>
                 ) : (
                     <div 
                         className="w-full h-full relative pointer-events-none"
                         style={{
-                            backgroundColor: layer.style?.backgroundColor || '#e0e7ff',
+                            background: getGradientCss(layer.style),
                             borderRadius: layer.style?.borderRadius || '0px',
-                            borderWidth: layer.style?.borderWidth,
-                            borderColor: layer.style?.borderColor,
-                            borderStyle: layer.style?.borderWidth ? 'solid' : 'none',
+                            opacity: layer.style?.opacity ?? 1
                         }}
                     ></div>
                 )

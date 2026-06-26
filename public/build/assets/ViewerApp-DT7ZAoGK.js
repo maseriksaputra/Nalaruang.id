@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-GNOrXgdF.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-Dl9dHpmW.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-DyH_IlAk.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DiAKF1-k.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -28602,7 +28602,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-GNOrXgdF.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-Dl9dHpmW.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -29540,7 +29540,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 	(0, import_react.useLayoutEffect)(() => {
 		if (!elementRef.current) return;
 		if (!hasAnimatedRef.current) {
-			elementRef.current.style.opacity = layer.style?.opacity !== void 0 ? layer.style.opacity : 1;
+			elementRef.current.style.opacity = layer.type === "shape" ? 1 : layer.style?.opacity !== void 0 ? layer.style.opacity : 1;
 			elementRef.current.style.filter = isChildOfGroup ? "none" : getFilterById(layer.style?.filterId);
 		}
 	}, [
@@ -29558,7 +29558,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 				width: "100%",
 				height: "100%",
 				transform: `rotate(${layer.style?.rotation || 0}deg)`,
-				opacity: layer.style?.opacity !== void 0 ? layer.style.opacity : 1
+				opacity: layer.type === "shape" ? 1 : layer.style?.opacity !== void 0 ? layer.style.opacity : 1
 			},
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				ref: elementRef,
@@ -29618,24 +29618,52 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 							},
 							dangerouslySetInnerHTML: { __html: layer.type === "dynamic_guest_name" ? layer.content.replace("[Nama Tamu]", new URLSearchParams(window.location.search).get("to") || "Bapak/Ibu/Saudara/i") : layer.content }
 						}),
-						layer.type === "shape" && (ShapePaths[layer.content] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+						layer.type === "shape" && (ShapePaths[layer.content] ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
 							viewBox: ShapePaths[layer.content].viewBox,
 							className: "w-full h-full pointer-events-none",
 							preserveAspectRatio: "none",
 							style: { color: layer.style?.backgroundColor || "#cbd5e1" },
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+							children: [(layer.style?.backgroundType === "linear-gradient" || layer.style?.backgroundType === "radial-gradient") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: layer.style.backgroundType === "linear-gradient" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", {
+								id: `grad-${layer.id}`,
+								x1: "0%",
+								y1: "0%",
+								x2: layer.style?.gradientAngle === 180 ? "0%" : "100%",
+								y2: layer.style?.gradientAngle === 180 ? "100%" : "0%",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
+									offset: "0%",
+									stopColor: hexToRgba(layer.style.gradientStart || "#ffffff", layer.style.gradientStartOpacity ?? 100)
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
+									offset: "100%",
+									stopColor: hexToRgba(layer.style.gradientEnd || "#000000", layer.style.gradientEndOpacity ?? 100)
+								})]
+							}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("radialGradient", {
+								id: `grad-${layer.id}`,
+								cx: "50%",
+								cy: "50%",
+								r: "50%",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
+									offset: "0%",
+									stopColor: hexToRgba(layer.style.gradientStart || "#ffffff", layer.style.gradientStartOpacity ?? 100)
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", {
+									offset: "100%",
+									stopColor: hexToRgba(layer.style.gradientEnd || "#000000", layer.style.gradientEndOpacity ?? 100)
+								})]
+							}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
 								d: ShapePaths[layer.content].path,
-								fill: "currentColor",
-								fillRule: ShapePaths[layer.content].fillRule || "nonzero"
-							})
+								fill: layer.style?.backgroundType === "linear-gradient" || layer.style?.backgroundType === "radial-gradient" ? `url(#grad-${layer.id})` : "currentColor",
+								fillOpacity: layer.style?.opacity ?? 1,
+								fillRule: ShapePaths[layer.content].fillRule || "nonzero",
+								stroke: layer.style?.borderWidth > 0 ? hexToRgba(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100) : void 0,
+								strokeWidth: layer.style?.borderWidth > 0 ? layer.style.borderWidth : void 0,
+								strokeDasharray: layer.style?.borderStyle === "dashed" ? "8 8" : layer.style?.borderStyle === "dotted" ? "2 4" : void 0,
+								strokeLinejoin: "round"
+							})]
 						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "w-full h-full relative pointer-events-none",
 							style: {
-								backgroundColor: layer.style?.backgroundColor || "#e0e7ff",
+								background: getGradientCss(layer.style),
 								borderRadius: layer.style?.borderRadius || "0px",
-								borderWidth: layer.style?.borderWidth,
-								borderColor: layer.style?.borderColor,
-								borderStyle: layer.style?.borderWidth ? "solid" : "none"
+								opacity: layer.style?.opacity ?? 1
 							}
 						})),
 						layer.type === "image" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
