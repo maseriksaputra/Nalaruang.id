@@ -172,9 +172,6 @@ const CanvasArea = () => {
                                                 if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
                                                     return section.layout.minHeight;
                                                 }
-                                                if (index === 0) {
-                                                    return '844px'; // Cover is 844px to match phone aspect ratio on PC
-                                                }
                                                 let maxY = 0;
                                                 const checkLayer = (layer, parentY = 0) => {
                                                     const currentY = parentY + (parseFloat(layer.style?.y) || 0);
@@ -185,6 +182,10 @@ const CanvasArea = () => {
                                                     }
                                                 };
                                                 section.layers?.forEach(l => checkLayer(l, 0));
+                                                
+                                                if (index === 0) {
+                                                    return maxY > 844 ? `${maxY}px` : '844px';
+                                                }
                                                 return maxY > 0 ? `${maxY}px` : (section.layout?.minHeight || '844px');
                                             })(),
                                         flex: 1, // Stretch to fill grid if iframe is taller
