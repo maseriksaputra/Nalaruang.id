@@ -216,7 +216,7 @@ export const IMAGE_FILTERS = [
         getOverlay: (i, layer) => {
             let maskCss = '';
             if (layer) {
-                const imgUrl = layer.type === 'polaroid' ? layer.style?.polaroidData?.image : (layer.style?.url || layer.url);
+                const imgUrl = layer.type === 'polaroid' ? layer.style?.polaroidData?.image : (layer.style?.url || layer.url || layer.content);
                 if (imgUrl) {
                     const cropX = layer.style?.cropX ?? 50;
                     const cropY = layer.style?.cropY ?? 50;

@@ -202,7 +202,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                 const stTimer = setTimeout(() => {
                     ScrollTrigger.create({
                         trigger: triggerElement,
-                        start: "top 80%",
+                        start: "top 95%",
                         scroller: scrollScroller,
                         animation: tween,
                         toggleActions: "play none none none",
@@ -315,7 +315,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             const stTimer = setTimeout(() => {
                 ScrollTrigger.create({
                     trigger: triggerElement,
-                    start: "top 75%",
+                    start: "top 95%",
                     scroller: scrollScroller,
                     animation: tl,
                     // If looping (pulse, swing, etc), pause when out of view and resume when in view.
@@ -369,7 +369,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                     const stTimer = setTimeout(() => {
                         ScrollTrigger.create({
                             trigger: elementRef,
-                            start: "top 75%",
+                            start: "top 95%",
                             scroller: scrollScroller,
                             animation: tween,
                             toggleActions: "play pause resume pause"
@@ -431,7 +431,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
 
                     ScrollTrigger.create({
                         trigger: triggerElement,
-                        start: "top 75%",
+                        start: "top 95%",
                         scroller: scrollScroller,
                         animation: tl,
                         toggleActions: toggleActionStr,
@@ -461,7 +461,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             const stTimer = setTimeout(() => {
                 ScrollTrigger.create({
                     trigger: elementRef,
-                    start: "top 75%",
+                    start: "top 95%",
                     scroller: scrollScroller,
                     animation: tween,
                     toggleActions: "play none none none",

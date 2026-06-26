@@ -380,7 +380,7 @@ const LeftDrawer = () => {
         const existingFolders = [...new Set(globalElements.map(el => el.category).filter(Boolean))];
         if(!existingFolders.includes('Umum')) existingFolders.unshift('Umum');
 
-        let folderName = await window.promptWithListAsync(`Simpan di folder apa? (Pilih dari daftar atau ketik nama folder baru)`, existingFolders, activeFolder || 'Umum');
+        let folderName = await window.promptWithListAsync(`Simpan di folder apa? (Kosongkan untuk 'Umum')`, existingFolders, activeFolder || 'Umum');
         if (folderName === null) return; // Cancelled
         if (!folderName.trim()) folderName = 'Umum';
 
