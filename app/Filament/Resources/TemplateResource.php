@@ -98,7 +98,7 @@ class TemplateResource extends Resource
                                                     } elseif ($service->slug === 'web-mobile-app') {
                                                         $defaults = ['Company Profile' => 'Company Profile', 'E-Commerce' => 'E-Commerce', 'Sistem Informasi' => 'Sistem Informasi'];
                                                     } elseif ($service->slug === 'cetak-fisik-premium' || $service->slug === 'undangan-cetak' || $service->slug === 'cetak-fisik') {
-                                                        $defaults = ['Undangan Fisik' => 'Undangan Fisik', 'A4' => 'A4', 'A3' => 'A3', 'Laminasi' => 'Laminasi', 'Art Paper' => 'Art Paper', 'HVS' => 'HVS', 'Buku Yasin' => 'Buku Yasin', 'ID Card' => 'ID Card'];
+                                                        $defaults = ['Undangan Fisik' => 'Undangan Fisik', 'A4' => 'A4', 'A3' => 'A3', 'Laminasi' => 'Laminasi', 'Art Paper' => 'Art Paper', 'HVS' => 'HVS', 'Buku Yasin' => 'Buku Yasin', 'ID Card' => 'ID Card', 'Lanyard' => 'Lanyard', 'Cetak Foto' => 'Cetak Foto'];
                                                     } elseif ($service->slug === 'souvenir-merchandise') {
                                                         $defaults = ['Lanyard' => 'Lanyard', 'ID Card' => 'ID Card', 'Paket Bundling' => 'Paket Bundling'];
                                                     }
