@@ -433,7 +433,6 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                         loading={isCoverPage ? "eager" : "lazy"}
                         decoding="async"
                         style={{ 
-                            opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
                             width: '100%', 
                             height: '100%', 
                             objectFit: 'cover',
