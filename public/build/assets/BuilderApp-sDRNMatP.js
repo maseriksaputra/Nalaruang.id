@@ -5766,11 +5766,12 @@ var DEFAULT_GRADIENTS = [
 	"linear-gradient(135deg, #cfd9df 0%, #e2ebf0 100%)",
 	"linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)"
 ];
+var EMPTY_ARRAY$1 = [];
 var ColorsPanel = () => {
 	const activeLayerId = useCanvasStore((state) => state.activeLayerId);
 	const sections = useCanvasStore((state) => state.sections);
 	const updateLayerStyle = useCanvasStore((state) => state.updateLayerStyle);
-	const customPalette = useCanvasStore((state) => state.global_settings?.custom_palette || []);
+	const customPalette = useCanvasStore((state) => state.global_settings?.custom_palette || EMPTY_ARRAY$1);
 	const addCustomColor = useCanvasStore((state) => state.addCustomColor);
 	const removeCustomColor = useCanvasStore((state) => state.removeCustomColor);
 	const findLayer = (sections, id) => {
@@ -19838,9 +19839,10 @@ var TopToolbar = () => {
 };
 //#endregion
 //#region resources/js/Builder/components/Panels/ContextualToolbar.jsx
+var EMPTY_ARRAY = [];
 var ContextualToolbar = () => {
 	const activeLayerId = useCanvasStore((state) => state.activeLayerId);
-	const activeLayerIds = useCanvasStore((state) => state.activeLayerIds || []);
+	const activeLayerIds = useCanvasStore((state) => state.activeLayerIds || EMPTY_ARRAY);
 	const sections = useCanvasStore((state) => state.sections);
 	const global_settings = useCanvasStore((state) => state.global_settings);
 	useCanvasStore((state) => state.activeSectionId);

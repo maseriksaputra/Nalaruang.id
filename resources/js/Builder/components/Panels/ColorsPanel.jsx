@@ -26,11 +26,13 @@ const DEFAULT_GRADIENTS = [
     'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)'
 ];
 
+const EMPTY_ARRAY = [];
+
 const ColorsPanel = () => {
     const activeLayerId = useCanvasStore(state => state.activeLayerId);
     const sections = useCanvasStore(state => state.sections);
     const updateLayerStyle = useCanvasStore(state => state.updateLayerStyle);
-    const customPalette = useCanvasStore(state => state.global_settings?.custom_palette || []);
+    const customPalette = useCanvasStore(state => state.global_settings?.custom_palette || EMPTY_ARRAY);
     const addCustomColor = useCanvasStore(state => state.addCustomColor);
     const removeCustomColor = useCanvasStore(state => state.removeCustomColor);
 

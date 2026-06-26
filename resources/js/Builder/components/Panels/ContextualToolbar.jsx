@@ -3,9 +3,11 @@ import useCanvasStore from '../../stores/useCanvasStore';
 import useUIStore from '../../stores/useUIStore';
 import { FONTS } from '../../utils/fonts';
 
+const EMPTY_ARRAY = [];
+
 const ContextualToolbar = () => {
     const activeLayerId = useCanvasStore(state => state.activeLayerId);
-    const activeLayerIds = useCanvasStore(state => state.activeLayerIds || []);
+    const activeLayerIds = useCanvasStore(state => state.activeLayerIds || EMPTY_ARRAY);
     const sections = useCanvasStore(state => state.sections);
     const global_settings = useCanvasStore(state => state.global_settings);
     const activeSectionId = useCanvasStore(state => state.activeSectionId);
