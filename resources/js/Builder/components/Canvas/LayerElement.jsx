@@ -395,7 +395,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                 overflow: layer.style?.borderRadius ? 'hidden' : 'visible',
                                 filter: getShadowCss(layer.style),
                                 background: (layer.type === 'image' || layer.type === 'text' || layer.type === 'dynamic_guest_name' || layer.type === 'shape') ? 'transparent' : getGradientCss(layer.style),
-                                opacity: layer.style?.opacity ?? 1,
+                                opacity: layer.type === 'shape' ? 1 : (layer.style?.opacity ?? 1),
                                 boxSizing: 'border-box'
                             }}
                         >
@@ -473,6 +473,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                         <path 
                                             d={ShapePaths[layer.content].path} 
                                             fill={(layer.style?.backgroundType === 'linear-gradient' || layer.style?.backgroundType === 'radial-gradient') ? `url(#grad-${layer.id})` : "currentColor"} 
+                                            fillOpacity={layer.style?.opacity ?? 1}
                                             fillRule={ShapePaths[layer.content].fillRule || 'nonzero'} 
                                             stroke={layer.style?.borderWidth > 0 ? hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100) : undefined}
                                             strokeWidth={layer.style?.borderWidth > 0 ? layer.style.borderWidth : undefined}
@@ -485,7 +486,8 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                         className="w-full h-full relative pointer-events-none"
                                         style={{
                                             background: getGradientCss(layer.style),
-                                            borderRadius: layer.style?.borderRadius || '0px'
+                                            borderRadius: layer.style?.borderRadius || '0px',
+                                            opacity: layer.style?.opacity ?? 1
                                         }}
                                     ></div>
                                 )
