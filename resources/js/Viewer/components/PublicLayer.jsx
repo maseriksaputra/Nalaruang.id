@@ -403,7 +403,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                             stroke={layer.style?.borderWidth > 0 ? hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100) : undefined}
                             strokeWidth={layer.style?.borderWidth > 0 ? layer.style.borderWidth : undefined}
                             strokeDasharray={layer.style?.borderStyle === 'dashed' ? '8 8' : layer.style?.borderStyle === 'dotted' ? '2 4' : undefined}
-                            strokeLinejoin="round"
+                            vectorEffect="non-scaling-stroke"
                         />
                     </svg>
                 ) : (
