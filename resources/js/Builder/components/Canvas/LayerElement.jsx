@@ -451,13 +451,18 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                         className="w-full h-full pointer-events-none" 
                                         preserveAspectRatio="none"
                                         style={{ 
-                                            color: layer.style?.backgroundColor || '#cbd5e1'
+                                            color: layer.style?.backgroundColor || '#cbd5e1',
+                                            overflow: 'visible'
                                         }}
                                     >
                                         <path 
                                             d={ShapePaths[layer.content].path} 
                                             fill="currentColor" 
                                             fillRule={ShapePaths[layer.content].fillRule || 'nonzero'} 
+                                            stroke={layer.style?.borderWidth > 0 ? hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100) : undefined}
+                                            strokeWidth={layer.style?.borderWidth > 0 ? layer.style.borderWidth : undefined}
+                                            strokeDasharray={layer.style?.borderStyle === 'dashed' ? '8 8' : layer.style?.borderStyle === 'dotted' ? '2 4' : undefined}
+                                            vectorEffect="non-scaling-stroke"
                                         />
                                     </svg>
                                 ) : (
@@ -1082,7 +1087,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                         </div> {/* End Content Wrapper */}
 
                         {/* Border Overlay (Independent of background opacity) */}
-                        {layer.style?.borderWidth > 0 && (
+                        {layer.style?.borderWidth > 0 && !(layer.type === 'shape' && ShapePaths[layer.content]) && (
                             <div 
                                 className="absolute inset-0 pointer-events-none z-20"
                                 style={{
