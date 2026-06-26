@@ -377,7 +377,10 @@ const LeftDrawer = () => {
         if (name === null) return; // Cancelled
         if (!name.trim()) name = `Custom ${type}`;
         
-        let folderName = await window.promptAsync(`Simpan di folder apa? (Kosongkan untuk 'Umum')`, activeFolder || 'Umum');
+        const existingFolders = [...new Set(globalElements.map(el => el.category).filter(Boolean))];
+        if(!existingFolders.includes('Umum')) existingFolders.unshift('Umum');
+
+        let folderName = await window.promptWithListAsync(`Simpan di folder apa? (Kosongkan untuk 'Umum')`, existingFolders, activeFolder || 'Umum');
         if (folderName === null) return; // Cancelled
         if (!folderName.trim()) folderName = 'Umum';
 

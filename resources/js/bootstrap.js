@@ -79,3 +79,44 @@ window.promptAsync = async function(message, defaultValue='') {
     });
     return result.isConfirmed ? result.value : null;
 };
+
+window.promptWithListAsync = async function(message, list=[], defaultValue='') {
+    const isDark = document.documentElement.classList.contains('dark');
+    const listId = 'datalist_' + Date.now();
+    const result = await Swal.fire({
+        title: message,
+        input: 'text',
+        inputValue: defaultValue,
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: 'Simpan',
+        cancelButtonText: 'Batal',
+        background: isDark ? '#1e293b' : '#ffffff',
+        color: isDark ? '#f8fafc' : '#1e293b',
+        padding: '1.5em',
+        width: '26em',
+        customClass: { 
+            popup: 'rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 font-sans', 
+            title: 'text-lg font-bold font-sans mt-2',
+            input: 'w-full text-sm font-sans border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg px-4 py-2.5 mt-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all', 
+            actions: 'mt-6 flex justify-center gap-3',
+            confirmButton: 'bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-5 rounded-lg shadow-sm transition-colors text-sm', 
+            cancelButton: 'bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-300 dark:border-gray-600 font-medium py-2 px-5 rounded-lg shadow-sm transition-colors text-sm' 
+        },
+        didOpen: () => {
+            const inputElement = Swal.getInput();
+            if (inputElement) {
+                inputElement.setAttribute('list', listId);
+                const datalist = document.createElement('datalist');
+                datalist.id = listId;
+                list.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item;
+                    datalist.appendChild(option);
+                });
+                inputElement.parentNode.insertBefore(datalist, inputElement.nextSibling);
+            }
+        }
+    });
+    return result.isConfirmed ? result.value : null;
+};
