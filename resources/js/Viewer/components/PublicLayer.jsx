@@ -207,7 +207,8 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
 
         let animationCtx = null;
         if (layer.animation) {
-            animationCtx = applyAnimation(elementRef.current, layer.animation, false, layer.style, 0, isCoverPage, isChildOfGroup);
+            const styleForAnimation = layer.type === 'shape' ? { ...layer.style, opacity: 1 } : layer.style;
+            animationCtx = applyAnimation(elementRef.current, layer.animation, false, styleForAnimation, 0, isCoverPage, isChildOfGroup);
         }
         
         return () => {
@@ -221,7 +222,8 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
     useEffect(() => {
         const handlePlayExit = () => {
             if (layer.animation?.exit && elementRef.current) {
-                applyExitAnimation(elementRef.current, layer.animation, layer.style, isChildOfGroup);
+                const styleForAnimation = layer.type === 'shape' ? { ...layer.style, opacity: 1 } : layer.style;
+                applyExitAnimation(elementRef.current, layer.animation, styleForAnimation, isChildOfGroup);
             }
         };
         window.addEventListener('builder:play_exit_animations', handlePlayExit);

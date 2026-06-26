@@ -217,7 +217,8 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
         if (layer.animation && elementRef.current) {
             // isBuilder = true prevents ScrollTrigger and plays immediately
             const startAt = window.__BUILDER_PLAYHEAD_POS__ || 0;
-            animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, startAt, false, isChildOfGroup);
+            const styleForAnimation = layer.type === 'shape' ? { ...layer.style, opacity: 1 } : layer.style;
+            animationInstance = applyAnimation(elementRef.current, layer.animation, true, styleForAnimation, startAt, false, isChildOfGroup);
             
             if (isPreviewing) {
                 if (animationInstance && typeof animationInstance.play === 'function') {
@@ -241,7 +242,8 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                         if (animationInstance.scrollTrigger) animationInstance.scrollTrigger.kill();
                     }
                     const startAt = window.__BUILDER_PLAYHEAD_POS__ || 0;
-                    animationInstance = applyAnimation(elementRef.current, layer.animation, true, layer.style, startAt, false, isChildOfGroup);
+                    const styleForAnimation = layer.type === 'shape' ? { ...layer.style, opacity: 1 } : layer.style;
+                    animationInstance = applyAnimation(elementRef.current, layer.animation, true, styleForAnimation, startAt, false, isChildOfGroup);
                     if (window.__BUILDER_IS_PLAYING__ === false && animationInstance && typeof animationInstance.pause === 'function') {
                         animationInstance.pause();
                     }
