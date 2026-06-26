@@ -56,13 +56,20 @@ const ColorsPanel = () => {
     const currentColor = typeof rawCurrentColor === 'string' ? rawCurrentColor : '#000000';
     const currentBackgroundType = activeLayer?.style?.backgroundType || 'solid';
 
-    // Ensure valid 7-character hex for input type="color" to prevent React controlled input loop
+    // Ensure valid 7-character lowercase hex for input type="color" to prevent React controlled input loop
     const getValidHex = (colorStr) => {
         if (!colorStr || typeof colorStr !== 'string') return '#000000';
-        if (colorStr.startsWith('rgba') || colorStr.startsWith('rgb') || colorStr === 'transparent') return '#000000';
-        if (colorStr.length === 4 && colorStr.startsWith('#')) return '#' + colorStr[1] + colorStr[1] + colorStr[2] + colorStr[2] + colorStr[3] + colorStr[3];
-        if (colorStr.length === 9 && colorStr.startsWith('#')) return colorStr.substring(0, 7);
-        if (colorStr.length === 7 && colorStr.startsWith('#')) return colorStr;
+        let hex = colorStr.toLowerCase().trim();
+        if (hex.startsWith('rgba') || hex.startsWith('rgb') || hex === 'transparent') return '#000000';
+        if (hex.length === 4 && hex.startsWith('#')) {
+            hex = '#' + hex[1] + hex[1] + hex[2] + hex[2] + hex[3] + hex[3];
+        }
+        if (hex.length === 9 && hex.startsWith('#')) {
+            hex = hex.substring(0, 7);
+        }
+        if (/^#[0-9a-f]{6}$/.test(hex)) {
+            return hex;
+        }
         return '#000000';
     };
     
