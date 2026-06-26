@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-Pg3-MOZN.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-CXf6Pf6r.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BQDTv-Qc.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$2, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-DRNbr20c.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-B5IFhhbk.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$2, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-Clv7uu3O.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -16031,7 +16031,8 @@ var RightInspector = () => {
 															windStrength: 70,
 															stiffness: 60,
 															damping: 40,
-															randomize: true
+															randomize: true,
+															swingSpeed: 50
 														};
 														updateLayerAnimation(activeLayer.id, { configIdle: {
 															...currentConfig,
@@ -16061,7 +16062,8 @@ var RightInspector = () => {
 															windStrength: 70,
 															stiffness: 60,
 															damping: 40,
-															randomize: true
+															randomize: true,
+															swingSpeed: 50
 														};
 														updateLayerAnimation(activeLayer.id, { configIdle: {
 															...currentConfig,
@@ -16091,11 +16093,43 @@ var RightInspector = () => {
 															windStrength: 70,
 															stiffness: 60,
 															damping: 40,
-															randomize: true
+															randomize: true,
+															swingSpeed: 50
 														};
 														updateLayerAnimation(activeLayer.id, { configIdle: {
 															...currentConfig,
 															damping: parseInt(e.target.value),
+															previewKey: Date.now()
+														} });
+													},
+													className: "w-full accent-primary-600"
+												})] }),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex justify-between items-center mb-1",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "text-[10px] font-bold text-gray-700",
+														children: "Kecepatan Ayun"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+														className: "text-[10px] font-bold text-primary-600",
+														children: [activeLayer.animation.configIdle?.swingSpeed ?? 50, "%"]
+													})]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+													type: "range",
+													min: "1",
+													max: "100",
+													step: "1",
+													value: activeLayer.animation.configIdle?.swingSpeed ?? 50,
+													onChange: (e) => {
+														const currentConfig = activeLayer.animation?.configIdle || {
+															windStrength: 70,
+															stiffness: 60,
+															damping: 40,
+															randomize: true,
+															swingSpeed: 50
+														};
+														updateLayerAnimation(activeLayer.id, { configIdle: {
+															...currentConfig,
+															swingSpeed: parseInt(e.target.value),
 															previewKey: Date.now()
 														} });
 													},
@@ -16120,7 +16154,8 @@ var RightInspector = () => {
 																	windStrength: 70,
 																	stiffness: 60,
 																	damping: 40,
-																	randomize: true
+																	randomize: true,
+																	swingSpeed: 50
 																};
 																updateLayerAnimation(activeLayer.id, { configIdle: {
 																	...currentConfig,

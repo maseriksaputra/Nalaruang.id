@@ -131,9 +131,11 @@ const getIdleProps = (type, config = {}) => {
             const stiffness = config.stiffness ?? 60;
             const damping = config.damping ?? 40;
             const isRandomize = config.randomize ?? true;
+            const swingSpeed = config.swingSpeed ?? 50;
             
             const maxRotation = 2 + (windStrength / 100 * 15);
-            const duration = 6 - (stiffness / 100 * 5);
+            const speedFactor = Math.max(0.1, swingSpeed / 50);
+            const duration = (6 - (stiffness / 100 * 5)) / speedFactor;
             const ease = damping < 50 ? "elastic.out(1, 0.5)" : "sine.inOut";
             
             return { 

@@ -1326,7 +1326,7 @@ const RightInspector = () => {
                                                             type="range" min="0" max="100" step="1"
                                                             value={activeLayer.animation.configIdle?.windStrength ?? 70}
                                                             onChange={(e) => {
-                                                                const currentConfig = activeLayer.animation?.configIdle || { windStrength: 70, stiffness: 60, damping: 40, randomize: true };
+                                                                const currentConfig = activeLayer.animation?.configIdle || { windStrength: 70, stiffness: 60, damping: 40, randomize: true, swingSpeed: 50 };
                                                                 updateLayerAnimation(activeLayer.id, { configIdle: { ...currentConfig, windStrength: parseInt(e.target.value), previewKey: Date.now() } });
                                                             }}
                                                             className="w-full accent-primary-600"
@@ -1341,7 +1341,7 @@ const RightInspector = () => {
                                                             type="range" min="0" max="100" step="1"
                                                             value={activeLayer.animation.configIdle?.stiffness ?? 60}
                                                             onChange={(e) => {
-                                                                const currentConfig = activeLayer.animation?.configIdle || { windStrength: 70, stiffness: 60, damping: 40, randomize: true };
+                                                                const currentConfig = activeLayer.animation?.configIdle || { windStrength: 70, stiffness: 60, damping: 40, randomize: true, swingSpeed: 50 };
                                                                 updateLayerAnimation(activeLayer.id, { configIdle: { ...currentConfig, stiffness: parseInt(e.target.value), previewKey: Date.now() } });
                                                             }}
                                                             className="w-full accent-primary-600"
@@ -1356,8 +1356,23 @@ const RightInspector = () => {
                                                             type="range" min="0" max="100" step="1"
                                                             value={activeLayer.animation.configIdle?.damping ?? 40}
                                                             onChange={(e) => {
-                                                                const currentConfig = activeLayer.animation?.configIdle || { windStrength: 70, stiffness: 60, damping: 40, randomize: true };
+                                                                const currentConfig = activeLayer.animation?.configIdle || { windStrength: 70, stiffness: 60, damping: 40, randomize: true, swingSpeed: 50 };
                                                                 updateLayerAnimation(activeLayer.id, { configIdle: { ...currentConfig, damping: parseInt(e.target.value), previewKey: Date.now() } });
+                                                            }}
+                                                            className="w-full accent-primary-600"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <div className="flex justify-between items-center mb-1">
+                                                            <span className="text-[10px] font-bold text-gray-700">Kecepatan Ayun</span>
+                                                            <span className="text-[10px] font-bold text-primary-600">{activeLayer.animation.configIdle?.swingSpeed ?? 50}%</span>
+                                                        </div>
+                                                        <input 
+                                                            type="range" min="1" max="100" step="1"
+                                                            value={activeLayer.animation.configIdle?.swingSpeed ?? 50}
+                                                            onChange={(e) => {
+                                                                const currentConfig = activeLayer.animation?.configIdle || { windStrength: 70, stiffness: 60, damping: 40, randomize: true, swingSpeed: 50 };
+                                                                updateLayerAnimation(activeLayer.id, { configIdle: { ...currentConfig, swingSpeed: parseInt(e.target.value), previewKey: Date.now() } });
                                                             }}
                                                             className="w-full accent-primary-600"
                                                         />
@@ -1373,7 +1388,7 @@ const RightInspector = () => {
                                                                 className="sr-only peer" 
                                                                 checked={activeLayer.animation.configIdle?.randomize ?? true}
                                                                 onChange={(e) => {
-                                                                    const currentConfig = activeLayer.animation?.configIdle || { windStrength: 70, stiffness: 60, damping: 40, randomize: true };
+                                                                    const currentConfig = activeLayer.animation?.configIdle || { windStrength: 70, stiffness: 60, damping: 40, randomize: true, swingSpeed: 50 };
                                                                     updateLayerAnimation(activeLayer.id, { configIdle: { ...currentConfig, randomize: e.target.checked, previewKey: Date.now() } });
                                                                 }}
                                                             />
