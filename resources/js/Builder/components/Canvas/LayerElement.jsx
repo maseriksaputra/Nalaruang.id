@@ -488,7 +488,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                         className="w-full h-full relative pointer-events-none"
                                         style={{
                                             background: (!layer.style?.backgroundType || layer.style?.backgroundType === 'solid') ? (layer.style?.backgroundColor || '#cbd5e1') : getGradientCss(layer.style),
-                                            borderRadius: layer.style?.borderRadius || '0px',
+                                            borderRadius: computedBorderRadius,
                                             borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : undefined,
                                             borderColor: layer.style?.borderWidth > 0 ? hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100) : undefined,
                                             borderStyle: layer.style?.borderWidth > 0 ? (layer.style.borderStyle || 'solid') : undefined,

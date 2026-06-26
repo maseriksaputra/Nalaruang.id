@@ -278,6 +278,26 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
         return val;
     };
 
+    const computedBorderRadius = (() => {
+        if (layer.style?.borderRadius === undefined) return '0px';
+        let val = layer.style.borderRadius;
+        let r = (typeof val === 'number' || (typeof val === 'string' && !isNaN(val) && val.trim() !== '')) 
+            ? `${val}px` 
+            : val;
+            
+        switch(layer.style.borderRadiusType) {
+            case 'top': return `${r} ${r} 0 0`;
+            case 'bottom': return `0 0 ${r} ${r}`;
+            case 'left': return `${r} 0 0 ${r}`;
+            case 'right': return `0 ${r} ${r} 0`;
+            case 'top-left': return `${r} 0 0 0`;
+            case 'top-right': return `0 ${r} 0 0`;
+            case 'bottom-right': return `0 0 ${r} 0`;
+            case 'bottom-left': return `0 0 0 ${r}`;
+            default: return r;
+        }
+    })();
+
     const wrapperStyle = {
         position: 'absolute',
         top: layer.style?.y !== undefined ? getPx(layer.style.y) : 0,
@@ -319,31 +339,13 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                         className="w-full h-full relative z-10"
                         style={{
                         transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
-                        borderRadius: (() => {
-                        if (layer.style?.borderRadius === undefined) return '0px';
-                        let val = layer.style.borderRadius;
-                        let r = (typeof val === 'number' || (typeof val === 'string' && !isNaN(val) && val.trim() !== '')) 
-                            ? `${val}px` 
-                            : val;
-                            
-                        switch(layer.style.borderRadiusType) {
-                            case 'top': return `${r} ${r} 0 0`;
-                            case 'bottom': return `0 0 ${r} ${r}`;
-                            case 'left': return `${r} 0 0 ${r}`;
-                            case 'right': return `0 ${r} ${r} 0`;
-                            case 'top-left': return `${r} 0 0 0`;
-                            case 'top-right': return `0 ${r} 0 0`;
-                            case 'bottom-right': return `0 0 ${r} 0`;
-                            case 'bottom-left': return `0 0 0 ${r}`;
-                            default: return r;
-                        }
-                    })(),
-                    overflow: layer.style?.borderRadius ? 'hidden' : 'visible',
-                    filter: getShadowCss(layer.style),
-                    background: (layer.type === 'image' || layer.type === 'text' || layer.type === 'dynamic_guest_name' || layer.type === 'shape') ? 'transparent' : getGradientCss(layer.style),
-                    boxSizing: 'border-box',
-                    cursor: layer.interaction?.isButton ? 'pointer' : 'default',
-                }}>
+                        borderRadius: computedBorderRadius,
+                        overflow: layer.style?.borderRadius ? 'hidden' : 'visible',
+                        filter: getShadowCss(layer.style),
+                        background: (layer.type === 'image' || layer.type === 'text' || layer.type === 'dynamic_guest_name' || layer.type === 'shape') ? 'transparent' : getGradientCss(layer.style),
+                        boxSizing: 'border-box',
+                        cursor: layer.interaction?.isButton ? 'pointer' : 'default',
+                    }}>
             {(layer.type === 'text' || layer.type === 'dynamic_guest_name') && (
                 <div 
                     style={{
@@ -413,7 +415,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                         className="w-full h-full relative pointer-events-none"
                         style={{
                             background: (!layer.style?.backgroundType || layer.style?.backgroundType === 'solid') ? (layer.style?.backgroundColor || '#cbd5e1') : getGradientCss(layer.style),
-                            borderRadius: layer.style?.borderRadius || '0px',
+                            borderRadius: computedBorderRadius,
                             borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : undefined,
                             borderColor: layer.style?.borderWidth > 0 ? hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100) : undefined,
                             borderStyle: layer.style?.borderWidth > 0 ? (layer.style.borderStyle || 'solid') : undefined,
