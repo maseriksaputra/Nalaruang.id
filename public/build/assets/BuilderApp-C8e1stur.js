@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BphwDIYn.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as apiClient, I as useStore, M as pointsToSmoothedSvgPath, N as useCanvasStore, O as LayerElement, P as useUIStore, h as r$2, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-eYmcl2V_.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CZqW-Whn.js";
+import ViewerApp, { A as loadFont, D as IframePreview, F as useUIStore, I as apiClient, L as useStore, M as pointsToSmoothedSvgPath, N as ShapePaths, O as LayerElement, P as useCanvasStore, h as r$2, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-CR7rC3ur.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -5786,8 +5786,18 @@ var ColorsPanel = () => {
 	};
 	const activeLayer = activeLayerId ? findLayer(sections, activeLayerId) : null;
 	const colorProperty = activeLayer?.type === "text" || activeLayer?.type === "dynamic_guest_name" ? "color" : "backgroundColor";
-	const currentColor = activeLayer?.style?.[colorProperty] || "#000000";
+	const rawCurrentColor = activeLayer?.style?.[colorProperty] || "#000000";
+	const currentColor = typeof rawCurrentColor === "string" ? rawCurrentColor : "#000000";
 	const currentBackgroundType = activeLayer?.style?.backgroundType || "solid";
+	const getValidHex = (colorStr) => {
+		if (!colorStr || typeof colorStr !== "string") return "#000000";
+		if (colorStr.startsWith("rgba") || colorStr.startsWith("rgb") || colorStr === "transparent") return "#000000";
+		if (colorStr.length === 4 && colorStr.startsWith("#")) return "#" + colorStr[1] + colorStr[1] + colorStr[2] + colorStr[2] + colorStr[3] + colorStr[3];
+		if (colorStr.length === 9 && colorStr.startsWith("#")) return colorStr.substring(0, 7);
+		if (colorStr.length === 7 && colorStr.startsWith("#")) return colorStr;
+		return "#000000";
+	};
+	const safeHexColor = getValidHex(currentColor);
 	const handleSelectColor = (color) => {
 		if (!activeLayerId) return;
 		const updates = { [colorProperty]: color };
@@ -5840,7 +5850,7 @@ var ColorsPanel = () => {
 										})
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 										type: "color",
-										value: currentBackgroundType === "solid" ? currentColor : "#ffffff",
+										value: currentBackgroundType === "solid" ? safeHexColor : "#ffffff",
 										onChange: (e) => handleSelectColor(e.target.value),
 										className: "absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10",
 										title: "Pilih warna kustom"
@@ -5920,7 +5930,7 @@ var ColorsPanel = () => {
 					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "grid grid-cols-5 gap-2",
 						children: customPalette.map((color, index) => {
-							const isActive = currentBackgroundType === "solid" && currentColor.toLowerCase() === color.toLowerCase();
+							const isActive = currentBackgroundType === "solid" && String(currentColor).toLowerCase() === String(color).toLowerCase();
 							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "relative group w-full aspect-square",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
@@ -5933,7 +5943,7 @@ var ColorsPanel = () => {
 											"#ffffff",
 											"#fff",
 											"#ffffffff"
-										].includes(color.toLowerCase()) ? "text-gray-900" : "text-white"}`,
+										].includes(String(color).toLowerCase()) ? "text-gray-900" : "text-white"}`,
 										fill: "none",
 										stroke: "currentColor",
 										viewBox: "0 0 24 24",
@@ -5973,7 +5983,7 @@ var ColorsPanel = () => {
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "grid grid-cols-5 gap-2",
 						children: TAILWIND_COLORS.map((color, index) => {
-							const isActive = currentBackgroundType === "solid" && currentColor.toLowerCase() === color;
+							const isActive = currentBackgroundType === "solid" && String(currentColor).toLowerCase() === color.toLowerCase();
 							return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 								onClick: () => handleSelectColor(color),
 								className: `w-full aspect-square rounded-md border shadow-sm transition-transform hover:scale-110 flex items-center justify-center ${isActive ? "ring-2 ring-primary-500 ring-offset-2" : "border-gray-200"}`,
@@ -8275,7 +8285,36 @@ var LeftDrawer = () => {
 									className: "text-[10px] font-semibold text-gray-700",
 									children: "Garis"
 								})]
-							})
+							}),
+							Object.entries(ShapePaths).map(([shapeId, shapeData]) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => addLayer({
+									id: "layer_" + Date.now(),
+									type: "shape",
+									content: shapeId,
+									style: {
+										x: 50,
+										y: 50,
+										width: 100,
+										height: shapeId.includes("classic") || shapeId.includes("frame") ? 140 : 100,
+										backgroundColor: "#cbd5e1"
+									}
+								}),
+								className: "flex flex-col items-center justify-center p-3 bg-white border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition gap-2",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+									viewBox: shapeData.viewBox,
+									className: "w-8 h-8",
+									preserveAspectRatio: "none",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+										d: shapeData.path,
+										fill: "currentColor",
+										className: "text-gray-400",
+										fillRule: shapeData.fillRule || "nonzero"
+									})
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[10px] font-semibold text-gray-700 capitalize text-center leading-tight",
+									children: shapeId.replace(/-/g, " ")
+								})]
+							}, shapeId))
 						]
 					})]
 				}),

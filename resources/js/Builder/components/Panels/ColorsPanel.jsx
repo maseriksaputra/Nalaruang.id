@@ -52,8 +52,21 @@ const ColorsPanel = () => {
     
     // Determine which property to change based on layer type
     const colorProperty = activeLayer?.type === 'text' || activeLayer?.type === 'dynamic_guest_name' ? 'color' : 'backgroundColor';
-    const currentColor = activeLayer?.style?.[colorProperty] || '#000000';
+    const rawCurrentColor = activeLayer?.style?.[colorProperty] || '#000000';
+    const currentColor = typeof rawCurrentColor === 'string' ? rawCurrentColor : '#000000';
     const currentBackgroundType = activeLayer?.style?.backgroundType || 'solid';
+
+    // Ensure valid 7-character hex for input type="color" to prevent React controlled input loop
+    const getValidHex = (colorStr) => {
+        if (!colorStr || typeof colorStr !== 'string') return '#000000';
+        if (colorStr.startsWith('rgba') || colorStr.startsWith('rgb') || colorStr === 'transparent') return '#000000';
+        if (colorStr.length === 4 && colorStr.startsWith('#')) return '#' + colorStr[1] + colorStr[1] + colorStr[2] + colorStr[2] + colorStr[3] + colorStr[3];
+        if (colorStr.length === 9 && colorStr.startsWith('#')) return colorStr.substring(0, 7);
+        if (colorStr.length === 7 && colorStr.startsWith('#')) return colorStr;
+        return '#000000';
+    };
+    
+    const safeHexColor = getValidHex(currentColor);
 
     const handleSelectColor = (color) => {
         if (!activeLayerId) return;
@@ -98,7 +111,7 @@ const ColorsPanel = () => {
                                 </div>
                                 <input 
                                     type="color" 
-                                    value={currentBackgroundType === 'solid' ? currentColor : '#ffffff'}
+                                    value={currentBackgroundType === 'solid' ? safeHexColor : '#ffffff'}
                                     onChange={(e) => handleSelectColor(e.target.value)}
                                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                     title="Pilih warna kustom"
@@ -161,7 +174,7 @@ const ColorsPanel = () => {
                         ) : (
                             <div className="grid grid-cols-5 gap-2">
                                 {customPalette.map((color, index) => {
-                                    const isActive = currentBackgroundType === 'solid' && currentColor.toLowerCase() === color.toLowerCase();
+                                    const isActive = currentBackgroundType === 'solid' && String(currentColor).toLowerCase() === String(color).toLowerCase();
                                     return (
                                         <div key={index} className="relative group w-full aspect-square">
                                             <button
@@ -170,7 +183,7 @@ const ColorsPanel = () => {
                                                 style={{ backgroundColor: color }}
                                                 title={color}
                                             >
-                                                {isActive && <svg className={`w-5 h-5 ${['#ffffff', '#fff', '#ffffffff'].includes(color.toLowerCase()) ? 'text-gray-900' : 'text-white'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>}
+                                                {isActive && <svg className={`w-5 h-5 ${['#ffffff', '#fff', '#ffffffff'].includes(String(color).toLowerCase()) ? 'text-gray-900' : 'text-white'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>}
                                             </button>
                                             
                                             <button 
@@ -192,7 +205,7 @@ const ColorsPanel = () => {
                         <h3 className="text-xs font-semibold tracking-wider text-gray-500 uppercase mb-3">Warna Solid Default</h3>
                         <div className="grid grid-cols-5 gap-2">
                             {TAILWIND_COLORS.map((color, index) => {
-                                const isActive = currentBackgroundType === 'solid' && currentColor.toLowerCase() === color;
+                                const isActive = currentBackgroundType === 'solid' && String(currentColor).toLowerCase() === color.toLowerCase();
                                 return (
                                     <button
                                         key={index}

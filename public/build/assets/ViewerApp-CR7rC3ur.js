@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-CAirQinV.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DKLfFxI8.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BphwDIYn.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CZqW-Whn.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -13047,6 +13047,52 @@ var ColorPicker = function(t) {
 	}, e;
 }(import_react.Component);
 //#endregion
+//#region resources/js/Builder/utils/ShapePaths.js
+var ShapePaths = {
+	"star": {
+		viewBox: "0 0 100 100",
+		path: "M 50 0 L 61.8 35.3 L 98.8 35.3 L 68.8 57.1 L 80.3 92.7 L 50 71.5 L 19.7 92.7 L 31.2 57.1 L 1.2 35.3 L 38.2 35.3 Z"
+	},
+	"heart": {
+		viewBox: "0 0 100 100",
+		path: "M 50 30 C 50 30 45 0 25 0 C 0 0 0 35 0 35 C 0 60 50 100 50 100 C 50 100 100 60 100 35 C 100 35 100 0 75 0 C 55 0 50 30 50 30 Z"
+	},
+	"hexagon": {
+		viewBox: "0 0 100 100",
+		path: "M 50 0 L 93.3 25 L 93.3 75 L 50 100 L 6.7 75 L 6.7 25 Z"
+	},
+	"diamond": {
+		viewBox: "0 0 100 100",
+		path: "M 50 0 L 100 50 L 50 100 L 0 50 Z"
+	},
+	"classic-1": {
+		viewBox: "0 0 100 140",
+		path: "M 20 0 L 80 0 A 20 20 0 0 0 100 20 L 100 120 A 20 20 0 0 0 80 140 L 20 140 A 20 20 0 0 0 0 120 L 0 20 A 20 20 0 0 0 20 0 Z"
+	},
+	"classic-2": {
+		viewBox: "0 0 100 140",
+		path: "M 50 0 C 80 0 100 20 100 40 L 100 100 C 100 120 80 140 50 140 C 20 140 0 120 0 100 L 0 40 C 0 20 20 0 50 0 Z"
+	},
+	"classic-3": {
+		viewBox: "0 0 100 140",
+		path: "M 30 0 L 70 0 Q 80 0 85 5 Q 90 10 95 15 Q 100 20 100 30 L 100 110 Q 100 120 95 125 Q 90 130 85 135 Q 80 140 70 140 L 30 140 Q 20 140 15 135 Q 10 130 5 125 Q 0 120 0 110 L 0 30 Q 0 20 5 15 Q 10 10 15 5 Q 20 0 30 0 Z"
+	},
+	"classic-4": {
+		viewBox: "0 0 100 140",
+		path: "M 25 0 L 75 0 C 85 0 90 10 100 25 L 100 115 C 90 130 85 140 75 140 L 25 140 C 15 140 10 130 0 115 L 0 25 C 10 10 15 0 25 0 Z"
+	},
+	"frame-1": {
+		viewBox: "0 0 100 140",
+		path: "M 20 0 L 80 0 A 20 20 0 0 0 100 20 L 100 120 A 20 20 0 0 0 80 140 L 20 140 A 20 20 0 0 0 0 120 L 0 20 A 20 20 0 0 0 20 0 Z M 22 4 L 78 4 A 16 16 0 0 0 96 22 L 96 118 A 16 16 0 0 0 78 136 L 22 136 A 16 16 0 0 0 4 118 L 4 22 A 16 16 0 0 0 22 4 Z",
+		fillRule: "evenodd"
+	},
+	"frame-2": {
+		viewBox: "0 0 100 140",
+		path: "M 30 0 L 70 0 Q 80 0 85 5 Q 90 10 95 15 Q 100 20 100 30 L 100 110 Q 100 120 95 125 Q 90 130 85 135 Q 80 140 70 140 L 30 140 Q 20 140 15 135 Q 10 130 5 125 Q 0 120 0 110 L 0 30 Q 0 20 5 15 Q 10 10 15 5 Q 20 0 30 0 Z M 32 4 L 68 4 Q 78 4 82 8 Q 88 12 92 18 Q 96 22 96 32 L 96 108 Q 96 118 92 122 Q 88 128 82 132 Q 78 136 68 136 L 32 136 Q 22 136 18 132 Q 12 128 8 122 Q 4 118 4 108 L 4 32 Q 4 22 8 18 Q 12 12 18 8 Q 22 4 32 4 Z",
+		fillRule: "evenodd"
+	}
+};
+//#endregion
 //#region resources/js/Builder/utils/pathSmoothing.js
 /**
 * Utility functions for SVG Path Generation and Smoothing
@@ -20459,7 +20505,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, styleParams
 			const stTimer = setTimeout(() => {
 				ScrollTrigger.create({
 					trigger: triggerElement,
-					start: "top 95%",
+					start: "top bottom",
 					scroller: scrollScroller,
 					animation: tween,
 					toggleActions: "play none none none",
@@ -20666,7 +20712,7 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, styleParams
 			const stTimer = setTimeout(() => {
 				ScrollTrigger.create({
 					trigger: elementRef,
-					start: "top 95%",
+					start: "top bottom",
 					scroller: scrollScroller,
 					animation: tween,
 					toggleActions: "play none none none",
@@ -25897,13 +25943,23 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 									},
 									children: layer.content
 								}),
-								layer.type === "shape" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								layer.type === "shape" && (ShapePaths[layer.content] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+									viewBox: ShapePaths[layer.content].viewBox,
+									className: "w-full h-full pointer-events-none",
+									preserveAspectRatio: "none",
+									style: { color: layer.style?.backgroundColor || "#cbd5e1" },
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+										d: ShapePaths[layer.content].path,
+										fill: "currentColor",
+										fillRule: ShapePaths[layer.content].fillRule || "nonzero"
+									})
+								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "w-full h-full relative pointer-events-none",
 									style: {
 										backgroundColor: layer.style?.backgroundColor || "#e0e7ff",
 										borderRadius: layer.style?.borderRadius || "0px"
 									}
-								}),
+								})),
 								(() => {
 									if (layer.type === "lottie") {
 										let lottieData = layer.lottieJsonObj || layer.animationData;
@@ -28514,7 +28570,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-CAirQinV.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DKLfFxI8.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -29474,11 +29530,10 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 			},
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				ref: elementRef,
-				className: "w-full h-full",
+				className: "w-full h-full relative",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "w-full h-full relative z-10",
 					style: {
-						width: "100%",
-						height: "100%",
 						transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
 						borderRadius: (() => {
 							if (layer.style?.borderRadius === void 0) return "0px";
@@ -29498,7 +29553,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 						})(),
 						overflow: layer.style?.borderRadius ? "hidden" : "visible",
 						filter: getShadowCss(layer.style),
-						background: layer.type === "image" || layer.type === "text" || layer.type === "dynamic_guest_name" ? "transparent" : getGradientCss(layer.style),
+						background: layer.type === "image" || layer.type === "text" || layer.type === "dynamic_guest_name" || layer.type === "shape" ? "transparent" : getGradientCss(layer.style),
 						borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : void 0,
 						borderStyle: layer.style?.borderStyle || (layer.style?.borderWidth ? "solid" : void 0),
 						borderColor: layer.style?.borderColor,
@@ -29531,15 +29586,26 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 							},
 							dangerouslySetInnerHTML: { __html: layer.type === "dynamic_guest_name" ? layer.content.replace("[Nama Tamu]", new URLSearchParams(window.location.search).get("to") || "Bapak/Ibu/Saudara/i") : layer.content }
 						}),
-						layer.type === "shape" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: {
-							width: "100%",
-							height: "100%",
-							backgroundColor: layer.style?.backgroundColor || "#e0e7ff",
-							borderRadius: layer.style?.borderRadius || "0px",
-							borderWidth: layer.style?.borderWidth,
-							borderColor: layer.style?.borderColor,
-							borderStyle: layer.style?.borderWidth ? "solid" : "none"
-						} }),
+						layer.type === "shape" && (ShapePaths[layer.content] ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+							viewBox: ShapePaths[layer.content].viewBox,
+							className: "w-full h-full pointer-events-none",
+							preserveAspectRatio: "none",
+							style: { color: layer.style?.backgroundColor || "#cbd5e1" },
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+								d: ShapePaths[layer.content].path,
+								fill: "currentColor",
+								fillRule: ShapePaths[layer.content].fillRule || "nonzero"
+							})
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "w-full h-full relative pointer-events-none",
+							style: {
+								backgroundColor: layer.style?.backgroundColor || "#e0e7ff",
+								borderRadius: layer.style?.borderRadius || "0px",
+								borderWidth: layer.style?.borderWidth,
+								borderColor: layer.style?.borderColor,
+								borderStyle: layer.style?.borderWidth ? "solid" : "none"
+							}
+						})),
 						layer.type === "image" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: `w-full h-full relative pointer-events-none`,
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
@@ -33069,4 +33135,4 @@ var ViewerApp = ({ previewData, onClosePreview }) => {
 var root = document.getElementById("viewer-root");
 if (root) (0, import_client.createRoot)(root).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ViewerApp, {}));
 //#endregion
-export { loadFont as A, AnimatableColor as C, IframePreview as D, OutMode as E, apiClient as F, useStore as I, pointsToSmoothedSvgPath as M, useCanvasStore as N, LayerElement as O, useUIStore as P, ValueWithRandom as S, ParticleOutType as T, getHslFromAnimation as _, mouseLeaveEvent as a, rangeColorToHsl as b, touchCancelEvent as c, touchStartEvent as d, ViewerApp as default, InteractorType as f, alterHsl as g, r as h, mouseDownEvent as i, IMAGE_FILTERS as j, FONTS as k, touchEndEvent as l, InteractivityDetect as m, loadFireflyPreset as n, mouseMoveEvent as o, Interactivity as p, clickEvent as r, mouseUpEvent as s, loadSnowPreset as t, touchMoveEvent as u, getStyleFromHsl as v, OptionsColor as w, rangeColorToRgb as x, getStyleFromRgb as y };
+export { loadFont as A, AnimatableColor as C, IframePreview as D, OutMode as E, useUIStore as F, apiClient as I, useStore as L, pointsToSmoothedSvgPath as M, ShapePaths as N, LayerElement as O, useCanvasStore as P, ValueWithRandom as S, ParticleOutType as T, getHslFromAnimation as _, mouseLeaveEvent as a, rangeColorToHsl as b, touchCancelEvent as c, touchStartEvent as d, ViewerApp as default, InteractorType as f, alterHsl as g, r as h, mouseDownEvent as i, IMAGE_FILTERS as j, FONTS as k, touchEndEvent as l, InteractivityDetect as m, loadFireflyPreset as n, mouseMoveEvent as o, Interactivity as p, clickEvent as r, mouseUpEvent as s, loadSnowPreset as t, touchMoveEvent as u, getStyleFromHsl as v, OptionsColor as w, rangeColorToRgb as x, getStyleFromRgb as y };
