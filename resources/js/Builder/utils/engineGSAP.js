@@ -202,7 +202,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                 const stTimer = setTimeout(() => {
                     ScrollTrigger.create({
                         trigger: triggerElement,
-                        start: "top 95%",
+                        start: "top bottom",
                         scroller: scrollScroller,
                         animation: tween,
                         toggleActions: "play none none none",
@@ -461,7 +461,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             const stTimer = setTimeout(() => {
                 ScrollTrigger.create({
                     trigger: elementRef,
-                    start: "top 95%",
+                    start: "top bottom",
                     scroller: scrollScroller,
                     animation: tween,
                     toggleActions: "play none none none",

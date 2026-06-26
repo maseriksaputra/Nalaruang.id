@@ -311,10 +311,10 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                     opacity: layer.style?.opacity !== undefined ? layer.style.opacity : 1,
                 }}
             >
-                <div ref={elementRef} className="w-full h-full">
-                    <div style={{
-                        width: '100%',
-                        height: '100%',
+                <div ref={elementRef} className="w-full h-full relative">
+                    <div 
+                        className="w-full h-full relative z-10"
+                        style={{
                         transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
                         borderRadius: (() => {
                         if (layer.style?.borderRadius === undefined) return '0px';
