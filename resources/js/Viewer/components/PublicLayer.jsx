@@ -339,9 +339,6 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                     overflow: layer.style?.borderRadius ? 'hidden' : 'visible',
                     filter: getShadowCss(layer.style),
                     background: (layer.type === 'image' || layer.type === 'text' || layer.type === 'dynamic_guest_name' || layer.type === 'shape') ? 'transparent' : getGradientCss(layer.style),
-                    borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : undefined,
-                    borderStyle: layer.style?.borderStyle || (layer.style?.borderWidth ? 'solid' : undefined),
-                    borderColor: layer.style?.borderColor,
                     boxSizing: 'border-box',
                     cursor: layer.interaction?.isButton ? 'pointer' : 'default',
                 }}>
