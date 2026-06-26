@@ -399,12 +399,11 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                             height: '100%', 
                             objectFit: 'cover',
                             objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
-                            transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
                             filter: `${layer.style?.imageFilter && layer.style.imageFilter !== 'none' ? getFilterById(layer.style.imageFilter).getCss(layer.style.imageFilterIntensity ?? 100) + ' ' : ''}brightness(${layer.style?.brightness ?? 1}) contrast(${layer.style?.contrast ?? 1}) saturate(${layer.style?.saturate ?? 1}) blur(${layer.style?.blur ?? 0}px) grayscale(${layer.style?.grayscale ?? 0})`.trim()
                         }} 
                     />
                     {layer.style?.imageFilter && getFilterById(layer.style.imageFilter).getOverlay && (
-                        <div dangerouslySetInnerHTML={{ __html: getFilterById(layer.style.imageFilter).getOverlay(layer.style.imageFilterIntensity ?? 100) }} />
+                        <div dangerouslySetInnerHTML={{ __html: getFilterById(layer.style.imageFilter).getOverlay(layer.style.imageFilterIntensity ?? 100, layer) }} />
                     )}
                 </div>
             )}
@@ -466,12 +465,11 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                                     className="w-full h-full object-cover"
                                     style={{
                                         objectPosition: `${layer.style?.cropX || 50}% ${layer.style?.cropY || 50}%`,
-                                        transform: `scaleX(${layer.style?.flipX ? -1 : 1}) scaleY(${layer.style?.flipY ? -1 : 1})`,
                                         filter: `${layer.style?.brightness ? `brightness(${layer.style.brightness}) ` : ''}${layer.style?.contrast ? `contrast(${layer.style.contrast}) ` : ''}${layer.style?.saturate ? `saturate(${layer.style.saturate}) ` : ''}${layer.style?.blur ? `blur(${layer.style.blur}px) ` : ''}`.trim() || 'none'
                                     }}
                                 />
                                 {layer.style?.polaroidData?.filterId && layer.style.polaroidData.filterId !== 'none' && (
-                                    <div dangerouslySetInnerHTML={{ __html: getFilterById(layer.style.polaroidData.filterId)?.getOverlay(100) || '' }} />
+                                    <div dangerouslySetInnerHTML={{ __html: getFilterById(layer.style.polaroidData.filterId)?.getOverlay(100, { type: 'polaroid', style: layer.style }) || '' }} />
                                 )}
                             </>
                         ) : (
