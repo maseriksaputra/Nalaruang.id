@@ -83,7 +83,6 @@ const PublicCanvas = ({ config }) => {
             }
             styleEl.innerHTML = `
                 body, html { overflow: hidden !important; }
-                #viewer-scroll-container { overflow-y: hidden !important; }
             `;
             
             // Prevent touch scrolling on iOS Safari
@@ -161,6 +160,7 @@ const PublicCanvas = ({ config }) => {
                 // Debounce only when shrinking to prevent transient scroll jumps on mobile
                 setScaledHeight(prev => {
                     if (prev === 'auto' || prev === 0 || newHeight >= prev) {
+                        clearTimeout(timeout);
                         return newHeight;
                     }
                     clearTimeout(timeout);
