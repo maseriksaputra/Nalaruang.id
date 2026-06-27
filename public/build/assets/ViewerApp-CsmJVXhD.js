@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-jAuKZKH7.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-Dr02Yzqg.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-CAWSJBxJ.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-C23hdbnM.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -26281,7 +26281,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 							},
 							children: [
 								(layer.type === "text" || layer.type === "dynamic_guest_name") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: `w-full h-full overflow-hidden flex outline-none border-none ${isEditing ? "no-drag !select-text !pointer-events-auto" : ""}`,
+									className: `w-full h-full overflow-visible flex outline-none border-none ${isEditing ? "no-drag !select-text !pointer-events-auto" : ""}`,
 									style: {
 										color: layer.style?.color || "#000000",
 										fontSize: layer.style?.fontSize ? String(layer.style.fontSize).includes("px") || String(layer.style.fontSize).includes("rem") || String(layer.style.fontSize).includes("em") ? layer.style.fontSize : `${layer.style.fontSize}px` : "16px",
@@ -29051,7 +29051,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-jAuKZKH7.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-Dr02Yzqg.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -30056,7 +30056,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 							style: {
 								width: "100%",
 								height: "100%",
-								overflow: "hidden",
+								overflow: "visible",
 								display: "flex",
 								outline: "none",
 								border: "none",

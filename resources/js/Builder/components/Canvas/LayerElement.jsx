@@ -405,7 +405,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                             {/* Visualizer Konten */}
                             {(layer.type === 'text' || layer.type === 'dynamic_guest_name') && (
                                 <div 
-                                    className={`w-full h-full overflow-hidden flex outline-none border-none ${isEditing ? 'no-drag !select-text !pointer-events-auto' : ''}`}
+                                    className={`w-full h-full overflow-visible flex outline-none border-none ${isEditing ? 'no-drag !select-text !pointer-events-auto' : ''}`}
                                     style={{
                                         color: layer.style?.color || '#000000',
                                         fontSize: layer.style?.fontSize ? (String(layer.style.fontSize).includes('px') || String(layer.style.fontSize).includes('rem') || String(layer.style.fontSize).includes('em') ? layer.style.fontSize : `${layer.style.fontSize}px`) : '16px',

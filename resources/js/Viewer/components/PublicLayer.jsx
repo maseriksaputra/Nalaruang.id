@@ -352,7 +352,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                                 style={{
                                     width: '100%',
                                     height: '100%',
-                                    overflow: 'hidden',
+                                    overflow: 'visible',
                                     display: 'flex',
                                     outline: 'none',
                                     border: 'none',
