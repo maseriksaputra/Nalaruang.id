@@ -1098,6 +1098,21 @@ const LeftDrawer = () => {
         if (activeTab === 'layers') {
 
             const flattenedItems = [];
+            if (global_settings?.desktop_thumbnail?.enabled) {
+                flattenedItems.push({
+                    id: `header_desktop`,
+                    isHeader: true,
+                    title: '🖥️ BATAS HALAMAN DESKTOP'
+                });
+                const sortedLayers = [...(global_settings.desktop_layers || [])].reverse();
+                sortedLayers.forEach(layer => {
+                    flattenedItems.push({
+                        ...layer,
+                        id: layer.id || `temp-id-${Math.random()}`,
+                        originalSectionId: 'desktop'
+                    });
+                });
+            }
             sections.forEach((section, index) => {
                 flattenedItems.push({
                     id: `header_${section.id}`,
@@ -1131,10 +1146,12 @@ const LeftDrawer = () => {
                     } else if (active.id !== over.id) {
                         // Reordered within the SAME group
                         const newSections = JSON.parse(JSON.stringify(sections));
+                        let newDesktopLayers = null;
                         let changed = false;
 
-                        for (let s of newSections) {
-                            const group = s.layers.find(l => l.id === targetGroupId);
+                        if (global_settings?.desktop_thumbnail?.enabled) {
+                            newDesktopLayers = JSON.parse(JSON.stringify(global_settings.desktop_layers || []));
+                            const group = newDesktopLayers.find(l => l.id === targetGroupId);
                             if (group && group.children) {
                                 const visualChildren = [...group.children].reverse();
                                 const oldIndex = visualChildren.findIndex(c => c.id === active.id);
@@ -1143,17 +1160,35 @@ const LeftDrawer = () => {
                                 if (oldIndex !== -1 && newIndex !== -1) {
                                     const newSorted = arrayMove(visualChildren, oldIndex, newIndex);
                                     group.children = newSorted.reverse();
-                                    
-                                    // Update z-index
                                     group.children.forEach((c, idx) => { if(c.style) c.style.zIndex = idx + 1; });
                                     changed = true;
                                 }
-                                break;
+                            }
+                        }
+
+                        if (!changed) {
+                            for (let s of newSections) {
+                                const group = s.layers.find(l => l.id === targetGroupId);
+                                if (group && group.children) {
+                                    const visualChildren = [...group.children].reverse();
+                                    const oldIndex = visualChildren.findIndex(c => c.id === active.id);
+                                    const newIndex = visualChildren.findIndex(c => c.id === over.id);
+                                    
+                                    if (oldIndex !== -1 && newIndex !== -1) {
+                                        const newSorted = arrayMove(visualChildren, oldIndex, newIndex);
+                                        group.children = newSorted.reverse();
+                                        
+                                        // Update z-index
+                                        group.children.forEach((c, idx) => { if(c.style) c.style.zIndex = idx + 1; });
+                                        changed = true;
+                                    }
+                                    break;
+                                }
                             }
                         }
 
                         if (changed) {
-                            useCanvasStore.getState().setAllSections(newSections);
+                            useCanvasStore.getState().setAllSections(newSections, newDesktopLayers);
                         }
                     }
                     return;
@@ -1192,25 +1227,40 @@ const LeftDrawer = () => {
                         
                         // Reconstruct sections based on the new header order
                         const newSections = [];
+                        let newDesktopLayers = null;
                         let currentSection = null;
+                        let isCurrentDesktop = false;
 
                         newSorted.forEach(item => {
                             if (item.isHeader) {
                                 const secId = item.id.replace('header_', '');
-                                const originalSection = sections.find(s => s.id === secId);
-                                if (originalSection) {
-                                    currentSection = { ...originalSection, layers: [] };
-                                    newSections.push(currentSection);
+                                if (secId === 'desktop') {
+                                    isCurrentDesktop = true;
+                                    newDesktopLayers = [];
+                                    currentSection = null;
+                                } else {
+                                    isCurrentDesktop = false;
+                                    const originalSection = sections.find(s => s.id === secId);
+                                    if (originalSection) {
+                                        currentSection = { ...originalSection, layers: [] };
+                                        newSections.push(currentSection);
+                                    }
                                 }
                             } else {
-                                if (!currentSection) {
-                                    const secId = sections[0].id;
-                                    const originalSection = sections.find(s => s.id === secId);
-                                    currentSection = { ...originalSection, layers: [] };
-                                    newSections.push(currentSection);
+                                if (isCurrentDesktop) {
+                                    if (!newDesktopLayers) newDesktopLayers = [];
+                                    const { originalSectionId, isHeader, ...layerData } = item;
+                                    newDesktopLayers.push(layerData);
+                                } else {
+                                    if (!currentSection) {
+                                        const secId = sections[0].id;
+                                        const originalSection = sections.find(s => s.id === secId);
+                                        currentSection = { ...originalSection, layers: [] };
+                                        newSections.push(currentSection);
+                                    }
+                                    const { originalSectionId, isHeader, ...layerData } = item;
+                                    currentSection.layers.push(layerData);
                                 }
-                                const { originalSectionId, isHeader, ...layerData } = item;
-                                currentSection.layers.push(layerData);
                             }
                         });
 
@@ -1219,8 +1269,13 @@ const LeftDrawer = () => {
                             sec.layers.reverse();
                             sec.layers.forEach((l, idx) => { if(l.style) l.style.zIndex = idx + 1; });
                         });
+                        
+                        if (newDesktopLayers) {
+                            newDesktopLayers.reverse();
+                            newDesktopLayers.forEach((l, idx) => { if(l.style) l.style.zIndex = idx + 1; });
+                        }
 
-                        useCanvasStore.getState().setAllSections(newSections);
+                        useCanvasStore.getState().setAllSections(newSections, newDesktopLayers);
                     }
                 }
             };

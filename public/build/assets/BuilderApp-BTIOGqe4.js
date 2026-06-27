@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BV2iBeq7.js";
-import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-DgvNMTPb.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-ub1qkqJ2.js";
+import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-DbD5Wn0O.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -8607,6 +8607,20 @@ var LeftDrawer = () => {
 		});
 		if (activeTab === "layers") {
 			const flattenedItems = [];
+			if (global_settings?.desktop_thumbnail?.enabled) {
+				flattenedItems.push({
+					id: `header_desktop`,
+					isHeader: true,
+					title: "🖥️ BATAS HALAMAN DESKTOP"
+				});
+				[...global_settings.desktop_layers || []].reverse().forEach((layer) => {
+					flattenedItems.push({
+						...layer,
+						id: layer.id || `temp-id-${Math.random()}`,
+						originalSectionId: "desktop"
+					});
+				});
+			}
 			sections.forEach((section, index) => {
 				flattenedItems.push({
 					id: `header_${section.id}`,
@@ -8632,8 +8646,25 @@ var LeftDrawer = () => {
 					if (active.data.current.parentId !== targetGroupId) useCanvasStore.getState().moveElementToGroup(active.id, targetGroupId);
 					else if (active.id !== over.id) {
 						const newSections = JSON.parse(JSON.stringify(sections));
+						let newDesktopLayers = null;
 						let changed = false;
-						for (let s of newSections) {
+						if (global_settings?.desktop_thumbnail?.enabled) {
+							newDesktopLayers = JSON.parse(JSON.stringify(global_settings.desktop_layers || []));
+							const group = newDesktopLayers.find((l) => l.id === targetGroupId);
+							if (group && group.children) {
+								const visualChildren = [...group.children].reverse();
+								const oldIndex = visualChildren.findIndex((c) => c.id === active.id);
+								const newIndex = visualChildren.findIndex((c) => c.id === over.id);
+								if (oldIndex !== -1 && newIndex !== -1) {
+									group.children = arrayMove(visualChildren, oldIndex, newIndex).reverse();
+									group.children.forEach((c, idx) => {
+										if (c.style) c.style.zIndex = idx + 1;
+									});
+									changed = true;
+								}
+							}
+						}
+						if (!changed) for (let s of newSections) {
 							const group = s.layers.find((l) => l.id === targetGroupId);
 							if (group && group.children) {
 								const visualChildren = [...group.children].reverse();
@@ -8649,7 +8680,7 @@ var LeftDrawer = () => {
 								break;
 							}
 						}
-						if (changed) useCanvasStore.getState().setAllSections(newSections);
+						if (changed) useCanvasStore.getState().setAllSections(newSections, newDesktopLayers);
 					}
 					return;
 				}
@@ -8670,18 +8701,31 @@ var LeftDrawer = () => {
 				} else {
 					const newSorted = arrayMove(flattenedItems, flattenedItems.findIndex((l) => l.id === active.id), flattenedItems.findIndex((l) => l.id === over.id));
 					const newSections = [];
+					let newDesktopLayers = null;
 					let currentSection = null;
+					let isCurrentDesktop = false;
 					newSorted.forEach((item) => {
 						if (item.isHeader) {
 							const secId = item.id.replace("header_", "");
-							const originalSection = sections.find((s) => s.id === secId);
-							if (originalSection) {
-								currentSection = {
-									...originalSection,
-									layers: []
-								};
-								newSections.push(currentSection);
+							if (secId === "desktop") {
+								isCurrentDesktop = true;
+								newDesktopLayers = [];
+								currentSection = null;
+							} else {
+								isCurrentDesktop = false;
+								const originalSection = sections.find((s) => s.id === secId);
+								if (originalSection) {
+									currentSection = {
+										...originalSection,
+										layers: []
+									};
+									newSections.push(currentSection);
+								}
 							}
+						} else if (isCurrentDesktop) {
+							if (!newDesktopLayers) newDesktopLayers = [];
+							const { originalSectionId, isHeader, ...layerData } = item;
+							newDesktopLayers.push(layerData);
 						} else {
 							if (!currentSection) {
 								const secId = sections[0].id;
@@ -8701,7 +8745,13 @@ var LeftDrawer = () => {
 							if (l.style) l.style.zIndex = idx + 1;
 						});
 					});
-					useCanvasStore.getState().setAllSections(newSections);
+					if (newDesktopLayers) {
+						newDesktopLayers.reverse();
+						newDesktopLayers.forEach((l, idx) => {
+							if (l.style) l.style.zIndex = idx + 1;
+						});
+					}
+					useCanvasStore.getState().setAllSections(newSections, newDesktopLayers);
 				}
 			};
 			return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

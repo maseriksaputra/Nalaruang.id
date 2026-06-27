@@ -939,9 +939,13 @@ const useCanvasStore = create(temporal((set, get) => ({
         get().triggerAutoSave();
     },
 
-    setAllSections: (newSections) => {
+    setAllSections: (newSections, newDesktopLayers) => {
         set(produce((state) => {
             state.sections = newSections;
+            if (newDesktopLayers !== undefined) {
+                if (!state.global_settings) state.global_settings = {};
+                state.global_settings.desktop_layers = newDesktopLayers;
+            }
         }));
         get().triggerAutoSave();
     },
