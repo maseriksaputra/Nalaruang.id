@@ -66,11 +66,6 @@ class ProductPriceResource extends Resource
                         ->prefix('Rp')
                         ->default(0),
 
-                    Forms\Components\FileUpload::make('image')
-                        ->label('Gambar Produk')
-                        ->image()
-                        ->directory('product-prices')
-                        ->nullable(),
 
                     Forms\Components\Toggle::make('is_active')
                         ->label('Aktif')
@@ -84,12 +79,7 @@ class ProductPriceResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\Layout\Stack::make([
-                    Tables\Columns\ImageColumn::make('image')
-                        ->height('150px')
-                        ->width('100%')
-                        ->extraImgAttributes(['class' => 'object-cover rounded-t-xl w-full'])
-                        ->defaultImageUrl(url('/images/placeholder.jpg')), // Fallback image if you have one
-                    
+
                     Tables\Columns\Layout\Stack::make([
                         Tables\Columns\TextColumn::make('name')
                             ->weight('bold')
@@ -105,7 +95,7 @@ class ProductPriceResource extends Resource
                             ->getStateUsing(fn ($record) => $record->category ? $record->category->name : ($record->service ? $record->service->title : '')),
                             
                         Tables\Columns\TextColumn::make('price')
-                            ->money('IDR', locale: 'id')
+                            ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state ?? 0, 0, ',', '.'))
                             ->weight('bold')
                             ->color('success')
                             ->size('lg'),
