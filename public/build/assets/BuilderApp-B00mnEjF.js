@@ -5774,12 +5774,17 @@ var EMPTY_ARRAY$1 = [];
 var ColorsPanel = () => {
 	const activeLayerId = useCanvasStore((state) => state.activeLayerId);
 	const sections = useCanvasStore((state) => state.sections);
+	const activeCanvasMode = useCanvasStore((state) => state.activeCanvasMode);
+	const desktopLayers = useCanvasStore((state) => state.global_settings?.desktop_layers || EMPTY_ARRAY$1);
 	const updateLayerStyle = useCanvasStore((state) => state.updateLayerStyle);
 	const customPalette = useCanvasStore((state) => state.global_settings?.custom_palette || EMPTY_ARRAY$1);
 	const addCustomColor = useCanvasStore((state) => state.addCustomColor);
 	const removeCustomColor = useCanvasStore((state) => state.removeCustomColor);
-	const findLayer = (sections, id) => {
-		for (const section of sections) {
+	const findLayer = (sections, desktopLayers, id, mode) => {
+		const targetSections = mode === "desktop" ? [{ layers: desktopLayers }] : sections;
+		if (!targetSections || !Array.isArray(targetSections)) return null;
+		for (const section of targetSections) {
+			if (!section || !section.layers) continue;
 			const layer = section.layers.find((l) => l.id === id);
 			if (layer) return layer;
 			for (const g of section.layers) if (g.children) {
@@ -5789,7 +5794,7 @@ var ColorsPanel = () => {
 		}
 		return null;
 	};
-	const activeLayer = activeLayerId ? findLayer(sections, activeLayerId) : null;
+	const activeLayer = activeLayerId ? findLayer(sections, desktopLayers, activeLayerId, activeCanvasMode) : null;
 	const colorProperty = activeLayer?.type === "text" || activeLayer?.type === "dynamic_guest_name" ? "color" : "backgroundColor";
 	const rawCurrentColor = activeLayer?.style?.[colorProperty] || "#000000";
 	const currentColor = typeof rawCurrentColor === "string" ? rawCurrentColor : "#000000";
