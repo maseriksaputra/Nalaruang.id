@@ -23874,6 +23874,32 @@ var PortalApp = () => {
 			setIsPublishing(false);
 		}
 	};
+	const handleToggleTemplateStatus = async (id, currentStatus) => {
+		try {
+			const newStatus = currentStatus === "published" ? "draft" : "published";
+			const csrfToken = document.querySelector("meta[name=\"csrf-token\"]")?.getAttribute("content");
+			const data = await (await fetch(`/admin/builder/${id}/publish`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"X-CSRF-TOKEN": csrfToken
+				},
+				body: JSON.stringify({
+					status: newStatus,
+					duration: newStatus === "published" ? "forever" : null
+				})
+			})).json();
+			if (data.success) setTemplates(templates.map((t) => t.id === id ? {
+				...t,
+				status: data.status,
+				expires_at: data.expires_at
+			} : t));
+			else alert("Gagal mengubah status: " + data.message);
+		} catch (e) {
+			console.error(e);
+			alert("Terjadi kesalahan jaringan.");
+		}
+	};
 	(0, import_react.useEffect)(() => {
 		const fetchInvitations = async () => {
 			try {
@@ -26422,28 +26448,47 @@ var PortalApp = () => {
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 												className: "text-gray-500 dark:text-gray-400 text-sm mb-6 flex-1 line-clamp-3",
 												children: item.description || "Tidak ada deskripsi atau batasan fitur yang diatur."
+											})
+										]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "p-4 flex-1 flex flex-col",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "text-sm font-bold text-gray-900 dark:text-white truncate",
+											children: item.title
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+											className: "text-xs text-gray-500 dark:text-gray-400 mt-1",
+											children: [item.total_uses, "x digunakan"]
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-wrap gap-2 justify-end items-end z-30",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												onClick: (e) => {
+													e.stopPropagation();
+													handleToggleTemplateStatus(item.id, item.status);
+												},
+												className: `px-3 py-1.5 text-white text-xs font-semibold rounded-lg shadow-sm w-full mb-1 ${item.status === "published" ? "bg-amber-500 hover:bg-amber-600" : "bg-emerald-500 hover:bg-emerald-600"}`,
+												children: item.status === "published" ? "Jadikan Draft" : "Publikasikan"
 											}),
-											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-												className: "flex gap-2 mt-auto",
-												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-													onClick: () => {
-														window.open(`/admin/builder/${item.id}`, "_blank");
-													},
-													className: "flex-1 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:hover:bg-indigo-900/50 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/50 rounded-lg font-bold text-sm transition-colors text-center",
-													children: "Edit Template"
-												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-													onClick: async () => {
-														try {
-															const csrfToken = document.querySelector("meta[name=\"csrf-token\"]")?.getAttribute("content");
-															const res = await axios.post(`/admin/invitation-portal/templates/${item.id}/duplicate`, {}, { headers: { "X-CSRF-TOKEN": csrfToken } });
-															if (res.data.success) window.open(res.data.redirect_url, "_blank");
-														} catch (e) {
-															alert("Gagal membuat proyek dari template");
-														}
-													},
-													className: "flex-1 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold text-sm transition-colors text-center",
-													children: "Buat Proyek"
-												})]
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												onClick: () => window.open(`/admin/builder/${item.id}`, "_blank"),
+												className: "flex-1 px-2 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold rounded-lg text-center",
+												children: "Edit"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												onClick: async () => {
+													try {
+														const csrfToken = document.querySelector("meta[name=\"csrf-token\"]")?.getAttribute("content");
+														const res = await axios.post(`/admin/invitation-portal/templates/${item.id}/duplicate`, {}, { headers: { "X-CSRF-TOKEN": csrfToken } });
+														if (res.data.success) window.location.href = res.data.redirect_url;
+													} catch (e) {
+														alert("Gagal membuat proyek dari template");
+													}
+												},
+												className: "flex-1 px-2 py-1.5 bg-purple-500 hover:bg-purple-600 text-white text-xs font-semibold rounded-lg text-center",
+												children: "Buat Proyek"
 											})
 										]
 									})

@@ -4138,6 +4138,20 @@
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
   }
 
+  .from-black\/90 {
+    --tw-gradient-from: #000000e6;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .from-black\/90 {
+      --tw-gradient-from: color-mix(in oklab, var(--color-black) 90%, transparent);
+    }
+  }
+
+  .from-black\/90 {
+    --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+  }
+
   .from-blue-50 {
     --tw-gradient-from: var(--color-blue-50);
     --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
@@ -4307,6 +4321,21 @@
   }
 
   .via-black\/20 {
+    --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-via-stops);
+  }
+
+  .via-black\/50 {
+    --tw-gradient-via: #00000080;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .via-black\/50 {
+      --tw-gradient-via: color-mix(in oklab, var(--color-black) 50%, transparent);
+    }
+  }
+
+  .via-black\/50 {
     --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
     --tw-gradient-stops: var(--tw-gradient-via-stops);
   }
@@ -6843,6 +6872,10 @@
       background-color: var(--color-amber-50);
     }
 
+    .hover\:bg-amber-600:hover {
+      background-color: var(--color-amber-600);
+    }
+
     .hover\:bg-black:hover {
       background-color: var(--color-black);
     }
@@ -6873,6 +6906,10 @@
 
     .hover\:bg-blue-500:hover {
       background-color: var(--color-blue-500);
+    }
+
+    .hover\:bg-blue-600:hover {
+      background-color: var(--color-blue-600);
     }
 
     .hover\:bg-blue-700:hover {
@@ -7019,6 +7056,10 @@
 
     .hover\:bg-purple-500:hover {
       background-color: var(--color-purple-500);
+    }
+
+    .hover\:bg-purple-600:hover {
+      background-color: var(--color-purple-600);
     }
 
     .hover\:bg-red-50:hover {

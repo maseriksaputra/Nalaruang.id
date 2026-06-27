@@ -116,7 +116,7 @@ class DashboardPortalController extends Controller
 
     public function getTemplates()
     {
-        $templates = Invitation::select('id', 'title', 'slug', 'thumbnail_path', 'price', 'category', 'total_uses', 'updated_at')
+        $templates = Invitation::select('id', 'title', 'slug', 'status', 'expires_at', 'thumbnail_path', 'price', 'category', 'total_uses', 'updated_at')
             ->where('is_template', true)
             ->orderBy('updated_at', 'desc')
             ->get();
