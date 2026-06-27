@@ -83,7 +83,7 @@ const PublicCanvas = ({ config }) => {
             }
             styleEl.innerHTML = `
                 body, html { overflow: hidden !important; }
-                #viewer-scroll-container { overflow-y: hidden !important; touch-action: none; }
+                #viewer-scroll-container { overflow-y: hidden !important; }
             `;
             
             // Prevent touch scrolling on iOS Safari
@@ -154,13 +154,28 @@ const PublicCanvas = ({ config }) => {
 
     useEffect(() => {
         if (!innerRef.current) return;
+        let timeout;
         const resizeObserver = new ResizeObserver((entries) => {
             for (let entry of entries) {
-                setScaledHeight(entry.contentRect.height * scale);
+                const newHeight = entry.contentRect.height * scale;
+                // Debounce only when shrinking to prevent transient scroll jumps on mobile
+                setScaledHeight(prev => {
+                    if (prev === 'auto' || prev === 0 || newHeight >= prev) {
+                        return newHeight;
+                    }
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        setScaledHeight(newHeight);
+                    }, 500);
+                    return prev;
+                });
             }
         });
         resizeObserver.observe(innerRef.current);
-        return () => resizeObserver.disconnect();
+        return () => {
+            resizeObserver.disconnect();
+            clearTimeout(timeout);
+        };
     }, [scale, sections]);
 
     const hasAnyLayers = sections.some(s => s.layers && s.layers.length > 0);
