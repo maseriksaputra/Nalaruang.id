@@ -16,13 +16,8 @@ const PublicCanvas = ({ config }) => {
 
     useEffect(() => {
         if (isOpened) {
-            // Biarkan DOM selesai me-render display:block dari section yang tersembunyi
-            // Cukup panggil refresh sekali setelah animasi selesai agar tidak memberatkan memori
-            const timer = setTimeout(() => {
-                ScrollTrigger.refresh(true);
-            }, 1250); // Waktu yang cukup setelah transisi slide-up selesai
-            
-            return () => clearTimeout(timer);
+            // Animasi cover slide-up terjadi, elemen-elemen di bawahnya sudah memiliki posisi absolut dan ScrollTrigger 
+            // yang di-setup segera, sehingga tidak perlu refresh manual yang bisa merusak native scrolling.
         }
     }, [isOpened]);
     const [transitionType, setTransitionType] = useState('slide_up');

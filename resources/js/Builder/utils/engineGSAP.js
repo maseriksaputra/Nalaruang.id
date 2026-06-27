@@ -200,17 +200,14 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             activeTweens.push(tween);
 
             if (isScrollTriggered) {
-                const stTimer = setTimeout(() => {
-                    ScrollTrigger.create({
-                        trigger: triggerElement,
-                        start: "top bottom",
-                        scroller: scrollScroller,
-                        animation: tween,
-                        toggleActions: "play none none none",
-                        once: true
-                    });
-                }, 1250);
-                scrollTriggerTimeouts.push(stTimer);
+                ScrollTrigger.create({
+                    trigger: triggerElement,
+                    start: "top bottom",
+                    scroller: scrollScroller,
+                    animation: tween,
+                    toggleActions: "play none none none",
+                    once: true
+                });
             }
             
             return { kill: () => {
@@ -313,19 +310,16 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
         activeTweens.push(tl);
 
         if (!isBuilder && trigger === 'onScroll') {
-            const stTimer = setTimeout(() => {
-                ScrollTrigger.create({
-                    trigger: triggerElement,
-                    start: "top 95%",
-                    scroller: scrollScroller,
-                    animation: tl,
-                    // If looping (pulse, swing, etc), pause when out of view and resume when in view.
-                    // If not looping (fade in, slide in), play ONCE and never reverse or reset.
-                    toggleActions: isLooping ? "play pause resume pause" : "play none none none",
-                    once: !isLooping
-                });
-            }, 1250);
-            scrollTriggerTimeouts.push(stTimer);
+            ScrollTrigger.create({
+                trigger: triggerElement,
+                start: "top 95%",
+                scroller: scrollScroller,
+                animation: tl,
+                // If looping (pulse, swing, etc), pause when out of view and resume when in view.
+                // If not looping (fade in, slide in), play ONCE and never reverse or reset.
+                toggleActions: isLooping ? "play pause resume pause" : "play none none none",
+                once: !isLooping
+            });
         }
     } 
     // -- 2. STANDARD IDLE ANIMATIONS --
@@ -367,16 +361,13 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                 activeTweens.push(tween);
                 
                 if (isScrollTriggered) {
-                    const stTimer = setTimeout(() => {
-                        ScrollTrigger.create({
-                            trigger: elementRef,
-                            start: "top 95%",
-                            scroller: scrollScroller,
-                            animation: tween,
-                            toggleActions: "play pause resume pause"
-                        });
-                    }, 1250);
-                    scrollTriggerTimeouts.push(stTimer);
+                    ScrollTrigger.create({
+                        trigger: elementRef,
+                        start: "top 95%",
+                        scroller: scrollScroller,
+                        animation: tween,
+                        toggleActions: "play pause resume pause"
+                    });
                 }
             }
         }
@@ -424,22 +415,19 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             tl.progress(0);
 
             if (isScrollTriggered) {
-                const stTimer = setTimeout(() => {
-                    if (!elementRef) return;
-                    
-                    const toggleActionStr = isLooping ? "play pause resume pause" : "play none none none";
-                    const isOnce = !isLooping;
+                if (!elementRef) return;
+                
+                const toggleActionStr = isLooping ? "play pause resume pause" : "play none none none";
+                const isOnce = !isLooping;
 
-                    ScrollTrigger.create({
-                        trigger: triggerElement,
-                        start: "top 95%",
-                        scroller: scrollScroller,
-                        animation: tl,
-                        toggleActions: toggleActionStr,
-                        once: isOnce
-                    });
-                }, 1250);
-                scrollTriggerTimeouts.push(stTimer);
+                ScrollTrigger.create({
+                    trigger: triggerElement,
+                    start: "top 95%",
+                    scroller: scrollScroller,
+                    animation: tl,
+                    toggleActions: toggleActionStr,
+                    once: isOnce
+                });
             }
         }
     } else if (!hasEntryAnimation && layerAnimation.idle !== 'custom_timeline' && globalDelay > 0) {
@@ -459,17 +447,14 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
         activeTweens.push(tween);
 
         if (isScrollTriggered) {
-            const stTimer = setTimeout(() => {
-                ScrollTrigger.create({
-                    trigger: elementRef,
-                    start: "top bottom",
-                    scroller: scrollScroller,
-                    animation: tween,
-                    toggleActions: "play none none none",
-                    once: true
-                });
-            }, 1250);
-            scrollTriggerTimeouts.push(stTimer);
+            ScrollTrigger.create({
+                trigger: elementRef,
+                start: "top bottom",
+                scroller: scrollScroller,
+                animation: tween,
+                toggleActions: "play none none none",
+                once: true
+            });
         }
     }
 
