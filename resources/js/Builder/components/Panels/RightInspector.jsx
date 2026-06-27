@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import useCanvasStore from '../../stores/useCanvasStore';
 import useUIStore from '../../stores/useUIStore';
+import { PaymentProviders } from '../../utils/PaymentLogos';
 
 import { IMAGE_FILTERS } from '../../utils/imageFilters';
 import { FONTS } from '../../utils/fonts';
@@ -3151,7 +3152,57 @@ const RightInspector = () => {
                             <h3 className="font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded">Pengaturan Salin Rekening</h3>
                             
                             <div>
-                                <label className="text-[11px] font-bold text-gray-800 block mb-2">Nama Bank / E-Wallet</label>
+                                <label className="flex items-center gap-2 cursor-pointer mb-4">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={activeLayer.style?.useCardTheme || false}
+                                        onChange={(e) => updateLayerStyle(activeLayer.id, { useCardTheme: e.target.checked })}
+                                        className="w-4 h-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500"
+                                    />
+                                    <span className="text-[11px] font-bold text-gray-800">Gunakan Tampilan Kartu (Visual)</span>
+                                </label>
+                            </div>
+
+                            {activeLayer.style?.useCardTheme && (
+                                <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg space-y-3 mb-4">
+                                    <div>
+                                        <label className="text-[11px] font-bold text-gray-800 block mb-1">Tipe Pembayaran</label>
+                                        <select 
+                                            value={activeLayer.style?.paymentType || 'bank'}
+                                            onChange={(e) => updateLayerStyle(activeLayer.id, { paymentType: e.target.value, providerId: PaymentProviders[e.target.value === 'bank' ? 'BANK' : 'EWALLET'][0].id })}
+                                            className="w-full text-xs p-1.5 border border-gray-300 rounded focus:border-primary-500 outline-none"
+                                        >
+                                            <option value="bank">Transfer Bank</option>
+                                            <option value="ewallet">E-Wallet</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="text-[11px] font-bold text-gray-800 block mb-1">Penyedia (Logo)</label>
+                                        <select 
+                                            value={activeLayer.style?.providerId || ''}
+                                            onChange={(e) => updateLayerStyle(activeLayer.id, { providerId: e.target.value })}
+                                            className="w-full text-xs p-1.5 border border-gray-300 rounded focus:border-primary-500 outline-none"
+                                        >
+                                            {PaymentProviders[activeLayer.style?.paymentType === 'ewallet' ? 'EWALLET' : 'BANK'].map(p => (
+                                                <option key={p.id} value={p.id}>{p.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="text-[11px] font-bold text-gray-800 block mb-1">Atas Nama (Pemilik)</label>
+                                        <input 
+                                            type="text" 
+                                            value={activeLayer.style?.accountName || ''}
+                                            placeholder="Cth: HABIB YULIANTO"
+                                            onChange={(e) => updateLayerStyle(activeLayer.id, { accountName: e.target.value })}
+                                            className="w-full text-xs border border-gray-300 rounded p-1.5 focus:ring-1 focus:ring-primary-500 outline-none uppercase"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            <div>
+                                <label className="text-[11px] font-bold text-gray-800 block mb-2">Nama Bank / E-Wallet (Teks Pendek)</label>
                                 <input 
                                     type="text" 
                                     value={activeLayer.style?.bankName || ''}

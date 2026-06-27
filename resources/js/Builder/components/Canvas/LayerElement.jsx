@@ -8,6 +8,7 @@ import { pointsToSmoothedSvgPath } from '../../utils/pathSmoothing';
 import { applyAnimation } from '../../utils/engineGSAP';
 import { getFilterById } from '../../utils/imageFilters';
 import { loadFont } from '../../utils/fonts';
+import { PaymentLogo, ChipIcon } from '../../utils/PaymentLogos';
 
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -937,6 +938,75 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 
                                 const bgColor = layer.style?.backgroundColor || '#ffffff';
                                 const textColor = layer.style?.textColor || '#1f2937';
+
+                                if (layer.style?.useCardTheme) {
+                                    return (
+                                        <div 
+                                            className="w-full h-full flex flex-col justify-between shadow-md relative overflow-hidden pointer-events-none p-4"
+                                            style={{
+                                                background: layer.style.paymentType === 'ewallet' 
+                                                    ? `linear-gradient(135deg, ${hexToRgba(bgColor, bgOpacity)}, ${hexToRgba(bgColor, bgOpacity - 0.15)})` 
+                                                    : `linear-gradient(135deg, ${hexToRgba(bgColor, bgOpacity)}, ${hexToRgba(bgColor, Math.max(0, bgOpacity - 0.4))})`,
+                                                borderRadius: layer.style?.borderRadius || '1rem',
+                                                borderWidth: layer.style?.borderWidth || '1px',
+                                                borderColor: layer.style?.borderColor || '#e5e7eb',
+                                                borderStyle: layer.style?.borderWidth ? 'solid' : (layer.style?.borderColor ? 'solid' : 'none'),
+                                                boxShadow: layer.style?.isShadowActive ? `0px ${layer.style?.shadowY || 6}px 12px -2px rgba(0, 0, 0, 0.15)` : 'none',
+                                            }}
+                                        >
+                                            {/* Decorative Background Pattern */}
+                                            <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-white/20 rounded-full blur-2xl pointer-events-none"></div>
+                                            <div className="absolute -left-8 -top-8 w-24 h-24 bg-white/20 rounded-full blur-xl pointer-events-none"></div>
+                                            <div className="absolute right-10 top-10 w-40 h-40 bg-black/5 rounded-full blur-3xl pointer-events-none mix-blend-overlay"></div>
+                                            
+                                            {/* Top Row: Chip & Logo */}
+                                            <div className="flex justify-between items-start w-full relative z-10">
+                                                <div className="flex-1">
+                                                    {layer.style?.paymentType !== 'ewallet' && (
+                                                        <ChipIcon className="w-10 h-8 opacity-90 drop-shadow-sm" />
+                                                    )}
+                                                </div>
+                                                <div className="shrink-0 h-8 flex items-center justify-end">
+                                                    <PaymentLogo provider={layer.style?.providerId || layer.style?.bankName} className="h-full drop-shadow-sm max-w-[100px]" />
+                                                </div>
+                                            </div>
+
+                                            {/* Bottom Row: Number, Name, Copy Button */}
+                                            <div className="flex justify-between items-end w-full relative z-10 mt-2">
+                                                <div className="flex flex-col min-w-0 pr-2">
+                                                    <span 
+                                                        className="font-mono font-bold tracking-widest truncate w-full drop-shadow-sm"
+                                                        style={{ 
+                                                            color: hexToRgba(textColor, textOpacity),
+                                                            fontSize: layer.style?.fontSize ? `${layer.style.fontSize}px` : '18px'
+                                                        }}
+                                                    >
+                                                        {layer.content || '0000 0000 0000'}
+                                                    </span>
+                                                    <span 
+                                                        className="font-bold uppercase tracking-widest mt-1.5 truncate w-full opacity-90 drop-shadow-sm"
+                                                        style={{ 
+                                                            color: hexToRgba(textColor, textOpacity),
+                                                            fontFamily: 'monospace',
+                                                            fontSize: layer.style?.fontSize ? `${Math.max(10, Math.round(layer.style.fontSize * 0.55))}px` : '10px'
+                                                        }}
+                                                    >
+                                                        {layer.style?.accountName || 'ATAS NAMA'}
+                                                    </span>
+                                                </div>
+                                                <div 
+                                                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 shadow-sm border border-white/20 backdrop-blur-sm"
+                                                    style={{ 
+                                                        backgroundColor: layer.style?.iconBgColor || 'rgba(255,255,255,0.2)',
+                                                        color: layer.style?.iconColor || textColor
+                                                    }}
+                                                >
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                }
 
                                 return (
                                     <div 
