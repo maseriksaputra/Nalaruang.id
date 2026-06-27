@@ -341,7 +341,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                         style={{
                             transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
                             borderRadius: computedBorderRadius,
-                            overflow: layer.style?.borderRadius ? 'hidden' : 'visible',
+                            overflow: (layer.type === 'text' || layer.type === 'dynamic_guest_name' || !layer.style?.borderRadius || layer.style?.borderRadius === '0' || layer.style?.borderRadius === 0) ? 'visible' : 'hidden',
                             filter: getShadowCss(layer.style),
                             background: (layer.type === 'image' || layer.type === 'text' || layer.type === 'dynamic_guest_name' || layer.type === 'shape') ? 'transparent' : getGradientCss(layer.style),
                             boxSizing: 'border-box',

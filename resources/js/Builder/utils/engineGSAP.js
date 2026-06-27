@@ -4,6 +4,7 @@ import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
 import { TextPlugin } from 'gsap/TextPlugin';
 
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, TextPlugin);
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 const getAnimationProps = (type, isExit = false, config = {}, layerStyle = null) => {
     const duration = parseFloat(config.speed) || 1.5;

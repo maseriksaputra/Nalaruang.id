@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-COODk4LX.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-CBktplXV.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-YPRKuDAe.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CGngN80b.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -20159,6 +20159,7 @@ _getGSAP() && gsap.registerPlugin(TextPlugin);
 //#endregion
 //#region resources/js/Builder/utils/engineGSAP.js
 gsapWithCSS.registerPlugin(ScrollTrigger, MotionPathPlugin, TextPlugin);
+ScrollTrigger.config({ ignoreMobileResize: true });
 var getAnimationProps = (type, isExit = false, config = {}, layerStyle = null) => {
 	const duration = parseFloat(config.speed) || 1.5;
 	const direction = config.direction || "default";
@@ -26273,7 +26274,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 							style: {
 								transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
 								borderRadius: computedBorderRadius,
-								overflow: layer.style?.borderRadius ? "hidden" : "visible",
+								overflow: layer.type === "text" || layer.type === "dynamic_guest_name" || !layer.style?.borderRadius || layer.style?.borderRadius === "0" || layer.style?.borderRadius === 0 ? "visible" : "hidden",
 								filter: getShadowCss$1(layer.style),
 								background: layer.type === "image" || layer.type === "text" || layer.type === "dynamic_guest_name" || layer.type === "shape" ? "transparent" : getGradientCss$1(layer.style),
 								opacity: layer.type === "shape" ? 1 : layer.style?.opacity ?? 1,
@@ -29051,7 +29052,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-COODk4LX.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-CBktplXV.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -30045,7 +30046,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 					style: {
 						transform: `scale(${layer.style?.flipX ? -1 : 1}, ${layer.style?.flipY ? -1 : 1})`,
 						borderRadius: computedBorderRadius,
-						overflow: layer.style?.borderRadius ? "hidden" : "visible",
+						overflow: layer.type === "text" || layer.type === "dynamic_guest_name" || !layer.style?.borderRadius || layer.style?.borderRadius === "0" || layer.style?.borderRadius === 0 ? "visible" : "hidden",
 						filter: getShadowCss(layer.style),
 						background: layer.type === "image" || layer.type === "text" || layer.type === "dynamic_guest_name" || layer.type === "shape" ? "transparent" : getGradientCss(layer.style),
 						boxSizing: "border-box",
