@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-CDh9byt-.js";
-import ViewerApp, { A as loadFont, D as IframePreview, F as useUIStore, I as apiClient, L as useStore, M as pointsToSmoothedSvgPath, N as ShapePaths, O as LayerElement, P as useCanvasStore, h as r$2, j as IMAGE_FILTERS, k as FONTS, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-C6J5qzBK.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-BV2iBeq7.js";
+import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-DgvNMTPb.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -19013,9 +19013,66 @@ var RightInspector = () => {
 									className: "font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded",
 									children: "Pengaturan Salin Rekening"
 								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+									className: "flex items-center gap-2 cursor-pointer mb-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "checkbox",
+										checked: activeLayer.style?.useCardTheme || false,
+										onChange: (e) => updateLayerStyle(activeLayer.id, { useCardTheme: e.target.checked }),
+										className: "w-4 h-4 text-primary-600 rounded border-gray-300 focus:ring-primary-500"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "text-[11px] font-bold text-gray-800",
+										children: "Gunakan Tampilan Kartu (Visual)"
+									})]
+								}) }),
+								activeLayer.style?.useCardTheme && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "p-3 bg-gray-50 border border-gray-200 rounded-lg space-y-3 mb-4",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+											className: "text-[11px] font-bold text-gray-800 block mb-1",
+											children: "Tipe Pembayaran"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+											value: activeLayer.style?.paymentType || "bank",
+											onChange: (e) => updateLayerStyle(activeLayer.id, {
+												paymentType: e.target.value,
+												providerId: PaymentProviders[e.target.value === "bank" ? "BANK" : "EWALLET"][0].id
+											}),
+											className: "w-full text-xs p-1.5 border border-gray-300 rounded focus:border-primary-500 outline-none",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+												value: "bank",
+												children: "Transfer Bank"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+												value: "ewallet",
+												children: "E-Wallet"
+											})]
+										})] }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+											className: "text-[11px] font-bold text-gray-800 block mb-1",
+											children: "Penyedia (Logo)"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("select", {
+											value: activeLayer.style?.providerId || "",
+											onChange: (e) => updateLayerStyle(activeLayer.id, { providerId: e.target.value }),
+											className: "w-full text-xs p-1.5 border border-gray-300 rounded focus:border-primary-500 outline-none",
+											children: PaymentProviders[activeLayer.style?.paymentType === "ewallet" ? "EWALLET" : "BANK"].map((p) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+												value: p.id,
+												children: p.name
+											}, p.id))
+										})] }),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+											className: "text-[11px] font-bold text-gray-800 block mb-1",
+											children: "Atas Nama (Pemilik)"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+											type: "text",
+											value: activeLayer.style?.accountName || "",
+											placeholder: "Cth: HABIB YULIANTO",
+											onChange: (e) => updateLayerStyle(activeLayer.id, { accountName: e.target.value }),
+											className: "w-full text-xs border border-gray-300 rounded p-1.5 focus:ring-1 focus:ring-primary-500 outline-none uppercase"
+										})] })
+									]
+								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 									className: "text-[11px] font-bold text-gray-800 block mb-2",
-									children: "Nama Bank / E-Wallet"
+									children: "Nama Bank / E-Wallet (Teks Pendek)"
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 									type: "text",
 									value: activeLayer.style?.bankName || "",

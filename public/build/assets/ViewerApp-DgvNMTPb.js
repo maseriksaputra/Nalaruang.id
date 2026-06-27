@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-pUwSIDCG.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-D6iZn9BZ.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-CDh9byt-.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-BV2iBeq7.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -21224,6 +21224,371 @@ var loadFont = (fontFamily) => {
 	document.head.appendChild(link);
 };
 //#endregion
+//#region resources/js/Builder/utils/PaymentLogos.jsx
+var PaymentProviders = {
+	BANK: [
+		{
+			id: "bca",
+			name: "BCA"
+		},
+		{
+			id: "mandiri",
+			name: "Mandiri"
+		},
+		{
+			id: "bni",
+			name: "BNI"
+		},
+		{
+			id: "bri",
+			name: "BRI"
+		},
+		{
+			id: "bsi",
+			name: "BSI"
+		},
+		{
+			id: "cimb",
+			name: "CIMB Niaga"
+		},
+		{
+			id: "permata",
+			name: "Permata"
+		},
+		{
+			id: "jenius",
+			name: "Jenius"
+		},
+		{
+			id: "seabank",
+			name: "SeaBank"
+		},
+		{
+			id: "jago",
+			name: "Bank Jago"
+		}
+	],
+	EWALLET: [
+		{
+			id: "dana",
+			name: "DANA"
+		},
+		{
+			id: "ovo",
+			name: "OVO"
+		},
+		{
+			id: "gopay",
+			name: "GoPay"
+		},
+		{
+			id: "shopeepay",
+			name: "ShopeePay"
+		},
+		{
+			id: "linkaja",
+			name: "LinkAja"
+		}
+	]
+};
+var PaymentLogo = ({ provider, className = "h-6" }) => {
+	const p = (provider || "").toLowerCase();
+	const Fallback = () => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+		className,
+		viewBox: "0 0 100 30",
+		fill: "none",
+		xmlns: "http://www.w3.org/2000/svg",
+		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+			x: "50",
+			y: "20",
+			fontSize: "18",
+			fontWeight: "bold",
+			fill: "currentColor",
+			textAnchor: "middle",
+			children: provider || "BANK"
+		})
+	});
+	switch (p) {
+		case "bca": return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+			className,
+			viewBox: "0 0 120 40",
+			fill: "none",
+			xmlns: "http://www.w3.org/2000/svg",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+					d: "M15 10 C 25 10, 25 20, 15 20 Z",
+					fill: "#003399"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+					d: "M15 20 C 5 20, 5 30, 15 30 Z",
+					fill: "#FF9900"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+					x: "35",
+					y: "28",
+					fontSize: "28",
+					fontWeight: "900",
+					fontStyle: "italic",
+					fill: "#003399",
+					fontFamily: "Arial, sans-serif",
+					children: "BCA"
+				})
+			]
+		});
+		case "mandiri": return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+			className,
+			viewBox: "0 0 150 40",
+			fill: "none",
+			xmlns: "http://www.w3.org/2000/svg",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
+					x: "5",
+					y: "10",
+					width: "8",
+					height: "20",
+					fill: "#FFB700"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
+					x: "18",
+					y: "10",
+					width: "8",
+					height: "20",
+					fill: "#003D79"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+					x: "35",
+					y: "28",
+					fontSize: "24",
+					fontWeight: "bold",
+					fill: "#003D79",
+					fontFamily: "Arial, sans-serif",
+					children: "mandiri"
+				})
+			]
+		});
+		case "bni": return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+			className,
+			viewBox: "0 0 100 40",
+			fill: "none",
+			xmlns: "http://www.w3.org/2000/svg",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+				x: "5",
+				y: "28",
+				fontSize: "28",
+				fontWeight: "900",
+				fontStyle: "italic",
+				fill: "#005E6A",
+				fontFamily: "Arial, sans-serif",
+				children: "BNI"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+				d: "M55 30 L 95 30 L 85 34 L 45 34 Z",
+				fill: "#F15A24"
+			})]
+		});
+		case "bri": return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+			className,
+			viewBox: "0 0 100 40",
+			fill: "none",
+			xmlns: "http://www.w3.org/2000/svg",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+				x: "5",
+				y: "28",
+				fontSize: "28",
+				fontWeight: "900",
+				fill: "#00529C",
+				fontFamily: "Arial, sans-serif",
+				children: "BRI"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+				d: "M5 32 Q 50 40 95 32",
+				fill: "none",
+				stroke: "#F37021",
+				strokeWidth: "3"
+			})]
+		});
+		case "bsi": return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+			className,
+			viewBox: "0 0 100 40",
+			fill: "none",
+			xmlns: "http://www.w3.org/2000/svg",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+					x: "30",
+					y: "28",
+					fontSize: "24",
+					fontWeight: "bold",
+					fill: "#00A29C",
+					fontFamily: "Arial, sans-serif",
+					children: "BSI"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
+					cx: "15",
+					cy: "20",
+					r: "10",
+					fill: "#F37021"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
+					cx: "15",
+					cy: "20",
+					r: "6",
+					fill: "#FFFFFF"
+				})
+			]
+		});
+		case "cimb":
+		case "cimb niaga": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+			className,
+			viewBox: "0 0 150 40",
+			fill: "none",
+			xmlns: "http://www.w3.org/2000/svg",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+				x: "5",
+				y: "28",
+				fontSize: "22",
+				fontWeight: "900",
+				fill: "#7A0026",
+				fontFamily: "Arial, sans-serif",
+				children: "CIMB NIAGA"
+			})
+		});
+		case "dana": return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+			className,
+			viewBox: "0 0 120 40",
+			fill: "none",
+			xmlns: "http://www.w3.org/2000/svg",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
+					cx: "20",
+					cy: "20",
+					r: "15",
+					fill: "#118EEA"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+					d: "M14 12 L 20 12 C 25 12, 28 15, 28 20 C 28 25, 25 28, 20 28 L 14 28 Z",
+					fill: "white"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+					d: "M18 16 L 20 16 C 22 16, 24 17, 24 20 C 24 23, 22 24, 20 24 L 18 24 Z",
+					fill: "#118EEA"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+					x: "45",
+					y: "28",
+					fontSize: "26",
+					fontWeight: "bold",
+					fill: "#118EEA",
+					fontFamily: "Arial, sans-serif",
+					children: "DANA"
+				})
+			]
+		});
+		case "ovo": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+			className,
+			viewBox: "0 0 100 40",
+			fill: "none",
+			xmlns: "http://www.w3.org/2000/svg",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+				x: "5",
+				y: "30",
+				fontSize: "28",
+				fontWeight: "900",
+				fill: "#4C3494",
+				fontFamily: "Arial, sans-serif",
+				children: "OVO"
+			})
+		});
+		case "gopay": return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+			className,
+			viewBox: "0 0 120 40",
+			fill: "none",
+			xmlns: "http://www.w3.org/2000/svg",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
+				cx: "20",
+				cy: "20",
+				r: "12",
+				fill: "#00AED6"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+				x: "40",
+				y: "28",
+				fontSize: "24",
+				fontWeight: "bold",
+				fill: "#00AED6",
+				fontFamily: "Arial, sans-serif",
+				children: "gopay"
+			})]
+		});
+		case "shopeepay": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+			className,
+			viewBox: "0 0 150 40",
+			fill: "none",
+			xmlns: "http://www.w3.org/2000/svg",
+			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+				x: "5",
+				y: "28",
+				fontSize: "24",
+				fontWeight: "bold",
+				fill: "#EE4D2D",
+				fontFamily: "Arial, sans-serif",
+				children: "ShopeePay"
+			})
+		});
+		case "linkaja": return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+			className,
+			viewBox: "0 0 120 40",
+			fill: "none",
+			xmlns: "http://www.w3.org/2000/svg",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
+				x: "5",
+				y: "10",
+				width: "20",
+				height: "20",
+				rx: "4",
+				fill: "#E31837"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("text", {
+				x: "35",
+				y: "28",
+				fontSize: "24",
+				fontWeight: "900",
+				fill: "#E31837",
+				fontFamily: "Arial, sans-serif",
+				children: "LinkAja"
+			})]
+		});
+		default: return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Fallback, {});
+	}
+};
+var ChipIcon = ({ className = "w-10 h-8" }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+	className,
+	viewBox: "0 0 40 30",
+	fill: "none",
+	xmlns: "http://www.w3.org/2000/svg",
+	children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
+			width: "40",
+			height: "30",
+			rx: "4",
+			fill: "#EAB308"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+			d: "M 10 0 L 10 30 M 20 0 L 20 30 M 30 0 L 30 30",
+			stroke: "#CA8A04",
+			strokeWidth: "1"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+			d: "M 0 10 L 40 10 M 0 20 L 40 20",
+			stroke: "#CA8A04",
+			strokeWidth: "1"
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
+			x: "12",
+			y: "8",
+			width: "16",
+			height: "14",
+			rx: "2",
+			fill: "#FEF08A"
+		})
+	]
+});
+//#endregion
 //#region node_modules/swiper/shared/ssr-window.esm.mjs
 /**
 * SSR Window 5.0.1
@@ -26538,6 +26903,75 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 									};
 									const bgColor = layer.style?.backgroundColor || "#ffffff";
 									const textColor = layer.style?.textColor || "#1f2937";
+									if (layer.style?.useCardTheme) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "w-full h-full flex flex-col justify-between shadow-md relative overflow-hidden pointer-events-none p-4",
+										style: {
+											background: layer.style.paymentType === "ewallet" ? `linear-gradient(135deg, ${hexToRgba(bgColor, bgOpacity)}, ${hexToRgba(bgColor, bgOpacity - .15)})` : `linear-gradient(135deg, ${hexToRgba(bgColor, bgOpacity)}, ${hexToRgba(bgColor, Math.max(0, bgOpacity - .4))})`,
+											borderRadius: layer.style?.borderRadius || "1rem",
+											borderWidth: layer.style?.borderWidth || "1px",
+											borderColor: layer.style?.borderColor || "#e5e7eb",
+											borderStyle: layer.style?.borderWidth ? "solid" : layer.style?.borderColor ? "solid" : "none",
+											boxShadow: layer.style?.isShadowActive ? `0px ${layer.style?.shadowY || 6}px 12px -2px rgba(0, 0, 0, 0.15)` : "none"
+										},
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -right-8 -bottom-8 w-32 h-32 bg-white/20 rounded-full blur-2xl pointer-events-none" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -left-8 -top-8 w-24 h-24 bg-white/20 rounded-full blur-xl pointer-events-none" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute right-10 top-10 w-40 h-40 bg-black/5 rounded-full blur-3xl pointer-events-none mix-blend-overlay" }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex justify-between items-start w-full relative z-10",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "flex-1",
+													children: layer.style?.paymentType !== "ewallet" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChipIcon, { className: "w-10 h-8 opacity-90 drop-shadow-sm" })
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "shrink-0 h-8 flex items-center justify-end",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PaymentLogo, {
+														provider: layer.style?.providerId || layer.style?.bankName,
+														className: "h-full drop-shadow-sm max-w-[100px]"
+													})
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex justify-between items-end w-full relative z-10 mt-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex flex-col min-w-0 pr-2",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "font-mono font-bold tracking-widest truncate w-full drop-shadow-sm",
+														style: {
+															color: hexToRgba(textColor, textOpacity),
+															fontSize: layer.style?.fontSize ? `${layer.style.fontSize}px` : "18px"
+														},
+														children: layer.content || "0000 0000 0000"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+														className: "font-bold uppercase tracking-widest mt-1.5 truncate w-full opacity-90 drop-shadow-sm",
+														style: {
+															color: hexToRgba(textColor, textOpacity),
+															fontFamily: "monospace",
+															fontSize: layer.style?.fontSize ? `${Math.max(10, Math.round(layer.style.fontSize * .55))}px` : "10px"
+														},
+														children: layer.style?.accountName || "ATAS NAMA"
+													})]
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 shadow-sm border border-white/20 backdrop-blur-sm",
+													style: {
+														backgroundColor: layer.style?.iconBgColor || "rgba(255,255,255,0.2)",
+														color: layer.style?.iconColor || textColor
+													},
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+														className: "w-4 h-4",
+														fill: "none",
+														stroke: "currentColor",
+														viewBox: "0 0 24 24",
+														children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+															strokeLinecap: "round",
+															strokeLinejoin: "round",
+															strokeWidth: "2",
+															d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+														})
+													})
+												})]
+											})
+										]
+									});
 									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "w-full h-full flex items-center justify-between shadow-sm pointer-events-none px-4",
 										style: {
@@ -28613,7 +29047,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-pUwSIDCG.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-D6iZn9BZ.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -30192,6 +30626,81 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 							};
 							const bgColor = layer.style?.backgroundColor || "#ffffff";
 							const textColor = layer.style?.textColor || "#1f2937";
+							if (layer.style?.useCardTheme) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "w-full h-full flex flex-col justify-between shadow-md relative overflow-hidden p-4 group hover:shadow-lg transition-shadow cursor-pointer",
+								style: {
+									background: layer.style.paymentType === "ewallet" ? `linear-gradient(135deg, ${hexToRgba(bgColor, bgOpacity)}, ${hexToRgba(bgColor, bgOpacity - .15)})` : `linear-gradient(135deg, ${hexToRgba(bgColor, bgOpacity)}, ${hexToRgba(bgColor, Math.max(0, bgOpacity - .4))})`,
+									borderRadius: layer.style?.borderRadius || "1rem",
+									borderWidth: layer.style?.borderWidth || "1px",
+									borderColor: layer.style?.borderColor || "#e5e7eb",
+									borderStyle: layer.style?.borderWidth ? "solid" : layer.style?.borderColor ? "solid" : "none",
+									boxShadow: layer.style?.isShadowActive ? `0px ${layer.style?.shadowY || 6}px 12px -2px rgba(0, 0, 0, 0.15)` : "none"
+								},
+								onClick: () => {
+									if (layer.content) {
+										navigator.clipboard.writeText(layer.content);
+										alert("Nomor Rekening berhasil disalin: " + layer.content);
+									}
+								},
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -right-8 -bottom-8 w-32 h-32 bg-white/20 rounded-full blur-2xl pointer-events-none" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -left-8 -top-8 w-24 h-24 bg-white/20 rounded-full blur-xl pointer-events-none" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute right-10 top-10 w-40 h-40 bg-black/5 rounded-full blur-3xl pointer-events-none mix-blend-overlay" }),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex justify-between items-start w-full relative z-10 pointer-events-none",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "flex-1",
+											children: layer.style?.paymentType !== "ewallet" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChipIcon, { className: "w-10 h-8 opacity-90 drop-shadow-sm" })
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "shrink-0 h-8 flex items-center justify-end",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PaymentLogo, {
+												provider: layer.style?.providerId || layer.style?.bankName,
+												className: "h-full drop-shadow-sm max-w-[100px]"
+											})
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex justify-between items-end w-full relative z-10 mt-2 pointer-events-none",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "flex flex-col min-w-0 pr-2",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "font-mono font-bold tracking-widest truncate w-full drop-shadow-sm",
+												style: {
+													color: hexToRgba(textColor, textOpacity),
+													fontSize: layer.style?.fontSize ? `${layer.style.fontSize}px` : "18px"
+												},
+												children: layer.content || "0000 0000 0000"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "font-bold uppercase tracking-widest mt-1.5 truncate w-full opacity-90 drop-shadow-sm",
+												style: {
+													color: hexToRgba(textColor, textOpacity),
+													fontFamily: "monospace",
+													fontSize: layer.style?.fontSize ? `${Math.max(10, Math.round(layer.style.fontSize * .55))}px` : "10px"
+												},
+												children: layer.style?.accountName || "ATAS NAMA"
+											})]
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 shadow-sm border border-white/20 backdrop-blur-sm group-hover:bg-black/10 transition-colors",
+											style: {
+												backgroundColor: layer.style?.iconBgColor || "rgba(255,255,255,0.2)",
+												color: layer.style?.iconColor || textColor
+											},
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+												className: "w-4 h-4",
+												fill: "none",
+												stroke: "currentColor",
+												viewBox: "0 0 24 24",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+												})
+											})
+										})]
+									})
+								]
+							});
 							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "w-full h-full flex items-center justify-between shadow-sm px-4 group hover:shadow-md transition-shadow cursor-pointer",
 								style: {
@@ -30209,7 +30718,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 									}
 								},
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex flex-col flex-1 min-w-0 pr-2",
+									className: "flex flex-col flex-1 min-w-0 pr-2 pointer-events-none",
 									children: [layer.style?.bankName && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "font-bold uppercase tracking-wider mb-0.5 truncate w-full",
 										style: {
@@ -30219,7 +30728,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 										},
 										children: layer.style.bankName
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "font-mono font-bold transition-colors truncate w-full",
+										className: "font-mono font-bold truncate w-full",
 										style: {
 											color: hexToRgba(textColor, textOpacity),
 											fontFamily: layer.style?.fontFamily || "monospace",
@@ -30228,10 +30737,10 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 										children: layer.content || ""
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 active:scale-95 ml-2",
+									className: "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ml-2 group-hover:scale-110 transition-transform pointer-events-none",
 									style: {
 										backgroundColor: layer.style?.iconBgColor || "#e0e7ff",
-										color: layer.style?.iconColor || "#4f46e5"
+										color: layer.style?.iconColor || "#db2777"
 									},
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 										className: "w-4 h-4",
@@ -33228,4 +33737,4 @@ var ViewerApp = ({ previewData, onClosePreview }) => {
 var root = document.getElementById("viewer-root");
 if (root) (0, import_client.createRoot)(root).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ViewerApp, {}));
 //#endregion
-export { loadFont as A, AnimatableColor as C, IframePreview as D, OutMode as E, useUIStore as F, apiClient as I, useStore as L, pointsToSmoothedSvgPath as M, ShapePaths as N, LayerElement as O, useCanvasStore as P, ValueWithRandom as S, ParticleOutType as T, getHslFromAnimation as _, mouseLeaveEvent as a, rangeColorToHsl as b, touchCancelEvent as c, touchStartEvent as d, ViewerApp as default, InteractorType as f, alterHsl as g, r as h, mouseDownEvent as i, IMAGE_FILTERS as j, FONTS as k, touchEndEvent as l, InteractivityDetect as m, loadFireflyPreset as n, mouseMoveEvent as o, Interactivity as p, clickEvent as r, mouseUpEvent as s, loadSnowPreset as t, touchMoveEvent as u, getStyleFromHsl as v, OptionsColor as w, rangeColorToRgb as x, getStyleFromRgb as y };
+export { FONTS as A, AnimatableColor as C, IframePreview as D, OutMode as E, useCanvasStore as F, useUIStore as I, apiClient as L, IMAGE_FILTERS as M, pointsToSmoothedSvgPath as N, LayerElement as O, ShapePaths as P, useStore as R, ValueWithRandom as S, ParticleOutType as T, getHslFromAnimation as _, mouseLeaveEvent as a, rangeColorToHsl as b, touchCancelEvent as c, touchStartEvent as d, ViewerApp as default, InteractorType as f, alterHsl as g, r as h, mouseDownEvent as i, loadFont as j, PaymentProviders as k, touchEndEvent as l, InteractivityDetect as m, loadFireflyPreset as n, mouseMoveEvent as o, Interactivity as p, clickEvent as r, mouseUpEvent as s, loadSnowPreset as t, touchMoveEvent as u, getStyleFromHsl as v, OptionsColor as w, rangeColorToRgb as x, getStyleFromRgb as y };
