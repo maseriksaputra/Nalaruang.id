@@ -35,9 +35,11 @@ class ViewerController extends Controller
         }
 
         // Cek apakah ini adalah demo dari sebuah Template
-        $template = \App\Models\Template::where('invitation_id', $invitation->id)->first();
-        if ($template) {
-            $template->increment('demo_views');
+        if (!$isAdmin) {
+            $template = \App\Models\Template::where('invitation_id', $invitation->id)->first();
+            if ($template) {
+                $template->increment('demo_views');
+            }
         }
 
         // Cek apakah ini adalah undangan milik klien yang dibuat dari sebuah Template
