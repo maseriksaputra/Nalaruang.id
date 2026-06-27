@@ -103,7 +103,7 @@ const CanvasArea = () => {
     const hideEmptySections = global_settings?.custom_code && !hasAnyLayers;
 
     return (
-        <div style={{ display: 'grid' }} onDragOver={handleDragOver} onDrop={handleDrop}>
+        <div style={{ display: 'grid', width: '100%', height: '100%' }} onDragOver={handleDragOver} onDrop={handleDrop}>
             {global_settings?.custom_code && (
                 <div style={{ gridArea: '1 / 1', zIndex: 0 }}>
                     <IframePreview 

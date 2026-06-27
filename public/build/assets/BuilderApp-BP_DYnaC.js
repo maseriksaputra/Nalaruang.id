@@ -108,7 +108,11 @@ var CanvasArea = () => {
 	const hasAnyLayers = sections.some((s) => s.layers && s.layers.length > 0);
 	const hideEmptySections = global_settings?.custom_code && !hasAnyLayers;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		style: { display: "grid" },
+		style: {
+			display: "grid",
+			width: "100%",
+			height: "100%"
+		},
 		onDragOver: handleDragOver,
 		onDrop: handleDrop,
 		children: [
