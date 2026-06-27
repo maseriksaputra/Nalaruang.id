@@ -20771,15 +20771,42 @@ var TimelinePanel = () => {
 								}),
 								sections.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "flex items-center ml-2 border border-primary-200 rounded-lg overflow-hidden shrink-0",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										onClick: () => useCanvasStore.getState().setActiveSection(sections[0].id),
-										className: `px-3 py-1.5 text-[10px] font-bold transition-colors ${activeSectionId === sections[0].id ? "bg-primary-600 text-white" : "bg-primary-50 text-primary-600 hover:bg-primary-100"}`,
-										children: "Halaman Cover"
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-										onClick: () => useCanvasStore.getState().setActiveSection(sections[1].id),
-										className: `px-3 py-1.5 text-[10px] font-bold transition-colors border-l border-primary-200 ${activeSectionId === sections[1].id ? "bg-primary-600 text-white border-l-primary-600" : "bg-primary-50 text-primary-600 hover:bg-primary-100"}`,
-										children: "Halaman Isi"
-									})]
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: () => {
+												useCanvasStore.getState().setActiveCanvasMode("mobile");
+												useCanvasStore.getState().setActiveSection(sections[0].id);
+											},
+											className: `px-3 py-1.5 text-[10px] font-bold transition-colors ${activeCanvasMode === "mobile" && activeSectionId === sections[0].id ? "bg-primary-600 text-white" : "bg-primary-50 text-primary-600 hover:bg-primary-100"}`,
+											children: "Halaman Cover"
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: () => {
+												useCanvasStore.getState().setActiveCanvasMode("mobile");
+												useCanvasStore.getState().setActiveSection(sections[1].id);
+											},
+											className: `px-3 py-1.5 text-[10px] font-bold transition-colors border-l border-primary-200 ${activeCanvasMode === "mobile" && activeSectionId === sections[1].id ? "bg-primary-600 text-white border-l-primary-600" : "bg-primary-50 text-primary-600 hover:bg-primary-100"}`,
+											children: "Halaman Isi"
+										}),
+										global_settings?.desktop_thumbnail?.enabled && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											onClick: () => {
+												useCanvasStore.getState().setActiveCanvasMode("desktop");
+											},
+											className: `px-3 py-1.5 text-[10px] font-bold transition-colors border-l border-primary-200 flex items-center gap-1 ${activeCanvasMode === "desktop" ? "bg-primary-600 text-white border-l-primary-600" : "bg-primary-50 text-primary-600 hover:bg-primary-100"}`,
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+												className: "w-3 h-3",
+												fill: "none",
+												stroke: "currentColor",
+												viewBox: "0 0 24 24",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+												})
+											}), "Halaman Desktop"]
+										})
+									]
 								})
 							]
 						})
