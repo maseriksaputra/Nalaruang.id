@@ -83,28 +83,38 @@ class ProductPriceResource extends Resource
                     Tables\Columns\Layout\Stack::make([
                         Tables\Columns\TextColumn::make('name')
                             ->weight('bold')
-                            ->size('lg'),
+                            ->size('md'),
                             
                         Tables\Columns\TextColumn::make('description')
                             ->color('gray')
-                            ->size('sm'),
+                            ->size('xs'),
 
                         Tables\Columns\TextColumn::make('category.name')
                             ->badge()
                             ->color('primary')
+                            ->icon(fn ($record) => match(strtolower($record->category ? $record->category->name : ($record->service ? $record->service->title : ''))) {
+                                'cetak foto' => 'heroicon-o-photo',
+                                'undangan web' => 'heroicon-o-globe-alt',
+                                'undangan video' => 'heroicon-o-video-camera',
+                                'minuman' => 'heroicon-o-beaker',
+                                'makanan' => 'heroicon-o-cake',
+                                'souvenir' => 'heroicon-o-gift',
+                                default => 'heroicon-o-tag',
+                            })
                             ->getStateUsing(fn ($record) => $record->category ? $record->category->name : ($record->service ? $record->service->title : '')),
                             
                         Tables\Columns\TextColumn::make('price')
                             ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state ?? 0, 0, ',', '.'))
                             ->weight('bold')
                             ->color('success')
-                            ->size('lg'),
-                    ])->space(2)->extraAttributes(['class' => 'p-4']),
+                            ->size('md'),
+                    ])->space(1)->extraAttributes(['class' => 'p-3']),
                 ]),
             ])
             ->contentGrid([
-                'md' => 3,
-                'xl' => 4,
+                'md' => 4,
+                'lg' => 5,
+                'xl' => 6,
             ])
             ->filters([
                 //
