@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BCSJFGm1.js";
-import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-jIcBB9QK.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-HK1SiB-n.js";
+import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-Bv1GuhO4.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);

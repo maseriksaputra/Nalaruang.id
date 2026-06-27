@@ -131,9 +131,11 @@ const PublicCanvas = ({ config }) => {
             if (isPreview) {
                 newScale = screenWidth / baseWidth;
             } else if (screenWidth < baseWidth || screenWidth < 1024) {
-                // Mobile and Tablet: ALWAYS fit the width to prevent horizontal clipping and "zoomed in" effect.
-                // Letting height be shorter or cut off is standard for absolute positioning builders.
-                newScale = screenWidth / baseWidth;
+                // Mobile and Tablet: Use object-fit: cover behavior (Math.max) 
+                // to guarantee the canvas always fills the entire screen without any white gaps!
+                const scaleX = screenWidth / baseWidth;
+                const scaleY = screenHeight / 844;
+                newScale = Math.max(scaleX, scaleY);
             } else {
                 // Desktop (>= 1024px)
                 if (hasDesktopThumbnail) {
@@ -240,10 +242,7 @@ const PublicCanvas = ({ config }) => {
                             return section.layout.height;
                         }
                         if (index === 0) {
-                            // Hitung tinggi layar secara dinamis agar background cover selalu full 100vh tanpa sela putih
-                            const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 844;
-                            const targetHeight = Math.max(844, viewportHeight / scale);
-                            return `${targetHeight}px`;
+                            return section.layout?.height || '844px';
                         }
                         if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
                             return section.layout.minHeight;

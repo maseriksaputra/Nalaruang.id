@@ -302,11 +302,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
     let finalHeight = layer.style?.height !== undefined ? getPx(layer.style.height) : '100px';
     let finalWidth = layer.style?.width !== undefined ? getPx(layer.style.width) : '100px';
 
-    // Auto-stretch background layers to fill extra space on mobile screens
-    if (layer.style?.width === 414 && layer.style?.height >= 844 && layer.style?.x === 0 && layer.style?.y === 0) {
-        finalHeight = '100%';
-        finalWidth = '100%';
-    }
+
 
     const wrapperStyle = {
         position: 'absolute',
