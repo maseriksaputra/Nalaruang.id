@@ -10,8 +10,9 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/effect-fade';
 
 import LayerElement from './LayerElement';
+import PublicLayer from '../../../Viewer/components/PublicLayer';
 
-const DesktopThumbnail = ({ settings }) => {
+const DesktopThumbnail = ({ settings, isViewer = false }) => {
     const desktopThumbnail = settings?.desktop_thumbnail || {};
 
     const {
@@ -187,7 +188,11 @@ const DesktopThumbnail = ({ settings }) => {
                             <div key={layer.id} style={{ zIndex: layer.style?.zIndex || 1, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
                                 {!layer.isHidden && layer.children?.map(child => (
                                     <div key={child.id} style={{ pointerEvents: 'auto' }}>
-                                        <LayerElement layer={child} sectionId="desktop" isViewer={true} />
+                                        {isViewer ? (
+                                            <PublicLayer layer={child} sectionId="desktop" />
+                                        ) : (
+                                            <LayerElement layer={child} sectionId="desktop" />
+                                        )}
                                     </div>
                                 ))}
                             </div>

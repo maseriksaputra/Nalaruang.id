@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BzY4MJ6x.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-jAuKZKH7.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-C7JoNUH2.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CAWSJBxJ.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -29051,7 +29051,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BzY4MJ6x.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-jAuKZKH7.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -31287,7 +31287,7 @@ var PublicCanvas = ({ config }) => {
 };
 //#endregion
 //#region resources/js/Builder/components/Canvas/DesktopThumbnail.jsx
-var DesktopThumbnail = ({ settings }) => {
+var DesktopThumbnail = ({ settings, isViewer = false }) => {
 	const { enabled, media = [], video_loop = true, album_duration = 3e3, transition_speed = 1e3, transition_effect = "fade", overlay_text = "", text_animation = "fade-up", background_color = "#1a1a1a" } = settings?.desktop_thumbnail || {};
 	if (!enabled) return null;
 	const desktopLayers = settings?.desktop_layers || [];
@@ -31433,10 +31433,12 @@ var DesktopThumbnail = ({ settings }) => {
 					},
 					children: !layer.isHidden && layer.children?.map((child) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						style: { pointerEvents: "auto" },
-						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayerElement, {
+						children: isViewer ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PublicLayer, {
 							layer: child,
-							sectionId: "desktop",
-							isViewer: true
+							sectionId: "desktop"
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LayerElement, {
+							layer: child,
+							sectionId: "desktop"
 						})
 					}, child.id))
 				}, layer.id))
@@ -33720,7 +33722,10 @@ var ViewerApp = ({ previewData, onClosePreview }) => {
 		children: [
 			hasDesktopThumbnail && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "fixed inset-0 z-0 hidden lg:block",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DesktopThumbnail, { settings: viewerData?.global_settings })
+				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DesktopThumbnail, {
+					settings: viewerData?.global_settings,
+					isViewer: true
+				})
 			}),
 			isInsideBuilderPreview && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "fixed top-0 left-0 right-0 h-14 bg-white/10 backdrop-blur-md flex items-center justify-between px-4 z-[2000] border-b border-white/20",

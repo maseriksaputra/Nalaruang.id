@@ -82,7 +82,7 @@ const ViewerApp = ({ previewData, onClosePreview }) => {
             {/* Desktop Thumbnail Background Layer */}
             {hasDesktopThumbnail && (
                 <div className="fixed inset-0 z-0 hidden lg:block">
-                     <DesktopThumbnail settings={viewerData?.global_settings} />
+                     <DesktopThumbnail settings={viewerData?.global_settings} isViewer={true} />
                 </div>
             )}
 
