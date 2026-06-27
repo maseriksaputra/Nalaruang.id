@@ -31,25 +31,41 @@ class SyncViewsCommand extends Command
         foreach ($templates as $template) {
             $visitorCount = \App\Models\InvitationVisitor::where('invitation_id', $template->invitation_id)->count();
             $expectedViews = ($template->demo_views ?? 0) + ($template->total_invitation_views ?? 0);
+            
             $diff = $expectedViews - $visitorCount;
             
-            if ($diff !== 0) {
-                $this->info("Template {$template->name}: has {$visitorCount} logs but expected {$expectedViews} views. Syncing template demo_views to match actual visitor logs...");
+            if ($diff > 0) {
+                $this->info("Template {$template->name}: missing {$diff} visitor logs. Inserting...");
                 
-                $newDemoViews = $visitorCount - ($template->total_invitation_views ?? 0);
-                
-                // Pastikan tidak negatif
-                if ($newDemoViews < 0) {
-                    $newDemoViews = 0;
+                $insertData = [];
+                for ($i = 0; $i < $diff; $i++) {
+                    $insertData[] = [
+                        'invitation_id' => $template->invitation_id,
+                        'ip_address' => '127.0.0.1',
+                        'user_agent' => 'System Sync',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                    
+                    if (count($insertData) >= 500) {
+                        \App\Models\InvitationVisitor::insert($insertData);
+                        $insertData = [];
+                    }
                 }
                 
-                $template->demo_views = $newDemoViews;
-                $template->save();
+                if (count($insertData) > 0) {
+                    \App\Models\InvitationVisitor::insert($insertData);
+                }
                 
-                $totalInserted++;
+                $totalInserted += $diff;
+            } elseif ($diff < 0) {
+                // If visitors log is higher, update the template demo_views to match
+                $this->info("Template {$template->name}: has {$visitorCount} logs but only {$expectedViews} views. Updating template views...");
+                $template->demo_views = $visitorCount - ($template->total_invitation_views ?? 0);
+                $template->save();
             }
         }
 
-        $this->info("Sync complete! Total templates synced: {$totalInserted}");
+        $this->info("Sync complete! Total inserted visitor logs: {$totalInserted}");
     }
 }
