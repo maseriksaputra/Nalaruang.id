@@ -48,21 +48,32 @@ const TopToolbar = () => {
             tanggal: true,
             lokasi: true,
             custom_request: true
-        }
+        },
+        discount_price: window.__INVITATION_DISCOUNT_PRICE__ || '',
+        package_id: window.__INVITATION_PACKAGE_ID__ || '',
+        is_active: window.__INVITATION_IS_ACTIVE__ !== undefined ? window.__INVITATION_IS_ACTIVE__ : true
     });
     const [isSavingTemplate, setIsSavingTemplate] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [folderList, setFolderList] = useState([]);
+    const [packageList, setPackageList] = useState([]);
 
     React.useEffect(() => {
-        if (isTemplateModalOpen && folderList.length === 0) {
-            axios.get('/admin/invitation-portal/template-folders')
-                .then(res => {
-                    if (Array.isArray(res.data)) {
-                        setFolderList(res.data);
-                    }
-                })
-                .catch(e => console.error("Error fetching folders", e));
+        if (isTemplateModalOpen) {
+            if (folderList.length === 0) {
+                axios.get('/admin/invitation-portal/template-folders')
+                    .then(res => {
+                        if (Array.isArray(res.data)) setFolderList(res.data);
+                    })
+                    .catch(e => console.error("Error fetching folders", e));
+            }
+            if (packageList.length === 0) {
+                axios.get('/api/builder/packages')
+                    .then(res => {
+                        if (Array.isArray(res.data)) setPackageList(res.data);
+                    })
+                    .catch(e => console.error("Error fetching packages", e));
+            }
         }
     }, [isTemplateModalOpen]);
 
@@ -79,6 +90,9 @@ const TopToolbar = () => {
                 title: templateData.title,
                 category: templateData.category,
                 price: templateData.price,
+                discount_price: templateData.discount_price,
+                package_id: templateData.package_id,
+                is_active: templateData.is_active,
                 description: templateData.description,
                 canvas_config: canvas_config,
                 features: templateData.features
@@ -268,16 +282,64 @@ const TopToolbar = () => {
                                 <p className="text-xs text-gray-500 mt-1">Kategori ini akan otomatis menjadi nama Folder di halaman Kelola Template. Biarkan kosong jika tidak pakai folder.</p>
                             </div>
                             
-                            <div>
-                                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Harga Template (Rp)</label>
-                                <input 
-                                    type="number" 
-                                    min="0"
-                                    value={templateData.price}
-                                    onChange={e => setTemplateData({...templateData, price: e.target.value})}
-                                    placeholder="0 untuk gratis"
-                                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm"
-                                />
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Harga Asli (Rp)</label>
+                                    <input 
+                                        type="number" 
+                                        min="0"
+                                        value={templateData.price}
+                                        onChange={e => setTemplateData({...templateData, price: e.target.value})}
+                                        placeholder="Misal: 99000"
+                                        className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Harga Diskon (Opsional)</label>
+                                    <input 
+                                        type="number" 
+                                        min="0"
+                                        value={templateData.discount_price}
+                                        onChange={e => setTemplateData({...templateData, discount_price: e.target.value})}
+                                        placeholder="Misal: 49000"
+                                        className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm"
+                                    />
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Paket Harga</label>
+                                    <select 
+                                        value={templateData.package_id}
+                                        onChange={e => setTemplateData({...templateData, package_id: e.target.value})}
+                                        className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm appearance-none"
+                                        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.75rem center', backgroundSize: '1rem' }}
+                                    >
+                                        <option value="">-- Pilih Paket (Opsional) --</option>
+                                        {packageList.map(pkg => (
+                                            <option key={pkg.id} value={pkg.id}>{pkg.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="flex flex-col justify-center">
+                                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Status Produk</label>
+                                    <label className="flex items-center cursor-pointer group mt-1">
+                                        <div className="relative">
+                                            <input 
+                                                type="checkbox" 
+                                                className="sr-only" 
+                                                checked={templateData.is_active}
+                                                onChange={e => setTemplateData({...templateData, is_active: e.target.checked})}
+                                            />
+                                            <div className={`block w-10 h-6 rounded-full transition-colors duration-300 ease-in-out ${templateData.is_active ? 'bg-primary-500' : 'bg-gray-300'}`}></div>
+                                            <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 ease-in-out ${templateData.is_active ? 'transform translate-x-4' : ''}`}></div>
+                                        </div>
+                                        <span className="ml-3 text-sm font-medium text-gray-700 group-hover:text-primary-600 transition-colors">
+                                            {templateData.is_active ? 'Aktif (Tampil)' : 'Non-aktif (Sembunyi)'}
+                                        </span>
+                                    </label>
+                                </div>
                             </div>
                             
                             <div>

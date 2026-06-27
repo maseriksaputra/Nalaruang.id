@@ -983,6 +983,10 @@
     left: calc(var(--spacing) * 0);
   }
 
+  .left-1 {
+    left: calc(var(--spacing) * 1);
+  }
+
   .left-1\/2 {
     left: 50%;
   }
@@ -1307,6 +1311,10 @@
 
   .ml-2 {
     margin-left: calc(var(--spacing) * 2);
+  }
+
+  .ml-3 {
+    margin-left: calc(var(--spacing) * 3);
   }
 
   .ml-4 {
@@ -6396,6 +6404,10 @@
 
     .group-hover\:text-primary-500:is(:where(.group):hover *) {
       color: var(--color-primary-500);
+    }
+
+    .group-hover\:text-primary-600:is(:where(.group):hover *) {
+      color: var(--color-primary-600);
     }
 
     .group-hover\:text-purple-400:is(:where(.group):hover *) {

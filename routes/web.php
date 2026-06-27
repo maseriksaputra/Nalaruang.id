@@ -391,6 +391,11 @@ Route::middleware(['web', 'auth'])->group(function () {
 // Auto-save route (menggunakan middleware web untuk dukungan CSRF dari Axios apiClient)
 Route::put('/api/builder/invitations/{id}/auto-save', [\App\Http\Controllers\BuilderController::class, 'autoSave']);
 Route::post('/api/builder/invitations/{id}/save-as-template', [\App\Http\Controllers\BuilderController::class, 'saveAsTemplate']);
+Route::get('/api/builder/packages', function () {
+    $service = \App\Models\Service::where('slug', 'event-digital')->first();
+    if (!$service) return response()->json([]);
+    return response()->json(\App\Models\Package::where('service_id', $service->id)->orderBy('sort_order')->get(['id', 'name']));
+});
 
 
 

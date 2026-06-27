@@ -142,6 +142,9 @@ class BuilderController extends Controller
             'title' => 'required|string|max:255',
             'category' => 'nullable|string|max:255',
             'price' => 'numeric|min:0',
+            'discount_price' => 'nullable|numeric|min:0',
+            'package_id' => 'nullable|exists:packages,id',
+            'is_active' => 'boolean',
             'description' => 'nullable|string',
             'canvas_config' => 'required|array',
             'features' => 'nullable|array'
@@ -226,11 +229,13 @@ class BuilderController extends Controller
                 ['invitation_id' => $invitation->id],
                 [
                     'service_id' => $service->id,
+                    'package_id' => $request->package_id,
                     'name' => $request->title,
                     'price' => $request->price ?: 0,
+                    'discount_price' => $request->discount_price,
                     'category' => $request->category,
                     'form_schema' => $formSchema,
-                    'is_active' => true,
+                    'is_active' => $request->has('is_active') ? $request->is_active : true,
                     'sort_order' => 0,
                     'preview_url' => url('/' . $invitation->slug)
                 ]

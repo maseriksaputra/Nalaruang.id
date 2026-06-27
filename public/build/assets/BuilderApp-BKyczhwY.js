@@ -19364,15 +19364,24 @@ var TopToolbar = () => {
 			tanggal: true,
 			lokasi: true,
 			custom_request: true
-		}
+		},
+		discount_price: window.__INVITATION_DISCOUNT_PRICE__ || "",
+		package_id: window.__INVITATION_PACKAGE_ID__ || "",
+		is_active: window.__INVITATION_IS_ACTIVE__ !== void 0 ? window.__INVITATION_IS_ACTIVE__ : true
 	});
 	const [isSavingTemplate, setIsSavingTemplate] = (0, import_react.useState)(false);
 	const [toastMessage, setToastMessage] = (0, import_react.useState)("");
 	const [folderList, setFolderList] = (0, import_react.useState)([]);
+	const [packageList, setPackageList] = (0, import_react.useState)([]);
 	import_react.useEffect(() => {
-		if (isTemplateModalOpen && folderList.length === 0) axios.get("/admin/invitation-portal/template-folders").then((res) => {
-			if (Array.isArray(res.data)) setFolderList(res.data);
-		}).catch((e) => console.error("Error fetching folders", e));
+		if (isTemplateModalOpen) {
+			if (folderList.length === 0) axios.get("/admin/invitation-portal/template-folders").then((res) => {
+				if (Array.isArray(res.data)) setFolderList(res.data);
+			}).catch((e) => console.error("Error fetching folders", e));
+			if (packageList.length === 0) axios.get("/api/builder/packages").then((res) => {
+				if (Array.isArray(res.data)) setPackageList(res.data);
+			}).catch((e) => console.error("Error fetching packages", e));
+		}
 	}, [isTemplateModalOpen]);
 	const handleSaveTemplateSubmit = async (e) => {
 		e.preventDefault();
@@ -19386,6 +19395,9 @@ var TopToolbar = () => {
 				title: templateData.title,
 				category: templateData.category,
 				price: templateData.price,
+				discount_price: templateData.discount_price,
+				package_id: templateData.package_id,
+				is_active: templateData.is_active,
 				description: templateData.description,
 				canvas_config,
 				features: templateData.features
@@ -19761,20 +19773,90 @@ var TopToolbar = () => {
 										children: "Kategori ini akan otomatis menjadi nama Folder di halaman Kelola Template. Biarkan kosong jika tidak pakai folder."
 									})
 								] }),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
-									className: "block text-sm font-semibold text-gray-700 mb-1.5",
-									children: "Harga Template (Rp)"
-								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-									type: "number",
-									min: "0",
-									value: templateData.price,
-									onChange: (e) => setTemplateData({
-										...templateData,
-										price: e.target.value
-									}),
-									placeholder: "0 untuk gratis",
-									className: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm"
-								})] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-2 gap-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "block text-sm font-semibold text-gray-700 mb-1.5",
+										children: "Harga Asli (Rp)"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "number",
+										min: "0",
+										value: templateData.price,
+										onChange: (e) => setTemplateData({
+											...templateData,
+											price: e.target.value
+										}),
+										placeholder: "Misal: 99000",
+										className: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm"
+									})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "block text-sm font-semibold text-gray-700 mb-1.5",
+										children: "Harga Diskon (Opsional)"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+										type: "number",
+										min: "0",
+										value: templateData.discount_price,
+										onChange: (e) => setTemplateData({
+											...templateData,
+											discount_price: e.target.value
+										}),
+										placeholder: "Misal: 49000",
+										className: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm"
+									})] })]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "grid grid-cols-2 gap-4",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "block text-sm font-semibold text-gray-700 mb-1.5",
+										children: "Paket Harga"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+										value: templateData.package_id,
+										onChange: (e) => setTemplateData({
+											...templateData,
+											package_id: e.target.value
+										}),
+										className: "w-full bg-white border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all text-sm appearance-none",
+										style: {
+											backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E\")",
+											backgroundRepeat: "no-repeat",
+											backgroundPosition: "right 0.75rem center",
+											backgroundSize: "1rem"
+										},
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: "",
+											children: "-- Pilih Paket (Opsional) --"
+										}), packageList.map((pkg) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+											value: pkg.id,
+											children: pkg.name
+										}, pkg.id))]
+									})] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex flex-col justify-center",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+											className: "block text-sm font-semibold text-gray-700 mb-1.5",
+											children: "Status Produk"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+											className: "flex items-center cursor-pointer group mt-1",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "relative",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+														type: "checkbox",
+														className: "sr-only",
+														checked: templateData.is_active,
+														onChange: (e) => setTemplateData({
+															...templateData,
+															is_active: e.target.checked
+														})
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: `block w-10 h-6 rounded-full transition-colors duration-300 ease-in-out ${templateData.is_active ? "bg-primary-500" : "bg-gray-300"}` }),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: `absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 ease-in-out ${templateData.is_active ? "transform translate-x-4" : ""}` })
+												]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "ml-3 text-sm font-medium text-gray-700 group-hover:text-primary-600 transition-colors",
+												children: templateData.is_active ? "Aktif (Tampil)" : "Non-aktif (Sembunyi)"
+											})]
+										})]
+									})]
+								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 									className: "block text-sm font-semibold text-gray-700 mb-1.5",
 									children: "Deskripsi Singkat"
