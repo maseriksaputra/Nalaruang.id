@@ -155,28 +155,15 @@ const PublicCanvas = ({ config }) => {
 
     useEffect(() => {
         if (!innerRef.current) return;
-        let timeout;
         const resizeObserver = new ResizeObserver((entries) => {
             for (let entry of entries) {
                 const newHeight = entry.contentRect.height * scale;
-                // Debounce only when shrinking to prevent transient scroll jumps on mobile
-                setScaledHeight(prev => {
-                    if (prev === 'auto' || prev === 0 || newHeight >= prev) {
-                        clearTimeout(timeout);
-                        return newHeight;
-                    }
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        setScaledHeight(newHeight);
-                    }, 500);
-                    return prev;
-                });
+                setScaledHeight(newHeight);
             }
         });
         resizeObserver.observe(innerRef.current);
         return () => {
             resizeObserver.disconnect();
-            clearTimeout(timeout);
         };
     }, [scale, sections]);
 
