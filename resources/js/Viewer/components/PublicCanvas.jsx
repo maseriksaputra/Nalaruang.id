@@ -150,7 +150,6 @@ const PublicCanvas = ({ config }) => {
             }
 
             setScale(newScale);
-            setScaledHeight(844 * newScale);
         };
         
         handleResize();
