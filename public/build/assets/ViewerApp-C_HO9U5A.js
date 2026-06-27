@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-8RDzCAkS.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BzY4MJ6x.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-ub1qkqJ2.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-C7JoNUH2.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -29051,7 +29051,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-8RDzCAkS.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BzY4MJ6x.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -31291,6 +31291,35 @@ var DesktopThumbnail = ({ settings }) => {
 	const { enabled, media = [], video_loop = true, album_duration = 3e3, transition_speed = 1e3, transition_effect = "fade", overlay_text = "", text_animation = "fade-up", background_color = "#1a1a1a" } = settings?.desktop_thumbnail || {};
 	if (!enabled) return null;
 	const desktopLayers = settings?.desktop_layers || [];
+	const [scale, setScale] = (0, import_react.useState)(1);
+	const [translate, setTranslate] = (0, import_react.useState)({
+		x: 0,
+		y: 0
+	});
+	(0, import_react.useEffect)(() => {
+		if (desktopLayers.length === 0) return;
+		const handleResize = () => {
+			const screenW = window.innerWidth;
+			const screenH = window.innerHeight;
+			const canvasW = 1280;
+			const canvasH = 720;
+			const scaleX = screenW / canvasW;
+			const scaleY = screenH / canvasH;
+			const scaleToCover = Math.max(scaleX, scaleY);
+			const scaledW = canvasW * scaleToCover;
+			const scaledH = canvasH * scaleToCover;
+			const translateX = (screenW - scaledW) / 2;
+			const translateY = (screenH - scaledH) / 2;
+			setScale(scaleToCover);
+			setTranslate({
+				x: translateX,
+				y: translateY
+			});
+		};
+		handleResize();
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, [desktopLayers.length]);
 	const getMediaInfo = (item) => {
 		if (!item) return {
 			url: "",
@@ -31381,15 +31410,16 @@ var DesktopThumbnail = ({ settings }) => {
 		className: "w-full h-full relative overflow-hidden flex items-end justify-start",
 		style: { backgroundColor: background_color },
 		children: desktopLayers.length > 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: "absolute inset-0 w-full h-full z-0",
+			className: "absolute inset-0 w-full h-full z-0 overflow-hidden bg-black",
 			children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "w-full h-full relative",
 				style: {
 					position: "absolute",
 					top: 0,
 					left: 0,
-					width: "100%",
-					height: "100%"
+					width: "1280px",
+					height: "720px",
+					transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
+					transformOrigin: "0 0"
 				},
 				children: desktopLayers.map((layer) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					style: {

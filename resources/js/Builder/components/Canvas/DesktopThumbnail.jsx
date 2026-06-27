@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import useCanvasStore from '../../stores/useCanvasStore';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, EffectCards, EffectCoverflow, EffectFade } from 'swiper/modules';
@@ -29,6 +29,36 @@ const DesktopThumbnail = ({ settings }) => {
     if (!enabled) return null;
 
     const desktopLayers = settings?.desktop_layers || [];
+
+    const [scale, setScale] = useState(1);
+    const [translate, setTranslate] = useState({ x: 0, y: 0 });
+
+    useEffect(() => {
+        if (desktopLayers.length === 0) return;
+
+        const handleResize = () => {
+            const screenW = window.innerWidth;
+            const screenH = window.innerHeight;
+            const canvasW = 1280;
+            const canvasH = 720;
+            
+            const scaleX = screenW / canvasW;
+            const scaleY = screenH / canvasH;
+            const scaleToCover = Math.max(scaleX, scaleY);
+            
+            const scaledW = canvasW * scaleToCover;
+            const scaledH = canvasH * scaleToCover;
+            const translateX = (screenW - scaledW) / 2;
+            const translateY = (screenH - scaledH) / 2;
+
+            setScale(scaleToCover);
+            setTranslate({ x: translateX, y: translateY });
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [desktopLayers.length]);
 
     // Determine the type for single media
     const getMediaInfo = (item) => {
@@ -140,9 +170,19 @@ const DesktopThumbnail = ({ settings }) => {
             style={{ backgroundColor: background_color }}
         >
             {desktopLayers.length > 0 ? (
-                <div className="absolute inset-0 w-full h-full z-0">
+                <div className="absolute inset-0 w-full h-full z-0 overflow-hidden bg-black">
                     {/* Dynamic Desktop Editor Canvas */}
-                    <div className="w-full h-full relative" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+                    <div 
+                        style={{ 
+                            position: 'absolute', 
+                            top: 0, 
+                            left: 0, 
+                            width: '1280px', 
+                            height: '720px', 
+                            transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
+                            transformOrigin: '0 0'
+                        }}
+                    >
                         {desktopLayers.map((layer) => (
                             <div key={layer.id} style={{ zIndex: layer.style?.zIndex || 1, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
                                 {!layer.isHidden && layer.children?.map(child => (
