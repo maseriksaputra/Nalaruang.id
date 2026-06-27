@@ -15,6 +15,15 @@ const DesktopThumbnailPanel = () => {
     const activeCanvasMode = useCanvasStore(state => state.activeCanvasMode);
     const setActiveCanvasMode = useCanvasStore(state => state.setActiveCanvasMode);
 
+    const handleChange = (key, value) => {
+        updateGlobalSettings({
+            desktop_thumbnail: {
+                ...settings,
+                [key]: value
+            }
+        });
+    };
+
     return (
         <div className="flex flex-col h-full bg-white">
             <div className="p-4 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-sm z-10">

@@ -6534,11 +6534,17 @@ var ANIMATION_STYLES = RAW_ANIMATION_STYLES + "\n" + ANIMATION_CATEGORIES.flatMa
 //#region resources/js/Builder/components/Panels/DesktopThumbnailPanel.jsx
 var DesktopThumbnailPanel = () => {
 	const global_settings = useCanvasStore((state) => state.global_settings);
-	useCanvasStore((state) => state.updateGlobalSettings);
+	const updateGlobalSettings = useCanvasStore((state) => state.updateGlobalSettings);
 	const settings = global_settings.desktop_thumbnail || {};
 	(0, import_react.useRef)(null);
 	const activeCanvasMode = useCanvasStore((state) => state.activeCanvasMode);
 	const setActiveCanvasMode = useCanvasStore((state) => state.setActiveCanvasMode);
+	const handleChange = (key, value) => {
+		updateGlobalSettings({ desktop_thumbnail: {
+			...settings,
+			[key]: value
+		} });
+	};
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "flex flex-col h-full bg-white",
 		children: [
