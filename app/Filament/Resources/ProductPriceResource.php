@@ -80,6 +80,11 @@ class ProductPriceResource extends Resource
             ->columns([
                 Tables\Columns\Layout\View::make('filament.tables.columns.product-price-card'),
             ])
+            ->contentGrid([
+                'md' => 3,
+                'lg' => 4,
+                'xl' => 5,
+            ])
             ->filters([
                 //
             ])
