@@ -78,50 +78,19 @@ class ProductPriceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\Layout\Stack::make([
-
-                    Tables\Columns\Layout\Stack::make([
-                        Tables\Columns\TextColumn::make('name')
-                            ->weight('bold')
-                            ->size('md'),
-                            
-                        Tables\Columns\TextColumn::make('description')
-                            ->color('gray')
-                            ->size('xs'),
-
-                        Tables\Columns\TextColumn::make('category.name')
-                            ->badge()
-                            ->color('primary')
-                            ->icon(fn ($record) => match(strtolower($record->category ? $record->category->name : ($record->service ? $record->service->title : ''))) {
-                                'cetak foto' => 'heroicon-o-photo',
-                                'undangan web' => 'heroicon-o-globe-alt',
-                                'undangan video' => 'heroicon-o-video-camera',
-                                'minuman' => 'heroicon-o-beaker',
-                                'makanan' => 'heroicon-o-cake',
-                                'souvenir' => 'heroicon-o-gift',
-                                default => 'heroicon-o-tag',
-                            })
-                            ->getStateUsing(fn ($record) => $record->category ? $record->category->name : ($record->service ? $record->service->title : '')),
-                            
-                        Tables\Columns\TextColumn::make('price')
-                            ->formatStateUsing(fn ($state) => 'Rp ' . number_format($state ?? 0, 0, ',', '.'))
-                            ->weight('bold')
-                            ->color('success')
-                            ->size('md'),
-                    ])->space(1)->extraAttributes(['class' => 'p-3']),
-                ]),
+                Tables\Columns\Layout\View::make('filament.tables.columns.product-price-card'),
             ])
             ->contentGrid([
-                'md' => 4,
-                'lg' => 5,
-                'xl' => 6,
+                'md' => 2,
+                'lg' => 3,
+                'xl' => 4,
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make()->button(),
-                Tables\Actions\DeleteAction::make()->button()->color('danger'),
+                Tables\Actions\EditAction::make()->iconButton(),
+                Tables\Actions\DeleteAction::make()->iconButton(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
