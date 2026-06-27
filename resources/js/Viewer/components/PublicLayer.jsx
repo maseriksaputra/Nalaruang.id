@@ -1031,6 +1031,19 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                 </div>
             )}
             
+            {layer.style?.borderWidth > 0 && !(layer.type === 'shape' && ShapePaths[layer.content]) && (
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    pointerEvents: 'none',
+                    borderRadius: computedBorderRadius,
+                    borderWidth: `${layer.style.borderWidth}px`,
+                    borderColor: hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100),
+                    borderStyle: layer.style.borderStyle || 'solid',
+                    boxSizing: 'border-box'
+                }} />
+            )}
+
             {layer.custom_injection && (
                 <div dangerouslySetInnerHTML={{ __html: layer.custom_injection }} />
             )}
