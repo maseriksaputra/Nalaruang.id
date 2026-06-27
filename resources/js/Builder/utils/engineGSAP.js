@@ -162,8 +162,9 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
     const repeatConfig = isLooping ? { repeat: -1, yoyo: true } : {};
     
     // Temukan scroll container untuk Preview Modal. Jika tidak ada, gunakan default window
-    const scrollScroller = !isBuilder && document.getElementById('viewer-scroll-container') 
-                            ? document.getElementById('viewer-scroll-container') 
+    const container = document.getElementById('viewer-scroll-container');
+    const scrollScroller = (!isBuilder && container && window.getComputedStyle(container).overflowY === 'auto') 
+                            ? container 
                             : undefined;
 
     const config = layerAnimation.config || { mode: 'enter', speed: 1.5, direction: 'up', trigger: 'onScroll' };

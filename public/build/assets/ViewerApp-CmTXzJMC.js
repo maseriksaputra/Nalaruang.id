@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BxSvl8ys.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-aNqxuSRz.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BBeafhTN.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-H_mqqT2L.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -20476,7 +20476,8 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, styleParams
 		repeat: -1,
 		yoyo: true
 	} : {};
-	const scrollScroller = !isBuilder && document.getElementById("viewer-scroll-container") ? document.getElementById("viewer-scroll-container") : void 0;
+	const container = document.getElementById("viewer-scroll-container");
+	const scrollScroller = !isBuilder && container && window.getComputedStyle(container).overflowY === "auto" ? container : void 0;
 	const config = layerAnimation.config || {
 		mode: "enter",
 		speed: 1.5,
@@ -29029,7 +29030,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BxSvl8ys.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-aNqxuSRz.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -33705,8 +33706,9 @@ var ViewerApp = ({ previewData, onClosePreview }) => {
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
 	}, [hasDesktopThumbnail]);
+	const isMobilePublic = !isInsideBuilderPreview && desktopScale === 1;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-		className: `w-full h-screen relative overflow-hidden ${isInsideBuilderPreview ? "bg-transparent" : "bg-gray-100 flex justify-center"} ${!isInsideBuilderPreview && !hasDesktopThumbnail ? "py-0 sm:py-8" : ""}`,
+		className: `w-full relative ${isMobilePublic ? "min-h-screen" : "h-screen overflow-hidden"} ${isInsideBuilderPreview ? "bg-transparent" : "bg-gray-100 flex justify-center"} ${!isInsideBuilderPreview && !hasDesktopThumbnail ? "py-0 sm:py-8" : ""}`,
 		children: [
 			hasDesktopThumbnail && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "fixed inset-0 z-0 hidden lg:block",
@@ -33745,13 +33747,13 @@ var ViewerApp = ({ previewData, onClosePreview }) => {
 				]
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: `relative z-10 w-full h-full flex ${hasDesktopThumbnail ? "justify-center lg:justify-end" : "justify-center items-center"} ${isInsideBuilderPreview && !hasDesktopThumbnail ? "pt-14 pb-6" : ""}`,
+				className: `relative z-10 w-full ${isMobilePublic ? "h-auto" : "h-full"} flex ${hasDesktopThumbnail ? "justify-center lg:justify-end" : "justify-center items-center"} ${isInsideBuilderPreview && !hasDesktopThumbnail ? "pt-14 pb-6" : ""}`,
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 					id: "viewer-scroll-container",
-					className: `w-full bg-white relative overflow-y-auto ${!hasDesktopThumbnail && desktopScale === 1 ? "shadow-2xl rounded-xl border border-gray-200/20" : ""}`,
+					className: `w-full bg-white relative ${isMobilePublic ? "" : "overflow-y-auto"} ${!hasDesktopThumbnail && desktopScale === 1 ? "shadow-2xl rounded-xl border border-gray-200/20" : ""}`,
 					style: {
-						height: !hasDesktopThumbnail && desktopScale === 1 ? "844px" : "100vh",
-						maxHeight: !hasDesktopThumbnail && desktopScale === 1 ? isInsideBuilderPreview ? "calc(100vh - 80px)" : "calc(100vh - 64px)" : "100%",
+						height: isMobilePublic ? "auto" : "100vh",
+						maxHeight: isMobilePublic ? "none" : isInsideBuilderPreview ? "calc(100vh - 80px)" : "calc(100vh - 64px)",
 						maxWidth: `${414 * desktopScale}px`
 					},
 					children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PublicCanvas, { config: viewerData })

@@ -1622,6 +1622,10 @@
     height: calc(100vh - 60px);
   }
 
+  .h-auto {
+    height: auto;
+  }
+
   .h-full {
     height: 100%;
   }

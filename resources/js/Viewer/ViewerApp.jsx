@@ -76,8 +76,10 @@ const ViewerApp = ({ previewData, onClosePreview }) => {
         return () => window.removeEventListener('resize', handleResize);
     }, [hasDesktopThumbnail]);
 
+    const isMobilePublic = !isInsideBuilderPreview && desktopScale === 1;
+
     return (
-        <div className={`w-full h-screen relative overflow-hidden ${isInsideBuilderPreview ? 'bg-transparent' : 'bg-gray-100 flex justify-center'} ${!isInsideBuilderPreview && !hasDesktopThumbnail ? 'py-0 sm:py-8' : ''}`}>
+        <div className={`w-full relative ${isMobilePublic ? 'min-h-screen' : 'h-screen overflow-hidden'} ${isInsideBuilderPreview ? 'bg-transparent' : 'bg-gray-100 flex justify-center'} ${!isInsideBuilderPreview && !hasDesktopThumbnail ? 'py-0 sm:py-8' : ''}`}>
             
             {/* Desktop Thumbnail Background Layer */}
             {hasDesktopThumbnail && (
@@ -101,13 +103,13 @@ const ViewerApp = ({ previewData, onClosePreview }) => {
             )}
             
             {/* Main Canvas Container */}
-            <div className={`relative z-10 w-full h-full flex ${hasDesktopThumbnail ? 'justify-center lg:justify-end' : 'justify-center items-center'} ${isInsideBuilderPreview && !hasDesktopThumbnail ? 'pt-14 pb-6' : ''}`}>
+            <div className={`relative z-10 w-full ${isMobilePublic ? 'h-auto' : 'h-full'} flex ${hasDesktopThumbnail ? 'justify-center lg:justify-end' : 'justify-center items-center'} ${isInsideBuilderPreview && !hasDesktopThumbnail ? 'pt-14 pb-6' : ''}`}>
                 <div 
                     id="viewer-scroll-container" 
-                    className={`w-full bg-white relative overflow-y-auto ${!hasDesktopThumbnail && desktopScale === 1 ? 'shadow-2xl rounded-xl border border-gray-200/20' : ''}`} 
+                    className={`w-full bg-white relative ${isMobilePublic ? '' : 'overflow-y-auto'} ${!hasDesktopThumbnail && desktopScale === 1 ? 'shadow-2xl rounded-xl border border-gray-200/20' : ''}`} 
                     style={{ 
-                        height: (!hasDesktopThumbnail && desktopScale === 1) ? '844px' : '100vh', 
-                        maxHeight: (!hasDesktopThumbnail && desktopScale === 1) ? (isInsideBuilderPreview ? 'calc(100vh - 80px)' : 'calc(100vh - 64px)') : '100%',
+                        height: isMobilePublic ? 'auto' : '100vh', 
+                        maxHeight: isMobilePublic ? 'none' : (isInsideBuilderPreview ? 'calc(100vh - 80px)' : 'calc(100vh - 64px)'),
                         maxWidth: `${414 * desktopScale}px` 
                     }}
                 >
