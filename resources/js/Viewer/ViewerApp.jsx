@@ -79,7 +79,7 @@ const ViewerApp = ({ previewData, onClosePreview }) => {
     const isMobilePublic = !isInsideBuilderPreview && desktopScale === 1;
 
     return (
-        <div className={`w-full relative ${isMobilePublic ? 'min-h-screen' : 'h-screen overflow-hidden'} ${isInsideBuilderPreview ? 'bg-transparent' : 'bg-gray-100 flex justify-center'} ${!isInsideBuilderPreview && !hasDesktopThumbnail ? 'py-0 sm:py-8' : ''}`}>
+        <div className={`w-full relative ${isMobilePublic ? 'min-h-screen' : 'h-screen overflow-hidden'} ${isInsideBuilderPreview ? 'bg-transparent' : 'bg-white flex justify-center'} ${!isInsideBuilderPreview && !hasDesktopThumbnail ? 'py-0 sm:py-8' : ''}`}>
             
             {/* Desktop Thumbnail Background Layer */}
             {hasDesktopThumbnail && (
