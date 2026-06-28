@@ -267,7 +267,7 @@ Route::get('/fix-packages', function () {
             'name' => 'Basic',
             'price' => 24.999,
             'description' => 'Lebih Hidup dengan Momen',
-            'features' => ["Masa Aktif Undangan: 1 Bulan","Nama Tamu & Share Unlimited","Formulir RSVP & Ucapan Tamu","Semua Fitur Paket Lite","Galeri Foto (Maksimal 5 Foto)","Animasi Transisi Dasar (Fade)","Custom Musik/Backsound","Revisi Teks & Data: 5 Kali"],
+            'features' => ["Masa Aktif Undangan: 1 Bulan","Nama Tamu & Share Unlimited","Formulir RSVP & Ucapan Tamu","Semua Fitur Paket Lite","Galeri Foto (Maksimal 10 Foto)","Animasi Transisi Dasar (Fade)","Custom Musik/Backsound","Revisi Teks & Data: 5 Kali"],
             'is_popular' => false,
             'sort_order' => 2,
             'is_customizable' => true
