@@ -127,7 +127,7 @@ const getShadowCss = (style) => {
     return `drop-shadow(${x}px ${y}px ${blur}px ${rgbaColor})`;
 };
 
-const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup = false }) => {
+const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup = false, isParentHovered = false }) => {
     if (layer.isHidden) return null;
 
     // Sembunyikan otomatis elemen teks yang berisi peringatan dari sistem agar tidak merusak pratinjau/produksi
@@ -136,6 +136,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
     }
 
     const elementRef = useRef(null);
+    const [isHovered, setIsHovered] = useState(false);
     const [rsvpForm, setRsvpForm] = useState({ name: '', status: 'Hadir', message: '' });
     const [rsvpStatus, setRsvpStatus] = useState(null);
     const [comments, setComments] = useState([]);
