@@ -35,6 +35,48 @@ Route::get('/debug-log', function () {
     return response("<pre>" . htmlspecialchars($lines) . "</pre>");
 });
 
+Route::get('/fix-bug-darurat', function () {
+    $inv = \App\Models\Invitation::find(10);
+    if ($inv) {
+        $config = $inv->canvas_config;
+        $modified = false;
+        if (isset($config['global_settings']['desktop_layers'])) {
+            $cleaned = array_filter($config['global_settings']['desktop_layers'], function($layer) {
+                return isset($layer['type']) && in_array($layer['type'], ['group', 'image', 'text', 'shape', 'lottie', 'frame', 'interactive_map', 'countdown', 'music_player', 'dynamic_guest_name', 'audio', 'canvas_group']);
+            });
+            if (count($cleaned) !== count($config['global_settings']['desktop_layers'])) {
+                $config['global_settings']['desktop_layers'] = array_values($cleaned);
+                $modified = true;
+            }
+        }
+        if ($modified) {
+            $inv->canvas_config = $config;
+            $inv->save();
+        }
+    }
+    
+    $package = \App\Models\Package::where('name', 'Basic')->first();
+    if ($package) {
+        $features = $package->features;
+        if (is_string($features)) $features = json_decode($features, true);
+        if (is_array($features)) {
+            $updated = false;
+            $features = array_map(function($f) use (&$updated) {
+                if (strpos($f, 'Maksimal 5 Foto') !== false) {
+                    $updated = true;
+                    return str_replace('Maksimal 5 Foto', 'Maksimal 10 Foto', $f);
+                }
+                return $f;
+            }, $features);
+            if ($updated) {
+                $package->features = $features;
+                $package->save();
+            }
+        }
+    }
+    return 'Bug Kanvas dan Paket Basic berhasil diperbaiki! Silakan tutup tab ini dan refresh halaman Builder.';
+});
+
 Route::get('/debug-cashflow', function () {
     \Illuminate\Support\Facades\DB::enableQueryLog();
     
