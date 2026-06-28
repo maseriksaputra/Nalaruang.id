@@ -23,6 +23,11 @@ export default defineConfig({
             ignored: ['**/storage/framework/views/**'],
         },
     },
+    resolve: {
+        alias: {
+            'onnxruntime-web/webgpu': 'onnxruntime-web'
+        }
+    },
     build: {
         minify: false,
         rollupOptions: {

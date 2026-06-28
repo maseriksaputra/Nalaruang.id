@@ -26,6 +26,10 @@ const PublicCanvas = ({ config }) => {
 
     useEffect(() => {
         const handleOpenInvitation = async (e) => {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch((err) => console.log("Fullscreen error:", err));
+            }
+
             const trans = e.detail?.transition || 'slide_up';
             
             // Check if there are any exit animations in the cover section
