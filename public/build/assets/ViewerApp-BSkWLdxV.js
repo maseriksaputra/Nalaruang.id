@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-Bf3DkF0J.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BS2Tkd8I.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-C3Z5SbnE.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CEMPcCUY.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -26864,19 +26864,25 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 												backgroundSize: "cover",
 												backgroundPosition: "center"
 											}
-										})), (!layer.content?.includes("<iframe") || isButtonOnly) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur px-5 py-2.5 rounded-full shadow-md flex items-center gap-2.5 text-sm font-bold z-10 pointer-events-none",
+										})), (!layer.content?.includes("<iframe") || isButtonOnly || layer.style?.mapDisplayType === "text_only") && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: `backdrop-blur shadow-md flex items-center justify-center gap-2.5 font-bold z-10 pointer-events-none ${layer.style?.mapDisplayType === "button_only" || layer.style?.mapDisplayType === "text_only" ? "w-full h-full" : "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-2.5"}`,
 											style: {
-												backgroundColor: isButtonOnly ? buttonColor : "rgba(255, 255, 255, 0.95)",
-												color: isButtonOnly ? buttonTextColor : "#1f2937"
+												backgroundColor: layer.style?.mapDisplayType === "text_only" ? "transparent" : isButtonOnly ? buttonColor : "rgba(255, 255, 255, 0.95)",
+												color: isButtonOnly || layer.style?.mapDisplayType === "text_only" ? buttonTextColor : "#1f2937",
+												borderRadius: layer.style?.borderRadius !== void 0 ? `${layer.style.borderRadius}px` : layer.style?.mapDisplayType === "text_only" ? "0" : "9999px",
+												boxShadow: layer.style?.mapDisplayType === "text_only" ? "none" : void 0,
+												fontSize: layer.style?.mapDisplayType === "text_only" || isButtonOnly ? layer.style?.fontSize ? `${layer.style.fontSize}px` : "14px" : "14px"
 											},
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-5 h-5",
+											children: [layer.style?.mapDisplayType !== "text_only" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+												className: "w-5 h-5 shrink-0",
 												style: { color: isButtonOnly ? buttonTextColor : "#ef4444" },
 												fill: "currentColor",
 												viewBox: "0 0 24 24",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" })
-											}), buttonText]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+												className: "truncate whitespace-normal text-center",
+												children: buttonText
+											})]
 										})]
 									});
 								})(),
@@ -29071,7 +29077,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-Bf3DkF0J.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BS2Tkd8I.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -29879,10 +29885,13 @@ var getShadowCss = (style) => {
 	const rgbaColor = hexToRgba(style.shadowColor || "#000000", (style.shadowOpacity ?? .5) * 100);
 	return `drop-shadow(${x}px ${y}px ${blur}px ${rgbaColor})`;
 };
-var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup = false }) => {
+var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup = false, isParentHovered = false, parentInteraction = null }) => {
 	if (layer.isHidden) return null;
 	if (layer.type === "text" && layer.content && typeof layer.content === "string" && layer.content.includes("DIHAPUS OTOMATIS OLEH SISTEM")) return null;
 	const elementRef = (0, import_react.useRef)(null);
+	const [isHovered, setIsHovered] = (0, import_react.useState)(false);
+	const effectiveHover = isHovered || isParentHovered;
+	const effectiveInteraction = layer.interaction?.isButton ? layer.interaction : isChildOfGroup && parentInteraction?.isButton ? parentInteraction : null;
 	const [rsvpForm, setRsvpForm] = (0, import_react.useState)({
 		name: "",
 		status: "Hadir",
@@ -30081,6 +30090,8 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 		style: interactionStyles,
 		className: interactionClasses,
 		onClick: handleInteraction,
+		onMouseEnter: () => setIsHovered(true),
+		onMouseLeave: () => setIsHovered(false),
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			style: {
 				width: "100%",
@@ -30112,7 +30123,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 								outline: "none",
 								border: "none",
 								transition: "color 0.3s ease",
-								color: `var(--current-text, ${layer.style?.color || "#000000"})`,
+								color: effectiveHover && effectiveInteraction ? effectiveInteraction.hoverTextColor || "#ffffff" : layer.style?.textColor || layer.style?.color || "#000000",
 								fontSize: layer.style?.fontSize ? String(layer.style.fontSize).includes("px") || String(layer.style.fontSize).includes("rem") || String(layer.style.fontSize).includes("em") ? layer.style.fontSize : `${layer.style.fontSize}px` : "16px",
 								fontFamily: layer.style?.fontFamily || "sans-serif",
 								fontWeight: layer.style?.fontWeight || "normal",
@@ -30127,7 +30138,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 								whiteSpace: "pre-wrap",
 								wordBreak: "break-word"
 							},
-							dangerouslySetInnerHTML: { __html: layer.type === "dynamic_guest_name" ? layer.content.replace("[Nama Tamu]", new URLSearchParams(window.location.search).get("to") || "Bapak/Ibu/Saudara/i") : layer.content }
+							dangerouslySetInnerHTML: { __html: layer.type === "dynamic_guest_name" ? layer.content.replace("[Nama Tamu]", new URLSearchParams(window.location.search).get("to") || "[Nama Tamu]") : layer.content }
 						}),
 						layer.type === "shape" && (ShapePaths[layer.content] ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
 							viewBox: ShapePaths[layer.content].viewBox,
@@ -30135,7 +30146,8 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 							preserveAspectRatio: "none",
 							style: {
 								transition: "color 0.3s ease",
-								color: `var(--current-bg, ${layer.style?.backgroundColor || "#cbd5e1"})`
+								height: "100%",
+								color: effectiveHover && effectiveInteraction ? effectiveInteraction.hoverBgColor || "#ff0000" : layer.style?.backgroundColor || "#cbd5e1"
 							},
 							children: [(layer.style?.backgroundType === "linear-gradient" || layer.style?.backgroundType === "radial-gradient") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: layer.style.backgroundType === "linear-gradient" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", {
 								id: `grad-${layer.id}`,
@@ -30168,7 +30180,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 								fillOpacity: layer.style?.opacity ?? 1,
 								fillRule: ShapePaths[layer.content].fillRule || "nonzero",
 								style: { transition: "stroke 0.3s ease" },
-								stroke: layer.style?.borderWidth > 0 ? `var(--current-border, ${hexToRgba(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100)})` : void 0,
+								stroke: layer.style?.borderWidth > 0 ? effectiveHover && effectiveInteraction ? effectiveInteraction.hoverBorderColor || "#000000" : hexToRgba(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100) : void 0,
 								strokeWidth: layer.style?.borderWidth > 0 ? layer.style.borderWidth : void 0,
 								strokeDasharray: layer.style?.borderStyle === "dashed" ? "8 8" : layer.style?.borderStyle === "dotted" ? "2 4" : void 0,
 								vectorEffect: "non-scaling-stroke"
@@ -30177,10 +30189,10 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 							className: "w-full h-full relative pointer-events-none",
 							style: {
 								transition: "background 0.3s ease, border-color 0.3s ease",
-								background: `var(--current-bg, ${!layer.style?.backgroundType || layer.style?.backgroundType === "solid" ? layer.style?.backgroundColor || "#cbd5e1" : getGradientCss(layer.style)})`,
+								background: effectiveHover && effectiveInteraction ? effectiveInteraction.hoverBgColor || "#ff0000" : !layer.style?.backgroundType || layer.style?.backgroundType === "solid" ? layer.style?.backgroundColor || "#cbd5e1" : getGradientCss(layer.style),
 								borderRadius: computedBorderRadius,
 								borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : void 0,
-								borderColor: layer.style?.borderWidth > 0 ? `var(--current-border, ${hexToRgba(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100)})` : void 0,
+								borderColor: layer.style?.borderWidth > 0 ? effectiveHover && effectiveInteraction ? effectiveInteraction.hoverBorderColor || "#000000" : hexToRgba(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100) : void 0,
 								borderStyle: layer.style?.borderWidth > 0 ? layer.style.borderStyle || "solid" : void 0,
 								opacity: layer.style?.opacity ?? 1
 							}
@@ -30657,23 +30669,29 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 										backgroundSize: "cover",
 										backgroundPosition: "center"
 									}
-								})), (!layer.content?.includes("<iframe") || isButtonOnly) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+								})), (!layer.content?.includes("<iframe") || isButtonOnly || layer.style?.mapDisplayType === "text_only") && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
 									href: layer.content || "#",
 									target: "_blank",
 									rel: "noopener noreferrer",
-									className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur px-5 py-2.5 rounded-full shadow-md flex items-center gap-2.5 text-sm font-bold transition hover:scale-105 z-10",
+									className: `backdrop-blur shadow-md flex items-center justify-center gap-2.5 font-bold transition hover:scale-105 z-10 ${layer.style?.mapDisplayType === "button_only" || layer.style?.mapDisplayType === "text_only" ? "w-full h-full" : "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-2.5"}`,
 									style: {
-										backgroundColor: isButtonOnly ? buttonColor : "rgba(255, 255, 255, 0.95)",
-										color: isButtonOnly ? buttonTextColor : "#1f2937",
-										textDecoration: "none"
+										backgroundColor: layer.style?.mapDisplayType === "text_only" ? "transparent" : isButtonOnly ? buttonColor : "rgba(255, 255, 255, 0.95)",
+										color: isButtonOnly || layer.style?.mapDisplayType === "text_only" ? buttonTextColor : "#1f2937",
+										textDecoration: "none",
+										borderRadius: layer.style?.borderRadius !== void 0 ? `${layer.style.borderRadius}px` : layer.style?.mapDisplayType === "text_only" ? "0" : "9999px",
+										boxShadow: layer.style?.mapDisplayType === "text_only" ? "none" : void 0,
+										fontSize: layer.style?.mapDisplayType === "text_only" || isButtonOnly ? layer.style?.fontSize ? `${layer.style.fontSize}px` : "14px" : "14px"
 									},
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-										className: "w-5 h-5",
+									children: [layer.style?.mapDisplayType !== "text_only" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+										className: "w-5 h-5 shrink-0",
 										style: { color: isButtonOnly ? buttonTextColor : "#ef4444" },
 										fill: "currentColor",
 										viewBox: "0 0 24 24",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" })
-									}), buttonText]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "truncate whitespace-normal text-center",
+										children: buttonText
+									})]
 								})]
 							});
 						})(),
@@ -31026,7 +31044,9 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 								layer: child,
 								isOpened,
 								isCoverPage,
-								isChildOfGroup: true
+								isChildOfGroup: true,
+								isParentHovered: effectiveHover,
+								parentInteraction: layer.interaction
 							}, child.id))
 						}),
 						layer.custom_injection && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { dangerouslySetInnerHTML: { __html: layer.custom_injection } })

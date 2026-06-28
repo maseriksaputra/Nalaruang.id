@@ -914,13 +914,21 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                             )
                                         )}
                                         
-                                        {(!layer.content?.includes('<iframe') || isButtonOnly) && (
+                                        {(!layer.content?.includes('<iframe') || isButtonOnly || layer.style?.mapDisplayType === 'text_only') && (
                                             <div 
-                                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur px-5 py-2.5 rounded-full shadow-md flex items-center gap-2.5 text-sm font-bold z-10 pointer-events-none"
-                                                style={{ backgroundColor: isButtonOnly ? buttonColor : 'rgba(255, 255, 255, 0.95)', color: isButtonOnly ? buttonTextColor : '#1f2937' }}
+                                                className={`backdrop-blur shadow-md flex items-center justify-center gap-2.5 font-bold z-10 pointer-events-none ${layer.style?.mapDisplayType === 'button_only' || layer.style?.mapDisplayType === 'text_only' ? 'w-full h-full' : 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-2.5'}`}
+                                                style={{ 
+                                                    backgroundColor: layer.style?.mapDisplayType === 'text_only' ? 'transparent' : (isButtonOnly ? buttonColor : 'rgba(255, 255, 255, 0.95)'), 
+                                                    color: (isButtonOnly || layer.style?.mapDisplayType === 'text_only') ? buttonTextColor : '#1f2937',
+                                                    borderRadius: layer.style?.borderRadius !== undefined ? `${layer.style.borderRadius}px` : (layer.style?.mapDisplayType === 'text_only' ? '0' : '9999px'),
+                                                    boxShadow: layer.style?.mapDisplayType === 'text_only' ? 'none' : undefined,
+                                                    fontSize: layer.style?.mapDisplayType === 'text_only' || isButtonOnly ? (layer.style?.fontSize ? `${layer.style.fontSize}px` : '14px') : '14px',
+                                                }}
                                             >
-                                                <svg className="w-5 h-5" style={{ color: isButtonOnly ? buttonTextColor : '#ef4444' }} fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                                                {buttonText}
+                                                {layer.style?.mapDisplayType !== 'text_only' && (
+                                                    <svg className="w-5 h-5 shrink-0" style={{ color: isButtonOnly ? buttonTextColor : '#ef4444' }} fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                                                )}
+                                                <span className="truncate whitespace-normal text-center">{buttonText}</span>
                                             </div>
                                         )}
                                     </div>

@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-C3Z5SbnE.js";
-import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-czaQmAbZ.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-CEMPcCUY.js";
+import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-BSkWLdxV.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -18710,40 +18710,66 @@ var RightInspector = () => {
 										children: "Tampilan Peta"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "grid grid-cols-2 gap-2 mb-4",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-											onClick: () => updateLayerStyle(activeLayer.id, { mapDisplayType: "full" }),
-											className: `py-2 px-3 text-[11px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType !== "button_only" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 text-gray-500 hover:bg-gray-50"}`,
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-5 h-5",
-												fill: "none",
-												stroke: "currentColor",
-												viewBox: "0 0 24 24",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-													strokeLinecap: "round",
-													strokeLinejoin: "round",
-													strokeWidth: "2",
-													d: "M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-												})
-											}), "Peta + Tombol"]
-										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-											onClick: () => updateLayerStyle(activeLayer.id, { mapDisplayType: "button_only" }),
-											className: `py-2 px-3 text-[11px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType === "button_only" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 text-gray-500 hover:bg-gray-50"}`,
-											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-5 h-5",
-												fill: "none",
-												stroke: "currentColor",
-												viewBox: "0 0 24 24",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-													strokeLinecap: "round",
-													strokeLinejoin: "round",
-													strokeWidth: "2",
-													d: "M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
-												})
-											}), "Tombol Saja"]
-										})]
+										className: "grid grid-cols-3 gap-2 mb-4",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												onClick: () => updateLayerStyle(activeLayer.id, { mapDisplayType: "full" }),
+												className: `py-2 px-1 text-[10px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType !== "button_only" && activeLayer.style?.mapDisplayType !== "text_only" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 text-gray-500 hover:bg-gray-50"}`,
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+													className: "w-5 h-5",
+													fill: "none",
+													stroke: "currentColor",
+													viewBox: "0 0 24 24",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+														strokeLinecap: "round",
+														strokeLinejoin: "round",
+														strokeWidth: "2",
+														d: "M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+													})
+												}), "Peta+Tombol"]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												onClick: () => updateLayerStyle(activeLayer.id, {
+													mapDisplayType: "button_only",
+													fontSize: activeLayer.style?.fontSize || 14,
+													borderRadius: activeLayer.style?.borderRadius ?? 9999
+												}),
+												className: `py-2 px-1 text-[10px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType === "button_only" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 text-gray-500 hover:bg-gray-50"}`,
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+													className: "w-5 h-5",
+													fill: "none",
+													stroke: "currentColor",
+													viewBox: "0 0 24 24",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+														strokeLinecap: "round",
+														strokeLinejoin: "round",
+														strokeWidth: "2",
+														d: "M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+													})
+												}), "Tombol"]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+												onClick: () => updateLayerStyle(activeLayer.id, {
+													mapDisplayType: "text_only",
+													fontSize: activeLayer.style?.fontSize || 14
+												}),
+												className: `py-2 px-1 text-[10px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType === "text_only" ? "border-primary-500 bg-primary-50 text-primary-600" : "border-gray-200 text-gray-500 hover:bg-gray-50"}`,
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+													className: "w-5 h-5",
+													fill: "none",
+													stroke: "currentColor",
+													viewBox: "0 0 24 24",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+														strokeLinecap: "round",
+														strokeLinejoin: "round",
+														strokeWidth: "2",
+														d: "M4 6h16M4 12h16m-7 6h7"
+													})
+												}), "Teks Saja"]
+											})
+										]
 									}),
-									activeLayer.style?.mapDisplayType !== "button_only" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									activeLayer.style?.mapDisplayType !== "button_only" && activeLayer.style?.mapDisplayType !== "text_only" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "mb-4",
 										children: [
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -18768,6 +18794,62 @@ var RightInspector = () => {
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 												className: "text-[9px] text-gray-400 mt-1",
 												children: "Hilangkan background (opasitas 0%) untuk menyisakan tombol saja secara halus."
+											})
+										]
+									}),
+									activeLayer.style?.mapDisplayType === "button_only" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mb-4",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex justify-between items-center mb-1",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+													className: "text-[11px] font-bold text-gray-700",
+													children: "Sudut Lengkung (Border Radius)"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+													className: "text-[10px] text-gray-500 font-mono",
+													children: [activeLayer.style?.borderRadius ?? 9999, "px"]
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+												type: "range",
+												min: "0",
+												max: "100",
+												step: "1",
+												value: activeLayer.style?.borderRadius ?? 9999,
+												onChange: (e) => updateLayerStyle(activeLayer.id, { borderRadius: parseInt(e.target.value) }),
+												className: "w-full accent-primary-600 cursor-pointer"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex justify-between text-[9px] text-gray-400 mt-1",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Kotak" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Oval Bulat" })]
+											})
+										]
+									}),
+									(activeLayer.style?.mapDisplayType === "button_only" || activeLayer.style?.mapDisplayType === "text_only") && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mb-4",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex justify-between items-center mb-1",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+													className: "text-[11px] font-bold text-gray-700",
+													children: "Ukuran Teks (Font Size)"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+													className: "text-[10px] text-gray-500 font-mono",
+													children: [activeLayer.style?.fontSize ?? 14, "px"]
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+												type: "range",
+												min: "8",
+												max: "72",
+												step: "1",
+												value: activeLayer.style?.fontSize ?? 14,
+												onChange: (e) => updateLayerStyle(activeLayer.id, { fontSize: parseInt(e.target.value) }),
+												className: "w-full accent-primary-600 cursor-pointer"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex justify-between text-[9px] text-gray-400 mt-1",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Kecil" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Besar" })]
 											})
 										]
 									}),

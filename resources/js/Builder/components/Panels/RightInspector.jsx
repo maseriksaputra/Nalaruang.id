@@ -2841,24 +2841,31 @@ const RightInspector = () => {
                         <div className="border-t border-gray-100 pt-4">
                             <label className="text-xs font-bold text-gray-800 block mb-3">Tampilan Peta</label>
                             
-                            <div className="grid grid-cols-2 gap-2 mb-4">
+                            <div className="grid grid-cols-3 gap-2 mb-4">
                                 <button
                                     onClick={() => updateLayerStyle(activeLayer.id, { mapDisplayType: 'full' })}
-                                    className={`py-2 px-3 text-[11px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType !== 'button_only' ? 'border-primary-500 bg-primary-50 text-primary-600' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
+                                    className={`py-2 px-1 text-[10px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType !== 'button_only' && activeLayer.style?.mapDisplayType !== 'text_only' ? 'border-primary-500 bg-primary-50 text-primary-600' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
-                                    Peta + Tombol
+                                    Peta+Tombol
                                 </button>
                                 <button
-                                    onClick={() => updateLayerStyle(activeLayer.id, { mapDisplayType: 'button_only' })}
-                                    className={`py-2 px-3 text-[11px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType === 'button_only' ? 'border-primary-500 bg-primary-50 text-primary-600' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
+                                    onClick={() => updateLayerStyle(activeLayer.id, { mapDisplayType: 'button_only', fontSize: activeLayer.style?.fontSize || 14, borderRadius: activeLayer.style?.borderRadius ?? 9999 })}
+                                    className={`py-2 px-1 text-[10px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType === 'button_only' ? 'border-primary-500 bg-primary-50 text-primary-600' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
-                                    Tombol Saja
+                                    Tombol
+                                </button>
+                                <button
+                                    onClick={() => updateLayerStyle(activeLayer.id, { mapDisplayType: 'text_only', fontSize: activeLayer.style?.fontSize || 14 })}
+                                    className={`py-2 px-1 text-[10px] font-bold rounded-lg border flex flex-col items-center gap-1 transition-all ${activeLayer.style?.mapDisplayType === 'text_only' ? 'border-primary-500 bg-primary-50 text-primary-600' : 'border-gray-200 text-gray-500 hover:bg-gray-50'}`}
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                                    Teks Saja
                                 </button>
                             </div>
 
-                            {activeLayer.style?.mapDisplayType !== 'button_only' && (
+                            {activeLayer.style?.mapDisplayType !== 'button_only' && activeLayer.style?.mapDisplayType !== 'text_only' && (
                                 <div className="mb-4">
                                     <div className="flex justify-between items-center mb-1">
                                         <label className="text-[11px] font-bold text-gray-700">Opasitas Peta</label>
@@ -2871,6 +2878,44 @@ const RightInspector = () => {
                                         className="w-full accent-primary-600 cursor-pointer"
                                     />
                                     <p className="text-[9px] text-gray-400 mt-1">Hilangkan background (opasitas 0%) untuk menyisakan tombol saja secara halus.</p>
+                                </div>
+                            )}
+
+                            {activeLayer.style?.mapDisplayType === 'button_only' && (
+                                <div className="mb-4">
+                                    <div className="flex justify-between items-center mb-1">
+                                        <label className="text-[11px] font-bold text-gray-700">Sudut Lengkung (Border Radius)</label>
+                                        <span className="text-[10px] text-gray-500 font-mono">{activeLayer.style?.borderRadius ?? 9999}px</span>
+                                    </div>
+                                    <input 
+                                        type="range" min="0" max="100" step="1"
+                                        value={activeLayer.style?.borderRadius ?? 9999}
+                                        onChange={(e) => updateLayerStyle(activeLayer.id, { borderRadius: parseInt(e.target.value) })}
+                                        className="w-full accent-primary-600 cursor-pointer"
+                                    />
+                                    <div className="flex justify-between text-[9px] text-gray-400 mt-1">
+                                        <span>Kotak</span>
+                                        <span>Oval Bulat</span>
+                                    </div>
+                                </div>
+                            )}
+
+                            {(activeLayer.style?.mapDisplayType === 'button_only' || activeLayer.style?.mapDisplayType === 'text_only') && (
+                                <div className="mb-4">
+                                    <div className="flex justify-between items-center mb-1">
+                                        <label className="text-[11px] font-bold text-gray-700">Ukuran Teks (Font Size)</label>
+                                        <span className="text-[10px] text-gray-500 font-mono">{activeLayer.style?.fontSize ?? 14}px</span>
+                                    </div>
+                                    <input 
+                                        type="range" min="8" max="72" step="1"
+                                        value={activeLayer.style?.fontSize ?? 14}
+                                        onChange={(e) => updateLayerStyle(activeLayer.id, { fontSize: parseInt(e.target.value) })}
+                                        className="w-full accent-primary-600 cursor-pointer"
+                                    />
+                                    <div className="flex justify-between text-[9px] text-gray-400 mt-1">
+                                        <span>Kecil</span>
+                                        <span>Besar</span>
+                                    </div>
                                 </div>
                             )}
 
