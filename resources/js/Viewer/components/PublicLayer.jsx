@@ -262,14 +262,6 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                 gsap.fromTo(target, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.7)" });
             }
         }
-
-        // Button press animation BEFORE taking action
-        if (elementRef.current && !isChildOfGroup) {
-            gsap.fromTo(elementRef.current,
-                { scale: 0.95 },
-                { scale: 1, duration: 0.2, ease: "power1.out" }
-            );
-        }
     };
 
     const getPx = (val) => {
@@ -325,11 +317,31 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
         }
     }, [layer.style?.opacity, layer.style?.filterId, isChildOfGroup]);
 
+    let interactionClasses = "public-layer-element";
+    let interactionStyles = { ...wrapperStyle };
+    if (layer.interaction && layer.interaction.isButton && !isChildOfGroup) {
+        interactionClasses += " transition-all";
+        const speed = layer.interaction.effectSpeed || 300;
+        interactionStyles.transitionDuration = `${speed}ms`;
+        
+        switch (layer.interaction.hoverEffect) {
+            case 'darken': interactionClasses += " hover:brightness-90"; break;
+            case 'lighten': interactionClasses += " hover:brightness-110"; break;
+            case 'fade': interactionClasses += " hover:opacity-75"; break;
+            case 'glow': interactionClasses += " hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]"; break;
+        }
+        
+        switch (layer.interaction.pressEffect) {
+            case 'shrink': interactionClasses += " active:scale-95"; break;
+            case 'grow': interactionClasses += " active:scale-105"; break;
+        }
+    }
+
     return (
         <div
             id={layer.id}
-            style={wrapperStyle}
-            className="public-layer-element"
+            style={interactionStyles}
+            className={interactionClasses}
             onClick={handleInteraction}
         >
             <div

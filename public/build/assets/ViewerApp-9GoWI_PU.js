@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BQbgHAcM.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-76fqYmOJ.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-lHckJOla.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-KB6l-3NN.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -27153,6 +27153,34 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 	const snapTargetsRef = (0, import_react.useRef)([]);
 	const pathRecordingRef = (0, import_react.useRef)([]);
 	if (isChildOfGroup) return innerStructure;
+	let interactionClasses = "";
+	let interactionStyles = {};
+	if (layer.interaction && layer.interaction.isButton && !isChildOfGroup) {
+		interactionClasses += " transition-all";
+		interactionStyles.transitionDuration = `${layer.interaction.effectSpeed || 300}ms`;
+		switch (layer.interaction.hoverEffect) {
+			case "darken":
+				interactionClasses += " hover:brightness-90";
+				break;
+			case "lighten":
+				interactionClasses += " hover:brightness-110";
+				break;
+			case "fade":
+				interactionClasses += " hover:opacity-75";
+				break;
+			case "glow":
+				interactionClasses += " hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]";
+				break;
+		}
+		switch (layer.interaction.pressEffect) {
+			case "shrink":
+				interactionClasses += " active:scale-95";
+				break;
+			case "grow":
+				interactionClasses += " active:scale-105";
+				break;
+		}
+	}
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Rnd, {
 		ref: rndRef,
 		size: {
@@ -27450,7 +27478,10 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 		enableResizing: isActive && !layer.isLocked && !isEditing,
 		cancel: ".no-drag",
 		scale: zoom,
-		style: { zIndex: layer.style?.zIndex || 1 },
+		style: {
+			zIndex: layer.style?.zIndex || 1,
+			...interactionStyles
+		},
 		resizeHandleComponent: isActive && !layer.isLocked ? {
 			topLeft: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResizeHandle, {}),
 			topRight: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ResizeHandle, {}),
@@ -27462,7 +27493,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 			bottomLeft: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, {}),
 			bottomRight: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react.Fragment, {})
 		},
-		className: `layer-wrapper ${layer.isLocked ? isActive ? "pointer-events-auto cursor-default" : "pointer-events-none" : "pointer-events-auto hover:cursor-move"} ${isActive ? "active-layer outline outline-1 outline-primary-500 rounded" : ""}`,
+		className: `layer-wrapper ${layer.isLocked ? isActive ? "pointer-events-auto cursor-default" : "pointer-events-none" : "pointer-events-auto hover:cursor-move"} ${isActive ? "active-layer outline outline-1 outline-primary-500 rounded" : ""} ${interactionClasses}`,
 		onClick: (e) => {
 			if (layer.isLocked && !isActive) return;
 			e.stopPropagation();
@@ -29030,7 +29061,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BQbgHAcM.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-76fqYmOJ.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -29956,11 +29987,6 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 				});
 			}
 		}
-		if (elementRef.current && !isChildOfGroup) gsapWithCSS.fromTo(elementRef.current, { scale: .95 }, {
-			scale: 1,
-			duration: .2,
-			ease: "power1.out"
-		});
 	};
 	const getPx = (val) => {
 		if (val === void 0 || val === null) return val;
@@ -30006,10 +30032,38 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 		layer.style?.filterId,
 		isChildOfGroup
 	]);
+	let interactionClasses = "public-layer-element";
+	let interactionStyles = { ...wrapperStyle };
+	if (layer.interaction && layer.interaction.isButton && !isChildOfGroup) {
+		interactionClasses += " transition-all";
+		interactionStyles.transitionDuration = `${layer.interaction.effectSpeed || 300}ms`;
+		switch (layer.interaction.hoverEffect) {
+			case "darken":
+				interactionClasses += " hover:brightness-90";
+				break;
+			case "lighten":
+				interactionClasses += " hover:brightness-110";
+				break;
+			case "fade":
+				interactionClasses += " hover:opacity-75";
+				break;
+			case "glow":
+				interactionClasses += " hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]";
+				break;
+		}
+		switch (layer.interaction.pressEffect) {
+			case "shrink":
+				interactionClasses += " active:scale-95";
+				break;
+			case "grow":
+				interactionClasses += " active:scale-105";
+				break;
+		}
+	}
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		id: layer.id,
-		style: wrapperStyle,
-		className: "public-layer-element",
+		style: interactionStyles,
+		className: interactionClasses,
 		onClick: handleInteraction,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			style: {

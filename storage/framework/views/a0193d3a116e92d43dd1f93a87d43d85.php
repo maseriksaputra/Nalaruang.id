@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="icon" href="/logo1.png?v=2" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+    <title>Visual Builder - <?php echo e($invitation->title); ?></title>
+    
+    <script>
+        window.ASSET_URL = '<?php echo e(str_replace('test.txt', '', Storage::url('test.txt'))); ?>';
+        // Injeksi ID Undangan & Data JSON awal ke React
+        window.__INVITATION_ID__ = <?php echo e($invitation->id); ?>;
+        window.__ORDER_ID__ = <?php echo e($invitation->order_id ? $invitation->order_id : 'null'); ?>;
+        window.__INVITATION_TITLE__ = <?php echo json_encode($invitation->title); ?>;
+        window.__INVITATION_SLUG__ = "<?php echo e($invitation->slug); ?>";
+        window.__INVITATION_STATUS__ = "<?php echo e($invitation->status); ?>";
+        window.__INVITATION_EXPIRES_AT__ = "<?php echo e($invitation->expires_at); ?>";
+        window.__IS_TEMPLATE__ = <?php echo e($invitation->is_template ? 'true' : 'false'); ?>;
+        window.__INVITATION_CATEGORY__ = <?php echo json_encode($invitation->category); ?>;
+        window.__INVITATION_PRICE__ = <?php echo e($invitation->price ?? 0); ?>;
+        window.__INVITATION_DESCRIPTION__ = <?php echo json_encode($invitation->description); ?>;
+        window.__CANVAS_DATA__ = <?php echo json_encode($invitation->canvas_config ?? ['sections' => [], 'global_settings' => []], 512) ?>;
+    </script>
+    
+    <?php echo app('Illuminate\Foundation\Vite')->reactRefresh(); ?>
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/Builder/BuilderApp.jsx']); ?>
+    
+    <style>
+        body, html { margin: 0; padding: 0; background-color: #0f172a; overflow-x: hidden; font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body>
+    <div id="builder-root"></div>
+</body>
+</html>
+<?php /**PATH D:\laragon\www\Undangan\resources\views/builder.blade.php ENDPATH**/ ?>

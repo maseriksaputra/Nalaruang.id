@@ -1204,6 +1204,26 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
         return innerStructure;
     }
 
+    let interactionClasses = "";
+    let interactionStyles = {};
+    if (layer.interaction && layer.interaction.isButton && !isChildOfGroup) {
+        interactionClasses += " transition-all";
+        const speed = layer.interaction.effectSpeed || 300;
+        interactionStyles.transitionDuration = `${speed}ms`;
+        
+        switch (layer.interaction.hoverEffect) {
+            case 'darken': interactionClasses += " hover:brightness-90"; break;
+            case 'lighten': interactionClasses += " hover:brightness-110"; break;
+            case 'fade': interactionClasses += " hover:opacity-75"; break;
+            case 'glow': interactionClasses += " hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.7)]"; break;
+        }
+        
+        switch (layer.interaction.pressEffect) {
+            case 'shrink': interactionClasses += " active:scale-95"; break;
+            case 'grow': interactionClasses += " active:scale-105"; break;
+        }
+    }
+
     return (
         <Rnd
             key={`rnd-${layer.id}`}
@@ -1450,6 +1470,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
             scale={zoom}
             style={{
                 zIndex: layer.style?.zIndex || 1,
+                ...interactionStyles
             }}
             resizeHandleComponent={(isActive && !layer.isLocked) ? {
                 topLeft: <ResizeHandle />,
@@ -1462,7 +1483,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                 bottomLeft: <React.Fragment />,
                 bottomRight: <React.Fragment />
             }}
-            className={`layer-wrapper ${layer.isLocked ? (isActive ? 'pointer-events-auto cursor-default' : 'pointer-events-none') : 'pointer-events-auto hover:cursor-move'} ${isActive ? 'active-layer outline outline-1 outline-primary-500 rounded' : ''}`}
+            className={`layer-wrapper ${layer.isLocked ? (isActive ? 'pointer-events-auto cursor-default' : 'pointer-events-none') : 'pointer-events-auto hover:cursor-move'} ${isActive ? 'active-layer outline outline-1 outline-primary-500 rounded' : ''} ${interactionClasses}`}
             onClick={(e) => {
                 if (layer.isLocked && !isActive) return;
                 e.stopPropagation();

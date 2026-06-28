@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-lHckJOla.js";
-import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-BHgUsRO1.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-KB6l-3NN.js";
+import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-9GoWI_PU.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -18153,7 +18153,95 @@ var RightInspector = () => {
 									value: activeLayer.interaction?.url || "",
 									onChange: (e) => updateLayerInteraction(activeLayer.id, { url: e.target.value }),
 									className: "w-full border border-gray-300 rounded p-2 text-sm text-gray-800"
-								})] })
+								})] }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "mt-6 pt-4 border-t border-gray-200",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "text-xs font-bold text-gray-800 mb-3 uppercase tracking-wider",
+										children: "Efek Visual Tombol"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "space-y-4",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+												className: "text-xs text-gray-600 block mb-1",
+												children: "Efek Warna Hover"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+												value: activeLayer.interaction?.hoverEffect || "none",
+												onChange: (e) => updateLayerInteraction(activeLayer.id, { hoverEffect: e.target.value }),
+												className: "w-full text-xs text-gray-700 border border-gray-300 rounded-lg p-2 focus:ring-1 focus:ring-primary-500 bg-white",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: "none",
+														children: "Tidak Ada"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: "darken",
+														children: "Meredup (Darken)"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: "lighten",
+														children: "Menerang (Lighten)"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: "fade",
+														children: "Transparan (Fade)"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: "glow",
+														children: "Menyala (Glow)"
+													})
+												]
+											})] }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+												className: "text-xs text-gray-600 block mb-1",
+												children: "Animasi Tekan (Press)"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+												value: activeLayer.interaction?.pressEffect || "none",
+												onChange: (e) => updateLayerInteraction(activeLayer.id, { pressEffect: e.target.value }),
+												className: "w-full text-xs text-gray-700 border border-gray-300 rounded-lg p-2 focus:ring-1 focus:ring-primary-500 bg-white",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: "none",
+														children: "Tidak Ada"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: "shrink",
+														children: "Mengecil (Kenyal)"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: "grow",
+														children: "Membesar"
+													})
+												]
+											})] }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex justify-between items-center mb-1",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+														className: "text-xs text-gray-600",
+														children: "Kecepatan Animasi"
+													}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+														className: "text-[10px] font-bold text-primary-600",
+														children: [activeLayer.interaction?.effectSpeed || 300, " ms"]
+													})]
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+													type: "range",
+													min: "100",
+													max: "1000",
+													step: "50",
+													value: activeLayer.interaction?.effectSpeed || 300,
+													onChange: (e) => updateLayerInteraction(activeLayer.id, { effectSpeed: parseInt(e.target.value) }),
+													className: "w-full accent-primary-500 cursor-pointer"
+												}),
+												/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+													className: "flex justify-between text-[9px] text-gray-400 mt-1",
+													children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Sangat Cepat" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Sangat Lambat" })]
+												})
+											] })
+										]
+									})]
+								})
 							]
 						})]
 					}),

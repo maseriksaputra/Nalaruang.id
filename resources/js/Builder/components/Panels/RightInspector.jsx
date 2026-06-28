@@ -2409,6 +2409,60 @@ const RightInspector = () => {
                                         />
                                     </div>
                                 )}
+
+                                <div className="mt-6 pt-4 border-t border-gray-200">
+                                    <h3 className="text-xs font-bold text-gray-800 mb-3 uppercase tracking-wider">Efek Visual Tombol</h3>
+                                    
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="text-xs text-gray-600 block mb-1">Efek Warna Hover</label>
+                                            <select 
+                                                value={activeLayer.interaction?.hoverEffect || 'none'}
+                                                onChange={(e) => updateLayerInteraction(activeLayer.id, { hoverEffect: e.target.value })}
+                                                className="w-full text-xs text-gray-700 border border-gray-300 rounded-lg p-2 focus:ring-1 focus:ring-primary-500 bg-white"
+                                            >
+                                                <option value="none">Tidak Ada</option>
+                                                <option value="darken">Meredup (Darken)</option>
+                                                <option value="lighten">Menerang (Lighten)</option>
+                                                <option value="fade">Transparan (Fade)</option>
+                                                <option value="glow">Menyala (Glow)</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div>
+                                            <label className="text-xs text-gray-600 block mb-1">Animasi Tekan (Press)</label>
+                                            <select 
+                                                value={activeLayer.interaction?.pressEffect || 'none'}
+                                                onChange={(e) => updateLayerInteraction(activeLayer.id, { pressEffect: e.target.value })}
+                                                className="w-full text-xs text-gray-700 border border-gray-300 rounded-lg p-2 focus:ring-1 focus:ring-primary-500 bg-white"
+                                            >
+                                                <option value="none">Tidak Ada</option>
+                                                <option value="shrink">Mengecil (Kenyal)</option>
+                                                <option value="grow">Membesar</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <div className="flex justify-between items-center mb-1">
+                                                <label className="text-xs text-gray-600">Kecepatan Animasi</label>
+                                                <span className="text-[10px] font-bold text-primary-600">{activeLayer.interaction?.effectSpeed || 300} ms</span>
+                                            </div>
+                                            <input 
+                                                type="range" 
+                                                min="100" 
+                                                max="1000" 
+                                                step="50"
+                                                value={activeLayer.interaction?.effectSpeed || 300}
+                                                onChange={(e) => updateLayerInteraction(activeLayer.id, { effectSpeed: parseInt(e.target.value) })}
+                                                className="w-full accent-primary-500 cursor-pointer"
+                                            />
+                                            <div className="flex justify-between text-[9px] text-gray-400 mt-1">
+                                                <span>Sangat Cepat</span>
+                                                <span>Sangat Lambat</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         )}
                     </div>
