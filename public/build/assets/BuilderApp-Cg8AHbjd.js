@@ -87,8 +87,14 @@ var CanvasArea = () => {
 				try {
 					const response = await apiClient.post("/admin/builder/upload", formData, { headers: { "Content-Type": "multipart/form-data" } });
 					if (response.data.success) {
-						if (activeSectionId) useCanvasStore.getState().addLayer(activeSectionId, "image", { url: response.data.url });
-						else if (sections.length > 0) useCanvasStore.getState().addLayer(sections[0].id, "image", { url: response.data.url });
+						if (activeSectionId) useCanvasStore.getState().addLayer({
+							type: "image",
+							url: response.data.url
+						});
+						else if (sections.length > 0) useCanvasStore.getState().addLayer({
+							type: "image",
+							url: response.data.url
+						});
 					}
 				} catch (error) {
 					console.error("Error uploading dragged image:", error);
@@ -23541,8 +23547,14 @@ var BuilderApp = () => {
 					const reader = new FileReader();
 					reader.onload = (re) => {
 						const store = useCanvasStore.getState();
-						if (store.activeSectionId) store.addLayer(store.activeSectionId, "image", { url: re.target.result });
-						else if (store.sections.length > 0) store.addLayer(store.sections[0].id, "image", { url: re.target.result });
+						if (store.activeSectionId) store.addLayer({
+							type: "image",
+							url: re.target.result
+						});
+						else if (store.sections.length > 0) store.addLayer({
+							type: "image",
+							url: re.target.result
+						});
 					};
 					reader.readAsDataURL(file);
 					break;

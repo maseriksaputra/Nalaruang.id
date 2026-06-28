@@ -75,9 +75,9 @@ const CanvasArea = () => {
                     
                     if (response.data.success) {
                         if (activeSectionId) {
-                            useCanvasStore.getState().addLayer(activeSectionId, 'image', { url: response.data.url });
+                            useCanvasStore.getState().addLayer({ type: 'image', url: response.data.url });
                         } else if (sections.length > 0) {
-                            useCanvasStore.getState().addLayer(sections[0].id, 'image', { url: response.data.url });
+                            useCanvasStore.getState().addLayer({ type: 'image', url: response.data.url });
                         }
                     }
                 } catch (error) {

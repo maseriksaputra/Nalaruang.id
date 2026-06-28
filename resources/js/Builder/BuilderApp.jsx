@@ -161,9 +161,9 @@ const BuilderApp = () => {
                         reader.onload = (re) => {
                             const store = useCanvasStore.getState();
                             if (store.activeSectionId) {
-                                store.addLayer(store.activeSectionId, 'image', { url: re.target.result });
+                                store.addLayer({ type: 'image', url: re.target.result });
                             } else if (store.sections.length > 0) {
-                                store.addLayer(store.sections[0].id, 'image', { url: re.target.result });
+                                store.addLayer({ type: 'image', url: re.target.result });
                             }
                         };
                         reader.readAsDataURL(file);
