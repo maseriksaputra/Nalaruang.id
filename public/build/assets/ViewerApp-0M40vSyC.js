@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-CB02KGJb.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-Di6ZlxL8.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-S2WjDM_M.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-BgdvfYjL.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -26846,7 +26846,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 									const isButtonOnly = layer.style?.mapDisplayType === "button_only";
 									const buttonText = layer.style?.mapButtonText || "Buka Google Maps";
 									const buttonColor = layer.style?.mapButtonColor || "#ef4444";
-									const buttonTextColor = layer.style?.mapButtonTextColor || "#ffffff";
+									const buttonTextColor = layer.style?.color || layer.style?.mapButtonTextColor || "#ffffff";
 									const isTextOnly = layer.style?.mapDisplayType === "text_only";
 									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "w-full h-full flex items-center justify-center pointer-events-none relative overflow-hidden",
@@ -26870,7 +26870,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 											className: `${isTextOnly ? "" : "backdrop-blur shadow-md"} flex items-center justify-center gap-2.5 font-bold z-10 pointer-events-none ${isButtonOnly || isTextOnly ? "w-full h-full" : "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-2.5"}`,
 											style: {
 												backgroundColor: isTextOnly ? "transparent" : isButtonOnly ? buttonColor : "rgba(255, 255, 255, 0.95)",
-												color: isButtonOnly || layer.style?.mapDisplayType === "text_only" ? buttonTextColor : "#1f2937",
+												color: isButtonOnly || isTextOnly ? buttonTextColor : layer.style?.color || "#1f2937",
 												borderRadius: layer.style?.borderRadius !== void 0 ? `${layer.style.borderRadius}px` : layer.style?.mapDisplayType === "text_only" ? "0" : "9999px",
 												boxShadow: layer.style?.mapDisplayType === "text_only" ? "none" : void 0,
 												fontSize: layer.style?.mapDisplayType === "text_only" || isButtonOnly ? layer.style?.fontSize ? `${layer.style.fontSize}px` : "14px" : "14px"
@@ -26882,7 +26882,15 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 												viewBox: "0 0 24 24",
 												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" })
 											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-												className: "truncate whitespace-normal text-center",
+												className: "truncate whitespace-normal",
+												style: {
+													fontFamily: layer.style?.fontFamily,
+													fontWeight: layer.style?.fontWeight,
+													fontStyle: layer.style?.fontStyle,
+													textDecoration: layer.style?.textDecoration,
+													textAlign: layer.style?.textAlign || "center",
+													width: "100%"
+												},
 												children: buttonText
 											})]
 										})]
@@ -29079,7 +29087,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-CB02KGJb.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-Di6ZlxL8.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -30653,7 +30661,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 							const isButtonOnly = layer.style?.mapDisplayType === "button_only";
 							const buttonText = layer.style?.mapButtonText || "Buka Google Maps";
 							const buttonColor = layer.style?.mapButtonColor || "#ef4444";
-							const buttonTextColor = layer.style?.mapButtonTextColor || "#ffffff";
+							const buttonTextColor = layer.style?.color || layer.style?.mapButtonTextColor || "#ffffff";
 							const isTextOnly = layer.style?.mapDisplayType === "text_only";
 							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								className: "w-full h-full flex items-center justify-center relative overflow-hidden",
@@ -30680,7 +30688,7 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 									className: `${isTextOnly ? "" : "backdrop-blur shadow-md"} flex items-center justify-center gap-2.5 font-bold transition hover:scale-105 z-10 ${isButtonOnly || isTextOnly ? "w-full h-full" : "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-2.5"}`,
 									style: {
 										backgroundColor: isTextOnly ? "transparent" : isButtonOnly ? buttonColor : "rgba(255, 255, 255, 0.95)",
-										color: isButtonOnly || isTextOnly ? buttonTextColor : "#1f2937",
+										color: isButtonOnly || isTextOnly ? buttonTextColor : layer.style?.color || "#1f2937",
 										textDecoration: "none",
 										borderRadius: layer.style?.borderRadius !== void 0 ? `${layer.style.borderRadius}px` : layer.style?.mapDisplayType === "text_only" ? "0" : "9999px",
 										boxShadow: layer.style?.mapDisplayType === "text_only" ? "none" : void 0,
@@ -30693,7 +30701,15 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 										viewBox: "0 0 24 24",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" })
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-										className: "truncate whitespace-normal text-center",
+										className: "truncate whitespace-normal",
+										style: {
+											fontFamily: layer.style?.fontFamily,
+											fontWeight: layer.style?.fontWeight,
+											fontStyle: layer.style?.fontStyle,
+											textDecoration: layer.style?.textDecoration,
+											textAlign: layer.style?.textAlign || "center",
+											width: "100%"
+										},
 										children: buttonText
 									})]
 								})]

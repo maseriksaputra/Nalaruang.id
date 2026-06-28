@@ -814,7 +814,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                             const isButtonOnly = layer.style?.mapDisplayType === 'button_only';
                             const buttonText = layer.style?.mapButtonText || 'Buka Google Maps';
                             const buttonColor = layer.style?.mapButtonColor || '#ef4444'; // default red
-                            const buttonTextColor = layer.style?.mapButtonTextColor || '#ffffff';
+                            const buttonTextColor = layer.style?.color || layer.style?.mapButtonTextColor || '#ffffff';
                             const isTextOnly = layer.style?.mapDisplayType === 'text_only';
 
                             return (
@@ -835,7 +835,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                                             className={`${isTextOnly ? '' : 'backdrop-blur shadow-md'} flex items-center justify-center gap-2.5 font-bold transition hover:scale-105 z-10 ${isButtonOnly || isTextOnly ? 'w-full h-full' : 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-5 py-2.5'}`}
                                             style={{ 
                                                 backgroundColor: isTextOnly ? 'transparent' : (isButtonOnly ? buttonColor : 'rgba(255, 255, 255, 0.95)'), 
-                                                color: (isButtonOnly || isTextOnly) ? buttonTextColor : '#1f2937', 
+                                                color: (isButtonOnly || isTextOnly) ? buttonTextColor : (layer.style?.color || '#1f2937'), 
                                                 textDecoration: 'none',
                                                 borderRadius: layer.style?.borderRadius !== undefined ? `${layer.style.borderRadius}px` : (layer.style?.mapDisplayType === 'text_only' ? '0' : '9999px'),
                                                 boxShadow: layer.style?.mapDisplayType === 'text_only' ? 'none' : undefined,
@@ -845,7 +845,19 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                                             {layer.style?.mapDisplayType !== 'text_only' && (
                                                 <svg className="w-5 h-5 shrink-0" style={{ color: isButtonOnly ? buttonTextColor : '#ef4444' }} fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" /></svg>
                                             )}
-                                            <span className="truncate whitespace-normal text-center">{buttonText}</span>
+                                            <span 
+                                                className="truncate whitespace-normal"
+                                                style={{ 
+                                                    fontFamily: layer.style?.fontFamily, 
+                                                    fontWeight: layer.style?.fontWeight, 
+                                                    fontStyle: layer.style?.fontStyle, 
+                                                    textDecoration: layer.style?.textDecoration,
+                                                    textAlign: layer.style?.textAlign || 'center',
+                                                    width: '100%'
+                                                }}
+                                            >
+                                                {buttonText}
+                                            </span>
                                         </a>
                                     )}
                                 </div>

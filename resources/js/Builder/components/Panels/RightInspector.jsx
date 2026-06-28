@@ -2947,11 +2947,11 @@ const RightInspector = () => {
                                         <div className="flex items-center gap-2">
                                             <input 
                                                 type="color" 
-                                                value={activeLayer.style?.mapButtonTextColor || '#ffffff'}
-                                                onChange={(e) => updateLayerStyle(activeLayer.id, { mapButtonTextColor: e.target.value })}
+                                                value={activeLayer.style?.color || activeLayer.style?.mapButtonTextColor || '#ffffff'}
+                                                onChange={(e) => updateLayerStyle(activeLayer.id, { color: e.target.value })}
                                                 className="w-6 h-6 p-0 border-0 rounded cursor-pointer"
                                             />
-                                            <span className="text-[9px] font-mono text-gray-500">{activeLayer.style?.mapButtonTextColor || '#ffffff'}</span>
+                                            <span className="text-[9px] font-mono text-gray-500">{activeLayer.style?.color || activeLayer.style?.mapButtonTextColor || '#ffffff'}</span>
                                         </div>
                                     </div>
                                 </div>

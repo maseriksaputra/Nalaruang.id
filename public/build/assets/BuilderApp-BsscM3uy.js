@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-S2WjDM_M.js";
-import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-C5NNg4Ne.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-BgdvfYjL.js";
+import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-0M40vSyC.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -18886,12 +18886,12 @@ var RightInspector = () => {
 												className: "flex items-center gap-2",
 												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 													type: "color",
-													value: activeLayer.style?.mapButtonTextColor || "#ffffff",
-													onChange: (e) => updateLayerStyle(activeLayer.id, { mapButtonTextColor: e.target.value }),
+													value: activeLayer.style?.color || activeLayer.style?.mapButtonTextColor || "#ffffff",
+													onChange: (e) => updateLayerStyle(activeLayer.id, { color: e.target.value }),
 													className: "w-6 h-6 p-0 border-0 rounded cursor-pointer"
 												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 													className: "text-[9px] font-mono text-gray-500",
-													children: activeLayer.style?.mapButtonTextColor || "#ffffff"
+													children: activeLayer.style?.color || activeLayer.style?.mapButtonTextColor || "#ffffff"
 												})]
 											})] })]
 										})]
@@ -20314,7 +20314,7 @@ var ContextualToolbar = () => {
 		})]
 	});
 	if (!activeLayer) return null;
-	const isText = activeLayer.type === "text" || activeLayer.type === "dynamic_guest_name";
+	const isText = activeLayer.type === "text" || activeLayer.type === "dynamic_guest_name" || activeLayer.type === "interactive_map";
 	const isImage = activeLayer.type === "image" || activeLayer.type === "polaroid";
 	const isShape = activeLayer.type === "shape";
 	const currentFontSize = parseInt(activeLayer.style?.fontSize) || 16;
