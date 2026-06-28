@@ -137,6 +137,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
 
     const elementRef = useRef(null);
     const [isHovered, setIsHovered] = useState(false);
+    const effectiveHover = isHovered || isParentHovered;
     const [rsvpForm, setRsvpForm] = useState({ name: '', status: 'Hadir', message: '' });
     const [rsvpStatus, setRsvpStatus] = useState(null);
     const [comments, setComments] = useState([]);
@@ -432,7 +433,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                                         fillOpacity={layer.style?.opacity ?? 1}
                                         fillRule={ShapePaths[layer.content].fillRule || 'nonzero'}
                                         style={{ transition: 'stroke 0.3s ease' }}
-                                        stroke={layer.style?.borderWidth > 0 ? `var(--current-border, ${hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100)})` : undefined}
+                                        stroke={layer.style?.borderWidth > 0 ? ((effectiveHover && layer.interaction?.isButton) ? (layer.interaction.hoverBorderColor || '#000000') : hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100)) : undefined}
                                         strokeWidth={layer.style?.borderWidth > 0 ? layer.style.borderWidth : undefined}
                                         strokeDasharray={layer.style?.borderStyle === 'dashed' ? '8 8' : layer.style?.borderStyle === 'dotted' ? '2 4' : undefined}
                                         vectorEffect="non-scaling-stroke"
@@ -443,10 +444,10 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                                     className="w-full h-full relative pointer-events-none"
                                     style={{
                                         transition: 'background 0.3s ease, border-color 0.3s ease',
-                                        background: `var(--current-bg, ${(!layer.style?.backgroundType || layer.style?.backgroundType === 'solid') ? (layer.style?.backgroundColor || '#cbd5e1') : getGradientCss(layer.style)})`,
+                                        background: (effectiveHover && layer.interaction?.isButton) ? (layer.interaction.hoverBgColor || '#ff0000') : (!layer.style?.backgroundType || layer.style?.backgroundType === 'solid' ? (layer.style?.backgroundColor || '#cbd5e1') : getGradientCss(layer.style)),
                                         borderRadius: computedBorderRadius,
                                         borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : undefined,
-                                        borderColor: layer.style?.borderWidth > 0 ? `var(--current-border, ${hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100)})` : undefined,
+                                        borderColor: layer.style?.borderWidth > 0 ? ((effectiveHover && layer.interaction?.isButton) ? (layer.interaction.hoverBorderColor || '#000000') : hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100)) : undefined,
                                         borderStyle: layer.style?.borderWidth > 0 ? (layer.style.borderStyle || 'solid') : undefined,
                                         opacity: layer.style?.opacity ?? 1
                                     }}
@@ -1127,7 +1128,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                         {(layer.type === 'canvas_group' || layer.type === 'group') && (
                             <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                                 {layer.children?.map(child => (
-                                    <PublicLayer key={child.id} layer={child} isOpened={isOpened} isCoverPage={isCoverPage} isChildOfGroup={true} />
+                                    <PublicLayer key={child.id} layer={child} isOpened={isOpened} isCoverPage={isCoverPage} isChildOfGroup={true} isParentHovered={effectiveHover} />
                                 ))}
                             </div>
                         )}
