@@ -59,10 +59,12 @@ const ViewerApp = ({ previewData, onClosePreview }) => {
     const hasDesktopThumbnail = viewerData?.global_settings?.desktop_thumbnail?.enabled;
 
     const [desktopScale, setDesktopScale] = useState(1);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
     useEffect(() => {
         const handleResize = () => {
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
+            setIsMobile(screenWidth < 1024);
             if (screenWidth >= 1024 && hasDesktopThumbnail) {
                 setDesktopScale(screenHeight / 844);
             } else if (screenWidth < 414) {
@@ -76,7 +78,7 @@ const ViewerApp = ({ previewData, onClosePreview }) => {
         return () => window.removeEventListener('resize', handleResize);
     }, [hasDesktopThumbnail]);
 
-    const isMobilePublic = !isInsideBuilderPreview && desktopScale === 1;
+    const isMobilePublic = !isInsideBuilderPreview && isMobile;
 
     return (
         <div className={`w-full relative ${isMobilePublic ? 'min-h-screen' : 'h-screen overflow-hidden'} ${isInsideBuilderPreview ? 'bg-transparent' : 'bg-white flex justify-center'} ${!isInsideBuilderPreview && !hasDesktopThumbnail ? 'py-0 sm:py-8' : ''}`}>

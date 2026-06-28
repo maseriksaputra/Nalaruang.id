@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DHxqLXhn.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BQbgHAcM.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-svMOL8HN.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-lHckJOla.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -29030,7 +29030,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DHxqLXhn.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BQbgHAcM.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -33682,10 +33682,12 @@ var ViewerApp = ({ previewData, onClosePreview }) => {
 	});
 	const hasDesktopThumbnail = viewerData?.global_settings?.desktop_thumbnail?.enabled;
 	const [desktopScale, setDesktopScale] = (0, import_react.useState)(1);
+	const [isMobile, setIsMobile] = (0, import_react.useState)(window.innerWidth < 1024);
 	(0, import_react.useEffect)(() => {
 		const handleResize = () => {
 			const screenWidth = window.innerWidth;
 			const screenHeight = window.innerHeight;
+			setIsMobile(screenWidth < 1024);
 			if (screenWidth >= 1024 && hasDesktopThumbnail) setDesktopScale(screenHeight / 844);
 			else if (screenWidth < 414) setDesktopScale(screenWidth / 414);
 			else setDesktopScale(1);
@@ -33694,7 +33696,7 @@ var ViewerApp = ({ previewData, onClosePreview }) => {
 		window.addEventListener("resize", handleResize);
 		return () => window.removeEventListener("resize", handleResize);
 	}, [hasDesktopThumbnail]);
-	const isMobilePublic = !isInsideBuilderPreview && desktopScale === 1;
+	const isMobilePublic = !isInsideBuilderPreview && isMobile;
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: `w-full relative ${isMobilePublic ? "min-h-screen" : "h-screen overflow-hidden"} ${isInsideBuilderPreview ? "bg-transparent" : "bg-white flex justify-center"} ${!isInsideBuilderPreview && !hasDesktopThumbnail ? "py-0 sm:py-8" : ""}`,
 		children: [
