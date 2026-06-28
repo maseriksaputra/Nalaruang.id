@@ -125,7 +125,7 @@ const PublicCanvas = ({ config }) => {
         const handleResize = () => {
             if (!containerRef.current) return;
             const screenWidth = window.innerWidth;
-            const screenHeight = window.screen?.availHeight || window.screen?.height || window.innerHeight;
+            const screenHeight = window.innerHeight;
             const baseWidth = 414;
             let newScale = 1;
             
