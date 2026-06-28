@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-C-Yv4PSf.js";
-import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-C4wzyqap.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-C3Z5SbnE.js";
+import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-czaQmAbZ.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -205,7 +205,6 @@ var CanvasArea = () => {
 					style: {
 						minHeight: (() => {
 							if (section.layout?.minHeight && section.layout.minHeight !== "844px" && section.layout.minHeight !== "100vh") return section.layout.minHeight;
-							if (index === 0) return "844px";
 							let maxY = 0;
 							const checkLayer = (layer, parentY = 0) => {
 								const currentY = parentY + (parseFloat(layer.style?.y) || 0);
@@ -214,6 +213,7 @@ var CanvasArea = () => {
 								if (layer.children) layer.children.forEach((child) => checkLayer(child, layer.type === "canvas_group" || layer.type === "group" ? currentY : parentY));
 							};
 							section.layers?.forEach((l) => checkLayer(l, 0));
+							if (index === 0) return maxY > 0 ? `${maxY}px` : "844px";
 							return maxY > 0 ? `${maxY}px` : section.layout?.minHeight || "844px";
 						})(),
 						flex: 1,

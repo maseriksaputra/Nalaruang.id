@@ -233,7 +233,7 @@ const PublicCanvas = ({ config }) => {
                             return section.layout.height;
                         }
                         if (index === 0) {
-                            return section.layout?.height || '844px';
+                            return maxY > 0 ? `${maxY}px` : (section.layout?.height || '844px');
                         }
                         if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
                             return section.layout.minHeight;
@@ -251,8 +251,8 @@ const PublicCanvas = ({ config }) => {
                             height: sectionHeight,
                             background: section.layout?.background_value || '#ffffff',
                             overflow: 'hidden',
-                            display: 'block',
-                            visibility: (!isOpened && hasOpenButton && index > 0) ? 'hidden' : 'visible',
+                            display: (!isOpened && index > 0) ? 'none' : 'block',
+                            visibility: (!isOpened && index > 0) ? 'hidden' : 'visible',
                             zIndex: index === 0 ? 50 : 1,
                             ...(index === 0 ? (() => {
                                 let isSlideUp = transitionType === 'slide_up' || !transitionType;
