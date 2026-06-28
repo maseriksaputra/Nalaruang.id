@@ -380,7 +380,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                                     outline: 'none',
                                     border: 'none',
                                     transition: 'color 0.3s ease',
-                                    color: `var(--current-text, ${layer.style?.color || '#000000'})`,
+                                    color: `var(--current-text, ${layer.style?.textColor || layer.style?.color || '#000000'})`,
                                     fontSize: layer.style?.fontSize ? (String(layer.style.fontSize).includes('px') || String(layer.style.fontSize).includes('rem') || String(layer.style.fontSize).includes('em') ? layer.style.fontSize : `${layer.style.fontSize}px`) : '16px',
                                     fontFamily: layer.style?.fontFamily || 'sans-serif',
                                     fontWeight: layer.style?.fontWeight || 'normal',
@@ -395,7 +395,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                                     whiteSpace: 'pre-wrap',
                                     wordBreak: 'break-word'
                                 }}
-                                dangerouslySetInnerHTML={{ __html: layer.type === 'dynamic_guest_name' ? layer.content.replace('[Nama Tamu]', new URLSearchParams(window.location.search).get('to') || 'Bapak/Ibu/Saudara/i') : layer.content }}
+                                dangerouslySetInnerHTML={{ __html: layer.type === 'dynamic_guest_name' ? layer.content.replace('[Nama Tamu]', new URLSearchParams(window.location.search).get('to') || '[Nama Tamu]') : layer.content }}
                             />
                         )}
 
