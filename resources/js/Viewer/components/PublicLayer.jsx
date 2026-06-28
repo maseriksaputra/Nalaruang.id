@@ -352,6 +352,8 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
             style={interactionStyles}
             className={interactionClasses}
             onClick={handleInteraction}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
             <div
                 style={{
@@ -383,7 +385,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                                     outline: 'none',
                                     border: 'none',
                                     transition: 'color 0.3s ease',
-                                    color: `var(--current-text, ${layer.style?.textColor || layer.style?.color || '#000000'})`,
+                                    color: (effectiveHover && effectiveInteraction) ? (effectiveInteraction.hoverTextColor || '#ffffff') : (layer.style?.textColor || layer.style?.color || '#000000'),
                                     fontSize: layer.style?.fontSize ? (String(layer.style.fontSize).includes('px') || String(layer.style.fontSize).includes('rem') || String(layer.style.fontSize).includes('em') ? layer.style.fontSize : `${layer.style.fontSize}px`) : '16px',
                                     fontFamily: layer.style?.fontFamily || 'sans-serif',
                                     fontWeight: layer.style?.fontWeight || 'normal',
@@ -410,7 +412,8 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                                     preserveAspectRatio="none"
                                     style={{
                                         transition: 'color 0.3s ease',
-                                        color: `var(--current-bg, ${layer.style?.backgroundColor || '#cbd5e1'})`
+                                        height: '100%',
+                                        color: (effectiveHover && effectiveInteraction) ? (effectiveInteraction.hoverBgColor || '#ff0000') : (layer.style?.backgroundColor || '#cbd5e1')
                                     }}
                                 >
                                     {(layer.style?.backgroundType === 'linear-gradient' || layer.style?.backgroundType === 'radial-gradient') && (
