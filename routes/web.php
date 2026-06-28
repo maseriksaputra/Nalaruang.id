@@ -49,32 +49,30 @@ Route::get('/fix-bug-darurat', function () {
                 $modified = true;
             }
         }
+        
+        if (isset($config['sections'])) {
+            foreach ($config['sections'] as &$section) {
+                if (isset($section['layers'])) {
+                    $cleanedSec = array_filter($section['layers'], function($layer) {
+                        return isset($layer['type']) && in_array($layer['type'], ['group', 'image', 'text', 'shape', 'lottie', 'frame', 'interactive_map', 'countdown', 'music_player', 'dynamic_guest_name', 'audio', 'canvas_group']);
+                    });
+                    if (count($cleanedSec) !== count($section['layers'])) {
+                        $section['layers'] = array_values($cleanedSec);
+                        $modified = true;
+                    }
+                }
+            }
+        }
+
         if ($modified) {
             $inv->canvas_config = $config;
             $inv->save();
+            return 'CLEANED';
         }
+        return 'NO CORRUPT LAYERS';
     }
     
-    $package = \App\Models\Package::where('name', 'Basic')->first();
-    if ($package) {
-        $features = $package->features;
-        if (is_string($features)) $features = json_decode($features, true);
-        if (is_array($features)) {
-            $updated = false;
-            $features = array_map(function($f) use (&$updated) {
-                if (strpos($f, 'Maksimal 5 Foto') !== false) {
-                    $updated = true;
-                    return str_replace('Maksimal 5 Foto', 'Maksimal 10 Foto', $f);
-                }
-                return $f;
-            }, $features);
-            if ($updated) {
-                $package->features = $features;
-                $package->save();
-            }
-        }
-    }
-    return 'Bug Kanvas dan Paket Basic berhasil diperbaiki! Silakan tutup tab ini dan refresh halaman Builder.';
+    return 'Not found';
 });
 
 Route::get('/debug-cashflow', function () {
