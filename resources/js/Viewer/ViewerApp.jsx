@@ -111,7 +111,7 @@ const ViewerApp = ({ previewData, onClosePreview }) => {
                     className={`w-full bg-white relative ${isMobilePublic ? '' : 'overflow-y-auto'} ${!hasDesktopThumbnail && desktopScale === 1 ? 'shadow-2xl rounded-xl border border-gray-200/20' : ''}`} 
                     style={{ 
                         height: isMobilePublic ? 'auto' : '100vh', 
-                        maxHeight: isMobilePublic ? 'none' : (isInsideBuilderPreview ? 'calc(100vh - 80px)' : 'calc(100vh - 64px)'),
+                        maxHeight: isMobilePublic ? 'none' : (hasDesktopThumbnail ? '100vh' : (isInsideBuilderPreview ? 'calc(100vh - 80px)' : 'calc(100vh - 64px)')),
                         maxWidth: `${414 * desktopScale}px` 
                     }}
                 >
