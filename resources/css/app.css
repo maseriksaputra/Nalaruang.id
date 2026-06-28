@@ -284,3 +284,13 @@
 .polaroid-tape .polaroid-caption {
     display: none;
 }
+
+.custom-hover-effect {
+    transition: all 0.3s ease;
+}
+
+.custom-hover-effect:hover, .custom-hover-effect:active {
+    --current-bg: var(--hover-bg, transparent);
+    --current-text: var(--hover-text, inherit);
+    --current-border: var(--hover-border, transparent);
+}

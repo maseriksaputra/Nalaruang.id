@@ -2422,12 +2422,45 @@ const RightInspector = () => {
                                                 className="w-full text-xs text-gray-700 border border-gray-300 rounded-lg p-2 focus:ring-1 focus:ring-primary-500 bg-white"
                                             >
                                                 <option value="none">Tidak Ada</option>
+                                                <option value="custom">Warna Kustom</option>
                                                 <option value="darken">Meredup (Darken)</option>
                                                 <option value="lighten">Menerang (Lighten)</option>
                                                 <option value="fade">Transparan (Fade)</option>
                                                 <option value="glow">Menyala (Glow)</option>
                                             </select>
                                         </div>
+
+                                        {activeLayer.interaction?.hoverEffect === 'custom' && (
+                                            <div className="space-y-3 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                                                <div className="flex items-center justify-between">
+                                                    <label className="text-xs text-gray-600">Warna Latar</label>
+                                                    <input 
+                                                        type="color" 
+                                                        value={activeLayer.interaction?.hoverBgColor || '#ff0000'}
+                                                        onChange={(e) => updateLayerInteraction(activeLayer.id, { hoverBgColor: e.target.value })}
+                                                        className="w-8 h-8 rounded border border-gray-300 cursor-pointer p-0"
+                                                    />
+                                                </div>
+                                                <div className="flex items-center justify-between">
+                                                    <label className="text-xs text-gray-600">Warna Teks</label>
+                                                    <input 
+                                                        type="color" 
+                                                        value={activeLayer.interaction?.hoverTextColor || '#ffffff'}
+                                                        onChange={(e) => updateLayerInteraction(activeLayer.id, { hoverTextColor: e.target.value })}
+                                                        className="w-8 h-8 rounded border border-gray-300 cursor-pointer p-0"
+                                                    />
+                                                </div>
+                                                <div className="flex items-center justify-between">
+                                                    <label className="text-xs text-gray-600">Warna Garis (Border)</label>
+                                                    <input 
+                                                        type="color" 
+                                                        value={activeLayer.interaction?.hoverBorderColor || '#000000'}
+                                                        onChange={(e) => updateLayerInteraction(activeLayer.id, { hoverBorderColor: e.target.value })}
+                                                        className="w-8 h-8 rounded border border-gray-300 cursor-pointer p-0"
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
                                         
                                         <div>
                                             <label className="text-xs text-gray-600 block mb-1">Animasi Tekan (Press)</label>

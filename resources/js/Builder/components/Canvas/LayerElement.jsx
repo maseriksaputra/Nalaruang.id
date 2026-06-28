@@ -407,7 +407,8 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                 <div 
                                     className={`w-full h-full overflow-visible flex outline-none border-none ${isEditing ? 'no-drag !select-text !pointer-events-auto' : ''}`}
                                     style={{
-                                        color: layer.style?.color || '#000000',
+                                        transition: 'color 0.3s ease',
+                                        color: `var(--current-text, ${layer.style?.color || '#000000'})`,
                                         fontSize: layer.style?.fontSize ? (String(layer.style.fontSize).includes('px') || String(layer.style.fontSize).includes('rem') || String(layer.style.fontSize).includes('em') ? layer.style.fontSize : `${layer.style.fontSize}px`) : '16px',
                                         fontFamily: layer.style?.fontFamily || 'sans-serif',
                                         fontWeight: layer.style?.fontWeight || 'normal',
@@ -454,7 +455,8 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                         className="w-full h-full pointer-events-none" 
                                         preserveAspectRatio="none"
                                         style={{ 
-                                            color: layer.style?.backgroundColor || '#cbd5e1',
+                                            transition: 'color 0.3s ease',
+                                            color: `var(--current-bg, ${layer.style?.backgroundColor || '#cbd5e1'})`,
                                             overflow: 'visible'
                                         }}
                                     >
@@ -478,7 +480,8 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                             fill={(layer.style?.backgroundType === 'linear-gradient' || layer.style?.backgroundType === 'radial-gradient') ? `url(#grad-${layer.id})` : "currentColor"} 
                                             fillOpacity={layer.style?.opacity ?? 1}
                                             fillRule={ShapePaths[layer.content].fillRule || 'nonzero'} 
-                                            stroke={layer.style?.borderWidth > 0 ? hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100) : undefined}
+                                            style={{ transition: 'stroke 0.3s ease' }}
+                                            stroke={layer.style?.borderWidth > 0 ? `var(--current-border, ${hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100)})` : undefined}
                                             strokeWidth={layer.style?.borderWidth > 0 ? layer.style.borderWidth : undefined}
                                             strokeDasharray={layer.style?.borderStyle === 'dashed' ? '8 8' : layer.style?.borderStyle === 'dotted' ? '2 4' : undefined}
                                             vectorEffect="non-scaling-stroke"
@@ -488,10 +491,11 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                     <div 
                                         className="w-full h-full relative pointer-events-none"
                                         style={{
-                                            background: (!layer.style?.backgroundType || layer.style?.backgroundType === 'solid') ? (layer.style?.backgroundColor || '#cbd5e1') : getGradientCss(layer.style),
+                                            transition: 'background 0.3s ease, border-color 0.3s ease',
+                                            background: `var(--current-bg, ${(!layer.style?.backgroundType || layer.style?.backgroundType === 'solid') ? (layer.style?.backgroundColor || '#cbd5e1') : getGradientCss(layer.style)})`,
                                             borderRadius: computedBorderRadius,
                                             borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : undefined,
-                                            borderColor: layer.style?.borderWidth > 0 ? hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100) : undefined,
+                                            borderColor: layer.style?.borderWidth > 0 ? `var(--current-border, ${hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100)})` : undefined,
                                             borderStyle: layer.style?.borderWidth > 0 ? (layer.style.borderStyle || 'solid') : undefined,
                                             opacity: layer.style?.opacity ?? 1
                                         }}
@@ -1212,6 +1216,12 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
         interactionStyles.transitionDuration = `${speed}ms`;
         
         switch (layer.interaction.hoverEffect) {
+            case 'custom': 
+                interactionClasses += " custom-hover-effect";
+                interactionStyles['--hover-bg'] = layer.interaction.hoverBgColor || '#ff0000';
+                interactionStyles['--hover-text'] = layer.interaction.hoverTextColor || '#ffffff';
+                interactionStyles['--hover-border'] = layer.interaction.hoverBorderColor || '#000000';
+                break;
             case 'darken': interactionClasses += " hover:brightness-90"; break;
             case 'lighten': interactionClasses += " hover:brightness-110"; break;
             case 'fade': interactionClasses += " hover:opacity-75"; break;

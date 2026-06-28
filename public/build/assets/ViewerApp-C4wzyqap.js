@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-76fqYmOJ.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-ExCNqWjp.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-KB6l-3NN.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-C-Yv4PSf.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -26262,7 +26262,8 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 								(layer.type === "text" || layer.type === "dynamic_guest_name") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: `w-full h-full overflow-visible flex outline-none border-none ${isEditing ? "no-drag !select-text !pointer-events-auto" : ""}`,
 									style: {
-										color: layer.style?.color || "#000000",
+										transition: "color 0.3s ease",
+										color: `var(--current-text, ${layer.style?.color || "#000000"})`,
 										fontSize: layer.style?.fontSize ? String(layer.style.fontSize).includes("px") || String(layer.style.fontSize).includes("rem") || String(layer.style.fontSize).includes("em") ? layer.style.fontSize : `${layer.style.fontSize}px` : "16px",
 										fontFamily: layer.style?.fontFamily || "sans-serif",
 										fontWeight: layer.style?.fontWeight || "normal",
@@ -26304,7 +26305,8 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 									className: "w-full h-full pointer-events-none",
 									preserveAspectRatio: "none",
 									style: {
-										color: layer.style?.backgroundColor || "#cbd5e1",
+										transition: "color 0.3s ease",
+										color: `var(--current-bg, ${layer.style?.backgroundColor || "#cbd5e1"})`,
 										overflow: "visible"
 									},
 									children: [(layer.style?.backgroundType === "linear-gradient" || layer.style?.backgroundType === "radial-gradient") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: layer.style.backgroundType === "linear-gradient" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", {
@@ -26335,7 +26337,8 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 										fill: layer.style?.backgroundType === "linear-gradient" || layer.style?.backgroundType === "radial-gradient" ? `url(#grad-${layer.id})` : "currentColor",
 										fillOpacity: layer.style?.opacity ?? 1,
 										fillRule: ShapePaths[layer.content].fillRule || "nonzero",
-										stroke: layer.style?.borderWidth > 0 ? hexToRgba$1(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100) : void 0,
+										style: { transition: "stroke 0.3s ease" },
+										stroke: layer.style?.borderWidth > 0 ? `var(--current-border, ${hexToRgba$1(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100)})` : void 0,
 										strokeWidth: layer.style?.borderWidth > 0 ? layer.style.borderWidth : void 0,
 										strokeDasharray: layer.style?.borderStyle === "dashed" ? "8 8" : layer.style?.borderStyle === "dotted" ? "2 4" : void 0,
 										vectorEffect: "non-scaling-stroke"
@@ -26343,10 +26346,11 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "w-full h-full relative pointer-events-none",
 									style: {
-										background: !layer.style?.backgroundType || layer.style?.backgroundType === "solid" ? layer.style?.backgroundColor || "#cbd5e1" : getGradientCss$1(layer.style),
+										transition: "background 0.3s ease, border-color 0.3s ease",
+										background: `var(--current-bg, ${!layer.style?.backgroundType || layer.style?.backgroundType === "solid" ? layer.style?.backgroundColor || "#cbd5e1" : getGradientCss$1(layer.style)})`,
 										borderRadius: computedBorderRadius,
 										borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : void 0,
-										borderColor: layer.style?.borderWidth > 0 ? hexToRgba$1(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100) : void 0,
+										borderColor: layer.style?.borderWidth > 0 ? `var(--current-border, ${hexToRgba$1(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100)})` : void 0,
 										borderStyle: layer.style?.borderWidth > 0 ? layer.style.borderStyle || "solid" : void 0,
 										opacity: layer.style?.opacity ?? 1
 									}
@@ -27159,6 +27163,12 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 		interactionClasses += " transition-all";
 		interactionStyles.transitionDuration = `${layer.interaction.effectSpeed || 300}ms`;
 		switch (layer.interaction.hoverEffect) {
+			case "custom":
+				interactionClasses += " custom-hover-effect";
+				interactionStyles["--hover-bg"] = layer.interaction.hoverBgColor || "#ff0000";
+				interactionStyles["--hover-text"] = layer.interaction.hoverTextColor || "#ffffff";
+				interactionStyles["--hover-border"] = layer.interaction.hoverBorderColor || "#000000";
+				break;
 			case "darken":
 				interactionClasses += " hover:brightness-90";
 				break;
@@ -29061,7 +29071,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-76fqYmOJ.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-ExCNqWjp.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -30038,6 +30048,12 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 		interactionClasses += " transition-all";
 		interactionStyles.transitionDuration = `${layer.interaction.effectSpeed || 300}ms`;
 		switch (layer.interaction.hoverEffect) {
+			case "custom":
+				interactionClasses += " custom-hover-effect";
+				interactionStyles["--hover-bg"] = layer.interaction.hoverBgColor || "#ff0000";
+				interactionStyles["--hover-text"] = layer.interaction.hoverTextColor || "#ffffff";
+				interactionStyles["--hover-border"] = layer.interaction.hoverBorderColor || "#000000";
+				break;
 			case "darken":
 				interactionClasses += " hover:brightness-90";
 				break;
@@ -30095,7 +30111,8 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 								display: "flex",
 								outline: "none",
 								border: "none",
-								color: layer.style?.color || "#000000",
+								transition: "color 0.3s ease",
+								color: `var(--current-text, ${layer.style?.color || "#000000"})`,
 								fontSize: layer.style?.fontSize ? String(layer.style.fontSize).includes("px") || String(layer.style.fontSize).includes("rem") || String(layer.style.fontSize).includes("em") ? layer.style.fontSize : `${layer.style.fontSize}px` : "16px",
 								fontFamily: layer.style?.fontFamily || "sans-serif",
 								fontWeight: layer.style?.fontWeight || "normal",
@@ -30116,7 +30133,10 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 							viewBox: ShapePaths[layer.content].viewBox,
 							className: "w-full h-full pointer-events-none",
 							preserveAspectRatio: "none",
-							style: { color: layer.style?.backgroundColor || "#cbd5e1" },
+							style: {
+								transition: "color 0.3s ease",
+								color: `var(--current-bg, ${layer.style?.backgroundColor || "#cbd5e1"})`
+							},
 							children: [(layer.style?.backgroundType === "linear-gradient" || layer.style?.backgroundType === "radial-gradient") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: layer.style.backgroundType === "linear-gradient" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", {
 								id: `grad-${layer.id}`,
 								x1: "0%",
@@ -30147,7 +30167,8 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 								fill: layer.style?.backgroundType === "linear-gradient" || layer.style?.backgroundType === "radial-gradient" ? `url(#grad-${layer.id})` : "currentColor",
 								fillOpacity: layer.style?.opacity ?? 1,
 								fillRule: ShapePaths[layer.content].fillRule || "nonzero",
-								stroke: layer.style?.borderWidth > 0 ? hexToRgba(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100) : void 0,
+								style: { transition: "stroke 0.3s ease" },
+								stroke: layer.style?.borderWidth > 0 ? `var(--current-border, ${hexToRgba(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100)})` : void 0,
 								strokeWidth: layer.style?.borderWidth > 0 ? layer.style.borderWidth : void 0,
 								strokeDasharray: layer.style?.borderStyle === "dashed" ? "8 8" : layer.style?.borderStyle === "dotted" ? "2 4" : void 0,
 								vectorEffect: "non-scaling-stroke"
@@ -30155,10 +30176,11 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "w-full h-full relative pointer-events-none",
 							style: {
-								background: !layer.style?.backgroundType || layer.style?.backgroundType === "solid" ? layer.style?.backgroundColor || "#cbd5e1" : getGradientCss(layer.style),
+								transition: "background 0.3s ease, border-color 0.3s ease",
+								background: `var(--current-bg, ${!layer.style?.backgroundType || layer.style?.backgroundType === "solid" ? layer.style?.backgroundColor || "#cbd5e1" : getGradientCss(layer.style)})`,
 								borderRadius: computedBorderRadius,
 								borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : void 0,
-								borderColor: layer.style?.borderWidth > 0 ? hexToRgba(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100) : void 0,
+								borderColor: layer.style?.borderWidth > 0 ? `var(--current-border, ${hexToRgba(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100)})` : void 0,
 								borderStyle: layer.style?.borderWidth > 0 ? layer.style.borderStyle || "solid" : void 0,
 								opacity: layer.style?.opacity ?? 1
 							}

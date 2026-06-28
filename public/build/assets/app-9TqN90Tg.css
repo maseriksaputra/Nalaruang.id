@@ -11676,6 +11676,16 @@
   display: none;
 }
 
+.custom-hover-effect {
+  transition: all .3s;
+}
+
+.custom-hover-effect:hover, .custom-hover-effect:active {
+  --current-bg: var(--hover-bg, transparent);
+  --current-text: var(--hover-text, inherit);
+  --current-border: var(--hover-border, transparent);
+}
+
 @property --tw-translate-x {
   syntax: "*";
   inherits: false;

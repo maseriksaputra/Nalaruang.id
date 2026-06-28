@@ -1,7 +1,7 @@
 import { i as __toESM$1, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-KB6l-3NN.js";
-import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-9GoWI_PU.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-C-Yv4PSf.js";
+import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-C4wzyqap.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -18175,6 +18175,10 @@ var RightInspector = () => {
 														children: "Tidak Ada"
 													}),
 													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+														value: "custom",
+														children: "Warna Kustom"
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
 														value: "darken",
 														children: "Meredup (Darken)"
 													}),
@@ -18192,6 +18196,47 @@ var RightInspector = () => {
 													})
 												]
 											})] }),
+											activeLayer.interaction?.hoverEffect === "custom" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "space-y-3 p-3 bg-gray-50 border border-gray-200 rounded-lg",
+												children: [
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center justify-between",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+															className: "text-xs text-gray-600",
+															children: "Warna Latar"
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+															type: "color",
+															value: activeLayer.interaction?.hoverBgColor || "#ff0000",
+															onChange: (e) => updateLayerInteraction(activeLayer.id, { hoverBgColor: e.target.value }),
+															className: "w-8 h-8 rounded border border-gray-300 cursor-pointer p-0"
+														})]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center justify-between",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+															className: "text-xs text-gray-600",
+															children: "Warna Teks"
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+															type: "color",
+															value: activeLayer.interaction?.hoverTextColor || "#ffffff",
+															onChange: (e) => updateLayerInteraction(activeLayer.id, { hoverTextColor: e.target.value }),
+															className: "w-8 h-8 rounded border border-gray-300 cursor-pointer p-0"
+														})]
+													}),
+													/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+														className: "flex items-center justify-between",
+														children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+															className: "text-xs text-gray-600",
+															children: "Warna Garis (Border)"
+														}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+															type: "color",
+															value: activeLayer.interaction?.hoverBorderColor || "#000000",
+															onChange: (e) => updateLayerInteraction(activeLayer.id, { hoverBorderColor: e.target.value }),
+															className: "w-8 h-8 rounded border border-gray-300 cursor-pointer p-0"
+														})]
+													})
+												]
+											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 												className: "text-xs text-gray-600 block mb-1",
 												children: "Animasi Tekan (Press)"
