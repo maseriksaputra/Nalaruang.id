@@ -206,7 +206,9 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
         
         // If element is selected in builder, disable animations so it doesn't fight with Rnd resizing/moving
         // Unless they explicitly clicked "Preview Animasi" (which updates previewKey)
-        const isPreviewing = layer.animation?.config?.previewKey && (Date.now() - layer.animation.config.previewKey < 2000);
+        const isPreviewing = (layer.animation?.config?.previewKey && (Date.now() - layer.animation.config.previewKey < 2000)) ||
+                             (layer.animation?.configIdle?.previewKey && (Date.now() - layer.animation.configIdle.previewKey < 2000)) ||
+                             (layer.animation?.configExit?.previewKey && (Date.now() - layer.animation.configExit.previewKey < 2000));
         
         if (isActive && !isPreviewing) {
             import('gsap').then(gsap => {
