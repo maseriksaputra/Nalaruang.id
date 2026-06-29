@@ -298,7 +298,7 @@ Route::get('/fix-packages', function () {
             'name' => 'Lite',
             'price' => 14.999,
             'description' => 'Tampil Elegan & Informatif',
-            'features' => ["Masa Aktif Undangan: 14 Hari","Nama Tamu & Share Unlimited","Formulir RSVP & Ucapan Tamu","Akses Dashboard Klien","Desain Template Statis","Halaman Acara, Lokasi & Maps","Revisi Teks & Data: 3 Kali"],
+            'features' => ["Masa Aktif Undangan: 1 Bulan","Nama Tamu & Share Unlimited","Formulir RSVP & Ucapan Tamu","Akses Dashboard Klien","Desain Template Statis","Halaman Acara, Lokasi & Maps","Revisi Teks & Data: 3 Kali"],
             'is_popular' => false,
             'sort_order' => 1,
             'is_customizable' => false
@@ -307,7 +307,7 @@ Route::get('/fix-packages', function () {
             'name' => 'Basic',
             'price' => 24.999,
             'description' => 'Lebih Hidup dengan Momen',
-            'features' => ["Masa Aktif Undangan: 1 Bulan","Nama Tamu & Share Unlimited","Formulir RSVP & Ucapan Tamu","Semua Fitur Paket Lite","Galeri Foto (Maksimal 10 Foto)","Animasi Transisi Dasar (Fade)","Custom Musik/Backsound","Revisi Teks & Data: 5 Kali"],
+            'features' => ["Masa Aktif Undangan: 3 Bulan","Nama Tamu & Share Unlimited","Formulir RSVP & Ucapan Tamu","Semua Fitur Paket Lite","Galeri Foto (Maksimal 10 Foto)","Animasi Transisi Dasar (Fade)","Custom Musik/Backsound","Revisi Teks & Data: 5 Kali"],
             'is_popular' => false,
             'sort_order' => 2,
             'is_customizable' => true
@@ -316,7 +316,7 @@ Route::get('/fix-packages', function () {
             'name' => 'Standard',
             'price' => 39.999,
             'description' => 'Pilihan Ideal & Terpopuler',
-            'features' => ["Masa Aktif Undangan: 3 Bulan","Nama Tamu & Share Unlimited","Formulir RSVP & Ucapan Tamu","Semua Fitur Paket Basic","Galeri Foto (Maksimal 15 Foto)","Custom Wording/Kutipan","Buku Tamu Digital (QR Code)","Revisi Teks & Data: 10 Kali"],
+            'features' => ["Masa Aktif Undangan: 6 Bulan","Nama Tamu & Share Unlimited","Formulir RSVP & Ucapan Tamu","Semua Fitur Paket Basic","Galeri Foto (Maksimal 15 Foto)","Custom Wording/Kutipan","Buku Tamu Digital (QR Code)","Revisi Teks & Data: 10 Kali"],
             'is_popular' => false,
             'sort_order' => 3,
             'is_customizable' => true
