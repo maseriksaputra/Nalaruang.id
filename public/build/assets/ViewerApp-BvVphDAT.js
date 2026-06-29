@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BmJc7q4s.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-D9xP3pqY.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-CqpmSXEV.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-iY4j_rDz.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -2324,28 +2324,31 @@ var useUIStore = create((set) => ({
 }));
 //#endregion
 //#region resources/js/Builder/stores/useCanvasStore.js
+var useCanvasStore_exports = /* @__PURE__ */ __exportAll({ default: () => useCanvasStore });
 var findElement = (sections, id) => {
 	if (!sections || !Array.isArray(sections)) return null;
+	let foundGroup = null;
 	for (const section of sections) {
 		if (!section || !section.layers) continue;
 		const group = section.layers.find((l) => l.id === id);
-		if (group) return group;
+		if (group) foundGroup = group;
 		for (const g of section.layers) if (g.children) {
 			const child = g.children.find((c) => c.id === id);
 			if (child) return child;
 		}
 	}
-	return null;
+	return foundGroup;
 };
 var findLayer = (layers, id) => {
 	if (!layers || !Array.isArray(layers)) return null;
+	let foundGroup = null;
 	const group = layers.find((l) => l.id === id);
-	if (group) return group;
+	if (group) foundGroup = group;
 	for (const g of layers) if (g.children) {
 		const child = g.children.find((c) => c.id === id);
 		if (child) return child;
 	}
-	return null;
+	return foundGroup;
 };
 var useCanvasStore = create(temporal((set, get) => ({
 	invitationId: null,
@@ -26086,7 +26089,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 	]);
 	(0, import_react.useEffect)(() => {
 		let animationInstance = null;
-		const isPreviewing = layer.animation?.config?.previewKey && Date.now() - layer.animation.config.previewKey < 2e3;
+		const isPreviewing = layer.animation?.config?.previewKey && Date.now() - layer.animation.config.previewKey < 2e3 || layer.animation?.configIdle?.previewKey && Date.now() - layer.animation.configIdle.previewKey < 2e3 || layer.animation?.configExit?.previewKey && Date.now() - layer.animation.configExit.previewKey < 2e3;
 		if (isActive && !isPreviewing) {
 			__vitePreload(() => Promise.resolve().then(() => gsap_exports).then((gsap) => {
 				if (elementRef.current) gsap.default.set(elementRef.current, { clearProps: "all" });
@@ -26199,7 +26202,8 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 	if (layer.type === "polaroid") loadFont("Caveat");
 	const computedBorderRadius = (() => {
 		if (layer.style?.borderRadius === void 0) return "0px";
-		const r = `${layer.style.borderRadius}px`;
+		const val = layer.style.borderRadius;
+		const r = typeof val === "string" && (val.endsWith("%") || val.endsWith("px")) ? val : `${val}px`;
 		switch (layer.style.borderRadiusType) {
 			case "top": return `${r} ${r} 0 0`;
 			case "bottom": return `0 0 ${r} ${r}`;
@@ -26306,7 +26310,7 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 									preserveAspectRatio: "none",
 									style: {
 										transition: "color 0.3s ease",
-										color: `var(--current-bg, ${layer.style?.backgroundColor || "#cbd5e1"})`,
+										color: layer.style?.backgroundColor || "#cbd5e1",
 										overflow: "visible"
 									},
 									children: [(layer.style?.backgroundType === "linear-gradient" || layer.style?.backgroundType === "radial-gradient") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: layer.style.backgroundType === "linear-gradient" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", {
@@ -26346,8 +26350,9 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "w-full h-full relative pointer-events-none",
 									style: {
-										transition: "background 0.3s ease, border-color 0.3s ease",
-										background: `var(--current-bg, ${!layer.style?.backgroundType || layer.style?.backgroundType === "solid" ? layer.style?.backgroundColor || "#cbd5e1" : getGradientCss$1(layer.style)})`,
+										transition: "background-color 0.3s ease, border-color 0.3s ease, background-image 0.3s ease",
+										backgroundColor: !layer.style?.backgroundType || layer.style?.backgroundType === "solid" ? layer.style?.backgroundColor || "#cbd5e1" : "transparent",
+										backgroundImage: layer.style?.backgroundType === "linear-gradient" || layer.style?.backgroundType === "radial-gradient" ? getGradientCss$1(layer.style) : "none",
 										borderRadius: computedBorderRadius,
 										borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : void 0,
 										borderColor: layer.style?.borderWidth > 0 ? `var(--current-border, ${hexToRgba$1(layer.style.borderColor || "#000000", (layer.style.borderOpacity ?? 1) * 100)})` : void 0,
@@ -26803,6 +26808,25 @@ var LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 										containerStyle.outline = "2px dashed " + (layer.style?.borderColor || "#78716c");
 										containerStyle.outlineOffset = "-8px";
 									}
+									if ((layer.style?.rsvpDisplayType || "full") === "modal_button") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "w-full h-full flex items-center justify-center pointer-events-none",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											style: {
+												backgroundColor: layer.style?.modalButtonColor || "#ec4899",
+												color: layer.style?.modalButtonTextColor || "#ffffff",
+												borderRadius: "0.5rem",
+												fontWeight: "bold",
+												textAlign: "center",
+												display: "flex",
+												alignItems: "center",
+												justifyContent: "center",
+												width: "100%",
+												height: "100%",
+												boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+											},
+											children: layer.style?.modalButtonText || "Konfirmasi Kehadiran"
+										})
+									});
 									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: wrapperClass,
 										style: containerStyle,
@@ -29087,7 +29111,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BmJc7q4s.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-D9xP3pqY.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -30102,6 +30126,9 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 		onClick: handleInteraction,
 		onMouseEnter: () => setIsHovered(true),
 		onMouseLeave: () => setIsHovered(false),
+		onTouchStart: () => setIsHovered(true),
+		onTouchEnd: () => setTimeout(() => setIsHovered(false), 200),
+		onTouchCancel: () => setIsHovered(false),
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			style: {
 				width: "100%",
@@ -30570,6 +30597,33 @@ var PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup 
 								containerStyle.outline = "2px dashed " + (layer.style?.borderColor || "#78716c");
 								containerStyle.outlineOffset = "-8px";
 							}
+							if ((layer.style?.rsvpDisplayType || "full") === "modal_button") return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "w-full h-full flex items-center justify-center pointer-events-auto",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									onClick: (e) => {
+										e.stopPropagation();
+										e.preventDefault();
+										window.dispatchEvent(new CustomEvent("builder:open_rsvp_modal", { detail: { layer } }));
+									},
+									style: {
+										backgroundColor: layer.style?.modalButtonColor || "#ec4899",
+										color: layer.style?.modalButtonTextColor || "#ffffff",
+										borderRadius: "0.5rem",
+										fontWeight: "bold",
+										textAlign: "center",
+										display: "flex",
+										alignItems: "center",
+										justifyContent: "center",
+										width: "100%",
+										height: "100%",
+										border: "none",
+										cursor: "pointer",
+										boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+									},
+									className: "transition hover:scale-105",
+									children: layer.style?.modalButtonText || "Konfirmasi Kehadiran"
+								})
+							});
 							return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 								style: containerStyle,
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
@@ -31098,6 +31152,7 @@ var PublicCanvas = ({ config }) => {
 		if (isOpened) {}
 	}, [isOpened]);
 	const [transitionType, setTransitionType] = (0, import_react.useState)("slide_up");
+	const [rsvpModalLayer, setRsvpModalLayer] = (0, import_react.useState)(null);
 	const containerRef = (0, import_react.useRef)(null);
 	const innerRef = (0, import_react.useRef)(null);
 	(0, import_react.useEffect)(() => {
@@ -31122,8 +31177,15 @@ var PublicCanvas = ({ config }) => {
 			setIsOpened(true);
 			window.dispatchEvent(new CustomEvent("builder:play_background_audio"));
 		};
+		const handleOpenRsvpModal = (e) => {
+			setRsvpModalLayer(e.detail.layer);
+		};
 		window.addEventListener("builder:open_invitation", handleOpenInvitation);
-		return () => window.removeEventListener("builder:open_invitation", handleOpenInvitation);
+		window.addEventListener("builder:open_rsvp_modal", handleOpenRsvpModal);
+		return () => {
+			window.removeEventListener("builder:open_invitation", handleOpenInvitation);
+			window.removeEventListener("builder:open_rsvp_modal", handleOpenRsvpModal);
+		};
 	}, [sections]);
 	(0, import_react.useEffect)(() => {
 		sections.forEach((s) => {
@@ -31271,10 +31333,9 @@ var PublicCanvas = ({ config }) => {
 					};
 					section.layers?.forEach((l) => checkLayer(l, 0));
 					const sectionHeight = (() => {
-						if (section.layout?.height && section.layout.height !== "auto" && section.layout.height !== "100vh") return section.layout.height;
-						if (index === 0) return maxY > 0 ? `${maxY}px` : section.layout?.height || "844px";
+						if (index === 0) return "100vh";
 						if (section.layout?.minHeight && section.layout.minHeight !== "844px" && section.layout.minHeight !== "100vh") return section.layout.minHeight;
-						return maxY > 0 ? `${maxY}px` : section.layout?.height || "844px";
+						return `calc(max(100vh, ${maxY}px))`;
 					})();
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 						id: section.id,
@@ -31373,6 +31434,56 @@ var PublicCanvas = ({ config }) => {
 							}, layer.id)
 						}, layer.id))
 					}, section.id);
+				}),
+				rsvpModalLayer && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm",
+					style: {
+						position: "fixed",
+						zIndex: 99999
+					},
+					onClick: () => setRsvpModalLayer(null),
+					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+						className: "relative w-full max-w-[374px]",
+						onClick: (e) => e.stopPropagation(),
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+							className: "absolute -top-10 right-0 text-white hover:text-gray-200 z-50 p-2",
+							onClick: () => setRsvpModalLayer(null),
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+								className: "w-6 h-6",
+								fill: "none",
+								stroke: "currentColor",
+								viewBox: "0 0 24 24",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+									strokeLinecap: "round",
+									strokeLinejoin: "round",
+									strokeWidth: "2",
+									d: "M6 18L18 6M6 6l12 12"
+								})
+							})
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "relative w-full rounded-xl overflow-hidden shadow-2xl",
+							style: {
+								height: rsvpModalLayer.style?.height || 450,
+								pointerEvents: "auto"
+							},
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(PublicLayer, {
+								layer: {
+									...rsvpModalLayer,
+									style: {
+										...rsvpModalLayer.style,
+										rsvpDisplayType: "full",
+										x: 0,
+										y: 0,
+										width: "100%",
+										height: "100%"
+									}
+								},
+								isOpened: true,
+								isCoverPage: false,
+								isChildOfGroup: true
+							})
+						})]
+					})
 				})
 			]
 		})
@@ -33872,4 +33983,4 @@ var ViewerApp = ({ previewData, onClosePreview }) => {
 var root = document.getElementById("viewer-root");
 if (root) (0, import_client.createRoot)(root).render(/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ViewerApp, {}));
 //#endregion
-export { FONTS as A, AnimatableColor as C, IframePreview as D, OutMode as E, useCanvasStore as F, useUIStore as I, apiClient as L, IMAGE_FILTERS as M, pointsToSmoothedSvgPath as N, LayerElement as O, ShapePaths as P, useStore as R, ValueWithRandom as S, ParticleOutType as T, getHslFromAnimation as _, mouseLeaveEvent as a, rangeColorToHsl as b, touchCancelEvent as c, touchStartEvent as d, ViewerApp as default, InteractorType as f, alterHsl as g, r as h, mouseDownEvent as i, loadFont as j, PaymentProviders as k, touchEndEvent as l, InteractivityDetect as m, loadFireflyPreset as n, mouseMoveEvent as o, Interactivity as p, clickEvent as r, mouseUpEvent as s, loadSnowPreset as t, touchMoveEvent as u, getStyleFromHsl as v, OptionsColor as w, rangeColorToRgb as x, getStyleFromRgb as y };
+export { FONTS as A, AnimatableColor as C, IframePreview as D, OutMode as E, useCanvasStore as F, useCanvasStore_exports as I, useUIStore as L, IMAGE_FILTERS as M, pointsToSmoothedSvgPath as N, LayerElement as O, ShapePaths as P, apiClient as R, ValueWithRandom as S, ParticleOutType as T, getHslFromAnimation as _, mouseLeaveEvent as a, rangeColorToHsl as b, touchCancelEvent as c, touchStartEvent as d, ViewerApp as default, InteractorType as f, alterHsl as g, r as h, mouseDownEvent as i, loadFont as j, PaymentProviders as k, touchEndEvent as l, InteractivityDetect as m, loadFireflyPreset as n, mouseMoveEvent as o, Interactivity as p, clickEvent as r, mouseUpEvent as s, loadSnowPreset as t, touchMoveEvent as u, getStyleFromHsl as v, OptionsColor as w, rangeColorToRgb as x, getStyleFromRgb as y, useStore as z };

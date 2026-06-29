@@ -1,7 +1,8 @@
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ViewerApp-BvVphDAT.js","assets/bootstrap-B7MMry3r.js","assets/browser-iY4j_rDz.js","assets/LogUtils-CjrGbVDZ.js","assets/jsx-runtime-B3AVLYIu.js","assets/ViewerApp-DQ4XEBu1.css"])))=>i.map(i=>d[i]);
 import { i as __toESM$1, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-CqpmSXEV.js";
-import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, I as useUIStore, L as apiClient, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as useStore, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset } from "./ViewerApp-vsa5xWVA.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-iY4j_rDz.js";
+import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, L as useUIStore, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as apiClient, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset, z as useStore } from "./ViewerApp-BvVphDAT.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -210,6 +211,7 @@ var CanvasArea = () => {
 					className: `relative group ${activeSectionId === section.id ? "ring-2 ring-inset ring-primary-500 z-10" : "z-0"} ${index > 0 ? "border-t border-dashed border-gray-300" : ""}`,
 					style: {
 						minHeight: (() => {
+							if (index === 0) return "844px";
 							if (section.layout?.minHeight && section.layout.minHeight !== "844px" && section.layout.minHeight !== "100vh") return section.layout.minHeight;
 							let maxY = 0;
 							const checkLayer = (layer, parentY = 0) => {
@@ -219,8 +221,7 @@ var CanvasArea = () => {
 								if (layer.children) layer.children.forEach((child) => checkLayer(child, layer.type === "canvas_group" || layer.type === "group" ? currentY : parentY));
 							};
 							section.layers?.forEach((l) => checkLayer(l, 0));
-							if (index === 0) return maxY > 0 ? `${maxY}px` : "844px";
-							return maxY > 0 ? `${maxY}px` : section.layout?.minHeight || "844px";
+							return `${Math.max(844, maxY)}px`;
 						})(),
 						flex: 1,
 						height: "auto",
@@ -5789,16 +5790,17 @@ var ColorsPanel = () => {
 	const findLayer = (sections, desktopLayers, id, mode) => {
 		const targetSections = mode === "desktop" ? [{ layers: desktopLayers }] : sections;
 		if (!targetSections || !Array.isArray(targetSections)) return null;
+		let foundGroup = null;
 		for (const section of targetSections) {
 			if (!section || !section.layers) continue;
-			const layer = section.layers.find((l) => l.id === id);
-			if (layer) return layer;
+			const group = section.layers.find((l) => l.id === id);
+			if (group) foundGroup = group;
 			for (const g of section.layers) if (g.children) {
 				const child = g.children.find((c) => c.id === id);
 				if (child) return child;
 			}
 		}
-		return null;
+		return foundGroup;
 	};
 	const activeLayer = activeLayerId ? findLayer(sections, desktopLayers, activeLayerId, activeCanvasMode) : null;
 	const colorProperty = activeLayer?.type === "text" || activeLayer?.type === "dynamic_guest_name" ? "color" : "backgroundColor";
@@ -7954,8 +7956,8 @@ var LeftDrawer = () => {
 									className: "relative group",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										onClick: () => addLayer({
-											id: "layer_" + Date.now(),
-											...el.payload
+											...el.payload,
+											id: "layer_" + Date.now()
 										}),
 										className: "w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-primary-500 hover:shadow-sm transition aspect-square",
 										title: el.name,
@@ -8052,8 +8054,8 @@ var LeftDrawer = () => {
 									className: "relative group",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 										onClick: () => addLayer({
-											id: "layer_" + Date.now(),
-											...el.payload
+											...el.payload,
+											id: "layer_" + Date.now()
 										}),
 										className: "w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-primary-500 hover:shadow-sm transition aspect-square",
 										title: el.name,
@@ -15176,6 +15178,45 @@ var RightInspector = () => {
 									className: "text-[11px] font-bold text-gray-800 uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded",
 									children: "Efek Latar & Visual"
 								}),
+								activeLayer.type === "shape" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+									className: "border border-gray-200 rounded-lg p-3 bg-white",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+										className: "text-xs font-bold text-gray-700 block mb-2",
+										children: "Warna Bentuk"
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "flex items-center gap-2",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+											onClick: () => {
+												__vitePreload(() => import("./ViewerApp-BvVphDAT.js").then((n) => n.I).then((module) => {
+													module.default.getState().setActiveTab("colors");
+												}), __vite__mapDeps([0,1,2,3,4,5]));
+											},
+											className: "w-full flex items-center justify-between border border-gray-300 rounded p-2 hover:bg-gray-50 transition",
+											title: "Pilih Warna",
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center gap-2",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+													className: "w-5 h-5 rounded border border-gray-300",
+													style: { backgroundColor: activeLayer.style.backgroundColor || "#e5e7eb" }
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+													className: "text-xs font-medium text-gray-700 uppercase",
+													children: activeLayer.style.backgroundColor || "#e5e7eb"
+												})]
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+												className: "w-4 h-4 text-gray-400",
+												fill: "none",
+												stroke: "currentColor",
+												viewBox: "0 0 24 24",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M9 5l7 7-7 7"
+												})
+											})]
+										})
+									})]
+								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "border border-gray-200 rounded-lg p-3 bg-white",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -18417,9 +18458,65 @@ var RightInspector = () => {
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "space-y-4",
 							children: [
+								activeLayer.type === "interactive_rsvp" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+										className: "font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded",
+										children: "Tipe Tampilan RSVP"
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex bg-gray-100 p-1 rounded-lg mb-4",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: () => updateLayerStyle(activeLayer.id, { rsvpDisplayType: "full" }),
+											className: `flex-1 py-1.5 text-xs font-semibold rounded-md transition ${!activeLayer.style?.rsvpDisplayType || activeLayer.style?.rsvpDisplayType === "full" ? "bg-white shadow text-primary-600" : "text-gray-500 hover:text-gray-700"}`,
+											children: "Form Penuh"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: () => updateLayerStyle(activeLayer.id, { rsvpDisplayType: "modal_button" }),
+											className: `flex-1 py-1.5 text-xs font-semibold rounded-md transition ${activeLayer.style?.rsvpDisplayType === "modal_button" ? "bg-white shadow text-primary-600" : "text-gray-500 hover:text-gray-700"}`,
+											children: "Tombol Modal"
+										})]
+									}),
+									activeLayer.style?.rsvpDisplayType === "modal_button" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "space-y-3 p-3 bg-gray-50 border border-gray-200 rounded-lg mb-4",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+												className: "text-[10px] font-bold text-gray-700 block mb-1",
+												children: "Teks Tombol"
+											}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+												type: "text",
+												value: activeLayer.style?.modalButtonText !== void 0 ? activeLayer.style.modalButtonText : "Konfirmasi Kehadiran",
+												onChange: (e) => updateLayerStyle(activeLayer.id, { modalButtonText: e.target.value }),
+												className: "w-full text-xs border border-gray-300 rounded p-1.5 focus:ring-1 focus:ring-primary-500"
+											})] }),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center justify-between",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+													className: "text-[10px] font-bold text-gray-700",
+													children: "Warna Latar Tombol"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+													type: "color",
+													value: activeLayer.style?.modalButtonColor || "#ec4899",
+													onChange: (e) => updateLayerStyle(activeLayer.id, { modalButtonColor: e.target.value }),
+													className: "w-6 h-6 rounded border border-gray-300 cursor-pointer p-0"
+												})]
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+												className: "flex items-center justify-between",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+													className: "text-[10px] font-bold text-gray-700",
+													children: "Warna Teks Tombol"
+												}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+													type: "color",
+													value: activeLayer.style?.modalButtonTextColor || "#ffffff",
+													onChange: (e) => updateLayerStyle(activeLayer.id, { modalButtonTextColor: e.target.value }),
+													className: "w-6 h-6 rounded border border-gray-300 cursor-pointer p-0"
+												})]
+											})
+										]
+									})
+								] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
 									className: "font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded",
-									children: "Tema & Tampilan"
+									children: "Tema & Tampilan (Isi Form)"
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
 									className: "text-[11px] font-bold text-gray-800 block mb-2",

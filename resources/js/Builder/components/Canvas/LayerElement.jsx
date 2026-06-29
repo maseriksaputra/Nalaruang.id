@@ -888,6 +888,29 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                     containerStyle.outlineOffset = '-8px';
                                 }
 
+                                const displayType = layer.style?.rsvpDisplayType || 'full';
+                                if (displayType === 'modal_button') {
+                                    return (
+                                        <div className="w-full h-full flex items-center justify-center pointer-events-none">
+                                            <div style={{
+                                                backgroundColor: layer.style?.modalButtonColor || '#ec4899',
+                                                color: layer.style?.modalButtonTextColor || '#ffffff',
+                                                borderRadius: '0.5rem',
+                                                fontWeight: 'bold',
+                                                textAlign: 'center',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                width: '100%',
+                                                height: '100%',
+                                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                            }}>
+                                                {layer.style?.modalButtonText || 'Konfirmasi Kehadiran'}
+                                            </div>
+                                        </div>
+                                    );
+                                }
+
                                 return (
                                     <div className={wrapperClass} style={containerStyle}>
                                         <h3 className="font-serif text-center z-10" style={{ fontSize: layer.style?.fontSize || '1.25rem', color: layer.style?.textColor || '#1f2937', marginBottom: '4px' }}>Kehadiran Anda</h3>

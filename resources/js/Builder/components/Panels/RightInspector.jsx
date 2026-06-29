@@ -2633,7 +2633,58 @@ const RightInspector = () => {
                 {inspectorTab === 'rsvp' && (activeLayer.type === 'interactive_rsvp' || activeLayer.type === 'interactive_comments') && (
                     <div className="space-y-6 pb-20">
                         <div className="space-y-4">
-                            <h3 className="font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded">Tema & Tampilan</h3>
+                            {activeLayer.type === 'interactive_rsvp' && (
+                                <>
+                                    <h3 className="font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded">Tipe Tampilan RSVP</h3>
+                                    <div className="flex bg-gray-100 p-1 rounded-lg mb-4">
+                                        <button
+                                            onClick={() => updateLayerStyle(activeLayer.id, { rsvpDisplayType: 'full' })}
+                                            className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition ${!activeLayer.style?.rsvpDisplayType || activeLayer.style?.rsvpDisplayType === 'full' ? 'bg-white shadow text-primary-600' : 'text-gray-500 hover:text-gray-700'}`}
+                                        >
+                                            Form Penuh
+                                        </button>
+                                        <button
+                                            onClick={() => updateLayerStyle(activeLayer.id, { rsvpDisplayType: 'modal_button' })}
+                                            className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition ${activeLayer.style?.rsvpDisplayType === 'modal_button' ? 'bg-white shadow text-primary-600' : 'text-gray-500 hover:text-gray-700'}`}
+                                        >
+                                            Tombol Modal
+                                        </button>
+                                    </div>
+                                    {activeLayer.style?.rsvpDisplayType === 'modal_button' && (
+                                        <div className="space-y-3 p-3 bg-gray-50 border border-gray-200 rounded-lg mb-4">
+                                            <div>
+                                                <label className="text-[10px] font-bold text-gray-700 block mb-1">Teks Tombol</label>
+                                                <input 
+                                                    type="text" 
+                                                    value={activeLayer.style?.modalButtonText !== undefined ? activeLayer.style.modalButtonText : 'Konfirmasi Kehadiran'}
+                                                    onChange={(e) => updateLayerStyle(activeLayer.id, { modalButtonText: e.target.value })}
+                                                    className="w-full text-xs border border-gray-300 rounded p-1.5 focus:ring-1 focus:ring-primary-500"
+                                                />
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <label className="text-[10px] font-bold text-gray-700">Warna Latar Tombol</label>
+                                                <input 
+                                                    type="color" 
+                                                    value={activeLayer.style?.modalButtonColor || '#ec4899'}
+                                                    onChange={(e) => updateLayerStyle(activeLayer.id, { modalButtonColor: e.target.value })}
+                                                    className="w-6 h-6 rounded border border-gray-300 cursor-pointer p-0"
+                                                />
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <label className="text-[10px] font-bold text-gray-700">Warna Teks Tombol</label>
+                                                <input 
+                                                    type="color" 
+                                                    value={activeLayer.style?.modalButtonTextColor || '#ffffff'}
+                                                    onChange={(e) => updateLayerStyle(activeLayer.id, { modalButtonTextColor: e.target.value })}
+                                                    className="w-6 h-6 rounded border border-gray-300 cursor-pointer p-0"
+                                                />
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                            
+                            <h3 className="font-bold text-gray-800 text-[11px] uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded">Tema & Tampilan (Isi Form)</h3>
                             
                             <div>
                                 <label className="text-[11px] font-bold text-gray-800 block mb-2">Tema Form RSVP</label>

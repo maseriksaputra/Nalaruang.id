@@ -774,6 +774,39 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                                 containerStyle.outlineOffset = '-8px';
                             }
 
+                            const displayType = layer.style?.rsvpDisplayType || 'full';
+                            if (displayType === 'modal_button') {
+                                return (
+                                    <div className="w-full h-full flex items-center justify-center pointer-events-auto">
+                                        <button 
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                e.preventDefault();
+                                                window.dispatchEvent(new CustomEvent('builder:open_rsvp_modal', { detail: { layer } }));
+                                            }}
+                                            style={{
+                                                backgroundColor: layer.style?.modalButtonColor || '#ec4899',
+                                                color: layer.style?.modalButtonTextColor || '#ffffff',
+                                                borderRadius: '0.5rem',
+                                                fontWeight: 'bold',
+                                                textAlign: 'center',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                width: '100%',
+                                                height: '100%',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                            }}
+                                            className="transition hover:scale-105"
+                                        >
+                                            {layer.style?.modalButtonText || 'Konfirmasi Kehadiran'}
+                                        </button>
+                                    </div>
+                                );
+                            }
+
                             return (
                                 <div style={containerStyle}>
                                     <h3 style={{ fontFamily: 'serif', fontSize: layer.style?.fontSize || '1.25rem', color: layer.style?.textColor || '#1f2937', marginBottom: '1rem', position: 'relative', zIndex: 10 }}>Kehadiran Anda</h3>

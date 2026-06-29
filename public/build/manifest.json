@@ -7,8 +7,8 @@
     "file": "assets/bootstrap-B7MMry3r.js",
     "name": "bootstrap"
   },
-  "_browser-CqpmSXEV.js": {
-    "file": "assets/browser-CqpmSXEV.js",
+  "_browser-iY4j_rDz.js": {
+    "file": "assets/browser-iY4j_rDz.js",
     "name": "browser",
     "imports": [
       "_LogUtils-CjrGbVDZ.js"
@@ -25,7 +25,7 @@
     ]
   },
   "node_modules/@tsparticles/engine/browser/Core/Container.js": {
-    "file": "assets/Container-reEWenXx.js",
+    "file": "assets/Container-BKyc9U0b.js",
     "name": "Container",
     "src": "node_modules/@tsparticles/engine/browser/Core/Container.js",
     "isDynamicEntry": true,
@@ -44,7 +44,7 @@
     ]
   },
   "node_modules/@tsparticles/plugin-interactivity/browser/InteractivityPluginInstance.js": {
-    "file": "assets/InteractivityPluginInstance-BmJc7q4s.js",
+    "file": "assets/InteractivityPluginInstance-D9xP3pqY.js",
     "name": "InteractivityPluginInstance",
     "src": "node_modules/@tsparticles/plugin-interactivity/browser/InteractivityPluginInstance.js",
     "isDynamicEntry": true,
@@ -63,7 +63,7 @@
     ]
   },
   "resources/css/app.css": {
-    "file": "assets/app-9TqN90Tg.css",
+    "file": "assets/app-BWwCSw1Y.css",
     "name": "app",
     "names": [
       "app.css"
@@ -72,16 +72,18 @@
     "isEntry": true
   },
   "resources/js/Builder/BuilderApp.jsx": {
-    "file": "assets/BuilderApp-B4bLske4.js",
+    "file": "assets/BuilderApp-DuPf7CWa.js",
     "name": "BuilderApp",
     "src": "resources/js/Builder/BuilderApp.jsx",
     "isEntry": true,
     "imports": [
       "_bootstrap-B7MMry3r.js",
-      "_browser-CqpmSXEV.js",
-      "resources/js/Viewer/ViewerApp.jsx",
+      "_browser-iY4j_rDz.js",
       "resources/js/Viewer/ViewerApp.jsx",
       "_jsx-runtime-B3AVLYIu.js"
+    ],
+    "dynamicImports": [
+      "resources/js/Viewer/ViewerApp.jsx"
     ]
   },
   "resources/js/Dashboard/PortalApp.jsx": {
@@ -95,13 +97,13 @@
     ]
   },
   "resources/js/Viewer/ViewerApp.jsx": {
-    "file": "assets/ViewerApp-vsa5xWVA.js",
+    "file": "assets/ViewerApp-BvVphDAT.js",
     "name": "ViewerApp",
     "src": "resources/js/Viewer/ViewerApp.jsx",
     "isEntry": true,
     "imports": [
       "_bootstrap-B7MMry3r.js",
-      "_browser-CqpmSXEV.js",
+      "_browser-iY4j_rDz.js",
       "_LogUtils-CjrGbVDZ.js",
       "_jsx-runtime-B3AVLYIu.js"
     ],

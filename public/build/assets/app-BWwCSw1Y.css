@@ -2211,6 +2211,10 @@
     max-width: 335px;
   }
 
+  .max-w-\[374px\] {
+    max-width: 374px;
+  }
+
   .max-w-fit {
     max-width: fit-content;
   }

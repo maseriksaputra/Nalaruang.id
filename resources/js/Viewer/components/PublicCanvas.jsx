@@ -21,6 +21,7 @@ const PublicCanvas = ({ config }) => {
         }
     }, [isOpened]);
     const [transitionType, setTransitionType] = useState('slide_up');
+    const [rsvpModalLayer, setRsvpModalLayer] = useState(null);
     const containerRef = useRef(null);
     const innerRef = useRef(null);
 
@@ -58,8 +59,17 @@ const PublicCanvas = ({ config }) => {
             // Auto play audio if exists logic can be added here
             window.dispatchEvent(new CustomEvent('builder:play_background_audio'));
         };
+
+        const handleOpenRsvpModal = (e) => {
+            setRsvpModalLayer(e.detail.layer);
+        };
+
         window.addEventListener('builder:open_invitation', handleOpenInvitation);
-        return () => window.removeEventListener('builder:open_invitation', handleOpenInvitation);
+        window.addEventListener('builder:open_rsvp_modal', handleOpenRsvpModal);
+        return () => {
+            window.removeEventListener('builder:open_invitation', handleOpenInvitation);
+            window.removeEventListener('builder:open_rsvp_modal', handleOpenRsvpModal);
+        };
     }, [sections]);
 
     useEffect(() => {
@@ -322,6 +332,45 @@ const PublicCanvas = ({ config }) => {
                     </section>
                     );
                 })}
+
+                {/* RSVP Modal Overlay */}
+                {rsvpModalLayer && (
+                    <div 
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+                        style={{ position: 'fixed', zIndex: 99999 }}
+                        onClick={() => setRsvpModalLayer(null)}
+                    >
+                        <div 
+                            className="relative w-full max-w-[374px]"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button 
+                                className="absolute -top-10 right-0 text-white hover:text-gray-200 z-50 p-2"
+                                onClick={() => setRsvpModalLayer(null)}
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                            <div className="relative w-full rounded-xl overflow-hidden shadow-2xl" style={{ height: rsvpModalLayer.style?.height || 450, pointerEvents: 'auto' }}>
+                                <PublicLayer 
+                                    layer={{
+                                        ...rsvpModalLayer,
+                                        style: {
+                                            ...rsvpModalLayer.style,
+                                            rsvpDisplayType: 'full',
+                                            x: 0,
+                                            y: 0,
+                                            width: '100%',
+                                            height: '100%'
+                                        }
+                                    }} 
+                                    isOpened={true} 
+                                    isCoverPage={false} 
+                                    isChildOfGroup={true}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
