@@ -47,18 +47,14 @@ const BackgroundAudio = ({ settings }) => {
                 setIsPlaying(true);
                 clearInterval(fadeTimerRef.current);
                 
-                // Mulai fade-in manual karena kita butuh akurasi per frame untuk start offset
-                const startTime = Date.now();
-                const actualStartOffset = start;
-                
                 fadeTimerRef.current = setInterval(() => {
-                    const elapsed = (Date.now() - startTime) / 1000;
-                    const currentPos = actualStartOffset + elapsed;
+                    let currentPos = sound.seek();
+                    if (typeof currentPos !== 'number') return;
                     
                     // Loop management
                     if (end > 0 && currentPos >= end) {
                         sound.seek(start);
-                        sound.volume(0);
+                        // Biarkan volume mengikuti logika fade di bawah agar tidak ada lonjakan ekstrem
                         return;
                     }
                     
