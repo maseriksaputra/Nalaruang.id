@@ -492,7 +492,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                     </svg>
                                 ) : (
                                     <div 
-                                        className="w-full h-full relative pointer-events-none"
+                                        className="w-full h-full relative pointer-events-none flex items-center justify-center"
                                         style={{
                                             transition: 'background-color 0.3s ease, border-color 0.3s ease, background-image 0.3s ease',
                                             backgroundColor: (!layer.style?.backgroundType || layer.style?.backgroundType === 'solid') ? (layer.style?.backgroundColor || '#cbd5e1') : 'transparent',
@@ -503,7 +503,11 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                             borderStyle: layer.style?.borderWidth > 0 ? (layer.style.borderStyle || 'solid') : undefined,
                                             opacity: layer.style?.opacity ?? 1
                                         }}
-                                    ></div>
+                                    >
+                                        <span className="bg-white/80 text-red-600 text-[10px] font-bold p-1 rounded z-50">
+                                            {layer.style?.backgroundColor || 'none'}
+                                        </span>
+                                    </div>
                                 )
                             )}
 
