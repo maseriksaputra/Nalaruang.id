@@ -459,7 +459,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                         preserveAspectRatio="none"
                                         style={{ 
                                             transition: 'color 0.3s ease',
-                                            color: `var(--current-bg, ${layer.style?.backgroundColor || '#cbd5e1'})`,
+                                            color: layer.style?.backgroundColor || '#cbd5e1',
                                             overflow: 'visible'
                                         }}
                                     >
@@ -495,7 +495,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                                         className="w-full h-full relative pointer-events-none"
                                         style={{
                                             transition: 'background 0.3s ease, border-color 0.3s ease',
-                                            background: `var(--current-bg, ${(!layer.style?.backgroundType || layer.style?.backgroundType === 'solid') ? (layer.style?.backgroundColor || '#cbd5e1') : getGradientCss(layer.style)})`,
+                                            background: (!layer.style?.backgroundType || layer.style?.backgroundType === 'solid') ? (layer.style?.backgroundColor || '#cbd5e1') : getGradientCss(layer.style),
                                             borderRadius: computedBorderRadius,
                                             borderWidth: layer.style?.borderWidth ? `${layer.style.borderWidth}px` : undefined,
                                             borderColor: layer.style?.borderWidth > 0 ? `var(--current-border, ${hexToRgba(layer.style.borderColor || '#000000', (layer.style.borderOpacity ?? 1) * 100)})` : undefined,
