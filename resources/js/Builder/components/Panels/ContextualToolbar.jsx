@@ -202,19 +202,15 @@ const ContextualToolbar = () => {
 
             {/* SHAPE TOOLS */}
             {isShape && (
-                <div className="flex items-center gap-2 mr-4">
-                    <button 
-                        onClick={() => setActiveTab('colors')}
-                        className="flex items-center justify-center w-8 h-8 rounded hover:bg-gray-100 cursor-pointer relative" 
+                <div className="flex items-center gap-2 mr-4 bg-gray-50 rounded-lg p-1 px-2 border border-gray-200">
+                    <label className="text-[10px] font-bold text-gray-500 uppercase">Warna:</label>
+                    <input 
+                        type="color" 
+                        value={activeLayer.style?.backgroundColor || '#e5e7eb'}
+                        onChange={(e) => updateLayerStyle(activeLayer.id, { backgroundColor: e.target.value })}
+                        className="w-6 h-6 rounded cursor-pointer border border-gray-300 p-0"
                         title="Warna Bentuk"
-                    >
-                        <div className="w-5 h-5 rounded border border-gray-300 overflow-hidden" style={{ backgroundColor: activeLayer.style?.backgroundColor || '#e5e7eb' }}>
-                        </div>
-                    </button>
-                    <div className="w-px h-6 bg-gray-300 mx-1"></div>
-                    <button className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded transition-colors border border-transparent hover:border-gray-200">
-                        Bentuk
-                    </button>
+                    />
                 </div>
             )}
 
