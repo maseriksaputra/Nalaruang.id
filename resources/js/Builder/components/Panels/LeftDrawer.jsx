@@ -743,7 +743,7 @@ const LeftDrawer = () => {
                                     {globalElements.filter(el => (el.category || 'Umum') === activeFolder && (!searchGlobal || el.name.toLowerCase().includes(searchGlobal.toLowerCase()))).map((el) => (
                                         <div key={el.id} className="relative group">
                                             <button 
-                                                onClick={() => addLayer({ id: 'layer_' + Date.now(), ...el.payload })}
+                                                onClick={() => addLayer({ ...el.payload, id: 'layer_' + Date.now() })}
                                                 className="w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-primary-500 hover:shadow-sm transition aspect-square"
                                                 title={el.name}
                                             >
@@ -797,7 +797,7 @@ const LeftDrawer = () => {
                                         {globalElements.filter(el => el.name.toLowerCase().includes(searchGlobal.toLowerCase())).map((el) => (
                                             <div key={el.id} className="relative group">
                                                 <button 
-                                                    onClick={() => addLayer({ id: 'layer_' + Date.now(), ...el.payload })}
+                                                    onClick={() => addLayer({ ...el.payload, id: 'layer_' + Date.now() })}
                                                     className="w-full flex flex-col items-center justify-center p-2 bg-white border border-gray-200 rounded hover:border-primary-500 hover:shadow-sm transition aspect-square"
                                                     title={el.name}
                                                 >
