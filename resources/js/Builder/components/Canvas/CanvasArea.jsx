@@ -184,9 +184,9 @@ const CanvasArea = () => {
                                                 section.layers?.forEach(l => checkLayer(l, 0));
                                                 
                                                 if (index === 0) {
-                                                    return maxY > 0 ? `${maxY}px` : '844px';
+                                                    return '844px';
                                                 }
-                                                return maxY > 0 ? `${maxY}px` : (section.layout?.minHeight || '844px');
+                                                return `${Math.max(844, maxY)}px`;
                                             })(),
                                         flex: 1, // Stretch to fill grid if iframe is taller
                                         height: 'auto',

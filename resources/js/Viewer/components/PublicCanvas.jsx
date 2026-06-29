@@ -229,16 +229,15 @@ const PublicCanvas = ({ config }) => {
                     section.layers?.forEach(l => checkLayer(l, 0));
 
                     const sectionHeight = (() => {
-                        if (section.layout?.height && section.layout.height !== 'auto' && section.layout.height !== '100vh') {
-                            return section.layout.height;
-                        }
                         if (index === 0) {
-                            return maxY > 0 ? `${maxY}px` : (section.layout?.height || '844px');
+                            return '100vh';
                         }
+                        
                         if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
                             return section.layout.minHeight;
                         }
-                        return maxY > 0 ? `${maxY}px` : (section.layout?.height || '844px');
+                        
+                        return `calc(max(100vh, ${maxY}px))`;
                     })();
 
                     return (
