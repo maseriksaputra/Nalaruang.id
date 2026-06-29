@@ -8,10 +8,11 @@ import useUIStore from './useUIStore';
 
 const findElement = (sections, id) => {
     if (!sections || !Array.isArray(sections)) return null;
+    let foundGroup = null;
     for (const section of sections) {
         if (!section || !section.layers) continue;
         const group = section.layers.find(l => l.id === id);
-        if (group) return group;
+        if (group) foundGroup = group;
         for (const g of section.layers) {
             if (g.children) {
                 const child = g.children.find(c => c.id === id);
@@ -19,20 +20,21 @@ const findElement = (sections, id) => {
             }
         }
     }
-    return null;
+    return foundGroup;
 };
 
 const findLayer = (layers, id) => {
     if (!layers || !Array.isArray(layers)) return null;
+    let foundGroup = null;
     const group = layers.find(l => l.id === id);
-    if (group) return group;
+    if (group) foundGroup = group;
     for (const g of layers) {
         if (g.children) {
             const child = g.children.find(c => c.id === id);
             if (child) return child;
         }
     }
-    return null;
+    return foundGroup;
 };
 
 const useCanvasStore = create(temporal((set, get) => ({

@@ -41,10 +41,12 @@ const ColorsPanel = () => {
     const findLayer = (sections, desktopLayers, id, mode) => {
         const targetSections = mode === 'desktop' ? [{ layers: desktopLayers }] : sections;
         if (!targetSections || !Array.isArray(targetSections)) return null;
+        let foundGroup = null;
         for (const section of targetSections) {
             if (!section || !section.layers) continue;
-            const layer = section.layers.find(l => l.id === id);
-            if (layer) return layer;
+            const group = section.layers.find(l => l.id === id);
+            if (group) foundGroup = group;
+            
             for (const g of section.layers) {
                 if (g.children) {
                     const child = g.children.find(c => c.id === id);
@@ -52,7 +54,7 @@ const ColorsPanel = () => {
                 }
             }
         }
-        return null;
+        return foundGroup;
     };
 
     const activeLayer = activeLayerId ? findLayer(sections, desktopLayers, activeLayerId, activeCanvasMode) : null;
