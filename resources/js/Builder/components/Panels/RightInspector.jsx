@@ -763,18 +763,24 @@ const RightInspector = () => {
                         <div className="border border-gray-200 rounded-lg p-3 bg-white">
                             <label className="text-xs font-bold text-gray-700 block mb-2">Warna Bentuk</label>
                             <div className="flex items-center gap-2">
-                                <input 
-                                    type="color" 
-                                    value={activeLayer.style.backgroundColor || '#e5e7eb'}
-                                    onChange={(e) => updateLayerStyle(activeLayer.id, { backgroundColor: e.target.value })}
-                                    className="w-8 h-8 rounded cursor-pointer border border-gray-300 p-0"
-                                />
-                                <input 
-                                    type="text" 
-                                    value={activeLayer.style.backgroundColor || '#e5e7eb'}
-                                    onChange={(e) => updateLayerStyle(activeLayer.id, { backgroundColor: e.target.value })}
-                                    className="flex-1 border border-gray-300 rounded p-1.5 text-xs font-medium uppercase"
-                                />
+                                <button 
+                                    onClick={() => {
+                                        useUIStore.getState().setActiveTab('colors');
+                                    }}
+                                    className="w-full flex items-center justify-between border border-gray-300 rounded p-2 hover:bg-gray-50 transition"
+                                    title="Pilih Warna"
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <div 
+                                            className="w-5 h-5 rounded border border-gray-300"
+                                            style={{ backgroundColor: activeLayer.style.backgroundColor || '#e5e7eb' }}
+                                        ></div>
+                                        <span className="text-xs font-medium text-gray-700 uppercase">
+                                            {activeLayer.style.backgroundColor || '#e5e7eb'}
+                                        </span>
+                                    </div>
+                                    <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+                                </button>
                             </div>
                         </div>
                     )}
