@@ -354,6 +354,9 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
             onClick={handleInteraction}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onTouchStart={() => setIsHovered(true)}
+            onTouchEnd={() => setTimeout(() => setIsHovered(false), 200)}
+            onTouchCancel={() => setIsHovered(false)}
         >
             <div
                 style={{
