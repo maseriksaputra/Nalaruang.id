@@ -47,13 +47,19 @@ const BackgroundAudio = ({ settings }) => {
                 setIsPlaying(true);
                 clearInterval(fadeTimerRef.current);
                 
+                let isSeeking = false;
+                
                 fadeTimerRef.current = setInterval(() => {
                     let currentPos = sound.seek();
                     if (typeof currentPos !== 'number') return;
                     
+                    if (isSeeking) return;
+                    
                     // Loop management
                     if (end > 0 && currentPos >= end) {
+                        isSeeking = true;
                         sound.seek(start);
+                        setTimeout(() => { isSeeking = false; }, 300);
                         // Biarkan volume mengikuti logika fade di bawah agar tidak ada lonjakan ekstrem
                         return;
                     }
@@ -87,11 +93,14 @@ const BackgroundAudio = ({ settings }) => {
 
         soundRef.current = sound;
 
+        let isPlayTriggered = false;
         const handlePlayEvent = () => {
-            if (!sound.playing()) {
+            if (!sound.playing() && !isPlayTriggered) {
+                isPlayTriggered = true;
                 sound.volume(0); // Absolute lock before play
                 if (start > 0) sound.seek(start);
                 sound.play();
+                setTimeout(() => { isPlayTriggered = false; }, 500);
             }
         };
 
