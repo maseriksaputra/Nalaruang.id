@@ -353,7 +353,8 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
 
     const computedBorderRadius = (() => {
         if (layer.style?.borderRadius === undefined) return '0px';
-        const r = `${layer.style.borderRadius}px`;
+        const val = layer.style.borderRadius;
+        const r = typeof val === 'string' && (val.endsWith('%') || val.endsWith('px')) ? val : `${val}px`;
         switch(layer.style.borderRadiusType) {
             case 'top': return `${r} ${r} 0 0`;
             case 'bottom': return `0 0 ${r} ${r}`;
