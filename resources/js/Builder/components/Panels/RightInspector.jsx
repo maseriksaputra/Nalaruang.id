@@ -765,7 +765,9 @@ const RightInspector = () => {
                             <div className="flex items-center gap-2">
                                 <button 
                                     onClick={() => {
-                                        useUIStore.getState().setActiveTab('colors');
+                                        import('../../stores/useCanvasStore').then(module => {
+                                            module.default.getState().setActiveTab('colors');
+                                        });
                                     }}
                                     className="w-full flex items-center justify-between border border-gray-300 rounded p-2 hover:bg-gray-50 transition"
                                     title="Pilih Warna"
