@@ -169,6 +169,9 @@ const CanvasArea = () => {
                                             className={`relative group ${activeSectionId === section.id ? 'ring-2 ring-inset ring-primary-500 z-10' : 'z-0'} ${index > 0 ? 'border-t border-dashed border-gray-300' : ''}`}
                                         style={{
                                             minHeight: (() => {
+                                                if (index === 0) {
+                                                    return '844px'; // Halaman sampul selalu 844px (fixed)
+                                                }
                                                 if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
                                                     return section.layout.minHeight;
                                                 }
@@ -183,9 +186,6 @@ const CanvasArea = () => {
                                                 };
                                                 section.layers?.forEach(l => checkLayer(l, 0));
                                                 
-                                                if (index === 0) {
-                                                    return '844px';
-                                                }
                                                 return `${Math.max(844, maxY)}px`;
                                             })(),
                                         flex: 1, // Stretch to fill grid if iframe is taller
