@@ -758,6 +758,27 @@ const RightInspector = () => {
                 <div className="pt-4 border-t border-gray-100 space-y-4">
                     <h3 className="text-[11px] font-bold text-gray-800 uppercase tracking-wider mb-2 bg-gray-100 p-2 rounded">Efek Latar & Visual</h3>
                     
+                    {/* Warna Bentuk (Shape) */}
+                    {activeLayer.type === 'shape' && (
+                        <div className="border border-gray-200 rounded-lg p-3 bg-white">
+                            <label className="text-xs font-bold text-gray-700 block mb-2">Warna Bentuk</label>
+                            <div className="flex items-center gap-2">
+                                <input 
+                                    type="color" 
+                                    value={activeLayer.style.backgroundColor || '#e5e7eb'}
+                                    onChange={(e) => updateLayerStyle(activeLayer.id, { backgroundColor: e.target.value })}
+                                    className="w-8 h-8 rounded cursor-pointer border border-gray-300 p-0"
+                                />
+                                <input 
+                                    type="text" 
+                                    value={activeLayer.style.backgroundColor || '#e5e7eb'}
+                                    onChange={(e) => updateLayerStyle(activeLayer.id, { backgroundColor: e.target.value })}
+                                    className="flex-1 border border-gray-300 rounded p-1.5 text-xs font-medium uppercase"
+                                />
+                            </div>
+                        </div>
+                    )}
+
                     {/* Opacity */}
                     <div className="border border-gray-200 rounded-lg p-3 bg-white">
                         <div className="flex justify-between text-[10px] text-gray-500 mb-2">
