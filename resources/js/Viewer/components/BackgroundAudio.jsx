@@ -32,47 +32,49 @@ const BackgroundAudio = ({ settings }) => {
             clearInterval(fadeTimerRef.current);
         }
 
+        const spriteConfig = {};
+        if (end > 0 && end > start) {
+            spriteConfig.customLoop = [start * 1000, (end - start) * 1000, true];
+        }
+
         const sound = new Howl({
             src: [audioUrl],
             html5: false, // Use Web Audio API for flawless volume control and preloading
+            sprite: Object.keys(spriteConfig).length > 0 ? spriteConfig : undefined,
             loop: end <= 0,
             volume: 0, // Always initialize at 0 to prevent leaks
             preload: true,
             onload: () => {
-                if (start > 0) {
+                if (start > 0 && Object.keys(spriteConfig).length === 0) {
                     sound.seek(start);
                 }
             },
-            onplay: () => {
+            onplay: (id) => {
                 setIsPlaying(true);
                 clearInterval(fadeTimerRef.current);
                 
-                let isSeeking = false;
-                
                 fadeTimerRef.current = setInterval(() => {
-                    let currentPos = sound.seek();
+                    let currentPos = sound.seek(id);
                     if (typeof currentPos !== 'number') return;
-                    
-                    if (isSeeking) return;
-                    
-                    // Loop management
-                    if (end > 0 && currentPos >= end) {
-                        isSeeking = true;
-                        sound.seek(start);
-                        setTimeout(() => { isSeeking = false; }, 300);
-                        // Biarkan volume mengikuti logika fade di bawah agar tidak ada lonjakan ekstrem
-                        return;
-                    }
                     
                     // Volume management
                     let currentVol = maxVol;
-                    if (fadeIn > 0 && currentPos < start + fadeIn) {
-                        currentVol = maxVol * ((currentPos - start) / fadeIn);
-                    } else if (fadeOut > 0 && end > 0 && currentPos > end - fadeOut) {
-                        currentVol = maxVol * ((end - currentPos) / fadeOut);
+                    if (Object.keys(spriteConfig).length > 0) {
+                        const duration = end - start;
+                        if (fadeIn > 0 && currentPos < fadeIn) {
+                            currentVol = maxVol * (currentPos / fadeIn);
+                        } else if (fadeOut > 0 && currentPos > duration - fadeOut) {
+                            currentVol = maxVol * ((duration - currentPos) / fadeOut);
+                        }
+                    } else {
+                        if (fadeIn > 0 && currentPos < start + fadeIn) {
+                            currentVol = maxVol * ((currentPos - start) / fadeIn);
+                        } else if (fadeOut > 0 && end > 0 && currentPos > end - fadeOut) {
+                            currentVol = maxVol * ((end - currentPos) / fadeOut);
+                        }
                     }
                     
-                    sound.volume(Math.max(0, Math.min(maxVol, currentVol)));
+                    sound.volume(Math.max(0, Math.min(maxVol, currentVol)), id);
                 }, 50); // 20fps volume check
             },
             onpause: () => {
@@ -98,8 +100,12 @@ const BackgroundAudio = ({ settings }) => {
             if (!sound.playing() && !isPlayTriggered) {
                 isPlayTriggered = true;
                 sound.volume(0); // Absolute lock before play
-                if (start > 0) sound.seek(start);
-                sound.play();
+                if (Object.keys(spriteConfig).length > 0) {
+                    sound.play('customLoop');
+                } else {
+                    if (start > 0) sound.seek(start);
+                    sound.play();
+                }
                 setTimeout(() => { isPlayTriggered = false; }, 500);
             }
         };

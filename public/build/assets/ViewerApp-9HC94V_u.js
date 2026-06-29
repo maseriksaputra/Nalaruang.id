@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-DwRIZD_A.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-C5X9dMQk.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-JInD-gBm.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-vPjemvdE.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -29111,7 +29111,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-DwRIZD_A.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-C5X9dMQk.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -33735,35 +33735,36 @@ var BackgroundAudio = ({ settings }) => {
 			soundRef.current.unload();
 			clearInterval(fadeTimerRef.current);
 		}
+		const spriteConfig = {};
+		if (end > 0 && end > start) spriteConfig.customLoop = [
+			start * 1e3,
+			(end - start) * 1e3,
+			true
+		];
 		const sound = new import_howler.Howl({
 			src: [audioUrl],
 			html5: false,
+			sprite: Object.keys(spriteConfig).length > 0 ? spriteConfig : void 0,
 			loop: end <= 0,
 			volume: 0,
 			preload: true,
 			onload: () => {
-				if (start > 0) sound.seek(start);
+				if (start > 0 && Object.keys(spriteConfig).length === 0) sound.seek(start);
 			},
-			onplay: () => {
+			onplay: (id) => {
 				setIsPlaying(true);
 				clearInterval(fadeTimerRef.current);
-				let isSeeking = false;
 				fadeTimerRef.current = setInterval(() => {
-					let currentPos = sound.seek();
+					let currentPos = sound.seek(id);
 					if (typeof currentPos !== "number") return;
-					if (isSeeking) return;
-					if (end > 0 && currentPos >= end) {
-						isSeeking = true;
-						sound.seek(start);
-						setTimeout(() => {
-							isSeeking = false;
-						}, 300);
-						return;
-					}
 					let currentVol = maxVol;
-					if (fadeIn > 0 && currentPos < start + fadeIn) currentVol = maxVol * ((currentPos - start) / fadeIn);
+					if (Object.keys(spriteConfig).length > 0) {
+						const duration = end - start;
+						if (fadeIn > 0 && currentPos < fadeIn) currentVol = maxVol * (currentPos / fadeIn);
+						else if (fadeOut > 0 && currentPos > duration - fadeOut) currentVol = maxVol * ((duration - currentPos) / fadeOut);
+					} else if (fadeIn > 0 && currentPos < start + fadeIn) currentVol = maxVol * ((currentPos - start) / fadeIn);
 					else if (fadeOut > 0 && end > 0 && currentPos > end - fadeOut) currentVol = maxVol * ((end - currentPos) / fadeOut);
-					sound.volume(Math.max(0, Math.min(maxVol, currentVol)));
+					sound.volume(Math.max(0, Math.min(maxVol, currentVol)), id);
 				}, 50);
 			},
 			onpause: () => {
@@ -33787,8 +33788,11 @@ var BackgroundAudio = ({ settings }) => {
 			if (!sound.playing() && !isPlayTriggered) {
 				isPlayTriggered = true;
 				sound.volume(0);
-				if (start > 0) sound.seek(start);
-				sound.play();
+				if (Object.keys(spriteConfig).length > 0) sound.play("customLoop");
+				else {
+					if (start > 0) sound.seek(start);
+					sound.play();
+				}
 				setTimeout(() => {
 					isPlayTriggered = false;
 				}, 500);
