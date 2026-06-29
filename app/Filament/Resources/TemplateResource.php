@@ -94,7 +94,12 @@ class TemplateResource extends Resource
                                                 $defaults = [];
                                                 if ($service) {
                                                     if ($service->slug === 'event-digital') {
-                                                        $defaults = ['Animasi' => 'Animasi', 'Simpel' => 'Simpel', 'Elegan' => 'Elegan', 'Premium' => 'Premium'];
+                                                        $defaults = [
+                                                            'Undangan Digital' => 'Undangan Digital', 
+                                                            'Video Undangan' => 'Video Undangan', 
+                                                            'Buku Tamu Digital' => 'Buku Tamu Digital', 
+                                                            'RSVP & Filter Instagram Acara' => 'RSVP & Filter Instagram Acara'
+                                                        ];
                                                     } elseif ($service->slug === 'web-mobile-app') {
                                                         $defaults = ['Company Profile' => 'Company Profile', 'E-Commerce' => 'E-Commerce', 'Sistem Informasi' => 'Sistem Informasi'];
                                                     } elseif ($service->slug === 'cetak-fisik-premium' || $service->slug === 'undangan-cetak' || $service->slug === 'cetak-fisik') {
