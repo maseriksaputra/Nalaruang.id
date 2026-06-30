@@ -90,6 +90,7 @@ const getAnimationProps = (type, isExit = false, config = {}, layerStyle = null)
         case 'plant-grow': 
             fromProps.scale = 0.2; toProps.scale = 1;
             fromProps.rotation = -10; toProps.rotation = 0;
+            fromProps.transformOrigin = "bottom center";
             toProps.transformOrigin = "bottom center"; 
             toProps.ease = "back.out(1.5)"; 
             break;
@@ -438,11 +439,15 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             // Set starting values
             tl.set(elementRef, { ...fromProps, force3D: true, immediateRender: true });
             
+            // Mencegah double-delay: timeline sudah menggunakan +=globalDelay
+            const safeToProps = { ...toProps };
+            delete safeToProps.delay;
+
             // Animate to end values after delay
             tl.to(elementRef, {
-                ...toProps,
+                ...safeToProps,
                 ...repeatConfig,
-                duration: toProps.duration || 1.5,
+                duration: safeToProps.duration || 1.5,
                 force3D: true,
                 autoRound: false,
                 ease: toProps.ease || "power2.out"
