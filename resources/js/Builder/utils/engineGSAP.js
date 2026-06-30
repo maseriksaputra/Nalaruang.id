@@ -343,7 +343,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             const idleProps = getIdleProps(layerAnimation.idle, configIdle);
             if (idleProps) {
                 // Jika digabung dengan Entry Animation, delay-nya adalah GlobalDelay + EntryDuration
-                const finalDelay = hasEntryAnimation ? (config.speed || 1.5) + globalDelay : globalDelay;
+                const finalDelay = hasEntryAnimation ? (parseFloat(config.speed) || 1.5) + globalDelay : globalDelay;
                 const isScrollTriggered = (!isBuilder && trigger === 'onScroll');
                 if (idleProps.isPendulum) {
                     const tl = gsap.timeline({
@@ -351,17 +351,19 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                         paused: isScrollTriggered
                     });
                     
-                    // Setup origin
-                    tl.set(elementRef, { transformOrigin: idleProps.transformOrigin });
-                    
                     // Fase 1: Pendorong Momentum (0 ke maxRotation)
                     // Menggunakan setengah durasi dan ease 'out' agar melambat di puncak
-                    tl.to(elementRef, {
+                    // Menggunakan fromTo untuk menjamin mulai dari 0 tanpa bentrok
+                    tl.fromTo(elementRef, {
+                        rotation: 0,
+                        transformOrigin: idleProps.transformOrigin
+                    }, {
                         rotation: idleProps.maxRotation,
                         duration: idleProps.duration / 2,
                         ease: "sine.out",
                         force3D: true,
-                        autoRound: false
+                        autoRound: false,
+                        immediateRender: false
                     });
                     
                     // Fase 2: Ayunan Abadi (maxRotation ke -maxRotation, bolak-balik)
