@@ -172,6 +172,7 @@ class OrderResource extends Resource
                                 $newTitle = 'Projek Klien: ' . $record->customer_name;
                                 $newInvitation = \App\Models\Invitation::create([
                                     'user_id' => auth()->id() ?? 2,
+                                    'order_id' => $record->id,
                                     'title' => $newTitle,
                                     'slug' => \Illuminate\Support\Str::uuid()->toString(),
                                     'status' => 'draft',
