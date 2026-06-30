@@ -13,6 +13,19 @@ class EditOrder extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('generate_form_link')
+                ->label('Generate Link Form')
+                ->icon('heroicon-o-link')
+                ->color('success')
+                ->visible(fn ($record) => empty($record->form_token))
+                ->action(function ($record) {
+                    $record->form_token = \Illuminate\Support\Str::random(32);
+                    $record->save();
+                    \Filament\Notifications\Notification::make()
+                        ->title('Link Form Berhasil Dibuat')
+                        ->success()
+                        ->send();
+                }),
             Actions\DeleteAction::make(),
         ];
     }

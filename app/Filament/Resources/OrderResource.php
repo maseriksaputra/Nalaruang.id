@@ -71,8 +71,42 @@ class OrderResource extends Resource
                                 if (!$record || !$record->form_token) return '-';
                                 $url = url('/client/form/' . $record->form_token);
                                 return new \Illuminate\Support\HtmlString('<a href="'.$url.'" target="_blank" class="text-primary-600 underline">'.$url.'</a>');
-                            }),
                     ])->columns(2),
+
+                Forms\Components\Section::make('Kebutuhan Aset Klien (Khusus Custom VIP)')
+                    ->description('Tentukan input form yang harus diisi klien secara kustom.')
+                    ->schema([
+                        Forms\Components\Repeater::make('custom_form_schema')
+                            ->label('Field Input')
+                            ->schema([
+                                Forms\Components\TextInput::make('field_name')
+                                    ->label('Nama Field (misal: Foto Cover, Rekening)')
+                                    ->required(),
+                                Forms\Components\Select::make('type')
+                                    ->label('Jenis Input')
+                                    ->options([
+                                        'text' => 'Teks Singkat',
+                                        'textarea' => 'Teks Panjang',
+                                        'image' => 'Upload Gambar/Foto',
+                                        'audio' => 'Upload Musik/Audio',
+                                    ])
+                                    ->required()
+                                    ->live(),
+                                Forms\Components\Toggle::make('is_required')
+                                    ->label('Wajib Diisi?')
+                                    ->default(true),
+                                Forms\Components\TextInput::make('max_files')
+                                    ->label('Maksimal File (Upload Media)')
+                                    ->numeric()
+                                    ->default(1)
+                                    ->visible(fn (\Filament\Forms\Get $get) => in_array($get('type'), ['image', 'audio'])),
+                            ])
+                            ->columns(2)
+                            ->collapsible()
+                            ->defaultItems(0)
+                    ])
+                    ->visible(fn ($record) => $record && strtolower(trim($record->package?->name)) === 'custom vip')
+                    ->collapsed(),
             ]);
     }
 

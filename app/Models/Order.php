@@ -24,12 +24,14 @@ class Order extends Model
         'form_token',
         'form_expires_at',
         'form_status',
+        'custom_form_schema',
     ];
 
     protected $casts = [
         'event_date' => 'date',
         'details' => 'array',
         'form_expires_at' => 'datetime',
+        'custom_form_schema' => 'array',
     ];
 
     public function template()

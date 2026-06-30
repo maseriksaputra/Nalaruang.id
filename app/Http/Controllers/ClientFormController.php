@@ -23,7 +23,7 @@ class ClientFormController extends Controller
         }
 
         $template = $order->template;
-        $schema = $template ? ($template->form_schema ?? []) : [
+        $schema = $order->custom_form_schema ?? ($template ? ($template->form_schema ?? []) : [
             ['field_name' => 'Nama Mempelai Pria (Lengkap)', 'type' => 'text', 'is_required' => true],
             ['field_name' => 'Nama Panggilan Mempelai Pria', 'type' => 'text', 'is_required' => true],
             ['field_name' => 'Nama Mempelai Wanita (Lengkap)', 'type' => 'text', 'is_required' => true],
@@ -33,7 +33,7 @@ class ClientFormController extends Controller
             ['field_name' => 'Galeri Foto & Video', 'type' => 'image', 'is_required' => false, 'max_files' => 20],
             ['field_name' => 'Musik / Backsound (Opsional)', 'type' => 'audio', 'is_required' => false],
             ['field_name' => 'Request Desain Spesifik / Catatan', 'type' => 'textarea', 'is_required' => false],
-        ];
+        ]);
 
         return view('client-form.show', compact('order', 'template', 'schema'));
     }
@@ -52,7 +52,7 @@ class ClientFormController extends Controller
         }
 
         $template = $order->template;
-        $schema = $template ? ($template->form_schema ?? []) : [
+        $schema = $order->custom_form_schema ?? ($template ? ($template->form_schema ?? []) : [
             ['field_name' => 'Nama Mempelai Pria (Lengkap)', 'type' => 'text', 'is_required' => true],
             ['field_name' => 'Nama Panggilan Mempelai Pria', 'type' => 'text', 'is_required' => true],
             ['field_name' => 'Nama Mempelai Wanita (Lengkap)', 'type' => 'text', 'is_required' => true],
@@ -62,7 +62,7 @@ class ClientFormController extends Controller
             ['field_name' => 'Galeri Foto & Video', 'type' => 'image', 'is_required' => false, 'max_files' => 20],
             ['field_name' => 'Musik / Backsound (Opsional)', 'type' => 'audio', 'is_required' => false],
             ['field_name' => 'Request Desain Spesifik / Catatan', 'type' => 'textarea', 'is_required' => false],
-        ];
+        ]);
 
         // Validation Rules based on schema
         $rules = [];
