@@ -118,4 +118,100 @@ class OrderController extends Controller
 
         return redirect()->away($waLink);
     }
+
+    public function createPackage($package_id)
+    {
+        $package = \App\Models\Package::with('service')->findOrFail($package_id);
+        
+        return view('order-form-package', compact('package'));
+    }
+
+    public function storePackage(Request $request)
+    {
+        $request->validate([
+            'package_id' => 'required|exists:packages,id',
+            'customer_name' => 'required|string|max:255',
+            'customer_phone' => 'required|string|max:50',
+            'event_date' => 'nullable|date',
+            'quantity' => 'nullable|integer|min:1',
+        ]);
+
+        $package = \App\Models\Package::with('service')->findOrFail($request->package_id);
+        
+        $details = $request->except(['_token', 'package_id', 'customer_name', 'customer_phone', 'event_date', 'quantity', 'guest_list', 'custom_requests', 'calculated_total']);
+
+        $totalPrice = $request->calculated_total ?? ($package->price * ($request->quantity ?? 1));
+
+        $order = \App\Models\Order::create([
+            'package_id' => $package->id,
+            'customer_name' => $request->customer_name,
+            'customer_phone' => $request->customer_phone,
+            'event_date' => $request->event_date,
+            'quantity' => $request->quantity ?? 1,
+            'guest_list' => $request->guest_list,
+            'custom_requests' => $request->custom_requests,
+            'details' => $details,
+            'total_price' => $totalPrice,
+            'status' => 'pending',
+        ]);
+
+        \App\Models\Cashflow::create([
+            'service_id' => $package->service_id,
+            'type' => 'income',
+            'amount' => $totalPrice,
+            'description' => 'Pesanan Baru #' . str_pad($order->id, 5, '0', STR_PAD_LEFT) . ' - Paket ' . $package->name,
+            'reference_type' => 'App\Models\Order',
+            'reference_id' => $order->id,
+            'transaction_date' => now()->toDateString(),
+        ]);
+
+        try {
+            $admins = \App\Models\User::all();
+            foreach ($admins as $admin) {
+                \Filament\Notifications\Notification::make()
+                    ->title('Pesanan Baru: Paket ' . $package->name)
+                    ->body('Pesanan masuk dari ' . $order->customer_name . ' (' . $order->customer_phone . ')')
+                    ->success()
+                    ->sendToDatabase($admin);
+            }
+        } catch (\Exception $e) {
+            // Abaikan jika notifikasi gagal agar order tidak terganggu
+        }
+
+        // Generate WA Link
+        $phone = '6285196811112'; // Admin Phone
+        $text = "Halo Nalaruang.id, saya telah melakukan pemesanan via website.\n\n";
+        $text .= "*ID Pesanan:* #" . str_pad($order->id, 5, '0', STR_PAD_LEFT) . "\n";
+        $text .= "*Nama:* " . $order->customer_name . "\n";
+        $text .= "*No HP:* " . $order->customer_phone . "\n";
+        $text .= "*Layanan:* " . ($package->service->title ?? '-') . "\n";
+        
+        $text .= "*Paket Terpilih:* " . $package->name . "\n";
+        $text .= "*Kuantitas:* " . $order->quantity . "\n";
+        
+        if ($order->event_date) {
+            $text .= "*Tanggal Acara:* " . \Carbon\Carbon::parse($order->event_date)->format('d/m/Y') . "\n";
+        }
+
+        $text .= "\n*ESTIMASI TOTAL BIAYA: Rp " . number_format($order->total_price, 0, ',', '.') . "*\n";
+
+        if (!empty($details)) {
+            $text .= "\n*Detail Spesifik:*\n";
+            foreach ($details as $key => $val) {
+                if (is_string($val)) {
+                    $text .= "- " . ucwords(str_replace('_', ' ', $key)) . ": " . $val . "\n";
+                }
+            }
+        }
+        
+        if ($order->custom_requests) {
+            $text .= "\n*Request Tambahan:*\n" . $order->custom_requests . "\n";
+        }
+        
+        $text .= "\nMohon informasi untuk langkah selanjutnya. Terima kasih!";
+
+        $waLink = "https://wa.me/" . $phone . "?text=" . urlencode($text);
+
+        return redirect()->away($waLink);
+    }
 }

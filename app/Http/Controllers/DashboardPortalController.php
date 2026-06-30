@@ -398,7 +398,36 @@ class DashboardPortalController extends Controller
             }
 
             if (!$order->template) {
-                return response()->json(['success' => false, 'error' => 'Template tidak ditemukan untuk pesanan ini.'], 404);
+                // If Custom VIP, just generate a blank project
+                $count = Invitation::withTrashed()->where('is_template', false)->count();
+                $newTitle = 'Undangan ' . $order->customer_name . ' - ' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+
+                $newInvitation = Invitation::create([
+                    'user_id' => auth()->id() ?? 2,
+                    'order_id' => $order->id,
+                    'title' => $newTitle,
+                    'slug' => $this->generateUniqueSlug($newTitle),
+                    'status' => 'draft',
+                    'canvas_config' => [
+                        'global_settings' => [
+                            'theme_colors' => ['#ffffff', '#000000']
+                        ],
+                        'sections' => [
+                            [
+                                'id' => 'sec_' . uniqid(),
+                                'layout' => ['height' => '100vh', 'background_value' => '#ffffff'],
+                                'layers' => []
+                            ]
+                        ]
+                    ],
+                    'is_template' => false
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'id' => $newInvitation->id,
+                    'redirect_url' => url('/admin/builder/' . $newInvitation->id)
+                ]);
             }
 
             $templateProject = Invitation::where('is_template', true)

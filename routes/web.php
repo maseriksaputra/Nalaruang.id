@@ -24,6 +24,9 @@ Route::post('/test-post-submit', function () {
 Route::get('/order/{template_id}', [OrderController::class, 'create'])->name('order.create');
 Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 
+Route::get('/order/package/{package_id}', [OrderController::class, 'createPackage'])->name('order.package');
+Route::post('/order/package', [OrderController::class, 'storePackage'])->name('order.package.store');
+
 Route::get('/p/{id}', [ProductController::class, 'show'])->name('product.show');
 Route::post('/p/{id}/share', [ProductController::class, 'share'])->name('product.share');
 

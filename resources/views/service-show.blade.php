@@ -191,9 +191,15 @@
                                 @endif
                             </ul>
 
-                            <button onclick="document.getElementById('packageFilter').value = '{{ $package->id }}'; document.getElementById('packageFilter').dispatchEvent(new Event('change')); document.getElementById('etalase').scrollIntoView({behavior: 'smooth'})" class="block w-full py-3.5 px-4 text-center rounded-xl text-sm font-semibold transition-colors duration-300 {{ $package->is_popular ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-md' : 'bg-brand-50 text-brand-600 hover:bg-brand-100' }}">
-                                Pilih Paket Ini
-                            </button>
+                            @if(strtolower(trim($package->name)) === 'custom vip')
+                                <a href="{{ route('order.package', $package->id) }}" class="block w-full py-3.5 px-4 text-center rounded-xl text-sm font-semibold transition-colors duration-300 {{ $package->is_popular ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-md' : 'bg-brand-50 text-brand-600 hover:bg-brand-100' }}">
+                                    Pilih Paket Ini
+                                </a>
+                            @else
+                                <button onclick="document.getElementById('packageFilter').value = '{{ $package->id }}'; document.getElementById('packageFilter').dispatchEvent(new Event('change')); document.getElementById('etalase').scrollIntoView({behavior: 'smooth'})" class="block w-full py-3.5 px-4 text-center rounded-xl text-sm font-semibold transition-colors duration-300 {{ $package->is_popular ? 'bg-brand-600 text-white hover:bg-brand-700 shadow-md' : 'bg-brand-50 text-brand-600 hover:bg-brand-100' }}">
+                                    Pilih Paket Ini
+                                </button>
+                            @endif
                         </div>
                     </div>
                     @endforeach
