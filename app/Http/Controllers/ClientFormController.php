@@ -23,7 +23,7 @@ class ClientFormController extends Controller
         }
 
         $template = $order->template;
-        $schema = $order->custom_form_schema ?? ($template ? ($template->form_schema ?? []) : [
+        $schema = !empty($order->custom_form_schema) ? $order->custom_form_schema : ($template ? ($template->form_schema ?? []) : [
             ['field_name' => 'Nama Mempelai Pria (Lengkap)', 'type' => 'text', 'is_required' => true],
             ['field_name' => 'Nama Panggilan Mempelai Pria', 'type' => 'text', 'is_required' => true],
             ['field_name' => 'Nama Mempelai Wanita (Lengkap)', 'type' => 'text', 'is_required' => true],
@@ -52,7 +52,7 @@ class ClientFormController extends Controller
         }
 
         $template = $order->template;
-        $schema = $order->custom_form_schema ?? ($template ? ($template->form_schema ?? []) : [
+        $schema = !empty($order->custom_form_schema) ? $order->custom_form_schema : ($template ? ($template->form_schema ?? []) : [
             ['field_name' => 'Nama Mempelai Pria (Lengkap)', 'type' => 'text', 'is_required' => true],
             ['field_name' => 'Nama Panggilan Mempelai Pria', 'type' => 'text', 'is_required' => true],
             ['field_name' => 'Nama Mempelai Wanita (Lengkap)', 'type' => 'text', 'is_required' => true],

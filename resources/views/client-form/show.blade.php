@@ -10,7 +10,7 @@
                 <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
                 <div class="relative z-10">
                     <h1 class="text-3xl md:text-4xl font-serif text-white mb-3">Form Data Klien</h1>
-                    <p class="text-brand-100 text-sm md:text-base leading-relaxed">Halo <strong>{{ $order->customer_name }}</strong>, silakan lengkapi data dan aset di bawah ini untuk memproses pesanan <strong>{{ $template->name }}</strong> Anda.</p>
+                    <p class="text-brand-100 text-sm md:text-base leading-relaxed">Halo <strong>{{ $order->customer_name }}</strong>, silakan lengkapi data dan aset di bawah ini untuk memproses pesanan <strong>{{ $template->name ?? 'Custom VIP' }}</strong> Anda.</p>
                 </div>
             </div>
 

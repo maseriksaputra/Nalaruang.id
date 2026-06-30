@@ -34,7 +34,8 @@ class OrderResource extends Resource
                             ->required(),
                         Forms\Components\Select::make('package_id')
                             ->relationship('package', 'name')
-                            ->searchable(),
+                            ->searchable()
+                            ->live(),
                         Forms\Components\TextInput::make('customer_name')
                             ->required(),
                         Forms\Components\TextInput::make('customer_phone')
@@ -106,7 +107,12 @@ class OrderResource extends Resource
                             ->collapsible()
                             ->defaultItems(0)
                     ])
-                    ->visible(fn ($record) => $record && strtolower(trim($record->package?->name)) === 'custom vip')
+                    ->visible(function (\Filament\Forms\Get $get) {
+                        $packageId = $get('package_id');
+                        if (!$packageId) return false;
+                        $package = \App\Models\Package::find($packageId);
+                        return $package && strtolower(trim($package->name)) === 'custom vip';
+                    })
                     ->collapsed(),
             ]);
     }
