@@ -17,7 +17,7 @@ trait WithStatTracker
      * @param string $mode Mode tracker ('refresh' atau 'daily')
      * @return Stat
      */
-    protected function makeTrackedStat($label, $value, string $storageKey, string $formattedValue = null, string $mode = 'refresh'): Stat
+    protected function makeTrackedStat($label, $value, string $storageKey, ?string $formattedValue = null, string $mode = 'refresh'): Stat
     {
         $displayValue = $formattedValue ?? (string) $value;
         $numericValue = is_numeric($value) ? $value : preg_replace('/[^0-9\-]/', '', $value);
