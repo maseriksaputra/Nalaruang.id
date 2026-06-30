@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-C5X9dMQk.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-BCjVQVio.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-vPjemvdE.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-rnb9IHVG.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -29111,7 +29111,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-C5X9dMQk.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-BCjVQVio.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);
@@ -31333,9 +31333,9 @@ var PublicCanvas = ({ config }) => {
 					};
 					section.layers?.forEach((l) => checkLayer(l, 0));
 					const sectionHeight = (() => {
-						if (index === 0) return "100vh";
+						if (index === 0) return "844px";
 						if (section.layout?.minHeight && section.layout.minHeight !== "844px" && section.layout.minHeight !== "100vh") return section.layout.minHeight;
-						return `calc(max(100vh, ${maxY}px))`;
+						return `calc(max(844px, ${maxY}px))`;
 					})();
 					return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", {
 						id: section.id,
@@ -31380,18 +31380,18 @@ var PublicCanvas = ({ config }) => {
 									transStyle.width = "100%";
 									transStyle.zIndex = 50;
 								}
-								if (isOpened) if (isSlideUp) transStyle.transform = `translateY(calc(-1 * max(100vh, ${maxY > 0 ? maxY : 0}px)))`;
+								if (isOpened) if (isSlideUp) transStyle.transform = `translateY(-100%)`;
 								else switch (transitionType) {
 									case "slide_down":
-										transStyle.transform = "translateY(100vh)";
+										transStyle.transform = "translateY(100%)";
 										transStyle.opacity = 0;
 										break;
 									case "slide_left":
-										transStyle.transform = "translateX(-100vw)";
+										transStyle.transform = "translateX(-100%)";
 										transStyle.opacity = 0;
 										break;
 									case "slide_right":
-										transStyle.transform = "translateX(100vw)";
+										transStyle.transform = "translateX(100%)";
 										transStyle.opacity = 0;
 										break;
 									case "fade_out":

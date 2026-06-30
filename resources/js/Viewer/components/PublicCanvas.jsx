@@ -240,14 +240,14 @@ const PublicCanvas = ({ config }) => {
 
                     const sectionHeight = (() => {
                         if (index === 0) {
-                            return '100vh';
+                            return '844px';
                         }
                         
                         if (section.layout?.minHeight && section.layout.minHeight !== '844px' && section.layout.minHeight !== '100vh') {
                             return section.layout.minHeight;
                         }
                         
-                        return `calc(max(100vh, ${maxY}px))`;
+                        return `calc(max(844px, ${maxY}px))`;
                     })();
 
                     return (
@@ -304,12 +304,12 @@ const PublicCanvas = ({ config }) => {
                                 
                                 if (isOpened) {
                                     if (isSlideUp) {
-                                        transStyle.transform = `translateY(calc(-1 * max(100vh, ${maxY > 0 ? maxY : 0}px)))`;
+                                        transStyle.transform = `translateY(-100%)`;
                                     } else {
                                         switch(transitionType) {
-                                            case 'slide_down': transStyle.transform = 'translateY(100vh)'; transStyle.opacity = 0; break;
-                                            case 'slide_left': transStyle.transform = 'translateX(-100vw)'; transStyle.opacity = 0; break;
-                                            case 'slide_right': transStyle.transform = 'translateX(100vw)'; transStyle.opacity = 0; break;
+                                            case 'slide_down': transStyle.transform = 'translateY(100%)'; transStyle.opacity = 0; break;
+                                            case 'slide_left': transStyle.transform = 'translateX(-100%)'; transStyle.opacity = 0; break;
+                                            case 'slide_right': transStyle.transform = 'translateX(100%)'; transStyle.opacity = 0; break;
                                             case 'fade_out': transStyle.opacity = 0; break;
                                             case 'zoom_out': transStyle.transform = 'scale(0.2)'; transStyle.opacity = 0; break;
                                             case 'zoom_in': transStyle.transform = 'scale(2)'; transStyle.opacity = 0; break;
