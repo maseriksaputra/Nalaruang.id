@@ -76,7 +76,7 @@ class ClientFormController extends Controller
         $rules = [];
         foreach ($schema as $field) {
             $fieldName = \Illuminate\Support\Str::slug($field['field_name'], '_');
-            if (!empty($field['is_required'])) {
+            if (filter_var($field['is_required'] ?? false, FILTER_VALIDATE_BOOLEAN)) {
                 $rules[$fieldName] = 'required';
                 if ($field['type'] === 'image') {
                     $rules[$fieldName] = "required|array";

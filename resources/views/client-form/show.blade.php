@@ -50,7 +50,7 @@
                         @foreach($schema as $field)
                             @php
                                 $fieldName = \Illuminate\Support\Str::slug($field['field_name'], '_');
-                                $isRequired = !empty($field['is_required']);
+                                $isRequired = filter_var($field['is_required'] ?? false, FILTER_VALIDATE_BOOLEAN);
                             @endphp
 
                             <div>
