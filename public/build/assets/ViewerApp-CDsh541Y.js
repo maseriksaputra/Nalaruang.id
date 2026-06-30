@@ -1,7 +1,7 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance-C_OZHEUo.js"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/BlendPluginInstance-BqDs_N-j.js","assets/LogUtils-CjrGbVDZ.js","assets/MovePluginInstance-C4XezuLZ.js","assets/InteractivityPluginInstance--JUvJnCl.js"])))=>i.map(i=>d[i]);
 import { i as __toESM, n as __commonJSMin, r as __exportAll, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, n as clsx, o as produce, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-CcCsfb5g.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-q1YKMcr-.js";
 import { B as getRangeMax, D as AnimationMode, E as AnimationStatus, F as getDistances, G as setRangeValue, H as getRangeValue, J as isNull, K as isArray, M as clamp$2, N as degToRad, Q as Vector, R as getRandom, S as StartValueType, T as DestroyType, U as parseAlpha, V as getRangeMin, W as randomInRangeValue, X as isObject$3, Y as isNumber, Z as isString, a as deepExtend, c as getItemMapFromInitializer, ct as half, d as initParticleNumericAnimationValue, dt as originPoint, et as MoveDirection, f as isInArray, ft as randomColorValue, h as itemFromSingleOrMultiple, it as doublePI, l as getItemsFromInitializer, m as itemFromArray, o as executeOnSingleOrMultiple, p as isPointInside, r as calculateBounds, ut as millisecondsToSeconds, w as OutModeDirection, x as updateAnimation, z as getRandomInRange } from "./LogUtils-CjrGbVDZ.js";
 //#region node_modules/zustand/esm/vanilla.mjs
 var createStoreImpl = (createState) => {
@@ -20418,11 +20418,9 @@ var getIdleProps = (type, config = {}) => {
 			ease: "sine.inOut"
 		};
 		case "swing": return {
-			rotation: 5,
+			isPendulum: true,
+			maxRotation: 5,
 			duration: speed * 3,
-			yoyo: true,
-			repeat: -1,
-			ease: "sine.inOut",
 			transformOrigin: "top center"
 		};
 		case "heartbeat": return {
@@ -20450,21 +20448,14 @@ var getIdleProps = (type, config = {}) => {
 		case "wind-sway": {
 			const windStrength = config.windStrength ?? 70;
 			const stiffness = config.stiffness ?? 60;
-			const damping = config.damping ?? 40;
-			const isRandomize = config.randomize ?? true;
 			const swingSpeed = config.swingSpeed ?? 50;
 			const maxRotation = 2 + windStrength / 100 * 15;
 			const speedFactor = Math.max(.1, swingSpeed / 50);
-			const duration = (6 - stiffness / 100 * 5) / speedFactor;
-			const ease = damping < 50 ? "elastic.out(1, 0.5)" : "sine.inOut";
 			return {
-				rotation: isRandomize ? `random(-${maxRotation}, ${maxRotation})` : maxRotation,
+				isPendulum: true,
+				maxRotation,
 				transformOrigin: "bottom center",
-				duration,
-				yoyo: true,
-				repeat: -1,
-				repeatRefresh: isRandomize,
-				ease
+				duration: (6 - stiffness / 100 * 5) / speedFactor
 			};
 		}
 		default: return null;
@@ -20627,22 +20618,53 @@ var applyAnimation = (elementRef, layerAnimation, isBuilder = false, styleParams
 		if (idleProps) {
 			const finalDelay = hasEntryAnimation ? (config.speed || 1.5) + globalDelay : globalDelay;
 			const isScrollTriggered = !isBuilder && trigger === "onScroll";
-			const tween = gsapWithCSS.to(elementRef, {
-				...idleProps,
-				delay: finalDelay,
-				force3D: true,
-				autoRound: false,
-				paused: isScrollTriggered,
-				immediateRender: true
-			});
-			activeTweens.push(tween);
-			if (isScrollTriggered) ScrollTrigger.create({
-				trigger: elementRef,
-				start: "top 95%",
-				scroller: scrollScroller,
-				animation: tween,
-				toggleActions: "play pause resume pause"
-			});
+			if (idleProps.isPendulum) {
+				const tl = gsapWithCSS.timeline({
+					delay: finalDelay,
+					paused: isScrollTriggered
+				});
+				tl.set(elementRef, { transformOrigin: idleProps.transformOrigin });
+				tl.to(elementRef, {
+					rotation: idleProps.maxRotation,
+					duration: idleProps.duration / 2,
+					ease: "sine.out",
+					force3D: true,
+					autoRound: false
+				});
+				tl.to(elementRef, {
+					rotation: -idleProps.maxRotation,
+					duration: idleProps.duration,
+					ease: "sine.inOut",
+					repeat: -1,
+					yoyo: true,
+					force3D: true,
+					autoRound: false
+				});
+				activeTweens.push(tl);
+				if (isScrollTriggered) ScrollTrigger.create({
+					trigger: elementRef,
+					start: "top 95%",
+					scroller: scrollScroller,
+					animation: tl,
+					toggleActions: "play pause resume pause"
+				});
+			} else {
+				const tween = gsapWithCSS.to(elementRef, {
+					...idleProps,
+					delay: finalDelay,
+					force3D: true,
+					autoRound: false,
+					paused: isScrollTriggered
+				});
+				activeTweens.push(tween);
+				if (isScrollTriggered) ScrollTrigger.create({
+					trigger: elementRef,
+					start: "top 95%",
+					scroller: scrollScroller,
+					animation: tween,
+					toggleActions: "play pause resume pause"
+				});
+			}
 		}
 	}
 	if (hasEntryAnimation) {
@@ -29111,7 +29133,7 @@ var InteractivityPlugin = class {
 	}
 	async getPlugin(container) {
 		const { InteractivityPluginInstance } = await __vitePreload(async () => {
-			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance-C_OZHEUo.js");
+			const { InteractivityPluginInstance } = await import("./InteractivityPluginInstance--JUvJnCl.js");
 			return { InteractivityPluginInstance };
 		}, __vite__mapDeps([3,1]));
 		return new InteractivityPluginInstance(this.#pluginManager, container);

@@ -123,30 +123,24 @@ const getIdleProps = (type, config = {}) => {
         case 'float-sway': return { y: -10, rotation: 3, duration: speed * 3, yoyo: true, repeat: -1, ease: "sine.inOut", transformOrigin: "center center" };
         case 'flicker': return { opacity: 0.2, duration: speed * 0.8, yoyo: true, repeat: -1, ease: "steps(2)" };
         case 'wave': return { y: -5, duration: speed, yoyo: true, repeat: -1, ease: "sine.inOut" };
-        case 'swing': return { rotation: 5, duration: speed * 3, yoyo: true, repeat: -1, ease: "sine.inOut", transformOrigin: "top center" };
+        case 'swing': return { isPendulum: true, maxRotation: 5, duration: speed * 3, transformOrigin: "top center" };
         case 'heartbeat': return { scale: 1.3, duration: speed, yoyo: true, repeat: -1, ease: "back.inOut(1.7)" };
         case 'jello': return { skewX: -12.5, skewY: -12.5, duration: speed * 2, yoyo: true, repeat: -1, ease: "elastic.out(1, 0.3)" };
         case 'neon': return { textShadow: "0 0 20px #e11d48", duration: speed * 1.5, yoyo: true, repeat: -1, ease: "sine.inOut" };
         case 'wind-sway': {
             const windStrength = config.windStrength ?? 70;
             const stiffness = config.stiffness ?? 60;
-            const damping = config.damping ?? 40;
-            const isRandomize = config.randomize ?? true;
             const swingSpeed = config.swingSpeed ?? 50;
             
             const maxRotation = 2 + (windStrength / 100 * 15);
             const speedFactor = Math.max(0.1, swingSpeed / 50);
             const duration = (6 - (stiffness / 100 * 5)) / speedFactor;
-            const ease = damping < 50 ? "elastic.out(1, 0.5)" : "sine.inOut";
             
             return { 
-                rotation: isRandomize ? `random(-${maxRotation}, ${maxRotation})` : maxRotation, 
+                isPendulum: true,
+                maxRotation: maxRotation,
                 transformOrigin: "bottom center",
-                duration: duration, 
-                yoyo: true, 
-                repeat: -1, 
-                repeatRefresh: isRandomize,
-                ease: ease 
+                duration: duration
             };
         }
         default: return null;
@@ -351,24 +345,67 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                 // Jika digabung dengan Entry Animation, delay-nya adalah GlobalDelay + EntryDuration
                 const finalDelay = hasEntryAnimation ? (config.speed || 1.5) + globalDelay : globalDelay;
                 const isScrollTriggered = (!isBuilder && trigger === 'onScroll');
-                const tween = gsap.to(elementRef, {
-                    ...idleProps,
-                    delay: finalDelay,
-                    force3D: true,
-                    autoRound: false,
-                    paused: isScrollTriggered,
-                    immediateRender: true
-                });
-                activeTweens.push(tween);
-                
-                if (isScrollTriggered) {
-                    ScrollTrigger.create({
-                        trigger: elementRef,
-                        start: "top 95%",
-                        scroller: scrollScroller,
-                        animation: tween,
-                        toggleActions: "play pause resume pause"
+                if (idleProps.isPendulum) {
+                    const tl = gsap.timeline({
+                        delay: finalDelay,
+                        paused: isScrollTriggered
                     });
+                    
+                    // Setup origin
+                    tl.set(elementRef, { transformOrigin: idleProps.transformOrigin });
+                    
+                    // Fase 1: Pendorong Momentum (0 ke maxRotation)
+                    // Menggunakan setengah durasi dan ease 'out' agar melambat di puncak
+                    tl.to(elementRef, {
+                        rotation: idleProps.maxRotation,
+                        duration: idleProps.duration / 2,
+                        ease: "sine.out",
+                        force3D: true,
+                        autoRound: false
+                    });
+                    
+                    // Fase 2: Ayunan Abadi (maxRotation ke -maxRotation, bolak-balik)
+                    // Menggunakan durasi penuh dan ease 'inOut' agar ngebut di 0 dan melambat di puncak
+                    tl.to(elementRef, {
+                        rotation: -idleProps.maxRotation,
+                        duration: idleProps.duration,
+                        ease: "sine.inOut",
+                        repeat: -1,
+                        yoyo: true,
+                        force3D: true,
+                        autoRound: false
+                    });
+                    
+                    activeTweens.push(tl);
+                    
+                    if (isScrollTriggered) {
+                        ScrollTrigger.create({
+                            trigger: elementRef,
+                            start: "top 95%",
+                            scroller: scrollScroller,
+                            animation: tl,
+                            toggleActions: "play pause resume pause"
+                        });
+                    }
+                } else {
+                    const tween = gsap.to(elementRef, {
+                        ...idleProps,
+                        delay: finalDelay,
+                        force3D: true,
+                        autoRound: false,
+                        paused: isScrollTriggered
+                    });
+                    activeTweens.push(tween);
+                    
+                    if (isScrollTriggered) {
+                        ScrollTrigger.create({
+                            trigger: elementRef,
+                            start: "top 95%",
+                            scroller: scrollScroller,
+                            animation: tween,
+                            toggleActions: "play pause resume pause"
+                        });
+                    }
                 }
             }
         }
