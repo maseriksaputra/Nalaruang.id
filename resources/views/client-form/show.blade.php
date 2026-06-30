@@ -61,6 +61,11 @@
 
                                 @if($field['type'] === 'text')
                                     <input type="text" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired ? 'required' : '' }} value="{{ old($fieldName) }}" placeholder="Masukkan {{ strtolower($field['field_name']) }}...">
+                                @elseif($field['type'] === 'date')
+                                    <input type="date" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired ? 'required' : '' }} value="{{ old($fieldName) }}">
+                                
+                                @elseif($field['type'] === 'datetime')
+                                    <input type="datetime-local" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired ? 'required' : '' }} value="{{ old($fieldName) }}">
                                 
                                 @elseif($field['type'] === 'audio')
                                     <div class="mt-1">
