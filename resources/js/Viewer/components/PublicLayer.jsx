@@ -191,6 +191,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
 
     const hasAnimatedRef = useRef(false);
     const prevLayerRef = useRef(layer);
+    const triggerRef = useRef(null);
 
     useLayoutEffect(() => {
         if (!elementRef.current) return;
@@ -212,7 +213,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
         let animationCtx = null;
         if (layer.animation) {
             const styleForAnimation = layer.type === 'shape' ? { ...layer.style, opacity: 1 } : layer.style;
-            animationCtx = applyAnimation(elementRef.current, layer.animation, false, styleForAnimation, 0, isCoverPage, isChildOfGroup);
+            animationCtx = applyAnimation(elementRef.current, layer.animation, false, styleForAnimation, 0, isCoverPage, isChildOfGroup, triggerRef.current);
         }
 
         return () => {
@@ -348,6 +349,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
 
     return (
         <div
+            ref={triggerRef}
             id={layer.id}
             style={interactionStyles}
             className={interactionClasses}

@@ -148,7 +148,7 @@ const getIdleProps = (type, config = {}) => {
     }
 };
 
-export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, styleParams = {}, playheadStart = 0, isCoverPage = false, isChildOfGroup = false) => {
+export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, styleParams = {}, playheadStart = 0, isCoverPage = false, isChildOfGroup = false, triggerRef = null) => {
     if (!elementRef || !layerAnimation) return;
     
     const activeTweens = [];
@@ -185,7 +185,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
     if (layerAnimation.custom) {
         try {
             const customObj = new Function(`return ${layerAnimation.custom}`)();
-            const triggerElement = elementRef;
+            const triggerElement = triggerRef || elementRef;
             const isScrollTriggered = !isBuilder;
 
             const tween = gsap.from(elementRef, {
@@ -221,7 +221,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
     // -- 1. CUSTOM TIMELINE (Keyframes) LOGIC --
     // We handle this entirely separately to mimic CapCut/Canva absolute timelines
     if (layerAnimation.idle === 'custom_timeline' && layerAnimation.custom_keyframes && layerAnimation.custom_keyframes.length > 0) {
-        const triggerElement = elementRef;
+        const triggerElement = triggerRef || elementRef;
         const keyframes = layerAnimation.custom_keyframes;
         
         const baseX = parseFloat(styleParams?.x) || 0;
@@ -383,7 +383,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                     
                     if (isScrollTriggered) {
                         ScrollTrigger.create({
-                            trigger: elementRef,
+                            trigger: triggerRef || elementRef,
                             start: "top 95%",
                             scroller: scrollScroller,
                             animation: tl,
@@ -402,7 +402,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                     
                     if (isScrollTriggered) {
                         ScrollTrigger.create({
-                            trigger: elementRef,
+                            trigger: triggerRef || elementRef,
                             start: "top 95%",
                             scroller: scrollScroller,
                             animation: tween,
@@ -427,7 +427,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             }
             const isOnce = !(hasExit || config.autoReverse);
             const toggleActionStr = (hasExit || config.autoReverse) ? "play reverse play reverse" : "play none none none";
-            const triggerElement = elementRef;
+            const triggerElement = triggerRef || elementRef;
 
 
             const isScrollTriggered = (!isBuilder && trigger === 'onScroll' && trigger !== 'onLoad');
