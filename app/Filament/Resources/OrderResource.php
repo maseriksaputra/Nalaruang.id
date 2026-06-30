@@ -71,6 +71,7 @@ class OrderResource extends Resource
                                 if (!$record || !$record->form_token) return '-';
                                 $url = url('/client/form/' . $record->form_token);
                                 return new \Illuminate\Support\HtmlString('<a href="'.$url.'" target="_blank" class="text-primary-600 underline">'.$url.'</a>');
+                            }),
                     ])->columns(2),
 
                 Forms\Components\Section::make('Kebutuhan Aset Klien (Khusus Custom VIP)')
