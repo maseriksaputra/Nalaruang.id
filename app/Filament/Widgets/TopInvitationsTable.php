@@ -19,9 +19,12 @@ class TopInvitationsTable extends BaseWidget
     {
         return $table
             ->query(
-                Invitation::select('id', 'title', 'slug', 'status', 'thumbnail_path')
+                Invitation::query()
+                    ->select('invitations.id', 'invitations.title', 'invitations.slug', 'invitations.status', 'invitations.thumbnail_path')
+                    ->leftJoin('templates', 'invitations.id', '=', 'templates.invitation_id')
                     ->withCount('visitors')
-                    ->orderBy('visitors_count', 'desc')
+                    ->selectRaw('COALESCE(templates.demo_views, 0) + COALESCE(templates.total_invitation_views, 0) as template_views')
+                    ->orderByRaw('GREATEST(visitors_count, COALESCE(templates.demo_views, 0) + COALESCE(templates.total_invitation_views, 0)) desc')
                     ->limit(5)
             )
             ->columns([
@@ -42,7 +45,10 @@ class TopInvitationsTable extends BaseWidget
                     }),
                 Tables\Columns\TextColumn::make('visitors_count')
                     ->label('Total Kunjungan')
-                    ->sortable()
+                    ->getStateUsing(function (Invitation $record) {
+                        $templateViews = $record->template_views ?? 0;
+                        return max($record->visitors_count ?? 0, $templateViews);
+                    })
                     ->badge()
                     ->color('primary')
                     ->icon('heroicon-m-eye'),
