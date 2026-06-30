@@ -96,7 +96,7 @@ class OrderResource extends Resource
                                         'textarea' => 'Teks Panjang',
                                         'date' => 'Tanggal Saja',
                                         'datetime' => 'Tanggal & Waktu',
-                                        'image' => 'Upload Gambar/Foto',
+                                        'image' => 'Upload Media (Gambar & Video)',
                                         'audio' => 'Upload Musik/Audio',
                                     ])
                                     ->required()
