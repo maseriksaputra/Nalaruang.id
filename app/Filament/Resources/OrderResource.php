@@ -125,7 +125,7 @@ class OrderResource extends Resource
                         return null; // Handled by action callback
                     })
                     ->openUrlInNewTab(fn ($record) => (bool)$record->invitation_id)
-                    ->action(function ($record, \Filament\Notifications\Notification $notification) {
+                    ->action(function ($record) {
                         if ($record->invitation_id) {
                             // If URL handles it, action doesn't run, but just in case
                             return;
@@ -133,7 +133,26 @@ class OrderResource extends Resource
                         
                         $template = $record->template;
                         if (!$template || !$template->invitation_id) {
-                            $notification->title('Template Error')
+                            if (strtolower(trim($record->package?->name)) === 'custom vip') {
+                                $newTitle = 'Projek Klien: ' . $record->customer_name;
+                                $newInvitation = \App\Models\Invitation::create([
+                                    'user_id' => auth()->id() ?? 2,
+                                    'title' => $newTitle,
+                                    'slug' => \Illuminate\Support\Str::uuid()->toString(),
+                                    'status' => 'draft',
+                                    'canvas_config' => json_encode(['width' => 414, 'height' => 736, 'background' => '#ffffff', 'objects' => []]),
+                                    'is_template' => false
+                                ]);
+
+                                $record->invitation_id = $newInvitation->id;
+                                $record->save();
+
+                                redirect(url('/admin/builder/' . $newInvitation->id . '?order_id=' . $record->id));
+                                return;
+                            }
+
+                            \Filament\Notifications\Notification::make()
+                                ->title('Template Error')
                                 ->body('Produk ini tidak terhubung dengan desain template builder apapun.')
                                 ->danger()
                                 ->send();
@@ -142,7 +161,8 @@ class OrderResource extends Resource
 
                         $sourceInvitation = \App\Models\Invitation::find($template->invitation_id);
                         if (!$sourceInvitation) {
-                            $notification->title('Desain Hilang')
+                            \Filament\Notifications\Notification::make()
+                                ->title('Desain Hilang')
                                 ->body('Desain asli untuk template ini sudah dihapus.')
                                 ->danger()
                                 ->send();
