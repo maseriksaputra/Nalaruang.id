@@ -510,7 +510,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
                             {/* Lottie Upload Fix */}
                             {(() => {
                                 if (layer.type === 'lottie') {
-                                    let lottieData = layer.lottieJsonObj || layer.animationData;
+                                    let lottieData = layer.lottieJsonObj || layer.animationData || layer.url;
                                     if (typeof lottieData === 'string') {
                                         try { lottieData = JSON.parse(lottieData); } catch(e) {}
                                     } else if (lottieData && typeof lottieData === 'object') {
