@@ -110,7 +110,21 @@ class OrderResource extends Resource
                             ])
                             ->columns(2)
                             ->collapsible()
-                            ->defaultItems(0)
+                            ->default([
+                                ['field_name' => 'Nama Mempelai Pria (Lengkap)', 'type' => 'text', 'is_required' => true],
+                                ['field_name' => 'Nama Panggilan Mempelai Pria', 'type' => 'text', 'is_required' => true],
+                                ['field_name' => 'Nama Orang Tua Mempelai Pria & Anak Keberapa', 'type' => 'textarea', 'is_required' => false],
+                                ['field_name' => 'Nama Mempelai Wanita (Lengkap)', 'type' => 'text', 'is_required' => true],
+                                ['field_name' => 'Nama Panggilan Mempelai Wanita', 'type' => 'text', 'is_required' => true],
+                                ['field_name' => 'Nama Orang Tua Mempelai Wanita & Anak Keberapa', 'type' => 'textarea', 'is_required' => false],
+                                ['field_name' => 'Informasi Akad Nikah (Tanggal, Jam, Tempat)', 'type' => 'textarea', 'is_required' => false],
+                                ['field_name' => 'Informasi Resepsi (Tanggal, Jam, Tempat)', 'type' => 'textarea', 'is_required' => false],
+                                ['field_name' => 'Informasi Rekening / Amplop Digital', 'type' => 'textarea', 'is_required' => false],
+                                ['field_name' => 'Kisah Cinta / Narasi / Ucapan', 'type' => 'textarea', 'is_required' => false],
+                                ['field_name' => 'Galeri Foto & Video', 'type' => 'image', 'is_required' => false, 'max_files' => 50],
+                                ['field_name' => 'Musik / Backsound (Opsional)', 'type' => 'audio', 'is_required' => false],
+                                ['field_name' => 'Request Desain Spesifik / Catatan', 'type' => 'textarea', 'is_required' => false],
+                            ])
                     ])
                     ->visible(function (\Filament\Forms\Get $get) {
                         $packageId = $get('package_id');
