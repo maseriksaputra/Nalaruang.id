@@ -31,7 +31,12 @@ class OrderResource extends Resource
                         Forms\Components\Select::make('template_id')
                             ->relationship('template', 'name')
                             ->searchable()
-                            ->required(),
+                            ->required(function (\Filament\Forms\Get $get) {
+                                $packageId = $get('package_id');
+                                if (!$packageId) return true;
+                                $package = \App\Models\Package::find($packageId);
+                                return !($package && strtolower(trim($package->name)) === 'custom vip');
+                            }),
                         Forms\Components\Select::make('package_id')
                             ->relationship('package', 'name')
                             ->searchable()

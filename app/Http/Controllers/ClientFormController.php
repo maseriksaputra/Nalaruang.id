@@ -30,7 +30,8 @@ class ClientFormController extends Controller
             ['field_name' => 'Nama Panggilan Mempelai Wanita', 'type' => 'text', 'is_required' => true],
             ['field_name' => 'Tanggal Acara', 'type' => 'text', 'is_required' => true],
             ['field_name' => 'Lokasi Acara', 'type' => 'textarea', 'is_required' => true],
-            ['field_name' => 'Galeri Foto & Video', 'type' => 'image', 'is_required' => false, 'max_files' => 20],
+            ['field_name' => 'Kisah Cinta / Narasi / Ucapan', 'type' => 'textarea', 'is_required' => false],
+            ['field_name' => 'Galeri Foto & Video', 'type' => 'image', 'is_required' => false, 'max_files' => 50],
             ['field_name' => 'Musik / Backsound (Opsional)', 'type' => 'audio', 'is_required' => false],
             ['field_name' => 'Request Desain Spesifik / Catatan', 'type' => 'textarea', 'is_required' => false],
         ]);
@@ -59,7 +60,8 @@ class ClientFormController extends Controller
             ['field_name' => 'Nama Panggilan Mempelai Wanita', 'type' => 'text', 'is_required' => true],
             ['field_name' => 'Tanggal Acara', 'type' => 'text', 'is_required' => true],
             ['field_name' => 'Lokasi Acara', 'type' => 'textarea', 'is_required' => true],
-            ['field_name' => 'Galeri Foto & Video', 'type' => 'image', 'is_required' => false, 'max_files' => 20],
+            ['field_name' => 'Kisah Cinta / Narasi / Ucapan', 'type' => 'textarea', 'is_required' => false],
+            ['field_name' => 'Galeri Foto & Video', 'type' => 'image', 'is_required' => false, 'max_files' => 50],
             ['field_name' => 'Musik / Backsound (Opsional)', 'type' => 'audio', 'is_required' => false],
             ['field_name' => 'Request Desain Spesifik / Catatan', 'type' => 'textarea', 'is_required' => false],
         ]);
