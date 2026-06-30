@@ -127,7 +127,7 @@ const getShadowCss = (style) => {
     return `drop-shadow(${x}px ${y}px ${blur}px ${rgbaColor})`;
 };
 
-const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup = false, isParentHovered = false, parentInteraction = null }) => {
+const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGroup = false, isParentHovered = false, parentInteraction = null, parentTriggerRef = null }) => {
     if (layer.isHidden) return null;
 
     // Sembunyikan otomatis elemen teks yang berisi peringatan dari sistem agar tidak merusak pratinjau/produksi
@@ -213,7 +213,8 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
         let animationCtx = null;
         if (layer.animation) {
             const styleForAnimation = layer.type === 'shape' ? { ...layer.style, opacity: 1 } : layer.style;
-            animationCtx = applyAnimation(elementRef.current, layer.animation, false, styleForAnimation, 0, isCoverPage, isChildOfGroup, triggerRef.current);
+            const actualTriggerRef = isChildOfGroup && parentTriggerRef ? parentTriggerRef : triggerRef.current;
+            animationCtx = applyAnimation(elementRef.current, layer.animation, false, styleForAnimation, 0, isCoverPage, isChildOfGroup, actualTriggerRef);
         }
 
         return () => {
@@ -1192,7 +1193,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
                         {(layer.type === 'canvas_group' || layer.type === 'group') && (
                             <div style={{ width: '100%', height: '100%', position: 'relative' }}>
                                 {layer.children?.map(child => (
-                                    <PublicLayer key={child.id} layer={child} isOpened={isOpened} isCoverPage={isCoverPage} isChildOfGroup={true} isParentHovered={effectiveHover} parentInteraction={layer.interaction} />
+                                    <PublicLayer key={child.id} layer={child} isOpened={isOpened} isCoverPage={isCoverPage} isChildOfGroup={true} isParentHovered={effectiveHover} parentInteraction={layer.interaction} parentTriggerRef={triggerRef.current} />
                                 ))}
                             </div>
                         )}
