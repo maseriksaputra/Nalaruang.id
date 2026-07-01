@@ -54,5 +54,15 @@ class Order extends Model
         static::creating(function ($order) {
             // Token generation moved to manual action in SaaS portal
         });
+        
+        static::deleting(function ($order) {
+            // Delete related cashflow
+            \App\Models\Cashflow::where('reference_type', 'App\Models\Order')
+                ->where('reference_id', $order->id)
+                ->delete();
+                
+            // Delete related invitation if exists
+            \App\Models\Invitation::where('order_id', $order->id)->delete();
+        });
     }
 }
