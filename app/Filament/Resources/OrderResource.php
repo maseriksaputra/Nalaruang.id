@@ -27,7 +27,7 @@ class OrderResource extends Resource
         return \Illuminate\Support\Facades\Cache::remember('pending_orders_count', 60, fn () => \App\Models\Order::where('status', 'pending')->count()) ?: null;
     }
 
-    public static function getNavigationBadgeColor(): ?string|array
+    public static function getNavigationBadgeColor(): string|array|null
     {
         return 'warning';
     }
