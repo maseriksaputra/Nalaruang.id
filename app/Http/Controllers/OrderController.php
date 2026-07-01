@@ -49,8 +49,17 @@ class OrderController extends Controller
             'status' => 'pending',
         ]);
 
+        $serviceSlug = $template->service->slug ?? '';
+        $cashflowCategory = match ($serviceSlug) {
+            'event-digital' => 'Digital',
+            'cetak-fisik-premium' => 'Printing',
+            'souvenir-merchandise' => 'Souvenir',
+            default => 'Digital',
+        };
+
         \App\Models\Cashflow::create([
             'service_id' => $template->service_id,
+            'category' => $cashflowCategory,
             'type' => 'income',
             'amount' => $totalPrice,
             'description' => 'Pesanan Baru #' . str_pad($order->id, 5, '0', STR_PAD_LEFT) . ' - ' . $template->name,
@@ -155,8 +164,17 @@ class OrderController extends Controller
             'status' => 'pending',
         ]);
 
+        $serviceSlug = $package->service->slug ?? '';
+        $cashflowCategory = match ($serviceSlug) {
+            'event-digital' => 'Digital',
+            'cetak-fisik-premium' => 'Printing',
+            'souvenir-merchandise' => 'Souvenir',
+            default => 'Digital',
+        };
+
         \App\Models\Cashflow::create([
             'service_id' => $package->service_id,
+            'category' => $cashflowCategory,
             'type' => 'income',
             'amount' => $totalPrice,
             'description' => 'Pesanan Baru #' . str_pad($order->id, 5, '0', STR_PAD_LEFT) . ' - Paket ' . $package->name,
