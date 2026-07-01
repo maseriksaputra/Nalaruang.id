@@ -406,6 +406,48 @@ const PortalApp = () => {
         }
     };
 
+    const handleDuplicateProject = async (e, id) => {
+        e.stopPropagation();
+        if (!(await window.confirmAsync("Buat salinan proyek ini?", "Duplikat Proyek"))) return;
+        
+        try {
+            setIsLoading(true);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const res = await axios.post(`/admin/invitation-portal/${id}/duplicate-project`, {}, {
+                headers: { 'X-CSRF-TOKEN': csrfToken }
+            });
+            if (res.data.success) {
+                fetchInvitations();
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Gagal menduplikasi proyek.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleDuplicateTemplate = async (e, id) => {
+        e.stopPropagation();
+        if (!(await window.confirmAsync("Buat salinan template ini?", "Duplikat Template"))) return;
+        
+        try {
+            setIsLoading(true);
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const res = await axios.post(`/admin/invitation-portal/templates/${id}/duplicate-template`, {}, {
+                headers: { 'X-CSRF-TOKEN': csrfToken }
+            });
+            if (res.data.success) {
+                fetchTemplates();
+            }
+        } catch (error) {
+            console.error(error);
+            alert("Gagal menduplikasi template.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const handleDelete = async (e, id) => {
         e.stopPropagation();
         if (!(await window.confirmAsync("Apakah Anda yakin ingin menghapus proyek ini secara permanen?", "Hapus Proyek?"))) return;
@@ -1243,6 +1285,9 @@ const PortalApp = () => {
                                                     <button onClick={(e) => handleRename(e, inv.id, inv.title)} className="p-1.5 text-gray-400 hover:text-blue-500 bg-gray-100 dark:bg-gray-800 rounded transition" title="Ubah Nama">
                                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                                     </button>
+                                                    <button onClick={(e) => handleDuplicateProject(e, inv.id)} className="p-1.5 text-gray-400 hover:text-indigo-500 bg-gray-100 dark:bg-gray-800 rounded transition" title="Buat Salinan / Duplikat">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                                    </button>
                                                     <button onClick={(e) => handleEditSlug(e, inv.id, inv.slug)} className="p-1.5 text-gray-400 hover:text-emerald-500 bg-gray-100 dark:bg-gray-800 rounded transition" title="Ubah URL / Slug">
                                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
                                                     </button>
@@ -1688,6 +1733,12 @@ const PortalApp = () => {
                                                             className="flex-1 px-2 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold rounded-lg text-center"
                                                         >
                                                             Edit
+                                                        </button>
+                                                        <button 
+                                                            onClick={(e) => handleDuplicateTemplate(e, item.id)}
+                                                            className="flex-1 px-2 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-semibold rounded-lg text-center"
+                                                        >
+                                                            Copy
                                                         </button>
                                                         <button 
                                                             onClick={async () => {

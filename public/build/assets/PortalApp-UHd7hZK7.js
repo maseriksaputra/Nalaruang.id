@@ -24031,6 +24031,34 @@ var PortalApp = () => {
 			alert(msg);
 		}
 	};
+	const handleDuplicateProject = async (e, id) => {
+		e.stopPropagation();
+		if (!await window.confirmAsync("Buat salinan proyek ini?", "Duplikat Proyek")) return;
+		try {
+			setIsLoading(true);
+			const csrfToken = document.querySelector("meta[name=\"csrf-token\"]")?.getAttribute("content");
+			if ((await axios.post(`/admin/invitation-portal/${id}/duplicate-project`, {}, { headers: { "X-CSRF-TOKEN": csrfToken } })).data.success) fetchInvitations();
+		} catch (error) {
+			console.error(error);
+			alert("Gagal menduplikasi proyek.");
+		} finally {
+			setIsLoading(false);
+		}
+	};
+	const handleDuplicateTemplate = async (e, id) => {
+		e.stopPropagation();
+		if (!await window.confirmAsync("Buat salinan template ini?", "Duplikat Template")) return;
+		try {
+			setIsLoading(true);
+			const csrfToken = document.querySelector("meta[name=\"csrf-token\"]")?.getAttribute("content");
+			if ((await axios.post(`/admin/invitation-portal/templates/${id}/duplicate-template`, {}, { headers: { "X-CSRF-TOKEN": csrfToken } })).data.success) fetchTemplates();
+		} catch (error) {
+			console.error(error);
+			alert("Gagal menduplikasi template.");
+		} finally {
+			setIsLoading(false);
+		}
+	};
 	const handleDelete = async (e, id) => {
 		e.stopPropagation();
 		if (!await window.confirmAsync("Apakah Anda yakin ingin menghapus proyek ini secara permanen?", "Hapus Proyek?")) return;
@@ -25657,6 +25685,23 @@ var PortalApp = () => {
 											})
 										}),
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: (e) => handleDuplicateProject(e, inv.id),
+											className: "p-1.5 text-gray-400 hover:text-indigo-500 bg-gray-100 dark:bg-gray-800 rounded transition",
+											title: "Buat Salinan / Duplikat",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+												className: "w-4 h-4",
+												fill: "none",
+												stroke: "currentColor",
+												viewBox: "0 0 24 24",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+												})
+											})
+										}),
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 											onClick: (e) => handleEditSlug(e, inv.id, inv.slug),
 											className: "p-1.5 text-gray-400 hover:text-emerald-500 bg-gray-100 dark:bg-gray-800 rounded transition",
 											title: "Ubah URL / Slug",
@@ -26476,6 +26521,11 @@ var PortalApp = () => {
 												onClick: () => window.open(`/admin/builder/${item.id}`, "_blank"),
 												className: "flex-1 px-2 py-1.5 bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold rounded-lg text-center",
 												children: "Edit"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												onClick: (e) => handleDuplicateTemplate(e, item.id),
+												className: "flex-1 px-2 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-semibold rounded-lg text-center",
+												children: "Copy"
 											}),
 											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												onClick: async () => {

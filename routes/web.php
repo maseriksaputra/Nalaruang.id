@@ -370,6 +370,8 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('/admin/invitation-portal/statistics', [\App\Http\Controllers\DashboardPortalController::class, 'getStatistics']);
     Route::get('/admin/invitation-portal/templates', [\App\Http\Controllers\DashboardPortalController::class, 'getTemplates']);
     Route::post('/admin/invitation-portal/templates/{id}/duplicate', [\App\Http\Controllers\DashboardPortalController::class, 'duplicateTemplate']);
+    Route::post('/admin/invitation-portal/templates/{id}/duplicate-template', [\App\Http\Controllers\DashboardPortalController::class, 'duplicateTemplateAsTemplate']);
+    Route::post('/admin/invitation-portal/{id}/duplicate-project', [\App\Http\Controllers\DashboardPortalController::class, 'duplicateProject']);
     Route::post('/admin/invitation-portal/templates/{id}/toggle', [\App\Http\Controllers\DashboardPortalController::class, 'toggleTemplate']);
     Route::post('/admin/invitation-portal/templates/{id}/thumbnail', [\App\Http\Controllers\DashboardPortalController::class, 'updateThumbnail']);
 

@@ -156,6 +156,68 @@ class DashboardPortalController extends Controller
         }
     }
 
+    public function duplicateTemplateAsTemplate(Request $request, $id)
+    {
+        try {
+            $template = Invitation::findOrFail($id);
+            $count = Invitation::withTrashed()->where('is_template', true)->count();
+            $newTitle = $template->title . ' - Salinan ' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+
+            $newInvitation = Invitation::create([
+                'user_id' => auth()->id() ?? 2,
+                'title' => $newTitle,
+                'slug' => $this->generateUniqueSlug($newTitle),
+                'status' => 'draft',
+                'canvas_config' => $template->canvas_config,
+                'is_template' => true,
+                'category' => $template->category,
+                'price' => $template->price,
+                'thumbnail_path' => $template->thumbnail_path,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'id' => $newInvitation->id,
+                'message' => 'Template berhasil diduplikasi'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Gagal menduplikasi template: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function duplicateProject(Request $request, $id)
+    {
+        try {
+            $project = Invitation::findOrFail($id);
+            $count = Invitation::withTrashed()->where('is_template', false)->count();
+            $newTitle = $project->title . ' - Salinan ' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+
+            $newInvitation = Invitation::create([
+                'user_id' => auth()->id() ?? 2,
+                'title' => $newTitle,
+                'slug' => $this->generateUniqueSlug($newTitle),
+                'status' => 'draft',
+                'canvas_config' => $project->canvas_config,
+                'is_template' => false,
+                'thumbnail_path' => $project->thumbnail_path,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'id' => $newInvitation->id,
+                'message' => 'Proyek berhasil diduplikasi'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Gagal menduplikasi proyek: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function toggleTemplate(Request $request, $id)
     {
         try {

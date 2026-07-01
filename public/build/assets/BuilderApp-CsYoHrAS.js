@@ -1,8 +1,8 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ViewerApp-BEP0PkdF.js","assets/bootstrap-B7MMry3r.js","assets/browser-BF7bllQG.js","assets/LogUtils-CjrGbVDZ.js","assets/jsx-runtime-B3AVLYIu.js","assets/ViewerApp-DQ4XEBu1.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ViewerApp-CxWc9WdX.js","assets/bootstrap-B7MMry3r.js","assets/browser-EbxFiHI_.js","assets/LogUtils-CjrGbVDZ.js","assets/jsx-runtime-B3AVLYIu.js","assets/ViewerApp-DQ4XEBu1.css"])))=>i.map(i=>d[i]);
 import { i as __toESM$1, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-BF7bllQG.js";
-import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, L as useUIStore, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as apiClient, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset, z as useStore } from "./ViewerApp-BEP0PkdF.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-EbxFiHI_.js";
+import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, L as useUIStore, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as apiClient, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset, z as useStore } from "./ViewerApp-CxWc9WdX.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -15187,7 +15187,7 @@ var RightInspector = () => {
 										className: "flex items-center gap-2",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => {
-												__vitePreload(() => import("./ViewerApp-BEP0PkdF.js").then((n) => n.I).then((module) => {
+												__vitePreload(() => import("./ViewerApp-CxWc9WdX.js").then((n) => n.I).then((module) => {
 													module.default.getState().setActiveTab("colors");
 												}), __vite__mapDeps([0,1,2,3,4,5]));
 											},
