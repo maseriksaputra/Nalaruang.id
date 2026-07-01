@@ -132,7 +132,7 @@ class DashboardPortalController extends Controller
             $template->increment('total_uses');
 
             $count = Invitation::withTrashed()->where('is_template', false)->count();
-            $newTitle = 'Desain ' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
+            $newTitle = $template->title . ' - ' . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
 
             $newInvitation = Invitation::create([
                 'user_id' => auth()->id() ?? 2,
