@@ -22,6 +22,16 @@ class OrderResource extends Resource
     protected static ?string $modelLabel = 'Pesanan Masuk';
     protected static ?string $pluralModelLabel = 'Daftar Pesanan';
 
+    public static function getNavigationBadge(): ?string
+    {
+        return \Illuminate\Support\Facades\Cache::remember('pending_orders_count', 60, fn () => \App\Models\Order::where('status', 'pending')->count()) ?: null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string|array
+    {
+        return 'warning';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
