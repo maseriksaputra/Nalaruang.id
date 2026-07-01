@@ -224,11 +224,20 @@ class OrderResource extends Resource
                         if (!$template || !$template->invitation_id) {
                             if (strtolower(trim($record->package?->name)) === 'custom vip') {
                                 $newTitle = 'Projek Klien: ' . $record->customer_name;
+                                
+                                $baseSlug = \Illuminate\Support\Str::slug($record->customer_name);
+                                $slug = $baseSlug;
+                                $counter = 1;
+                                while (\App\Models\Invitation::withTrashed()->where('slug', $slug)->exists()) {
+                                    $slug = $baseSlug . '-' . $counter;
+                                    $counter++;
+                                }
+
                                 $newInvitation = \App\Models\Invitation::create([
                                     'user_id' => auth()->id() ?? 2,
                                     'order_id' => $record->id,
                                     'title' => $newTitle,
-                                    'slug' => \Illuminate\Support\Str::uuid()->toString(),
+                                    'slug' => $slug,
                                     'status' => 'draft',
                                     'canvas_config' => json_encode(['width' => 414, 'height' => 736, 'background' => '#ffffff', 'objects' => []]),
                                     'is_template' => false
@@ -261,10 +270,19 @@ class OrderResource extends Resource
 
                         // Duplicate it
                         $newTitle = 'Projek Klien: ' . $record->customer_name;
+                        
+                        $baseSlug = \Illuminate\Support\Str::slug($record->customer_name);
+                        $slug = $baseSlug;
+                        $counter = 1;
+                        while (\App\Models\Invitation::withTrashed()->where('slug', $slug)->exists()) {
+                            $slug = $baseSlug . '-' . $counter;
+                            $counter++;
+                        }
+
                         $newInvitation = \App\Models\Invitation::create([
                             'user_id' => auth()->id() ?? 2,
                             'title' => $newTitle,
-                            'slug' => \Illuminate\Support\Str::uuid()->toString(),
+                            'slug' => $slug,
                             'status' => 'draft',
                             'canvas_config' => $sourceInvitation->canvas_config,
                             'is_template' => false
