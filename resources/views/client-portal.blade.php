@@ -447,11 +447,17 @@
         <!-- TAB: WISHES / RSVP -->
         <div x-show="activeTab === 'wishes'" x-cloak x-transition.opacity.duration.300ms>
             <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col h-[600px] max-h-[80vh]">
-                <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 shrink-0">
+                <div class="px-6 py-5 border-b border-slate-200 dark:border-slate-800 shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <h2 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         Wishes & Konfirmasi Kehadiran
                         <span class="bg-indigo-100 text-indigo-700 dark:text-indigo-400 py-0.5 px-2.5 rounded-full text-xs">{{ count($rsvps) }}</span>
                     </h2>
+                    @if(count($rsvps) > 0)
+                    <a href="{{ route('client.export.rsvps', $invitation->slug) }}" class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-sm font-semibold transition shadow-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Unduh ke Excel
+                    </a>
+                    @endif
                 </div>
                 
                 <div class="p-6 overflow-y-auto wishes-scroll flex-1 bg-slate-50 dark:bg-slate-800/50/50">

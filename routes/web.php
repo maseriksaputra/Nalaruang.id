@@ -444,6 +444,7 @@ Route::get('/api/builder/packages', function () {
 
 // Route Viewer Engine Publik
 Route::get('/client/{slug}', [\App\Http\Controllers\ClientPortalController::class, 'show']);
+Route::get('/client/{slug}/export-rsvps', [\App\Http\Controllers\ClientPortalController::class, 'exportRsvps'])->name('client.export.rsvps');
 Route::post('/client/{slug}/links/batch', [\App\Http\Controllers\ClientPortalController::class, 'storeBatchGuestLinks']);
 Route::post('/client/{slug}/greeting', [\App\Http\Controllers\ClientPortalController::class, 'updateGreeting']);
 Route::delete('/client/{slug}/links/{id}', [\App\Http\Controllers\ClientPortalController::class, 'deleteGuestLink']);

@@ -93,4 +93,51 @@ class ClientPortalController extends Controller
 
         return redirect()->back()->with('success', 'Tamu berhasil dihapus dari daftar.');
     }
+
+    public function exportRsvps($slug)
+    {
+        $invitation = Invitation::where('slug', $slug)->firstOrFail();
+        $rsvps = \App\Models\Rsvp::where('invitation_id', $invitation->id)->orderBy('created_at', 'desc')->get();
+        
+        $filename = "Buku_Tamu_{$slug}_" . date('Ymd_His') . ".csv";
+        
+        $headers = [
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+        
+        $columns = ['Tanggal', 'Nama', 'Kehadiran', 'Ucapan / Komentar'];
+        
+        $callback = function() use($rsvps, $columns) {
+            $file = fopen('php://output', 'w');
+            
+            // Add BOM (Byte Order Mark) to fix UTF-8 in Excel
+            fputs($file, $bom =(chr(0xEF) . chr(0xBB) . chr(0xBF)));
+            
+            fputcsv($file, $columns);
+            
+            foreach ($rsvps as $rsvp) {
+                $status = 'Mungkin Hadir';
+                if ($rsvp->status === 'attending') {
+                    $status = 'Hadir';
+                } elseif ($rsvp->status === 'not_attending') {
+                    $status = 'Tidak Hadir';
+                }
+                
+                fputcsv($file, [
+                    $rsvp->created_at->format('d/m/Y H:i'),
+                    $rsvp->name,
+                    $status,
+                    $rsvp->message
+                ]);
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
+    }
 }
