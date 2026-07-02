@@ -252,7 +252,7 @@ const BuilderApp = () => {
             <style dangerouslySetInnerHTML={{ __html: ANIMATION_STYLES }} />
             
             {/* Global Color Picker to prevent Chrome native modal freeze bug when unmounting */}
-            <input type="color" id="global-color-picker" className="absolute opacity-0 pointer-events-none" style={{ top: '-9999px', left: '-9999px' }} />
+            <input type="color" id="global-color-picker" className="absolute opacity-0" style={{ top: '10px', left: '10px', width: '1px', height: '1px', zIndex: -1 }} />
             
             {showMobileWarning && (
                 <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6">

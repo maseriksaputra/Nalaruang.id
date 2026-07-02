@@ -5804,12 +5804,6 @@ var ColorsPanel = () => {
 	const customPalette = useCanvasStore((state) => state.global_settings?.custom_palette || EMPTY_ARRAY$1);
 	const addCustomColor = useCanvasStore((state) => state.addCustomColor);
 	const removeCustomColor = useCanvasStore((state) => state.removeCustomColor);
-	const abortControllerRef = (0, import_react.useRef)(null);
-	(0, import_react.useEffect)(() => {
-		return () => {
-			if (abortControllerRef.current) abortControllerRef.current.abort();
-		};
-	}, []);
 	const findLayer = (sections, desktopLayers, id, mode) => {
 		const targetSections = mode === "desktop" ? [{ layers: desktopLayers }] : sections;
 		if (!targetSections || !Array.isArray(targetSections)) return null;
@@ -5889,67 +5883,37 @@ var ColorsPanel = () => {
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex items-center gap-3 mb-4",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									onClick: () => {
-										const picker = document.getElementById("global-color-picker");
-										if (picker) picker.click();
-									},
-									className: "w-10 h-10 rounded-full border border-gray-200 p-0.5 shadow-sm hover:shadow transition relative flex items-center justify-center bg-white cursor-pointer group",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								onClick: () => {
+									const picker = document.getElementById("global-color-picker");
+									if (picker) picker.click();
+								},
+								className: "w-10 h-10 rounded-full border border-gray-200 p-0.5 shadow-sm hover:shadow transition relative flex items-center justify-center bg-white cursor-pointer group",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "absolute inset-0 rounded-full bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500 p-[2px]",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "absolute inset-0 rounded-full bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500 p-[2px]",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "w-full h-full bg-white rounded-full flex items-center justify-center pointer-events-none",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-5 h-5 text-gray-700",
-												fill: "none",
-												stroke: "currentColor",
-												viewBox: "0 0 24 24",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-													strokeLinecap: "round",
-													strokeLinejoin: "round",
-													strokeWidth: "2",
-													d: "M12 4v16m8-8H4"
-												})
+										className: "w-full h-full bg-white rounded-full flex items-center justify-center pointer-events-none",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+											className: "w-5 h-5 text-gray-700",
+											fill: "none",
+											stroke: "currentColor",
+											viewBox: "0 0 24 24",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+												strokeLinecap: "round",
+												strokeLinejoin: "round",
+												strokeWidth: "2",
+												d: "M12 4v16m8-8H4"
 											})
 										})
 									})
-								}),
-								typeof window !== "undefined" && window.EyeDropper && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									type: "button",
-									onClick: async (e) => {
-										e.preventDefault();
-										if (abortControllerRef.current) abortControllerRef.current.abort();
-										abortControllerRef.current = new AbortController();
-										try {
-											handleSelectColor((await new window.EyeDropper().open({ signal: abortControllerRef.current.signal })).sRGBHex);
-										} catch (e) {
-											console.log("Eyedropper cancelled", e);
-										}
-									},
-									className: "w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 shadow-sm transition text-gray-600",
-									title: "Suntik Warna dari Layar",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-										className: "w-5 h-5",
-										fill: "none",
-										stroke: "currentColor",
-										viewBox: "0 0 24 24",
-										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-											strokeLinecap: "round",
-											strokeLinejoin: "round",
-											strokeWidth: "2",
-											d: "M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-										})
-									})
-								}),
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "w-10 h-10 rounded-full border-2 border-primary-500 flex items-center justify-center p-0.5",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: "w-full h-full rounded-full border border-gray-200",
-										style: { backgroundColor: currentBackgroundType === "solid" ? currentColor : "#ffffff" }
-									})
 								})
-							]
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "w-10 h-10 rounded-full border-2 border-primary-500 flex items-center justify-center p-0.5",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "w-full h-full rounded-full border border-gray-200",
+									style: { backgroundColor: currentBackgroundType === "solid" ? currentColor : "#ffffff" }
+								})
+							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex items-center gap-3 p-2 bg-gray-50 border border-gray-200 rounded-lg",
@@ -23771,10 +23735,13 @@ var BuilderApp = () => {
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 				type: "color",
 				id: "global-color-picker",
-				className: "absolute opacity-0 pointer-events-none",
+				className: "absolute opacity-0",
 				style: {
-					top: "-9999px",
-					left: "-9999px"
+					top: "10px",
+					left: "10px",
+					width: "1px",
+					height: "1px",
+					zIndex: -1
 				}
 			}),
 			showMobileWarning && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
