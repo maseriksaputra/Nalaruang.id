@@ -21088,7 +21088,7 @@ var TimelinePanel = () => {
 					return;
 				}
 				window.__BUILDER_PLAYHEAD_POS__ = next;
-				if (playheadRef.current) playheadRef.current.style.left = `${next * timeScale}px`;
+				if (playheadRef.current) playheadRef.current.style.transform = `translate3d(${next * timeScale}px, 0, 0) translateX(-50%)`;
 				if (timeDisplayRef.current) timeDisplayRef.current.innerText = `${next.toFixed(1)}s`;
 				animationFrame = requestAnimationFrame(animate);
 			}
@@ -21346,9 +21346,9 @@ var TimelinePanel = () => {
 								ref: playheadRef,
 								className: "absolute top-0 bottom-0 z-30 pointer-events-none flex flex-col items-center",
 								style: {
-									left: `${(isPlaying ? playheadPosRef.current : playheadPos) * timeScale}px`,
-									transform: "translateX(-50%)",
-									willChange: "left"
+									left: 0,
+									transform: `translate3d(${(isPlaying ? playheadPosRef.current : playheadPos) * timeScale}px, 0, 0) translateX(-50%)`,
+									willChange: "transform"
 								},
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "w-3 h-3 rotate-45 bg-red-500 mt-5 pointer-events-auto cursor-ew-resize rounded-sm shadow-sm",
