@@ -1,0 +1,377 @@
+{
+    "global_settings": {
+        "theme_colors": [
+            "#ffffff",
+            "#000000"
+        ],
+        "desktop_thumbnail": {
+            "enabled": false,
+            "type": "image",
+            "media": [],
+            "video_loop": true,
+            "album_duration": 3000,
+            "overlay_text": "The Wedding Of\nPasangan",
+            "text_animation": "fade-up",
+            "background_color": "#1a1a1a"
+        },
+        "audioUrl": "\/uploads\/1781766647_Dinda Putri.mp3"
+    },
+    "sections": [
+        {
+            "id": "sec_6a339519bd8ef",
+            "layout": {
+                "height": "100vh",
+                "background_value": "#ffffff",
+                "minHeight": "824px"
+            },
+            "layers": [
+                {
+                    "id": "layer_1781767657123212",
+                    "type": "group",
+                    "name": "Layer 1",
+                    "children": [
+                        {
+                            "id": "layer_1781769634463566",
+                            "type": "image",
+                            "url": "\/uploads\/1781768594_ChatGPT Image 15 Jun 2026, 18.55.31.webp",
+                            "style": {
+                                "x": 86,
+                                "y": 259,
+                                "width": 150,
+                                "height": 150,
+                                "zIndex": 1,
+                                "color": "#000000",
+                                "fontSize": "24px",
+                                "removeBg": true
+                            },
+                            "animation": {
+                                "entry": null,
+                                "exit": "fadeOut",
+                                "isLooping": false,
+                                "config": {
+                                    "delay": 11.830000000000002
+                                },
+                                "configExit": {
+                                    "delay": 14.330000000000002
+                                }
+                            },
+                            "interaction": {
+                                "isButton": false,
+                                "action": null,
+                                "targetId": null
+                            }
+                        },
+                        {
+                            "id": "layer_1781771474038",
+                            "type": "image",
+                            "url": "\/uploads\/1781771473_ChatGPT Image 15 Jun 2026, 13.31.11.webp",
+                            "style": {
+                                "x": 50,
+                                "y": 50,
+                                "width": 150,
+                                "height": 150,
+                                "zIndex": 3,
+                                "color": "#000000",
+                                "fontSize": "24px"
+                            },
+                            "animation": {
+                                "entry": null,
+                                "exit": null,
+                                "isLooping": false,
+                                "config": {
+                                    "delay": 9.3,
+                                    "speed": 1.5
+                                },
+                                "configExit": {
+                                    "delay": 14.3,
+                                    "speed": 1.5
+                                }
+                            },
+                            "interaction": {
+                                "isButton": false,
+                                "action": null,
+                                "targetId": null
+                            }
+                        }
+                    ],
+                    "style": {
+                        "zIndex": 2,
+                        "x": 132.5,
+                        "y": 384
+                    },
+                    "animation": {
+                        "config": {
+                            "delay": 0
+                        },
+                        "configExit": {
+                            "delay": 7.2
+                        },
+                        "exit": "fadeOut"
+                    }
+                },
+                {
+                    "id": "layer_1781768323409805",
+                    "type": "group",
+                    "name": "Layer 1",
+                    "children": [],
+                    "style": {
+                        "zIndex": 3,
+                        "x": 168,
+                        "y": 259
+                    },
+                    "animation": {
+                        "config": {
+                            "delay": 8.1
+                        },
+                        "configExit": {
+                            "delay": 15.3
+                        },
+                        "exit": "fadeOut"
+                    }
+                },
+                {
+                    "id": "layer_1781768334968958",
+                    "type": "group",
+                    "name": "Layer 1",
+                    "children": [
+                        {
+                            "0": "s",
+                            "1": "e",
+                            "2": "c",
+                            "3": "_",
+                            "4": "6",
+                            "5": "a",
+                            "6": "3",
+                            "7": "3",
+                            "8": "9",
+                            "9": "5",
+                            "10": "1",
+                            "11": "9",
+                            "12": "b",
+                            "13": "d",
+                            "14": "8",
+                            "15": "e",
+                            "16": "f",
+                            "id": "elem_1781770499999",
+                            "style": {
+                                "x": 50,
+                                "y": 50,
+                                "width": 200,
+                                "height": 200,
+                                "zIndex": 3,
+                                "color": "#000000",
+                                "fontSize": "24px"
+                            },
+                            "animation": {
+                                "entry": null,
+                                "exit": "fadeOut",
+                                "isLooping": false,
+                                "config": {
+                                    "delay": 10.6,
+                                    "speed": 1.5
+                                },
+                                "configExit": {
+                                    "delay": 15.4,
+                                    "speed": 1
+                                }
+                            },
+                            "interaction": {
+                                "isButton": false,
+                                "action": null,
+                                "targetId": null
+                            }
+                        },
+                        {
+                            "id": "layer_1781770499975649",
+                            "type": "image",
+                            "url": "\/uploads\/1781768594_ChatGPT Image 15 Jun 2026, 18.55.31.webp",
+                            "style": {
+                                "x": 46,
+                                "y": 472,
+                                "width": "344px",
+                                "height": "289px",
+                                "zIndex": 2,
+                                "color": "#000000",
+                                "fontSize": "24px",
+                                "removeBg": true,
+                                "removeBgTolerance": 20
+                            },
+                            "animation": {
+                                "entry": "plant-grow",
+                                "exit": "fadeOut",
+                                "isLooping": false,
+                                "config": {
+                                    "delay": 1.1,
+                                    "speed": 2.1,
+                                    "direction": "default"
+                                },
+                                "configExit": {
+                                    "delay": 7.6,
+                                    "speed": 1.5
+                                }
+                            },
+                            "interaction": {
+                                "isButton": false,
+                                "action": null,
+                                "targetId": null
+                            }
+                        }
+                    ],
+                    "style": {
+                        "zIndex": 4,
+                        "x": -3,
+                        "y": 295.5
+                    },
+                    "animation": {
+                        "config": {
+                            "delay": 8.1
+                        },
+                        "configExit": {
+                            "delay": 15.3
+                        },
+                        "exit": "fadeOut"
+                    }
+                },
+                {
+                    "id": "layer_1781783111582",
+                    "type": "group",
+                    "name": "Layer Baru",
+                    "children": [
+                        {
+                            "id": "layer_1781776460250",
+                            "type": "image",
+                            "url": "\/uploads\/1781776459_ChatGPT Image 13 Jun 2026, 13.35.43.webp",
+                            "style": {
+                                "x": 50,
+                                "y": 50,
+                                "width": 150,
+                                "height": 150,
+                                "zIndex": 2,
+                                "color": "#000000",
+                                "fontSize": "24px"
+                            },
+                            "animation": {
+                                "entry": null,
+                                "exit": null,
+                                "isLooping": false,
+                                "config": {
+                                    "delay": 7.6,
+                                    "speed": 1.5
+                                },
+                                "configExit": {
+                                    "delay": 12.6,
+                                    "speed": 1.5
+                                }
+                            },
+                            "interaction": {
+                                "isButton": false,
+                                "action": null,
+                                "targetId": null
+                            }
+                        }
+                    ],
+                    "style": {
+                        "zIndex": 5
+                    }
+                },
+                {
+                    "id": "layer_1781783955259",
+                    "type": "group",
+                    "name": "Layer Baru",
+                    "children": [
+                        {
+                            "id": "layer_1781768595496",
+                            "type": "image",
+                            "url": "\/uploads\/1781768594_ChatGPT Image 15 Jun 2026, 18.55.31.webp",
+                            "style": {
+                                "x": 143,
+                                "y": 234,
+                                "width": 150,
+                                "height": 150,
+                                "zIndex": 3,
+                                "color": "#000000",
+                                "fontSize": "24px"
+                            },
+                            "animation": {
+                                "entry": null,
+                                "exit": "fadeOut",
+                                "isLooping": false,
+                                "config": {
+                                    "delay": 2.4,
+                                    "speed": 1.5
+                                },
+                                "configExit": {
+                                    "delay": 8.3,
+                                    "speed": 1.5
+                                }
+                            },
+                            "interaction": {
+                                "isButton": false,
+                                "action": null,
+                                "targetId": null
+                            }
+                        }
+                    ],
+                    "style": {
+                        "zIndex": 6
+                    }
+                },
+                {
+                    "id": "layer_1781786107640",
+                    "type": "group",
+                    "name": "Layer Baru",
+                    "children": [
+                        {
+                            "id": "layer_1781770847767",
+                            "type": "image",
+                            "url": "\/uploads\/1781770847_d06ed527a62518b62906985070fc540e.webp",
+                            "style": {
+                                "x": 0,
+                                "y": 354.5,
+                                "width": "185px",
+                                "height": "159px",
+                                "zIndex": 3,
+                                "color": "#000000",
+                                "fontSize": "24px",
+                                "removeBg": true,
+                                "removeBgTolerance": 0
+                            },
+                            "animation": {
+                                "entry": "tumble",
+                                "exit": null,
+                                "isLooping": false,
+                                "config": {
+                                    "speed": 1.5,
+                                    "trigger": "onLoad",
+                                    "delay": 1.1,
+                                    "direction": "default"
+                                },
+                                "configExit": {
+                                    "delay": 6.2,
+                                    "speed": 1.5
+                                }
+                            },
+                            "interaction": {
+                                "isButton": false,
+                                "action": null,
+                                "targetId": null
+                            }
+                        }
+                    ],
+                    "style": {
+                        "zIndex": 7
+                    }
+                }
+            ]
+        },
+        {
+            "id": "sec_1781780782442",
+            "layout": {
+                "height": "auto",
+                "minHeight": "852px",
+                "background_value": "#ffffff"
+            },
+            "layers": []
+        }
+    ]
+}

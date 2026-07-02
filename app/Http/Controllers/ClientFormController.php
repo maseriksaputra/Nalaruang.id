@@ -81,41 +81,18 @@ class ClientFormController extends Controller
         foreach ($schema as $field) {
             $fieldName = \Illuminate\Support\Str::slug($field['field_name'], '_');
             $hasAsset = $assets->has($field['field_name']);
-            if (filter_var($field['is_required'] ?? false, FILTER_VALIDATE_BOOLEAN)) {
-                if (($field['type'] === 'image' || $field['type'] === 'audio') && $hasAsset) {
-                    $rules[$fieldName] = 'nullable';
-                } else {
-                    $rules[$fieldName] = 'required';
+            
+            // Semua field dibuat nullable di backend agar klien bisa "nyicil" submit
+            $rules[$fieldName] = 'nullable';
+            
+            if ($field['type'] === 'image') {
+                $rules[$fieldName] = "nullable|array";
+                if (isset($field['max_files']) && $field['max_files'] > 0) {
+                    $rules[$fieldName] .= "|max:{$field['max_files']}";
                 }
-                
-                if ($field['type'] === 'image') {
-                    if (!$hasAsset) {
-                        $rules[$fieldName] = "required|array";
-                    } else {
-                        $rules[$fieldName] = "nullable|array";
-                    }
-                    if (isset($field['max_files']) && $field['max_files'] > 0) {
-                        $rules[$fieldName] .= "|max:{$field['max_files']}";
-                    }
-                    $rules[$fieldName.'.*'] = 'file|mimes:jpeg,png,jpg,gif,svg,webp,mp4,mov,webm,ogg|max:51200'; // Max 50MB per media
-                } elseif ($field['type'] === 'audio') {
-                    if (!$hasAsset) {
-                        $rules[$fieldName] = "required|file|mimes:mp3,wav|max:20480"; // Max 20MB
-                    } else {
-                        $rules[$fieldName] = "nullable|file|mimes:mp3,wav|max:20480"; // Max 20MB
-                    }
-                }
-            } else {
-                $rules[$fieldName] = 'nullable';
-                if ($field['type'] === 'image') {
-                    $rules[$fieldName] = "nullable|array";
-                    if (isset($field['max_files']) && $field['max_files'] > 0) {
-                        $rules[$fieldName] .= "|max:{$field['max_files']}";
-                    }
-                    $rules[$fieldName.'.*'] = 'file|mimes:jpeg,png,jpg,gif,svg,webp,mp4,mov,webm,ogg|max:51200'; // Max 50MB per media
-                } elseif ($field['type'] === 'audio') {
-                    $rules[$fieldName] = "nullable|file|mimes:mp3,wav|max:20480"; // Max 20MB
-                }
+                $rules[$fieldName.'.*'] = 'file|mimes:jpeg,png,jpg,gif,svg,webp,mp4,mov,webm,ogg|max:51200'; // Max 50MB per media
+            } elseif ($field['type'] === 'audio') {
+                $rules[$fieldName] = "nullable|file|mimes:mp3,wav|max:20480"; // Max 20MB
             }
         }
 

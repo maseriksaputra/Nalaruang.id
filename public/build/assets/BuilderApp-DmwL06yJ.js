@@ -104,6 +104,25 @@ var CanvasArea = () => {
 			}
 		}
 	};
+	const [particlesContainer, setParticlesContainer] = (0, import_react.useState)(null);
+	const particlesLoaded = (container) => {
+		setParticlesContainer(container);
+		if (window.__BUILDER_IS_PLAYING__ === false) container.pause();
+	};
+	(0, import_react.useEffect)(() => {
+		const handlePlay = () => {
+			if (particlesContainer) particlesContainer.play();
+		};
+		const handleStop = () => {
+			if (particlesContainer) particlesContainer.pause();
+		};
+		window.addEventListener("builder:play_all_animations", handlePlay);
+		window.addEventListener("builder:stop_all_animations", handleStop);
+		return () => {
+			window.removeEventListener("builder:play_all_animations", handlePlay);
+			window.removeEventListener("builder:stop_all_animations", handleStop);
+		};
+	}, [particlesContainer]);
 	(0, import_react.useEffect)(() => {
 		const initEngine = async () => {
 			await loadFireflyPreset(tsParticles);
@@ -145,6 +164,7 @@ var CanvasArea = () => {
 				},
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(r$2, {
 					id: "tsparticles",
+					particlesLoaded,
 					options: {
 						preset: global_settings.particleEffect,
 						background: { opacity: 0 }

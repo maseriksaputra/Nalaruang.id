@@ -62,16 +62,16 @@
                                 </label>
 
                                 @if($field['type'] === 'text')
-                                    <input type="text" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired && !$hasAsset ? 'required' : '' }} value="{{ old($fieldName, $existingValue) }}" placeholder="Masukkan {{ strtolower($field['field_name']) }}...">
+                                    <input type="text" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" value="{{ old($fieldName, $existingValue) }}" placeholder="Masukkan {{ strtolower($field['field_name']) }}...">
                                 @elseif($field['type'] === 'date')
-                                    <input type="date" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired && !$hasAsset ? 'required' : '' }} value="{{ old($fieldName, $existingValue) }}">
+                                    <input type="date" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" value="{{ old($fieldName, $existingValue) }}">
                                 
                                 @elseif($field['type'] === 'datetime')
-                                    <input type="datetime-local" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired && !$hasAsset ? 'required' : '' }} value="{{ old($fieldName, $existingValue) }}">
+                                    <input type="datetime-local" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" value="{{ old($fieldName, $existingValue) }}">
                                 
                                 @elseif($field['type'] === 'audio')
                                     <div class="mt-1">
-                                        <input type="file" name="{{ $fieldName }}" accept="audio/mpeg, audio/wav, audio/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 transition-colors cursor-pointer" {{ $isRequired && !$hasAsset ? 'required' : '' }}>
+                                        <input type="file" name="{{ $fieldName }}" accept="audio/mpeg, audio/wav, audio/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 transition-colors cursor-pointer">
                                         <p class="mt-2 text-xs text-gray-500">Unggah file audio format MP3 atau WAV.</p>
                                         @if($hasAsset)
                                             <p class="mt-1 text-xs text-green-600 font-medium">✓ File audio sudah tersimpan.</p>
@@ -79,7 +79,7 @@
                                     </div>
                                 
                                 @elseif($field['type'] === 'textarea')
-                                    <textarea name="{{ $fieldName }}" rows="4" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired && !$hasAsset ? 'required' : '' }} placeholder="Tuliskan {{ strtolower($field['field_name']) }} di sini...">{{ old($fieldName, $existingValue) }}</textarea>
+                                    <textarea name="{{ $fieldName }}" rows="4" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" placeholder="Tuliskan {{ strtolower($field['field_name']) }} di sini...">{{ old($fieldName, $existingValue) }}</textarea>
                                 
                                 @elseif($field['type'] === 'image')
                                     <div x-data="imageUpload()" class="mt-1">
@@ -91,7 +91,7 @@
                                                 <div class="flex text-sm text-gray-600 justify-center">
                                                     <div class="relative font-semibold text-brand-600 hover:text-brand-500">
                                                         <span x-text="files.length > 0 ? files.length + ' file dipilih (Klik untuk menambah/mengganti)' : 'Pilih file dari perangkat'"></span>
-                                                        <input x-ref="fileInput" @change="handleFiles($event)" name="{{ $fieldName }}[]" type="file" class="sr-only" accept="image/*,video/mp4,video/quicktime" {{ $isRequired && !$hasAsset ? 'required' : '' }} {{ ($field['max_files'] ?? 1) > 1 || ($field['max_files'] ?? 0) === 0 ? 'multiple' : '' }}>
+                                                        <input x-ref="fileInput" @change="handleFiles($event)" name="{{ $fieldName }}[]" type="file" class="sr-only" accept="image/*,video/mp4,video/quicktime" {{ ($field['max_files'] ?? 1) > 1 || ($field['max_files'] ?? 0) === 0 ? 'multiple' : '' }}>
                                                     </div>
                                                 </div>
                                                 <p class="text-xs text-gray-500">
