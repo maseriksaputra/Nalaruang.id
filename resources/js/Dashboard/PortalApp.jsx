@@ -65,6 +65,10 @@ const PortalApp = () => {
     const [isDarkMode, setIsDarkMode] = useState(document.documentElement.classList.contains('dark'));
     const [statistics, setStatistics] = useState(null);
     const [selectedOrder, setSelectedOrder] = useState(null);
+    const [showLinkOrderModal, setShowLinkOrderModal] = useState(false);
+    const [selectedProjectToLink, setSelectedProjectToLink] = useState(null);
+    const [availableOrders, setAvailableOrders] = useState([]);
+    const [selectedOrderIdToLink, setSelectedOrderIdToLink] = useState('');
     const toggleDarkMode = () => {
         if (isDarkMode) {
             document.documentElement.classList.remove('dark');
@@ -422,6 +426,46 @@ const PortalApp = () => {
         } catch (error) {
             console.error(error);
             alert("Gagal menduplikasi proyek.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const fetchAvailableOrders = async () => {
+        try {
+            const response = await axios.get('/admin/invitation-portal/available-orders');
+            setAvailableOrders(Array.isArray(response.data) ? response.data : []);
+        } catch (error) {
+            console.error("Gagal mengambil daftar pesanan", error);
+        }
+    };
+
+    const handleOpenLinkOrderModal = (e, inv) => {
+        e.stopPropagation();
+        setSelectedProjectToLink(inv);
+        setSelectedOrderIdToLink('');
+        fetchAvailableOrders();
+        setShowLinkOrderModal(true);
+    };
+
+    const submitLinkOrder = async () => {
+        if (!selectedProjectToLink || !selectedOrderIdToLink) return;
+        setIsLoading(true);
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+            const response = await axios.post(`/admin/invitation-portal/${selectedProjectToLink.id}/link-order`, { order_id: selectedOrderIdToLink }, {
+                headers: { 'X-CSRF-TOKEN': csrfToken }
+            });
+            if (response.data.success) {
+                alert('Projek berhasil ditautkan ke pesanan!');
+                setShowLinkOrderModal(false);
+                window.location.reload();
+            } else {
+                alert(response.data.error || 'Gagal menautkan pesanan.');
+            }
+        } catch (error) {
+            console.error(error);
+            alert(error.response?.data?.error || 'Gagal menautkan pesanan.');
         } finally {
             setIsLoading(false);
         }
@@ -1286,7 +1330,10 @@ const PortalApp = () => {
                                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                                     </button>
                                                     <button onClick={(e) => handleDuplicateProject(e, inv.id)} className="p-1.5 text-gray-400 hover:text-indigo-500 bg-gray-100 dark:bg-gray-800 rounded transition" title="Buat Salinan / Duplikat">
-                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2-2v8a2 2 0 002 2z"></path></svg>
+                                                    </button>
+                                                    <button onClick={(e) => handleOpenLinkOrderModal(e, inv)} className="p-1.5 text-gray-400 hover:text-orange-500 bg-gray-100 dark:bg-gray-800 rounded transition" title="Tautkan ke Pesanan Klien">
+                                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
                                                     </button>
                                                     <button onClick={(e) => handleEditSlug(e, inv.id, inv.slug)} className="p-1.5 text-gray-400 hover:text-emerald-500 bg-gray-100 dark:bg-gray-800 rounded transition" title="Ubah URL / Slug">
                                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
@@ -1298,6 +1345,48 @@ const PortalApp = () => {
                                             </div>
                                         </div>
                                     ))}
+                                </div>
+                            )}
+
+                            {showLinkOrderModal && selectedProjectToLink && (
+                                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowLinkOrderModal(false)}></div>
+                                    <div className="bg-white dark:bg-[#0f172a] w-full max-w-md rounded-2xl shadow-2xl relative z-10 p-6 border border-gray-200 dark:border-gray-800 animate-fade-in-up">
+                                        <div className="flex items-center justify-between mb-6 border-b border-gray-100 dark:border-gray-800 pb-4">
+                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white">Tautkan ke Pesanan</h3>
+                                            <button onClick={() => setShowLinkOrderModal(false)} className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition">
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                            </button>
+                                        </div>
+                                        <div className="mb-4">
+                                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Projek yang dipilih:</p>
+                                            <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white font-semibold">
+                                                {selectedProjectToLink.title}
+                                            </div>
+                                        </div>
+                                        <div className="mb-6">
+                                            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">Pilih Pesanan Klien</label>
+                                            <select 
+                                                value={selectedOrderIdToLink} 
+                                                onChange={(e) => setSelectedOrderIdToLink(e.target.value)}
+                                                className="w-full bg-white dark:bg-[#1e293b] border border-gray-200 dark:border-[#334155] rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-indigo-500"
+                                            >
+                                                <option value="">-- Pilih Pesanan VIP --</option>
+                                                {availableOrders.map(o => (
+                                                    <option key={o.id} value={o.id}>{o.customer_name} (ID: #{o.id}) - {o.template?.name || 'Custom VIP'}</option>
+                                                ))}
+                                            </select>
+                                            {availableOrders.length === 0 && (
+                                                <p className="text-xs text-orange-500 mt-2">Tidak ada pesanan yang tersedia atau semua pesanan sudah memiliki projek.</p>
+                                            )}
+                                        </div>
+                                        <div className="flex justify-end gap-3">
+                                            <button onClick={() => setShowLinkOrderModal(false)} className="px-5 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-xl font-bold transition">Batal</button>
+                                            <button onClick={submitLinkOrder} disabled={!selectedOrderIdToLink || isLoading} className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                                                {isLoading ? 'Menyimpan...' : 'Tautkan Sekarang'}
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             )}
                         </>
