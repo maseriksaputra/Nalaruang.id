@@ -49,16 +49,13 @@ class TemplateStatsOverview extends BaseWidget
         $outOfStock = $stats->out_of_stock ?? 0;
         $totalViews = $stats->total_views ?? 0;
 
-        // Calculate Total Produk Terjual and trend for the last 7 days
-        $templateIds = $this->getBaseQuery()->pluck('id')->toArray();
-        $totalSold = \App\Models\Order::whereIn('template_id', $templateIds)->count();
+        // Calculate Total Produk Terjual and trend for the last 7 days (count all orders as requested)
+        $totalSold = \App\Models\Order::count();
 
         $chartData = [];
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i)->format('Y-m-d');
-            $count = \App\Models\Order::whereIn('template_id', $templateIds)
-                ->whereDate('created_at', $date)
-                ->count();
+            $count = \App\Models\Order::whereDate('created_at', $date)->count();
             $chartData[] = $count;
         }
 
