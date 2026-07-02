@@ -264,13 +264,19 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
             });
         };
 
-        window.addEventListener('builder:play_all_animations', handlePlayAll);
-        window.addEventListener('builder:stop_all_animations', handleStopAll);
+        const handlePlaybackChange = (e) => {
+            if (e.detail.isPlaying) {
+                handlePlayAll();
+            } else {
+                handleStopAll();
+            }
+        };
+
+        window.addEventListener('builder:playback_change', handlePlaybackChange);
 
         // Cleanup yang krusial agar memori tidak bocor saat layer dihapus/update
         return () => {
-            window.removeEventListener('builder:play_all_animations', handlePlayAll);
-            window.removeEventListener('builder:stop_all_animations', handleStopAll);
+            window.removeEventListener('builder:playback_change', handlePlaybackChange);
             if (animationInstance) {
                 animationInstance.kill();
                 if (animationInstance.scrollTrigger) {

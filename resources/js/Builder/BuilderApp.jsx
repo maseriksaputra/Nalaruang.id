@@ -198,11 +198,17 @@ const BuilderApp = () => {
             }
         };
 
-        window.addEventListener('builder:play_all_animations', handlePlayAll);
-        window.addEventListener('builder:stop_all_animations', handleStopAll);
+        const handlePlaybackChange = (e) => {
+            if (e.detail.isPlaying) {
+                handlePlayAll();
+            } else {
+                handleStopAll();
+            }
+        };
+
+        window.addEventListener('builder:playback_change', handlePlaybackChange);
         return () => {
-            window.removeEventListener('builder:play_all_animations', handlePlayAll);
-            window.removeEventListener('builder:stop_all_animations', handleStopAll);
+            window.removeEventListener('builder:playback_change', handlePlaybackChange);
         };
     }, [global_settings?.audioUrl, global_settings?.audioStart, global_settings?.audioVolume]);
 
