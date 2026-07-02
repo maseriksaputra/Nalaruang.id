@@ -16,8 +16,12 @@ const PublicCanvas = ({ config }) => {
 
     useEffect(() => {
         if (isOpened) {
-            // Animasi cover slide-up terjadi, elemen-elemen di bawahnya sudah memiliki posisi absolut dan ScrollTrigger 
-            // yang di-setup segera, sehingga tidak perlu refresh manual yang bisa merusak native scrolling.
+            // Animasi cover slide-up terjadi, elemen-elemen di bawahnya mulai terlihat.
+            // Panggil refresh agar GSAP dapat mengukur ulang kordinat fisik (karena sebelumnya visibility: hidden)
+            const t1 = setTimeout(() => { ScrollTrigger.refresh(); }, 100);
+            const t2 = setTimeout(() => { ScrollTrigger.refresh(); }, 1500); // Setelah animasi transisi selesai (1.2s)
+            
+            return () => { clearTimeout(t1); clearTimeout(t2); };
         }
     }, [isOpened]);
     const [transitionType, setTransitionType] = useState('slide_up');
