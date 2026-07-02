@@ -198,7 +198,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             if (isScrollTriggered) {
                 ScrollTrigger.create({
                     trigger: triggerElement,
-                    start: "top 95%",
+                    start: "top 80%",
                     scroller: scrollScroller,
                     animation: tween,
                     toggleActions: "play none none none",
@@ -308,7 +308,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
         if (!isBuilder && trigger === 'onScroll') {
             ScrollTrigger.create({
                 trigger: triggerElement,
-                start: "top 95%",
+                start: "top 80%",
                 scroller: scrollScroller,
                 animation: tl,
                 // If looping (pulse, swing, etc), pause when out of view and resume when in view.
@@ -384,7 +384,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                     if (isScrollTriggered) {
                         ScrollTrigger.create({
                             trigger: triggerRef || elementRef,
-                            start: "top 95%",
+                            start: "top 80%",
                             scroller: scrollScroller,
                             animation: tl,
                             toggleActions: "play pause resume pause"
@@ -403,7 +403,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
                     if (isScrollTriggered) {
                         ScrollTrigger.create({
                             trigger: triggerRef || elementRef,
-                            start: "top 95%",
+                            start: "top 80%",
                             scroller: scrollScroller,
                             animation: tween,
                             toggleActions: "play pause resume pause"
@@ -467,7 +467,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
 
                 ScrollTrigger.create({
                     trigger: triggerElement,
-                    start: "top 95%",
+                    start: "top 80%",
                     scroller: scrollScroller,
                     animation: tl,
                     toggleActions: toggleActionStr,
