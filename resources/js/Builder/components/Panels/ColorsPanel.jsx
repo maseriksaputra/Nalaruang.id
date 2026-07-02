@@ -103,6 +103,35 @@ const ColorsPanel = () => {
         updateLayerStyle(activeLayerId, updates);
     };
 
+    // Keep track of the latest handleSelectColor to avoid stale closures in event listeners
+    const latestHandleSelectColor = useRef(handleSelectColor);
+    useEffect(() => {
+        latestHandleSelectColor.current = handleSelectColor;
+    });
+
+    useEffect(() => {
+        const globalPicker = document.getElementById('global-color-picker');
+        if (!globalPicker) return;
+
+        const handleChange = (e) => {
+            if (latestHandleSelectColor.current) {
+                latestHandleSelectColor.current(e.target.value);
+            }
+        };
+
+        globalPicker.addEventListener('input', handleChange);
+        return () => {
+            globalPicker.removeEventListener('input', handleChange);
+        };
+    }, []);
+
+    useEffect(() => {
+        const globalPicker = document.getElementById('global-color-picker');
+        if (globalPicker && currentBackgroundType === 'solid') {
+            globalPicker.value = safeHexColor;
+        }
+    }, [safeHexColor, currentBackgroundType]);
+
     const handleSelectGradient = (gradient) => {
         if (!activeLayerId || activeLayer.type === 'text' || activeLayer.type === 'dynamic_guest_name') return; // gradients typically for shapes/backgrounds
         
@@ -129,19 +158,18 @@ const ColorsPanel = () => {
                         
                         <div className="flex items-center gap-3 mb-4">
                             {/* Tombol Tambah Warna (Rainbow) */}
-                            <div className="w-10 h-10 rounded-full border border-gray-200 p-0.5 shadow-sm hover:shadow transition relative flex items-center justify-center bg-white cursor-pointer group">
+                            <div 
+                                onClick={() => {
+                                    const picker = document.getElementById('global-color-picker');
+                                    if (picker) picker.click();
+                                }}
+                                className="w-10 h-10 rounded-full border border-gray-200 p-0.5 shadow-sm hover:shadow transition relative flex items-center justify-center bg-white cursor-pointer group"
+                            >
                                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500 p-[2px]">
-                                    <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
+                                    <div className="w-full h-full bg-white rounded-full flex items-center justify-center pointer-events-none">
                                         <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
                                     </div>
                                 </div>
-                                <input 
-                                    type="color" 
-                                    value={currentBackgroundType === 'solid' ? safeHexColor : '#ffffff'}
-                                    onChange={(e) => handleSelectColor(e.target.value)}
-                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                    title="Pilih warna kustom"
-                                />
                             </div>
 
                             {/* Tombol Suntik Warna (Eyedropper) */}

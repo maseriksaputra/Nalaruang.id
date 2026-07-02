@@ -5846,6 +5846,25 @@ var ColorsPanel = () => {
 		if (colorProperty !== "color") updates.backgroundType = "solid";
 		updateLayerStyle(activeLayerId, updates);
 	};
+	const latestHandleSelectColor = (0, import_react.useRef)(handleSelectColor);
+	(0, import_react.useEffect)(() => {
+		latestHandleSelectColor.current = handleSelectColor;
+	});
+	(0, import_react.useEffect)(() => {
+		const globalPicker = document.getElementById("global-color-picker");
+		if (!globalPicker) return;
+		const handleChange = (e) => {
+			if (latestHandleSelectColor.current) latestHandleSelectColor.current(e.target.value);
+		};
+		globalPicker.addEventListener("input", handleChange);
+		return () => {
+			globalPicker.removeEventListener("input", handleChange);
+		};
+	}, []);
+	(0, import_react.useEffect)(() => {
+		const globalPicker = document.getElementById("global-color-picker");
+		if (globalPicker && currentBackgroundType === "solid") globalPicker.value = safeHexColor;
+	}, [safeHexColor, currentBackgroundType]);
 	const handleSelectGradient = (gradient) => {
 		if (!activeLayerId || activeLayer.type === "text" || activeLayer.type === "dynamic_guest_name") return;
 		const colors = gradient.match(/#[a-fA-F0-9]{6}/g) || ["#ffffff", "#000000"];
@@ -5871,12 +5890,16 @@ var ColorsPanel = () => {
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex items-center gap-3 mb-4",
 							children: [
-								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									onClick: () => {
+										const picker = document.getElementById("global-color-picker");
+										if (picker) picker.click();
+									},
 									className: "w-10 h-10 rounded-full border border-gray-200 p-0.5 shadow-sm hover:shadow transition relative flex items-center justify-center bg-white cursor-pointer group",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 										className: "absolute inset-0 rounded-full bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500 p-[2px]",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-											className: "w-full h-full bg-white rounded-full flex items-center justify-center",
+											className: "w-full h-full bg-white rounded-full flex items-center justify-center pointer-events-none",
 											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
 												className: "w-5 h-5 text-gray-700",
 												fill: "none",
@@ -5890,13 +5913,7 @@ var ColorsPanel = () => {
 												})
 											})
 										})
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-										type: "color",
-										value: currentBackgroundType === "solid" ? safeHexColor : "#ffffff",
-										onChange: (e) => handleSelectColor(e.target.value),
-										className: "absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10",
-										title: "Pilih warna kustom"
-									})]
+									})
 								}),
 								typeof window !== "undefined" && window.EyeDropper && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 									type: "button",
@@ -23751,6 +23768,15 @@ var BuilderApp = () => {
 		className: "flex flex-col h-screen w-screen bg-white text-gray-800 font-sans overflow-hidden",
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { dangerouslySetInnerHTML: { __html: ANIMATION_STYLES } }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+				type: "color",
+				id: "global-color-picker",
+				className: "absolute opacity-0 pointer-events-none",
+				style: {
+					top: "-9999px",
+					left: "-9999px"
+				}
+			}),
 			showMobileWarning && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 				className: "fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6",
 				children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

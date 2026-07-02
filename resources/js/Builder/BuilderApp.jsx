@@ -251,6 +251,9 @@ const BuilderApp = () => {
         <div className="flex flex-col h-screen w-screen bg-white text-gray-800 font-sans overflow-hidden">
             <style dangerouslySetInnerHTML={{ __html: ANIMATION_STYLES }} />
             
+            {/* Global Color Picker to prevent Chrome native modal freeze bug when unmounting */}
+            <input type="color" id="global-color-picker" className="absolute opacity-0 pointer-events-none" style={{ top: '-9999px', left: '-9999px' }} />
+            
             {showMobileWarning && (
                 <div className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-6">
                     <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full text-center border-t-4 border-yellow-500 animate-fade-in-up">
