@@ -134,43 +134,7 @@ const ColorsPanel = () => {
                                 />
                             </div>
 
-                            {/* Tombol Suntik Warna (Eyedropper) */}
-                            {typeof window !== 'undefined' && window.EyeDropper && (
-                                <button 
-                                    type="button"
-                                    onClick={async (e) => {
-                                        e.preventDefault();
-                                        
-                                        const releaseDragState = () => {
-                                            document.body.style.pointerEvents = 'auto';
-                                            // Force release any stuck drag state from react-rnd due to intercepted mouseup
-                                            window.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
-                                            window.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
-                                        };
 
-                                        try {
-                                            const eyeDropper = new window.EyeDropper();
-                                            // Prevent click pass-through to the Canvas which causes unmount and Chrome crash
-                                            document.body.style.pointerEvents = 'none';
-                                            await new Promise(resolve => setTimeout(resolve, 50));
-
-                                            const result = await eyeDropper.open();
-                                            releaseDragState();
-                                            // Defer the heavy React re-render to avoid freezing Chrome's UI thread
-                                            setTimeout(() => {
-                                                handleSelectColor(result.sRGBHex);
-                                            }, 100);
-                                        } catch (e) {
-                                            console.log('Eyedropper cancelled', e);
-                                            releaseDragState();
-                                        }
-                                    }}
-                                    className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 shadow-sm transition text-gray-600"
-                                    title="Suntik Warna dari Layar"
-                                >
-                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                                </button>
-                            )}
 
                             {/* Warna Saat Ini */}
                             <div className="w-10 h-10 rounded-full border-2 border-primary-500 flex items-center justify-center p-0.5">
