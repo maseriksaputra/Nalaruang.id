@@ -5897,11 +5897,15 @@ var ColorsPanel = () => {
 									onClick: async (e) => {
 										e.preventDefault();
 										const releaseDragState = () => {
+											document.body.style.pointerEvents = "auto";
 											window.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
 											window.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
 										};
 										try {
-											const result = await new window.EyeDropper().open();
+											const eyeDropper = new window.EyeDropper();
+											document.body.style.pointerEvents = "none";
+											await new Promise((resolve) => setTimeout(resolve, 50));
+											const result = await eyeDropper.open();
 											releaseDragState();
 											setTimeout(() => {
 												handleSelectColor(result.sRGBHex);

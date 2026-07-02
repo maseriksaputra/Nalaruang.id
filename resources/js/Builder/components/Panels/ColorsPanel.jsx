@@ -142,6 +142,7 @@ const ColorsPanel = () => {
                                         e.preventDefault();
                                         
                                         const releaseDragState = () => {
+                                            document.body.style.pointerEvents = 'auto';
                                             // Force release any stuck drag state from react-rnd due to intercepted mouseup
                                             window.dispatchEvent(new MouseEvent('mouseup', { bubbles: true }));
                                             window.dispatchEvent(new PointerEvent('pointerup', { bubbles: true }));
@@ -149,6 +150,10 @@ const ColorsPanel = () => {
 
                                         try {
                                             const eyeDropper = new window.EyeDropper();
+                                            // Prevent click pass-through to the Canvas which causes unmount and Chrome crash
+                                            document.body.style.pointerEvents = 'none';
+                                            await new Promise(resolve => setTimeout(resolve, 50));
+
                                             const result = await eyeDropper.open();
                                             releaseDragState();
                                             // Defer the heavy React re-render to avoid freezing Chrome's UI thread
