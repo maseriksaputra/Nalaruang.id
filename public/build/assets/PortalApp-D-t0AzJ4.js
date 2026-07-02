@@ -23730,6 +23730,10 @@ var PortalApp = () => {
 	const [isDarkMode, setIsDarkMode] = (0, import_react.useState)(document.documentElement.classList.contains("dark"));
 	const [statistics, setStatistics] = (0, import_react.useState)(null);
 	const [selectedOrder, setSelectedOrder] = (0, import_react.useState)(null);
+	const [showLinkOrderModal, setShowLinkOrderModal] = (0, import_react.useState)(false);
+	const [selectedProjectToLink, setSelectedProjectToLink] = (0, import_react.useState)(null);
+	const [availableOrders, setAvailableOrders] = (0, import_react.useState)([]);
+	const [selectedOrderIdToLink, setSelectedOrderIdToLink] = (0, import_react.useState)("");
 	const toggleDarkMode = () => {
 		if (isDarkMode) {
 			document.documentElement.classList.remove("dark");
@@ -24041,6 +24045,39 @@ var PortalApp = () => {
 		} catch (error) {
 			console.error(error);
 			alert("Gagal menduplikasi proyek.");
+		} finally {
+			setIsLoading(false);
+		}
+	};
+	const fetchAvailableOrders = async () => {
+		try {
+			const response = await axios.get("/admin/invitation-portal/available-orders");
+			setAvailableOrders(Array.isArray(response.data) ? response.data : []);
+		} catch (error) {
+			console.error("Gagal mengambil daftar pesanan", error);
+		}
+	};
+	const handleOpenLinkOrderModal = (e, inv) => {
+		e.stopPropagation();
+		setSelectedProjectToLink(inv);
+		setSelectedOrderIdToLink("");
+		fetchAvailableOrders();
+		setShowLinkOrderModal(true);
+	};
+	const submitLinkOrder = async () => {
+		if (!selectedProjectToLink || !selectedOrderIdToLink) return;
+		setIsLoading(true);
+		try {
+			const csrfToken = document.querySelector("meta[name=\"csrf-token\"]")?.getAttribute("content");
+			const response = await axios.post(`/admin/invitation-portal/${selectedProjectToLink.id}/link-order`, { order_id: selectedOrderIdToLink }, { headers: { "X-CSRF-TOKEN": csrfToken } });
+			if (response.data.success) {
+				alert("Projek berhasil ditautkan ke pesanan!");
+				setShowLinkOrderModal(false);
+				window.location.reload();
+			} else alert(response.data.error || "Gagal menautkan pesanan.");
+		} catch (error) {
+			console.error(error);
+			alert(error.response?.data?.error || "Gagal menautkan pesanan.");
 		} finally {
 			setIsLoading(false);
 		}
@@ -25575,26 +25612,53 @@ var PortalApp = () => {
 							}, template.id))]
 						})
 					] }),
-					(activeTab === "proyek" || activeTab === "beranda") && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center justify-between mb-6 mt-4",
-						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-							className: "text-2xl font-bold text-gray-900 dark:text-gray-100",
-							children: "Desain Terakhir"
-						}), activeTab === "beranda" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							onClick: () => setActiveTab("proyek"),
-							className: "text-blue-400 hover:text-blue-300 text-sm font-medium",
-							children: "Lihat Semua"
-						})]
-					}), !invitations || invitations.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "text-center py-24 bg-gradient-to-b from-white to-blue-50 dark:from-[#1e293b] dark:to-[#0f172a] rounded-3xl border border-blue-100 dark:border-blue-900/30 shadow-inner relative overflow-hidden mt-4",
-						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-2xl bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0wIDBoNDB2NDBIMHoiIGZpbGw9Im5vbmUiLz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSg1OSwgMTMwLCAyNDYsIDAuMSkiLz4KPC9zdmc+')] opacity-50 pointer-events-none" }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-								className: "w-24 h-24 bg-white dark:bg-[#1e293b] rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl relative z-10",
-								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: "w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-										className: "w-8 h-8 text-blue-600 dark:text-blue-400",
+					(activeTab === "proyek" || activeTab === "beranda") && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "flex items-center justify-between mb-6 mt-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+								className: "text-2xl font-bold text-gray-900 dark:text-gray-100",
+								children: "Desain Terakhir"
+							}), activeTab === "beranda" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: () => setActiveTab("proyek"),
+								className: "text-blue-400 hover:text-blue-300 text-sm font-medium",
+								children: "Lihat Semua"
+							})]
+						}),
+						!invitations || invitations.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "text-center py-24 bg-gradient-to-b from-white to-blue-50 dark:from-[#1e293b] dark:to-[#0f172a] rounded-3xl border border-blue-100 dark:border-blue-900/30 shadow-inner relative overflow-hidden mt-4",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-2xl bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxwYXRoIGQ9Ik0wIDBoNDB2NDBIMHoiIGZpbGw9Im5vbmUiLz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0icmdiYSg1OSwgMTMwLCAyNDYsIDAuMSkiLz4KPC9zdmc+')] opacity-50 pointer-events-none" }),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+									className: "w-24 h-24 bg-white dark:bg-[#1e293b] rounded-full flex items-center justify-center mx-auto mb-6 shadow-xl relative z-10",
+									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: "w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center",
+										children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+											className: "w-8 h-8 text-blue-600 dark:text-blue-400",
+											fill: "none",
+											stroke: "currentColor",
+											viewBox: "0 0 24 24",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+												strokeLinecap: "round",
+												strokeLinejoin: "round",
+												strokeWidth: "2",
+												d: "M12 4v16m8-8H4"
+											})
+										})
+									})
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+									className: "text-2xl font-bold text-gray-900 dark:text-white relative z-10",
+									children: "Karya Anda Dimulai di Sini"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+									className: "text-gray-500 dark:text-gray-400 mt-3 max-w-md mx-auto relative z-10 mb-8 leading-relaxed",
+									children: "Belum ada undangan atau desain yang Anda buat. Pilih template di atas atau mulai dari kanvas kosong untuk menciptakan mahakarya Anda."
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									onClick: handleCreateBlank,
+									className: "relative z-10 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded-full font-medium transition-all shadow-lg hover:shadow-blue-500/30 transform hover:-translate-y-1",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+										className: "w-5 h-5",
 										fill: "none",
 										stroke: "currentColor",
 										viewBox: "0 0 24 24",
@@ -25602,144 +25666,224 @@ var PortalApp = () => {
 											strokeLinecap: "round",
 											strokeLinejoin: "round",
 											strokeWidth: "2",
-											d: "M12 4v16m8-8H4"
+											d: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
 										})
-									})
+									}), "Mulai Kanvas Kosong"]
 								})
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-								className: "text-2xl font-bold text-gray-900 dark:text-white relative z-10",
-								children: "Karya Anda Dimulai di Sini"
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-								className: "text-gray-500 dark:text-gray-400 mt-3 max-w-md mx-auto relative z-10 mb-8 leading-relaxed",
-								children: "Belum ada undangan atau desain yang Anda buat. Pilih template di atas atau mulai dari kanvas kosong untuk menciptakan mahakarya Anda."
-							}),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: handleCreateBlank,
-								className: "relative z-10 inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-3.5 rounded-full font-medium transition-all shadow-lg hover:shadow-blue-500/30 transform hover:-translate-y-1",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-									className: "w-5 h-5",
-									fill: "none",
-									stroke: "currentColor",
-									viewBox: "0 0 24 24",
-									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-										strokeLinecap: "round",
-										strokeLinejoin: "round",
-										strokeWidth: "2",
-										d: "M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
-									})
-								}), "Mulai Kanvas Kosong"]
-							})
-						]
-					}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-						className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6",
-						children: invitations.map((inv) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							onClick: () => handleOpenProject(inv.id),
-							className: "group bg-white dark:bg-[#1e293b] border border-gray-200 dark:border-[#334155] rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_8px_30px_-10px_rgba(255,255,255,0.1)] hover:-translate-y-1 hover:border-gray-400",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "h-40 bg-gray-100 dark:bg-gray-800 p-0 relative overflow-hidden group-hover:opacity-90 transition-opacity",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-									className: `absolute top-3 right-3 px-2 py-1 backdrop-blur rounded text-[10px] font-bold text-white border uppercase z-20 shadow ${inv.status === "published" ? "bg-emerald-500/80 border-emerald-400" : "bg-gray-700/80 border-gray-500"}`,
-									children: inv.status
-								}), inv.thumbnail_path ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-									src: inv.thumbnail_path.startsWith("http") ? inv.thumbnail_path : `/${inv.thumbnail_path}`,
-									alt: "Preview",
-									className: "w-full h-full object-cover"
-								}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MobilePreview, {
-									slug: inv.slug,
-									title: inv.title
-								})]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "p-4 bg-white dark:bg-[#1e293b] border-t border-gray-200 dark:border-[#334155] relative flex justify-between items-center",
+							]
+						}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+							className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6",
+							children: invitations.map((inv) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								onClick: () => handleOpenProject(inv.id),
+								className: "group bg-white dark:bg-[#1e293b] border border-gray-200 dark:border-[#334155] rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_8px_30px_-10px_rgba(255,255,255,0.1)] hover:-translate-y-1 hover:border-gray-400",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex-1 min-w-0 mr-2",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-										className: "text-md font-semibold text-gray-900 dark:text-white truncate group-hover:text-blue-400 transition-colors",
-										children: inv.title
-									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-										className: "text-xs text-gray-500 dark:text-gray-400 mt-1",
-										children: ["Diperbarui: ", new Date(inv.updated_at).toLocaleDateString("id-ID", {
-											day: "numeric",
-											month: "short"
-										})]
+									className: "h-40 bg-gray-100 dark:bg-gray-800 p-0 relative overflow-hidden group-hover:opacity-90 transition-opacity",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+										className: `absolute top-3 right-3 px-2 py-1 backdrop-blur rounded text-[10px] font-bold text-white border uppercase z-20 shadow ${inv.status === "published" ? "bg-emerald-500/80 border-emerald-400" : "bg-gray-700/80 border-gray-500"}`,
+										children: inv.status
+									}), inv.thumbnail_path ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+										src: inv.thumbnail_path.startsWith("http") ? inv.thumbnail_path : `/${inv.thumbnail_path}`,
+										alt: "Preview",
+										className: "w-full h-full object-cover"
+									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MobilePreview, {
+										slug: inv.slug,
+										title: inv.title
 									})]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex gap-2 shrink-0",
-									children: [
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-											onClick: (e) => handleRename(e, inv.id, inv.title),
-											className: "p-1.5 text-gray-400 hover:text-blue-500 bg-gray-100 dark:bg-gray-800 rounded transition",
-											title: "Ubah Nama",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-4 h-4",
-												fill: "none",
-												stroke: "currentColor",
-												viewBox: "0 0 24 24",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-													strokeLinecap: "round",
-													strokeLinejoin: "round",
-													strokeWidth: "2",
-													d: "M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+									className: "p-4 bg-white dark:bg-[#1e293b] border-t border-gray-200 dark:border-[#334155] relative flex justify-between items-center",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex-1 min-w-0 mr-2",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "text-md font-semibold text-gray-900 dark:text-white truncate group-hover:text-blue-400 transition-colors",
+											children: inv.title
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+											className: "text-xs text-gray-500 dark:text-gray-400 mt-1",
+											children: ["Diperbarui: ", new Date(inv.updated_at).toLocaleDateString("id-ID", {
+												day: "numeric",
+												month: "short"
+											})]
+										})]
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex gap-2 shrink-0",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												onClick: (e) => handleRename(e, inv.id, inv.title),
+												className: "p-1.5 text-gray-400 hover:text-blue-500 bg-gray-100 dark:bg-gray-800 rounded transition",
+												title: "Ubah Nama",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+													className: "w-4 h-4",
+													fill: "none",
+													stroke: "currentColor",
+													viewBox: "0 0 24 24",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+														strokeLinecap: "round",
+														strokeLinejoin: "round",
+														strokeWidth: "2",
+														d: "M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+													})
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												onClick: (e) => handleDuplicateProject(e, inv.id),
+												className: "p-1.5 text-gray-400 hover:text-indigo-500 bg-gray-100 dark:bg-gray-800 rounded transition",
+												title: "Buat Salinan / Duplikat",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+													className: "w-4 h-4",
+													fill: "none",
+													stroke: "currentColor",
+													viewBox: "0 0 24 24",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+														strokeLinecap: "round",
+														strokeLinejoin: "round",
+														strokeWidth: "2",
+														d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2-2v8a2 2 0 002 2z"
+													})
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												onClick: (e) => handleOpenLinkOrderModal(e, inv),
+												className: "p-1.5 text-gray-400 hover:text-orange-500 bg-gray-100 dark:bg-gray-800 rounded transition",
+												title: "Tautkan ke Pesanan Klien",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+													className: "w-4 h-4",
+													fill: "none",
+													stroke: "currentColor",
+													viewBox: "0 0 24 24",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+														strokeLinecap: "round",
+														strokeLinejoin: "round",
+														strokeWidth: "2",
+														d: "M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"
+													})
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												onClick: (e) => handleEditSlug(e, inv.id, inv.slug),
+												className: "p-1.5 text-gray-400 hover:text-emerald-500 bg-gray-100 dark:bg-gray-800 rounded transition",
+												title: "Ubah URL / Slug",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+													className: "w-4 h-4",
+													fill: "none",
+													stroke: "currentColor",
+													viewBox: "0 0 24 24",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+														strokeLinecap: "round",
+														strokeLinejoin: "round",
+														strokeWidth: "2",
+														d: "M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+													})
+												})
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+												onClick: (e) => handleDelete(e, inv.id),
+												className: "p-1.5 text-gray-400 hover:text-red-500 bg-gray-100 dark:bg-gray-800 rounded transition",
+												title: "Hapus",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+													className: "w-4 h-4",
+													fill: "none",
+													stroke: "currentColor",
+													viewBox: "0 0 24 24",
+													children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+														strokeLinecap: "round",
+														strokeLinejoin: "round",
+														strokeWidth: "2",
+														d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+													})
 												})
 											})
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-											onClick: (e) => handleDuplicateProject(e, inv.id),
-											className: "p-1.5 text-gray-400 hover:text-indigo-500 bg-gray-100 dark:bg-gray-800 rounded transition",
-											title: "Buat Salinan / Duplikat",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-4 h-4",
-												fill: "none",
-												stroke: "currentColor",
-												viewBox: "0 0 24 24",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-													strokeLinecap: "round",
-													strokeLinejoin: "round",
-													strokeWidth: "2",
-													d: "M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-												})
-											})
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-											onClick: (e) => handleEditSlug(e, inv.id, inv.slug),
-											className: "p-1.5 text-gray-400 hover:text-emerald-500 bg-gray-100 dark:bg-gray-800 rounded transition",
-											title: "Ubah URL / Slug",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-4 h-4",
-												fill: "none",
-												stroke: "currentColor",
-												viewBox: "0 0 24 24",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-													strokeLinecap: "round",
-													strokeLinejoin: "round",
-													strokeWidth: "2",
-													d: "M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-												})
-											})
-										}),
-										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-											onClick: (e) => handleDelete(e, inv.id),
-											className: "p-1.5 text-gray-400 hover:text-red-500 bg-gray-100 dark:bg-gray-800 rounded transition",
-											title: "Hapus",
-											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
-												className: "w-4 h-4",
-												fill: "none",
-												stroke: "currentColor",
-												viewBox: "0 0 24 24",
-												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-													strokeLinecap: "round",
-													strokeLinejoin: "round",
-													strokeWidth: "2",
-													d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-												})
-											})
-										})
-									]
+										]
+									})]
 								})]
+							}, inv.id))
+						}),
+						showLinkOrderModal && selectedProjectToLink && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+							className: "fixed inset-0 z-50 flex items-center justify-center p-4",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+								className: "absolute inset-0 bg-black/60 backdrop-blur-sm",
+								onClick: () => setShowLinkOrderModal(false)
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "bg-white dark:bg-[#0f172a] w-full max-w-md rounded-2xl shadow-2xl relative z-10 p-6 border border-gray-200 dark:border-gray-800 animate-fade-in-up",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex items-center justify-between mb-6 border-b border-gray-100 dark:border-gray-800 pb-4",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+											className: "text-xl font-bold text-gray-900 dark:text-white",
+											children: "Tautkan ke Pesanan"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: () => setShowLinkOrderModal(false),
+											className: "p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition",
+											children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+												className: "w-5 h-5",
+												fill: "none",
+												stroke: "currentColor",
+												viewBox: "0 0 24 24",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M6 18L18 6M6 6l12 12"
+												})
+											})
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mb-4",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+											className: "text-sm text-gray-600 dark:text-gray-400 mb-2",
+											children: "Projek yang dipilih:"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: "p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white font-semibold",
+											children: selectedProjectToLink.title
+										})]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "mb-6",
+										children: [
+											/* @__PURE__ */ (0, import_jsx_runtime.jsx)("label", {
+												className: "text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block",
+												children: "Pilih Pesanan Klien"
+											}),
+											/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+												value: selectedOrderIdToLink,
+												onChange: (e) => setSelectedOrderIdToLink(e.target.value),
+												className: "w-full bg-white dark:bg-[#1e293b] border border-gray-200 dark:border-[#334155] rounded-xl px-4 py-3 text-gray-900 dark:text-white outline-none focus:border-indigo-500",
+												children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+													value: "",
+													children: "-- Pilih Pesanan VIP --"
+												}), availableOrders.map((o) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("option", {
+													value: o.id,
+													children: [
+														o.customer_name,
+														" (ID: #",
+														o.id,
+														") - ",
+														o.template?.name || "Custom VIP"
+													]
+												}, o.id))]
+											}),
+											availableOrders.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+												className: "text-xs text-orange-500 mt-2",
+												children: "Tidak ada pesanan yang tersedia atau semua pesanan sudah memiliki projek."
+											})
+										]
+									}),
+									/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+										className: "flex justify-end gap-3",
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: () => setShowLinkOrderModal(false),
+											className: "px-5 py-2.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-white rounded-xl font-bold transition",
+											children: "Batal"
+										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+											onClick: submitLinkOrder,
+											disabled: !selectedOrderIdToLink || isLoading,
+											className: "px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2",
+											children: isLoading ? "Menyimpan..." : "Tautkan Sekarang"
+										})]
+									})
+								]
 							})]
-						}, inv.id))
-					})] }),
+						})
+					] }),
 					activeTab === "tamu" && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 						className: "flex items-center justify-between mb-6 mt-4",
 						children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {

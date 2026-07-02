@@ -8339,6 +8339,10 @@
       color: var(--color-indigo-600);
     }
 
+    .hover\:text-orange-500:hover {
+      color: var(--color-orange-500);
+    }
+
     .hover\:text-primary-500:hover {
       color: var(--color-primary-500);
     }

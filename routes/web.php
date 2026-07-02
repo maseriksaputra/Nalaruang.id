@@ -406,6 +406,8 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::post('/admin/invitation-portal/{id}/rename', [\App\Http\Controllers\DashboardPortalController::class, 'renameInvitation']);
     Route::post('/admin/invitation-portal/{id}/slug', [\App\Http\Controllers\DashboardPortalController::class, 'updateSlug']);
     Route::delete('/admin/invitation-portal/{id}', [\App\Http\Controllers\DashboardPortalController::class, 'deleteInvitation']);
+    Route::get('/admin/invitation-portal/available-orders', [\App\Http\Controllers\DashboardPortalController::class, 'getAvailableOrders']);
+    Route::post('/admin/invitation-portal/{id}/link-order', [\App\Http\Controllers\DashboardPortalController::class, 'linkProjectToOrder']);
     Route::post('/admin/invitation-portal/create', [\App\Http\Controllers\DashboardPortalController::class, 'store']);
     Route::get('/admin/builder/global-elements', [\App\Http\Controllers\GlobalElementController::class, 'index']);
     Route::post('/admin/builder/global-elements', [\App\Http\Controllers\GlobalElementController::class, 'store']);

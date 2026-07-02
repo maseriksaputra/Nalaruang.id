@@ -533,4 +533,50 @@ class DashboardPortalController extends Controller
             ], 500);
         }
     }
+
+    public function getAvailableOrders()
+    {
+        // Get orders that are not linked to any invitation
+        // Excluding 'dibatalkan' and 'selesai' statuses if you want, but for now just check link
+        $linkedOrderIds = Invitation::whereNotNull('order_id')->pluck('order_id');
+        $orders = \App\Models\Order::whereNotIn('id', $linkedOrderIds)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+        return response()->json($orders);
+    }
+
+    public function linkProjectToOrder(Request $request, $id)
+    {
+        $request->validate([
+            'order_id' => 'required|exists:orders,id'
+        ]);
+
+        try {
+            $invitation = Invitation::findOrFail($id);
+            
+            // Validate if order is already linked to another project
+            $existingLink = Invitation::where('order_id', $request->order_id)
+                                        ->where('id', '!=', $id)
+                                        ->first();
+            if ($existingLink) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Pesanan ini sudah tertaut dengan projek lain.'
+                ], 400);
+            }
+
+            $invitation->order_id = $request->order_id;
+            $invitation->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Projek berhasil ditautkan ke pesanan.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Gagal menautkan pesanan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
