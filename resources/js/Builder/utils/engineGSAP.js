@@ -467,7 +467,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
 
                 ScrollTrigger.create({
                     trigger: triggerElement,
-                    start: "top 80%",
+                    start: "top 95%",
                     scroller: scrollScroller,
                     animation: tl,
                     toggleActions: toggleActionStr,
