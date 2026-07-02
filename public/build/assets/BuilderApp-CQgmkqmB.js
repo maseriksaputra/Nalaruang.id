@@ -110,17 +110,14 @@ var CanvasArea = () => {
 		if (window.__BUILDER_IS_PLAYING__ === false) container.pause();
 	};
 	(0, import_react.useEffect)(() => {
-		const handlePlay = () => {
-			if (particlesContainer) particlesContainer.play();
+		const handlePlaybackChange = (e) => {
+			if (!particlesContainer) return;
+			if (e.detail.isPlaying) particlesContainer.play();
+			else particlesContainer.pause();
 		};
-		const handleStop = () => {
-			if (particlesContainer) particlesContainer.pause();
-		};
-		window.addEventListener("builder:play_all_animations", handlePlay);
-		window.addEventListener("builder:stop_all_animations", handleStop);
+		window.addEventListener("builder:playback_change", handlePlaybackChange);
 		return () => {
-			window.removeEventListener("builder:play_all_animations", handlePlay);
-			window.removeEventListener("builder:stop_all_animations", handleStop);
+			window.removeEventListener("builder:playback_change", handlePlaybackChange);
 		};
 	}, [particlesContainer]);
 	(0, import_react.useEffect)(() => {
@@ -21025,6 +21022,7 @@ var TimelinePanel = () => {
 			window.__BUILDER_PLAYHEAD_POS__ = playheadPos;
 			window.dispatchEvent(new CustomEvent("builder:time_update", { detail: { time: playheadPos } }));
 		} else window.__BUILDER_IS_PLAYING__ = true;
+		window.dispatchEvent(new CustomEvent("builder:playback_change", { detail: { isPlaying } }));
 	}, [playheadPos, isPlaying]);
 	const playheadRef = (0, import_react.useRef)(null);
 	const timeDisplayRef = (0, import_react.useRef)(null);

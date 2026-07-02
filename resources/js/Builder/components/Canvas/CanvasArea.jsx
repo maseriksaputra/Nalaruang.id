@@ -98,17 +98,17 @@ const CanvasArea = () => {
     };
 
     useEffect(() => {
-        const handlePlay = () => {
-            if (particlesContainer) particlesContainer.play();
+        const handlePlaybackChange = (e) => {
+            if (!particlesContainer) return;
+            if (e.detail.isPlaying) {
+                particlesContainer.play();
+            } else {
+                particlesContainer.pause();
+            }
         };
-        const handleStop = () => {
-            if (particlesContainer) particlesContainer.pause();
-        };
-        window.addEventListener('builder:play_all_animations', handlePlay);
-        window.addEventListener('builder:stop_all_animations', handleStop);
+        window.addEventListener('builder:playback_change', handlePlaybackChange);
         return () => {
-            window.removeEventListener('builder:play_all_animations', handlePlay);
-            window.removeEventListener('builder:stop_all_animations', handleStop);
+            window.removeEventListener('builder:playback_change', handlePlaybackChange);
         };
     }, [particlesContainer]);
 

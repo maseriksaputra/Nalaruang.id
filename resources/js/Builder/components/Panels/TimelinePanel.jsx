@@ -36,6 +36,7 @@ const TimelinePanel = () => {
         } else {
             window.__BUILDER_IS_PLAYING__ = true;
         }
+        window.dispatchEvent(new CustomEvent('builder:playback_change', { detail: { isPlaying } }));
     }, [playheadPos, isPlaying]);
 
     const playheadRef = useRef(null);
