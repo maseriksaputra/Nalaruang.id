@@ -536,10 +536,9 @@ class DashboardPortalController extends Controller
 
     public function getAvailableOrders()
     {
-        // Get orders that are not linked to any invitation
-        // Excluding 'dibatalkan' and 'selesai' statuses if you want, but for now just check link
-        $linkedOrderIds = Invitation::whereNotNull('order_id')->pluck('order_id');
-        $orders = \App\Models\Order::whereNotIn('id', $linkedOrderIds)
+        // Menampilkan semua pesanan, termasuk yang sudah memiliki proyek
+        // Agar pengguna bisa menautkan proyek duplikat ke pesanan VIP dan menimpa relasi lamanya
+        $orders = \App\Models\Order::with('template')
                     ->orderBy('created_at', 'desc')
                     ->get();
         return response()->json($orders);
@@ -554,15 +553,15 @@ class DashboardPortalController extends Controller
         try {
             $invitation = Invitation::findOrFail($id);
             
-            // Validate if order is already linked to another project
-            $existingLink = Invitation::where('order_id', $request->order_id)
+            // Check if order is already linked to another project
+            $existingLinks = Invitation::where('order_id', $request->order_id)
                                         ->where('id', '!=', $id)
-                                        ->first();
-            if ($existingLink) {
-                return response()->json([
-                    'success' => false,
-                    'error' => 'Pesanan ini sudah tertaut dengan projek lain.'
-                ], 400);
+                                        ->get();
+                                        
+            // If it is, unlink the old projects so the order is transferred to this new project
+            foreach($existingLinks as $oldLink) {
+                $oldLink->order_id = null;
+                $oldLink->save();
             }
 
             $invitation->order_id = $request->order_id;
@@ -570,7 +569,7 @@ class DashboardPortalController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Projek berhasil ditautkan ke pesanan.'
+                'message' => 'Projek berhasil ditautkan ke pesanan (menimpa tautan sebelumnya jika ada).'
             ]);
         } catch (\Exception $e) {
             return response()->json([
