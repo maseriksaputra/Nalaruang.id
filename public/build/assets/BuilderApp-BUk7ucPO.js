@@ -5896,13 +5896,19 @@ var ColorsPanel = () => {
 									type: "button",
 									onClick: async (e) => {
 										e.preventDefault();
+										const releaseDragState = () => {
+											window.dispatchEvent(new MouseEvent("mouseup", { bubbles: true }));
+											window.dispatchEvent(new PointerEvent("pointerup", { bubbles: true }));
+										};
 										try {
 											const result = await new window.EyeDropper().open();
+											releaseDragState();
 											setTimeout(() => {
 												handleSelectColor(result.sRGBHex);
 											}, 100);
 										} catch (e) {
 											console.log("Eyedropper cancelled", e);
+											releaseDragState();
 										}
 									},
 									className: "w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 shadow-sm transition text-gray-600",
