@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import useCanvasStore from '../../stores/useCanvasStore';
 
 const TAILWIND_COLORS = [
@@ -37,6 +37,16 @@ const ColorsPanel = () => {
     const customPalette = useCanvasStore(state => state.global_settings?.custom_palette || EMPTY_ARRAY);
     const addCustomColor = useCanvasStore(state => state.addCustomColor);
     const removeCustomColor = useCanvasStore(state => state.removeCustomColor);
+
+    const abortControllerRef = useRef(null);
+
+    useEffect(() => {
+        return () => {
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+        };
+    }, []);
 
     const findLayer = (sections, desktopLayers, id, mode) => {
         const targetSections = mode === 'desktop' ? [{ layers: desktopLayers }] : sections;
@@ -134,7 +144,31 @@ const ColorsPanel = () => {
                                 />
                             </div>
 
-
+                            {/* Tombol Suntik Warna (Eyedropper) */}
+                            {typeof window !== 'undefined' && window.EyeDropper && (
+                                <button 
+                                    type="button"
+                                    onClick={async (e) => {
+                                        e.preventDefault();
+                                        if (abortControllerRef.current) {
+                                            abortControllerRef.current.abort();
+                                        }
+                                        abortControllerRef.current = new AbortController();
+                                        
+                                        try {
+                                            const eyeDropper = new window.EyeDropper();
+                                            const result = await eyeDropper.open({ signal: abortControllerRef.current.signal });
+                                            handleSelectColor(result.sRGBHex);
+                                        } catch (e) {
+                                            console.log('Eyedropper cancelled', e);
+                                        }
+                                    }}
+                                    className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 shadow-sm transition text-gray-600"
+                                    title="Suntik Warna dari Layar"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                            )}
 
                             {/* Warna Saat Ini */}
                             <div className="w-10 h-10 rounded-full border-2 border-primary-500 flex items-center justify-center p-0.5">
