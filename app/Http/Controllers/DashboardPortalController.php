@@ -33,7 +33,8 @@ class DashboardPortalController extends Controller
     public function getInvitations()
     {
         // Hindari mengambil kolom 'canvas_config' yang sangat berat
-        $invitations = Invitation::select('id', 'title', 'slug', 'status', 'thumbnail_path', 'updated_at', 'created_at')
+        $invitations = Invitation::select('id', 'title', 'slug', 'status', 'thumbnail_path', 'updated_at', 'created_at', 'order_id')
+            ->with('order:id,customer_name')
             ->where('is_template', false)
             ->orderBy('updated_at', 'desc')
             ->get();

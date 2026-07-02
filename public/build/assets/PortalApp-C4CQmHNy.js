@@ -25678,17 +25678,36 @@ var PortalApp = () => {
 								className: "group bg-white dark:bg-[#1e293b] border border-gray-200 dark:border-[#334155] rounded-2xl overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-[0_8px_30px_-10px_rgba(255,255,255,0.1)] hover:-translate-y-1 hover:border-gray-400",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "h-40 bg-gray-100 dark:bg-gray-800 p-0 relative overflow-hidden group-hover:opacity-90 transition-opacity",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-										className: `absolute top-3 right-3 px-2 py-1 backdrop-blur rounded text-[10px] font-bold text-white border uppercase z-20 shadow ${inv.status === "published" ? "bg-emerald-500/80 border-emerald-400" : "bg-gray-700/80 border-gray-500"}`,
-										children: inv.status
-									}), inv.thumbnail_path ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-										src: inv.thumbnail_path.startsWith("http") ? inv.thumbnail_path : `/${inv.thumbnail_path}`,
-										alt: "Preview",
-										className: "w-full h-full object-cover"
-									}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MobilePreview, {
-										slug: inv.slug,
-										title: inv.title
-									})]
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+											className: `absolute top-3 right-3 px-2 py-1 backdrop-blur rounded text-[10px] font-bold text-white border uppercase z-20 shadow ${inv.status === "published" ? "bg-emerald-500/80 border-emerald-400" : "bg-gray-700/80 border-gray-500"}`,
+											children: inv.status
+										}),
+										inv.order_id && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+											className: "absolute top-3 left-3 px-2 py-1 backdrop-blur rounded text-[10px] font-bold text-white border uppercase z-20 shadow bg-orange-500/90 border-orange-400 flex items-center gap-1",
+											title: `Terhubung dengan pesanan: ${inv.order?.customer_name || "Klien VIP"}`,
+											children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("svg", {
+												className: "w-3 h-3",
+												fill: "none",
+												stroke: "currentColor",
+												viewBox: "0 0 24 24",
+												children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+													strokeLinecap: "round",
+													strokeLinejoin: "round",
+													strokeWidth: "2",
+													d: "M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+												})
+											}), "TERTAUT"]
+										}),
+										inv.thumbnail_path ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+											src: inv.thumbnail_path.startsWith("http") ? inv.thumbnail_path : `/${inv.thumbnail_path}`,
+											alt: "Preview",
+											className: "w-full h-full object-cover"
+										}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MobilePreview, {
+											slug: inv.slug,
+											title: inv.title
+										})
+									]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 									className: "p-4 bg-white dark:bg-[#1e293b] border-t border-gray-200 dark:border-[#334155] relative flex justify-between items-center",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
