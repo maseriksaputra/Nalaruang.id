@@ -67,7 +67,7 @@ const CanvasArea = () => {
                 const formData = new FormData();
                 formData.append('file', file);
                 try {
-                    const response = await apiClient.post('/admin/builder/upload', formData, {
+                    const response = await apiClient.post('/admin/builder/upload-media', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                         },

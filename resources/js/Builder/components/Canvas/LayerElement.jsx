@@ -136,7 +136,6 @@ const CountdownDisplay = ({ targetDate, textColor, bgColor, bgImage, fontFamily,
 const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
     if (layer.isHidden) return null;
     const updateLayerPosition = useCanvasStore(state => state.updateLayerPosition);
-    const zoom = useCanvasStore(state => state.zoom);
     const activeTab = useCanvasStore(state => state.activeTab);
     
     const [localPos, setLocalPos] = useState({ x: layer.style?.x || 0, y: layer.style?.y || 0 });

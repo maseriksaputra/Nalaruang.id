@@ -1,8 +1,8 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ViewerApp-BavYpqAC.js","assets/bootstrap-B7MMry3r.js","assets/browser-D00NV7RG.js","assets/LogUtils-CjrGbVDZ.js","assets/jsx-runtime-B3AVLYIu.js","assets/ViewerApp-DQ4XEBu1.css"])))=>i.map(i=>d[i]);
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/ViewerApp-DeG99uO7.js","assets/bootstrap-B7MMry3r.js","assets/browser-DAC95rxI.js","assets/LogUtils-CjrGbVDZ.js","assets/jsx-runtime-B3AVLYIu.js","assets/ViewerApp-DQ4XEBu1.css"])))=>i.map(i=>d[i]);
 import { i as __toESM$1, t as axios } from "./bootstrap-B7MMry3r.js";
 import { c as require_react_dom, l as require_react, s as require_client, t as require_jsx_runtime } from "./jsx-runtime-B3AVLYIu.js";
-import { n as __vitePreload, t as tsParticles } from "./browser-D00NV7RG.js";
-import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, L as useUIStore, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as apiClient, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset, z as useStore } from "./ViewerApp-BavYpqAC.js";
+import { n as __vitePreload, t as tsParticles } from "./browser-DAC95rxI.js";
+import ViewerApp, { A as FONTS, D as IframePreview, F as useCanvasStore, L as useUIStore, M as IMAGE_FILTERS, N as pointsToSmoothedSvgPath, O as LayerElement, P as ShapePaths, R as apiClient, h as r$2, j as loadFont, k as PaymentProviders, n as loadFireflyPreset, t as loadSnowPreset, z as useStore } from "./ViewerApp-DeG99uO7.js";
 //#region resources/js/Builder/components/Canvas/PathVisualizerOverlay.jsx
 var import_client = require_client();
 var import_react = /* @__PURE__ */ __toESM$1(require_react(), 1);
@@ -86,7 +86,7 @@ var CanvasArea = () => {
 				const formData = new FormData();
 				formData.append("file", file);
 				try {
-					const response = await apiClient.post("/admin/builder/upload", formData, { headers: { "Content-Type": "multipart/form-data" } });
+					const response = await apiClient.post("/admin/builder/upload-media", formData, { headers: { "Content-Type": "multipart/form-data" } });
 					if (response.data.success) {
 						if (activeSectionId) useCanvasStore.getState().addLayer({
 							type: "image",
@@ -15204,7 +15204,7 @@ var RightInspector = () => {
 										className: "flex items-center gap-2",
 										children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 											onClick: () => {
-												__vitePreload(() => import("./ViewerApp-BavYpqAC.js").then((n) => n.I).then((module) => {
+												__vitePreload(() => import("./ViewerApp-DeG99uO7.js").then((n) => n.I).then((module) => {
 													module.default.getState().setActiveTab("colors");
 												}), __vite__mapDeps([0,1,2,3,4,5]));
 											},
