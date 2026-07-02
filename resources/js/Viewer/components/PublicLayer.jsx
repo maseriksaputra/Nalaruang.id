@@ -213,7 +213,7 @@ const PublicLayer = ({ layer, isOpened = true, isCoverPage = true, isChildOfGrou
         let animationCtx = null;
         if (layer.animation) {
             const styleForAnimation = layer.type === 'shape' ? { ...layer.style, opacity: 1 } : layer.style;
-            const actualTriggerRef = isChildOfGroup && parentTriggerRef ? parentTriggerRef : triggerRef.current;
+            const actualTriggerRef = triggerRef.current;
             animationCtx = applyAnimation(elementRef.current, layer.animation, false, styleForAnimation, 0, isCoverPage, isChildOfGroup, actualTriggerRef);
         }
 
