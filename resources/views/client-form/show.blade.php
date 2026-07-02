@@ -51,30 +51,35 @@
                             @php
                                 $fieldName = \Illuminate\Support\Str::slug($field['field_name'], '_');
                                 $isRequired = filter_var($field['is_required'] ?? false, FILTER_VALIDATE_BOOLEAN);
+                                $hasAsset = isset($assets) && $assets->has($field['field_name']);
+                                $existingValue = $hasAsset ? $assets[$field['field_name']]->first()->content : '';
                             @endphp
 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-800 mb-2">
                                     {{ $field['field_name'] }}
-                                    @if($isRequired) <span class="text-red-500">*</span> @endif
+                                    @if($isRequired && !$hasAsset) <span class="text-red-500">*</span> @endif
                                 </label>
 
                                 @if($field['type'] === 'text')
-                                    <input type="text" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired ? 'required' : '' }} value="{{ old($fieldName) }}" placeholder="Masukkan {{ strtolower($field['field_name']) }}...">
+                                    <input type="text" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired && !$hasAsset ? 'required' : '' }} value="{{ old($fieldName, $existingValue) }}" placeholder="Masukkan {{ strtolower($field['field_name']) }}...">
                                 @elseif($field['type'] === 'date')
-                                    <input type="date" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired ? 'required' : '' }} value="{{ old($fieldName) }}">
+                                    <input type="date" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired && !$hasAsset ? 'required' : '' }} value="{{ old($fieldName, $existingValue) }}">
                                 
                                 @elseif($field['type'] === 'datetime')
-                                    <input type="datetime-local" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired ? 'required' : '' }} value="{{ old($fieldName) }}">
+                                    <input type="datetime-local" name="{{ $fieldName }}" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired && !$hasAsset ? 'required' : '' }} value="{{ old($fieldName, $existingValue) }}">
                                 
                                 @elseif($field['type'] === 'audio')
                                     <div class="mt-1">
-                                        <input type="file" name="{{ $fieldName }}" accept="audio/mpeg, audio/wav, audio/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 transition-colors cursor-pointer" {{ $isRequired ? 'required' : '' }}>
+                                        <input type="file" name="{{ $fieldName }}" accept="audio/mpeg, audio/wav, audio/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 transition-colors cursor-pointer" {{ $isRequired && !$hasAsset ? 'required' : '' }}>
                                         <p class="mt-2 text-xs text-gray-500">Unggah file audio format MP3 atau WAV.</p>
+                                        @if($hasAsset)
+                                            <p class="mt-1 text-xs text-green-600 font-medium">✓ File audio sudah tersimpan.</p>
+                                        @endif
                                     </div>
                                 
                                 @elseif($field['type'] === 'textarea')
-                                    <textarea name="{{ $fieldName }}" rows="4" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired ? 'required' : '' }} placeholder="Tuliskan {{ strtolower($field['field_name']) }} di sini...">{{ old($fieldName) }}</textarea>
+                                    <textarea name="{{ $fieldName }}" rows="4" class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm placeholder-gray-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all duration-200" {{ $isRequired && !$hasAsset ? 'required' : '' }} placeholder="Tuliskan {{ strtolower($field['field_name']) }} di sini...">{{ old($fieldName, $existingValue) }}</textarea>
                                 
                                 @elseif($field['type'] === 'image')
                                     <div x-data="imageUpload()" class="mt-1">
@@ -86,7 +91,7 @@
                                                 <div class="flex text-sm text-gray-600 justify-center">
                                                     <div class="relative font-semibold text-brand-600 hover:text-brand-500">
                                                         <span x-text="files.length > 0 ? files.length + ' file dipilih (Klik untuk menambah/mengganti)' : 'Pilih file dari perangkat'"></span>
-                                                        <input x-ref="fileInput" @change="handleFiles($event)" name="{{ $fieldName }}[]" type="file" class="sr-only" accept="image/*,video/mp4,video/quicktime" {{ $isRequired ? 'required' : '' }} {{ ($field['max_files'] ?? 1) > 1 || ($field['max_files'] ?? 0) === 0 ? 'multiple' : '' }}>
+                                                        <input x-ref="fileInput" @change="handleFiles($event)" name="{{ $fieldName }}[]" type="file" class="sr-only" accept="image/*,video/mp4,video/quicktime" {{ $isRequired && !$hasAsset ? 'required' : '' }} {{ ($field['max_files'] ?? 1) > 1 || ($field['max_files'] ?? 0) === 0 ? 'multiple' : '' }}>
                                                     </div>
                                                 </div>
                                                 <p class="text-xs text-gray-500">
@@ -95,6 +100,9 @@
                                                         (Maksimal {{ $field['max_files'] }} file)
                                                     @endif
                                                 </p>
+                                                @if($hasAsset)
+                                                    <p class="mt-2 text-xs text-green-600 font-medium text-center">✓ {{ $assets[$field['field_name']]->count() }} file media sudah tersimpan. Unggah lagi untuk menambahkan.</p>
+                                                @endif
                                             </div>
                                         </label>
                                         
@@ -128,7 +136,7 @@
                             </button>
                             <div class="bg-blue-50 text-blue-800 p-4 rounded-xl mt-6 flex items-start text-sm">
                                 <svg class="w-5 h-5 text-blue-500 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <p>Pastikan data sudah benar sebelum dikirim, karena link ini hanya bisa diisi satu kali untuk menjaga keamanan data Anda.</p>
+                                <p>Anda dapat mencicil pengisian form ini berulang kali. Data yang Anda kirim akan disimpan atau ditambahkan.</p>
                             </div>
                         </div>
                     </form>

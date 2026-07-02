@@ -17,11 +17,6 @@ class ClientFormController extends Controller
             abort(403, 'Link form ini sudah kedaluwarsa.');
         }
 
-        // Check if already submitted
-        if ($order->form_status === 'submitted') {
-            return view('client-form.success', compact('order'));
-        }
-
         $template = $order->template;
         $schema = !empty($order->custom_form_schema) ? $order->custom_form_schema : ($template ? ($template->form_schema ?? []) : [
             ['field_name' => 'Nama Mempelai Pria (Lengkap)', 'type' => 'text', 'is_required' => true],
@@ -43,7 +38,9 @@ class ClientFormController extends Controller
             ['field_name' => 'Request Desain Spesifik / Catatan', 'type' => 'textarea', 'is_required' => false],
         ]);
 
-        return view('client-form.show', compact('order', 'template', 'schema'));
+        $assets = \App\Models\ClientAsset::where('order_id', $order->id)->get()->groupBy('field_name');
+
+        return view('client-form.show', compact('order', 'template', 'schema', 'assets'));
     }
 
     public function submit(Request $request, $token)
@@ -55,9 +52,6 @@ class ClientFormController extends Controller
         if ($order->form_expires_at && $order->form_expires_at->isPast()) {
             abort(403, 'Link form ini sudah kedaluwarsa.');
         }
-        if ($order->form_status === 'submitted') {
-            abort(403, 'Form ini sudah dikirim sebelumnya.');
-        }
 
         $template = $order->template;
         $schema = !empty($order->custom_form_schema) ? $order->custom_form_schema : ($template ? ($template->form_schema ?? []) : [
@@ -80,20 +74,36 @@ class ClientFormController extends Controller
             ['field_name' => 'Request Desain Spesifik / Catatan', 'type' => 'textarea', 'is_required' => false],
         ]);
 
+        $assets = \App\Models\ClientAsset::where('order_id', $order->id)->get()->groupBy('field_name');
+
         // Validation Rules based on schema
         $rules = [];
         foreach ($schema as $field) {
             $fieldName = \Illuminate\Support\Str::slug($field['field_name'], '_');
+            $hasAsset = $assets->has($field['field_name']);
             if (filter_var($field['is_required'] ?? false, FILTER_VALIDATE_BOOLEAN)) {
-                $rules[$fieldName] = 'required';
+                if (($field['type'] === 'image' || $field['type'] === 'audio') && $hasAsset) {
+                    $rules[$fieldName] = 'nullable';
+                } else {
+                    $rules[$fieldName] = 'required';
+                }
+                
                 if ($field['type'] === 'image') {
-                    $rules[$fieldName] = "required|array";
+                    if (!$hasAsset) {
+                        $rules[$fieldName] = "required|array";
+                    } else {
+                        $rules[$fieldName] = "nullable|array";
+                    }
                     if (isset($field['max_files']) && $field['max_files'] > 0) {
                         $rules[$fieldName] .= "|max:{$field['max_files']}";
                     }
                     $rules[$fieldName.'.*'] = 'file|mimes:jpeg,png,jpg,gif,svg,webp,mp4,mov,webm,ogg|max:51200'; // Max 50MB per media
                 } elseif ($field['type'] === 'audio') {
-                    $rules[$fieldName] = "required|file|mimes:mp3,wav|max:20480"; // Max 20MB
+                    if (!$hasAsset) {
+                        $rules[$fieldName] = "required|file|mimes:mp3,wav|max:20480"; // Max 20MB
+                    } else {
+                        $rules[$fieldName] = "nullable|file|mimes:mp3,wav|max:20480"; // Max 20MB
+                    }
                 }
             } else {
                 $rules[$fieldName] = 'nullable';
@@ -140,13 +150,17 @@ class ClientFormController extends Controller
                     'type' => 'audio',
                     'file_path' => $path,
                 ]);
-            } elseif (in_array($field['type'], ['text', 'textarea']) && isset($validated[$fieldName])) {
-                \App\Models\ClientAsset::create([
-                    'order_id' => $order->id,
-                    'field_name' => $field['field_name'],
-                    'type' => 'text',
-                    'content' => strip_tags($validated[$fieldName]), // Security: Prevent XSS
-                ]);
+            } elseif (in_array($field['type'], ['text', 'textarea', 'datetime', 'date']) && isset($validated[$fieldName])) {
+                \App\Models\ClientAsset::updateOrCreate(
+                    [
+                        'order_id' => $order->id,
+                        'field_name' => $field['field_name'],
+                        'type' => 'text'
+                    ],
+                    [
+                        'content' => strip_tags($validated[$fieldName]), // Security: Prevent XSS
+                    ]
+                );
             }
         }
 
