@@ -23,16 +23,14 @@ class ViewerController extends Controller
             return view('expired');
         }
 
-        // Track visitor (we keep the IP log only for non-admin, but always increment the view counts for real-time testing)
-        if (!$isAdmin) {
-            \Illuminate\Support\Facades\DB::table('invitation_visitors')->insert([
-                'invitation_id' => $invitation->id,
-                'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        // Track visitor (we always log to invitation_visitors so the Dashboard Chart remains accurate)
+        \Illuminate\Support\Facades\DB::table('invitation_visitors')->insert([
+            'invitation_id' => $invitation->id,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         // Cek apakah ini adalah demo dari sebuah Template
         $template = \App\Models\Template::where('invitation_id', $invitation->id)->first();

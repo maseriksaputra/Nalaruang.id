@@ -13,42 +13,31 @@ class TopInvitationsTable extends BaseWidget
 
     protected static ?int $sort = 10;
     protected int | string | array $columnSpan = 'full';
-    protected static ?string $heading = 'Undangan Paling Ramai (Top Invitations)';
+    protected static ?string $heading = 'Produk Paling Ramai (Top Products)';
 
     public function table(Table $table): Table
     {
         return $table
             ->query(
-                Invitation::query()
-                    ->select('invitations.id', 'invitations.title', 'invitations.slug', 'invitations.status', 'invitations.thumbnail_path')
-                    ->leftJoin('templates', 'invitations.id', '=', 'templates.invitation_id')
-                    ->withCount('visitors')
-                    ->selectRaw('COALESCE(templates.demo_views, 0) + COALESCE(templates.total_invitation_views, 0) as template_views')
-                    ->orderByRaw('GREATEST(visitors_count, COALESCE(templates.demo_views, 0) + COALESCE(templates.total_invitation_views, 0)) desc')
+                \App\Models\Template::query()
+                    ->select('id', 'name', 'is_active', 'image', 'preview_url')
+                    ->selectRaw('COALESCE(demo_views, 0) + COALESCE(total_invitation_views, 0) as total_views')
+                    ->orderByRaw('COALESCE(demo_views, 0) + COALESCE(total_invitation_views, 0) desc')
                     ->limit(5)
             )
             ->columns([
-                Tables\Columns\ImageColumn::make('thumbnail_path')
+                Tables\Columns\ImageColumn::make('image')
                     ->label('Sampul')
                     ->circular(),
-                Tables\Columns\TextColumn::make('title')
-                    ->label('Judul / Klien')
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Judul Produk')
                     ->searchable()
                     ->weight('bold'),
-                Tables\Columns\TextColumn::make('status')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'published' => 'success',
-                        'draft' => 'gray',
-                        'archived' => 'danger',
-                        default => 'gray',
-                    }),
-                Tables\Columns\TextColumn::make('visitors_count')
+                Tables\Columns\IconColumn::make('is_active')
+                    ->label('Status Aktif')
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('total_views')
                     ->label('Total Kunjungan')
-                    ->getStateUsing(function (Invitation $record) {
-                        $templateViews = $record->template_views ?? 0;
-                        return max($record->visitors_count ?? 0, $templateViews);
-                    })
                     ->badge()
                     ->color('primary')
                     ->icon('heroicon-m-eye'),
@@ -57,7 +46,7 @@ class TopInvitationsTable extends BaseWidget
                 Tables\Actions\Action::make('open')
                     ->label('Buka')
                     ->icon('heroicon-m-arrow-top-right-on-square')
-                    ->url(fn (Invitation $record): string => url('/' . $record->slug))
+                    ->url(fn (\App\Models\Template $record): string => $record->preview_url ?? url('/p/' . $record->id))
                     ->openUrlInNewTab(),
             ]);
     }

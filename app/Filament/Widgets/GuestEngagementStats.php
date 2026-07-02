@@ -18,7 +18,7 @@ class GuestEngagementStats extends BaseWidget
 
     protected function getStats(): array
     {
-        $totalVisitors = InvitationVisitor::count();
+        $totalVisitors = \App\Models\Template::sum(\Illuminate\Support\Facades\DB::raw('COALESCE(demo_views, 0) + COALESCE(total_invitation_views, 0)'));
         $totalGuests = GuestLink::count();
         $totalRsvp = Rsvp::count();
 
@@ -33,12 +33,12 @@ class GuestEngagementStats extends BaseWidget
                 ->url(\App\Filament\Resources\GuestResource::getUrl('index'))
                 ->extraAttributes(['style' => 'background-color: rgba(99, 102, 241, 0.05);']),
 
-            Stat::make('Total Kunjungan Server', number_format($totalVisitors))
-                ->description('Total klik undangan (' . $engagementRate . '% engagement)')
+            Stat::make('Total View Semua Produk', number_format($totalVisitors))
+                ->description('Total view seluruh katalog')
                 ->descriptionIcon('heroicon-m-cursor-arrow-rays')
                 ->color('success')
                 ->chart([7, 2, 10, 3, 15, 4, 17])
-                ->url(\App\Filament\Resources\InvitationVisitorResource::getUrl('index'))
+                ->url(\App\Filament\Resources\TemplateResource::getUrl('index'))
                 ->extraAttributes(['style' => 'background-color: rgba(16, 185, 129, 0.05);']),
 
             Stat::make('Total RSVP Masuk', number_format($totalRsvp))
