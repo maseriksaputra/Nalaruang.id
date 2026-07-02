@@ -137,11 +137,16 @@ const ColorsPanel = () => {
                             {/* Tombol Suntik Warna (Eyedropper) */}
                             {typeof window !== 'undefined' && window.EyeDropper && (
                                 <button 
-                                    onClick={async () => {
+                                    type="button"
+                                    onClick={async (e) => {
+                                        e.preventDefault();
                                         try {
                                             const eyeDropper = new window.EyeDropper();
                                             const result = await eyeDropper.open();
-                                            handleSelectColor(result.sRGBHex);
+                                            // Defer the heavy React re-render to avoid freezing Chrome's UI thread
+                                            setTimeout(() => {
+                                                handleSelectColor(result.sRGBHex);
+                                            }, 100);
                                         } catch (e) {
                                             console.log('Eyedropper cancelled', e);
                                         }

@@ -5893,9 +5893,14 @@ var ColorsPanel = () => {
 									})]
 								}),
 								typeof window !== "undefined" && window.EyeDropper && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-									onClick: async () => {
+									type: "button",
+									onClick: async (e) => {
+										e.preventDefault();
 										try {
-											handleSelectColor((await new window.EyeDropper().open()).sRGBHex);
+											const result = await new window.EyeDropper().open();
+											setTimeout(() => {
+												handleSelectColor(result.sRGBHex);
+											}, 100);
 										} catch (e) {
 											console.log("Eyedropper cancelled", e);
 										}
