@@ -137,6 +137,7 @@ const LayerElement = ({ layer, isChildOfGroup, sectionId, isActiveParent }) => {
     if (layer.isHidden) return null;
     const updateLayerPosition = useCanvasStore(state => state.updateLayerPosition);
     const activeTab = useCanvasStore(state => state.activeTab);
+    const zoom = useCanvasStore(state => state.zoom);
     
     const [localPos, setLocalPos] = useState({ x: layer.style?.x || 0, y: layer.style?.y || 0 });
     const [localSize, setLocalSize] = useState({ width: layer.style?.width || 100, height: layer.style?.height || 100 });
