@@ -378,7 +378,7 @@ const TimelinePanel = () => {
                                         <React.Fragment key={track.id}>
                                             <div className={`h-12 border-b border-gray-200 flex items-center relative w-full mb-1 ${isRealGroup && isExpanded ? 'bg-primary-50/50' : 'hover:bg-gray-100/50'}`}>
                                                 {/* Track Label */}
-                                                <div className="absolute left-0 top-0 bottom-0 w-24 bg-white/50 border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] backdrop-blur-sm pointer-events-none">
+                                                <div className="absolute left-0 top-0 bottom-0 w-24 bg-white border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] pointer-events-none">
                                                     {isRealGroup && (
                                                         <button 
                                                             onClick={(e) => { e.stopPropagation(); toggleGroup(track.id); }}
@@ -478,7 +478,7 @@ const RecursiveChildTrackRow = ({ childLayer, childIndex, depth, timeScale, upda
         <React.Fragment>
             <div className="h-10 border-b border-gray-100 flex items-center relative w-full mb-1 bg-gray-50/50 hover:bg-gray-100/80">
                 {/* Child Label */}
-                <div className="absolute left-0 top-0 bottom-0 w-24 bg-white/50 border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] backdrop-blur-sm pointer-events-none" style={{ paddingLeft: `${1.5 + (depth - 1) * 0.5}rem` }}>
+                <div className="absolute left-0 top-0 bottom-0 w-24 bg-white border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] pointer-events-none" style={{ paddingLeft: `${1.5 + (depth - 1) * 0.5}rem` }}>
                     <div className="w-1.5 h-1.5 border-l-2 border-b-2 border-gray-400 mr-1.5 opacity-50"></div>
                     <span className="text-[9px] font-medium text-gray-500 truncate">{childLayer.name || `Child ${childIndex + 1}`}</span>
                 </div>
@@ -809,4 +809,4 @@ const TimeBlock = ({ layer, parentTrackId, startTime, endTime, timeScale, update
     );
 };
 
-export default TimelinePanel;
+export default React.memo(TimelinePanel);

@@ -21368,7 +21368,7 @@ var TimelinePanel = () => {
 									return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_react.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: `h-12 border-b border-gray-200 flex items-center relative w-full mb-1 ${isRealGroup && isExpanded ? "bg-primary-50/50" : "hover:bg-gray-100/50"}`,
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-											className: "absolute left-0 top-0 bottom-0 w-24 bg-white/50 border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] backdrop-blur-sm pointer-events-none",
+											className: "absolute left-0 top-0 bottom-0 w-24 bg-white border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] pointer-events-none",
 											children: [isRealGroup && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 												onClick: (e) => {
 													e.stopPropagation();
@@ -21448,7 +21448,7 @@ var RecursiveChildTrackRow = ({ childLayer, childIndex, depth, timeScale, update
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_react.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "h-10 border-b border-gray-100 flex items-center relative w-full mb-1 bg-gray-50/50 hover:bg-gray-100/80",
 		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "absolute left-0 top-0 bottom-0 w-24 bg-white/50 border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] backdrop-blur-sm pointer-events-none",
+			className: "absolute left-0 top-0 bottom-0 w-24 bg-white border-r border-gray-200 z-40 px-2 flex items-center sticky left-0 shadow-[2px_0_5px_rgba(0,0,0,0.05)] pointer-events-none",
 			style: { paddingLeft: `${1.5 + (depth - 1) * .5}rem` },
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "w-1.5 h-1.5 border-l-2 border-b-2 border-gray-400 mr-1.5 opacity-50" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 				className: "text-[9px] font-medium text-gray-500 truncate",
@@ -21700,6 +21700,7 @@ var TimeBlock = ({ layer, parentTrackId, startTime, endTime, timeScale, updateAn
 		]
 	});
 };
+var TimelinePanel_default = import_react.memo(TimelinePanel);
 //#endregion
 //#region node_modules/react-zoom-pan-pinch/dist/index.esm.js
 /**
@@ -23911,7 +23912,7 @@ var BuilderApp = () => {
 											positionY: state.positionY
 										})] })
 									}),
-									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TimelinePanel, {})
+									/* @__PURE__ */ (0, import_jsx_runtime.jsx)(TimelinePanel_default, {})
 								]
 							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: isPreviewMobile ? "hidden" : "absolute top-0 right-0 bottom-0 z-[60] flex pointer-events-none transition-all duration-300",
