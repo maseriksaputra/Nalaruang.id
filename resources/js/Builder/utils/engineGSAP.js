@@ -434,10 +434,10 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
 
             // Set start state immediately and animate ke tujuan setelah delay
             // Menggunakan timeline menjamin konsistensi mutlak selama delay
-            const tl = gsap.timeline({ paused: isScrollTriggered });
+            // Force initial state instantly outside the timeline to guarantee no FOUC
+            gsap.set(elementRef, { ...fromProps, force3D: true });
             
-            // Set starting values
-            tl.set(elementRef, { ...fromProps, force3D: true, immediateRender: true });
+            const tl = gsap.timeline({ paused: isScrollTriggered });
             
             // Mencegah double-delay: timeline sudah menggunakan +=globalDelay
             const safeToProps = { ...toProps };
