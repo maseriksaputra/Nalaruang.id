@@ -574,6 +574,7 @@
                                             <template x-for="(slide, index) in extendedSlides" :key="index">
                                                 <img x-bind:src="slide ? (slide.startsWith('http') ? slide : window.ASSET_URL + slide) : 'https://placehold.co/600x800/eef2f0/2A4035?text=Preview+Desain'" 
                                                      class="portfolio-img w-full h-full object-cover shrink-0" 
+                                                     loading="lazy"
                                                      alt="{{ $template->name }}" 
                                                      onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000'">
                                             </template>
@@ -697,7 +698,7 @@
                                     <source src="{{ Storage::url($portfolio->video) }}" type="video/mp4">
                                 </video>
                             @elseif($portfolio->image)
-                                <img src="{{ Storage::url($portfolio->image) }}" 
+                                <img src="{{ Storage::url($portfolio->image) }}" loading="lazy"
                                      alt="{{ $portfolio->title }}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110 vintage-film">
                             @else
                                 <div class="w-full h-full bg-brand-800 flex items-center justify-center">
