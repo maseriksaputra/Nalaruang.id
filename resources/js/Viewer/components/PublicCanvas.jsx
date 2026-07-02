@@ -260,7 +260,6 @@ const PublicCanvas = ({ config }) => {
                             height: sectionHeight,
                             background: section.layout?.background_value || '#ffffff',
                             overflow: 'hidden',
-                            display: (!isOpened && index > 0) ? 'none' : 'block',
                             visibility: (!isOpened && index > 0) ? 'hidden' : 'visible',
                             zIndex: index === 0 ? 50 : 1,
                             ...(index === 0 ? (() => {

@@ -158,7 +158,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
     
     // Temukan scroll container untuk Preview Modal. Jika tidak ada, gunakan default window
     const container = document.getElementById('viewer-scroll-container');
-    const scrollScroller = (!isBuilder && container && window.getComputedStyle(container).overflowY === 'auto') 
+    const scrollScroller = (!isBuilder && container && container.classList.contains('overflow-y-auto')) 
                             ? container 
                             : undefined;
 
@@ -198,7 +198,7 @@ export const applyAnimation = (elementRef, layerAnimation, isBuilder = false, st
             if (isScrollTriggered) {
                 ScrollTrigger.create({
                     trigger: triggerElement,
-                    start: "top bottom",
+                    start: "top 95%",
                     scroller: scrollScroller,
                     animation: tween,
                     toggleActions: "play none none none",
